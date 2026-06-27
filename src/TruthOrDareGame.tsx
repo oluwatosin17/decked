@@ -4,13 +4,23 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 type Player = { name: string; color: string }
 type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
 
-/* ─── Asset URLs (7-day Figma MCP hosted) ─── */
-const HEART_FILLED = 'https://www.figma.com/api/mcp/asset/7d1c3e18-e7bf-4c69-8b59-a7e40df03a36'
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+/* ─── Asset URLs ─── */
+const HEART_FILLED     = 'https://www.figma.com/api/mcp/asset/7d1c3e18-e7bf-4c69-8b59-a7e40df03a36'
+const HEART_GAME       = 'https://www.figma.com/api/mcp/asset/122700e6-327d-412c-8572-0eabbb934e20'
 const SOCIAL_TIKTOK    = 'https://www.figma.com/api/mcp/asset/52c80b9f-7611-4e1c-b0a1-b87cbde55222'
 const SOCIAL_INSTAGRAM = 'https://www.figma.com/api/mcp/asset/2fb330d3-8103-4715-98c4-977825083eae'
 const SOCIAL_WHATSAPP  = 'https://www.figma.com/api/mcp/asset/5e3391bc-c214-4266-8b20-9d5680742eef'
 
-const PLAYER_COLORS = ['#dc2827', '#9b59b6', '#27ae60', '#e67e22', '#3498db', '#e91e63', '#f39c12', '#1abc9c']
+const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
 /* ─── Game prompts ─── */
 const TRUTHS = [
@@ -59,8 +69,7 @@ const DARES = [
   "Show your most recent search on your phone.",
 ]
 
-
-/* ─── Hearts band (top / bottom of age-gate card) ─── */
+/* ─── Hearts band (age-gate card) ─── */
 function HeartsRow({ top }: { top: boolean }) {
   return (
     <div style={{
@@ -71,10 +80,9 @@ function HeartsRow({ top }: { top: boolean }) {
       background: '#dc2827',
       overflow: 'hidden',
     }}>
-      {/* pink stripe lines */}
       <div style={{
         position: 'absolute',
-        [top ? 'bottom' : 'top']: '25px',
+        [top ? 'bottom' : 'top']: '14px',
         left: 0, right: 0,
         display: 'flex', flexDirection: 'column', gap: '1px',
       }}>
@@ -83,7 +91,6 @@ function HeartsRow({ top }: { top: boolean }) {
           : <><div style={{ height: '4px', background: '#ecc1c9' }} /><div style={{ height: '7px', background: '#ecc1c9' }} /></>
         }
       </div>
-      {/* heart row */}
       <div style={{
         position: 'absolute',
         [top ? 'top' : 'bottom']: '15px',
@@ -91,8 +98,7 @@ function HeartsRow({ top }: { top: boolean }) {
         display: 'flex', gap: '5px', alignItems: 'center',
       }}>
         {Array.from({ length: 11 }, (_, i) => (
-          <img
-            key={i} src={HEART_FILLED} alt=""
+          <img key={i} src={HEART_FILLED} alt=""
             style={{ width: '32px', height: '32px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }}
           />
         ))}
@@ -150,7 +156,7 @@ function GameFooter() {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px' }}>
-          <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '32px', color: '#fff', lineHeight: 'normal' }}>
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '32px', color: '#fff', lineHeight: 'normal' }}>
             DECKED
           </span>
           <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: '14px', color: '#9ca3af', lineHeight: 1.5, margin: 0 }}>
@@ -184,31 +190,23 @@ function GameFooter() {
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
   return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      {/* galaxy canvas from galaxy.ts provides the star background */}
       <div style={{
         background: '#fff', borderRadius: '20px',
         width: '454px', position: 'relative', overflow: 'hidden', zIndex: 2,
       }}>
-        {/* Top red hearts band */}
         <HeartsRow top={true} />
-
-        {/* White middle content */}
-        <div style={{ padding: '107px 90px 107px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-          {/* 18+ badge */}
+        <div style={{ padding: '107px 90px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
           <div style={{ transform: 'rotate(-6deg)', marginBottom: '4px' }}>
             <div style={{
-              background: '#e62a24',
-              border: '4px solid #000', borderRadius: '9999px',
+              background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
               width: '97px', height: '96px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '38px', color: '#fff', letterSpacing: '1.44px', lineHeight: 1 }}>
+              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '52px', color: '#fff', letterSpacing: '1.44px', lineHeight: 1 }}>
                 18+
               </span>
             </div>
           </div>
-
-          {/* Text block */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
             <h2 style={{
               fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
@@ -220,19 +218,14 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
             <div style={{ textAlign: 'center', color: '#5d3f3c', fontSize: '14px', fontFamily: "'Inter', sans-serif", fontWeight: 400, lineHeight: '20px' }}>
               <p style={{ margin: 0 }}>Truth or Dare includes</p>
               <p style={{ margin: 0 }}>mature content for ages 18+</p>
-              <p style={{ margin: '0 0 0' }}>&nbsp;</p>
-              <p style={{ margin: 0 }}>Continue?</p>
+              <p style={{ margin: '8px 0 0' }}>Continue?</p>
             </div>
           </div>
-
-          {/* CTA buttons */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px', marginTop: '4px' }}>
             <button
               onClick={onBack}
-              className="tod-cta-outline"
               style={{
-                flex: 1,
-                border: '1px solid #000', background: 'none', borderRadius: '999px',
+                flex: 1, border: '1px solid #000', background: 'none', borderRadius: '999px',
                 padding: '12px 18px',
                 fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
                 color: '#131416', cursor: 'pointer', textAlign: 'center',
@@ -244,8 +237,7 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
             <button
               onClick={onConfirm}
               style={{
-                flex: 1,
-                background: '#dc2827', border: 'none', borderRadius: '999px',
+                flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px',
                 padding: '12px 18px',
                 fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
                 color: '#fff', cursor: 'pointer', textAlign: 'center',
@@ -256,8 +248,6 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
             </button>
           </div>
         </div>
-
-        {/* Bottom red hearts band */}
         <HeartsRow top={false} />
       </div>
     </div>
@@ -265,15 +255,17 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
 }
 
 /* ─── Screen 2: Player Setup ─── */
-function PlayerSetup({ players, setPlayers, onSkip, onNext }: { players: Player[]; setPlayers: SetPlayers; onSkip: () => void; onNext: () => void }) {
+function PlayerSetup({ players, setPlayers, onBack, onNext }: {
+  players: Player[]; setPlayers: SetPlayers; onBack: () => void; onNext: () => void
+}) {
   const [input, setInput] = useState('')
   const [editingIdx, setEditingIdx] = useState<number | null>(null)
   const [editValue, setEditValue] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
-  const editRef = useRef<HTMLInputElement>(null)
+  const editRef  = useRef<HTMLInputElement>(null)
 
   const nextColor = PLAYER_COLORS[players.length % PLAYER_COLORS.length]
-  const hasInput = input.trim().length > 0
+  const hasInput  = input.trim().length > 0
 
   const addPlayer = () => {
     const name = input.trim()
@@ -293,50 +285,31 @@ function PlayerSetup({ players, setPlayers, onSkip, onNext }: { players: Player[
 
   const commitEdit = () => {
     const name = editValue.trim()
-    if (name && editingIdx !== null) {
+    if (name && editingIdx !== null)
       setPlayers((prev: Player[]) => prev.map((p: Player, i: number) => i === editingIdx ? { ...p, name } : p))
-    }
     setEditingIdx(null)
     setEditValue('')
   }
 
-  const cancelEdit = () => {
-    setEditingIdx(null)
-    setEditValue('')
-  }
-
-  const canNext = players.length > 0
+  const cancelEdit = () => { setEditingIdx(null); setEditValue('') }
 
   return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      {/* galaxy canvas from galaxy.ts provides the star background */}
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
-        {/* Title */}
-        <h2 style={{
-          fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-          fontSize: '36px', color: '#fff',
-          margin: 0, textAlign: 'center', lineHeight: '45px',
-        }}>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
           Who's playing?
         </h2>
 
-        {/* Players + Add input */}
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {players.map((p: Player, i: number) => (
             <div key={i} style={{
-              background: '#111113',
-              border: '1px dashed rgba(255,255,255,0.1)',
+              background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
               borderRadius: '12px', height: '56px',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '12px',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px',
             }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
-                <div style={{
-                  width: '32px', height: '32px', borderRadius: '50%',
-                  background: p.color, flexShrink: 0,
-                  boxShadow: '0 0 0 2.5px #ffffff',
-                }} />
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
                 {editingIdx === i ? (
                   <input
                     ref={editRef}
@@ -344,64 +317,33 @@ function PlayerSetup({ players, setPlayers, onSkip, onNext }: { players: Player[
                     onChange={e => setEditValue(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') cancelEdit() }}
                     onBlur={commitEdit}
-                    style={{
-                      background: 'none', border: 'none', outline: 'none',
-                      fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-                      fontSize: '18px', color: '#fff', flex: 1, lineHeight: 'normal',
-                    }}
+                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1, lineHeight: 'normal' }}
                   />
                 ) : (
-                  <span
-                    onClick={() => startEdit(i)}
-                    style={{
-                      fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-                      fontSize: '18px', color: '#fff', lineHeight: 'normal',
-                      cursor: 'text', flex: 1,
-                    }}
-                  >
+                  <span onClick={() => startEdit(i)} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', cursor: 'text', flex: 1 }}>
                     {p.name}
                   </span>
                 )}
               </div>
-              <button
-                onClick={() => removePlayer(i)}
-                style={{
-                  background: 'none', border: 'none',
-                  color: 'rgba(255,255,255,0.4)',
-                  cursor: 'pointer', fontSize: '18px',
-                  lineHeight: 1, padding: '0 4px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}
-                aria-label="Remove player"
-              >
+              <button onClick={() => removePlayer(i)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', lineHeight: 1, padding: '0 4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-label="Remove player">
                 ×
               </button>
             </div>
           ))}
 
-          {/* Add player row */}
           <div
-            style={{
-              background: '#111113',
-              border: '1px dashed rgba(255,255,255,0.1)',
-              borderRadius: '12px', height: '56px',
-              display: 'flex', alignItems: 'center', gap: '12px',
-              padding: '12px', cursor: 'text',
-            }}
+            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text' }}
             onClick={() => inputRef.current?.focus()}
           >
-            {/* + button: becomes colored ✓ when typing */}
             <button
-              onClick={(e) => { e.stopPropagation(); addPlayer() }}
+              onClick={e => { e.stopPropagation(); addPlayer() }}
               style={{
-                background: hasInput ? nextColor : 'rgba(255,255,255,0.1)',
-                border: 'none',
+                background: hasInput ? nextColor : 'rgba(255,255,255,0.1)', border: 'none',
                 borderRadius: '16px', width: '32px', height: '32px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', flexShrink: 0,
                 color: hasInput ? '#fff' : 'rgba(255,255,255,0.6)',
-                fontSize: hasInput ? '16px' : '20px', fontWeight: 400,
-                lineHeight: 1,
+                fontSize: hasInput ? '16px' : '20px', fontWeight: 400, lineHeight: 1,
                 transition: 'background 0.15s',
                 boxShadow: hasInput ? '0 0 0 2.5px #ffffff' : 'none',
               }}
@@ -415,58 +357,26 @@ function PlayerSetup({ players, setPlayers, onSkip, onNext }: { players: Player[
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') addPlayer() }}
               placeholder="Add a player..."
-              style={{
-                background: 'none', border: 'none', outline: 'none',
-                fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-                fontSize: '18px', color: '#fff',
-                flex: 1, lineHeight: 'normal',
-              }}
+              style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1, lineHeight: 'normal' }}
             />
-            {/* TAP TO ADD → inline prompt */}
             {hasInput && (
-              <button
-                onClick={(e) => { e.stopPropagation(); addPlayer() }}
-                style={{
-                  background: 'none', border: 'none',
-                  fontFamily: "'Staatliches', sans-serif", fontSize: '14px',
-                  color: nextColor, cursor: 'pointer',
-                  whiteSpace: 'nowrap', padding: 0, letterSpacing: '0.05em',
-                }}
-              >
+              <button onClick={e => { e.stopPropagation(); addPlayer() }} style={{ background: 'none', border: 'none', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: nextColor, cursor: 'pointer', whiteSpace: 'nowrap', padding: 0, letterSpacing: '0.05em' }}>
                 TAP TO ADD →
               </button>
             )}
           </div>
         </div>
 
-        {/* CTA buttons */}
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
           <button
-            onClick={onSkip}
-            style={{
-              flex: 1,
-              border: '1px solid #fff', background: 'none', borderRadius: '999px',
-              padding: '12px 18px',
-              fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-              color: '#fff', cursor: 'pointer', textAlign: 'center',
-              boxShadow: '0 10px 24px rgba(0,0,0,0.25)',
-            }}
+            onClick={onBack}
+            style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}
           >
-            SKIP FOR NOW
+            GO BACK
           </button>
           <button
-            onClick={canNext ? onNext : undefined}
-            style={{
-              flex: 1,
-              background: canNext ? '#dc2827' : '#626262',
-              border: 'none', borderRadius: '999px',
-              padding: '12px 18px',
-              fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-              color: canNext ? '#fff' : '#a0a0a0',
-              cursor: canNext ? 'pointer' : 'not-allowed',
-              textAlign: 'center',
-              transition: 'background 0.2s, color 0.2s',
-            }}
+            onClick={onNext}
+            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' }}
           >
             NEXT
           </button>
@@ -476,218 +386,529 @@ function PlayerSetup({ players, setPlayers, onSkip, onNext }: { players: Player[
   )
 }
 
-/* ─── Screen 3: Game Play ─── */
-function GamePlay({ players, onBack }: { players: Player[]; onBack: () => void }) {
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [cardKey, setCardKey] = useState(0)
-
-  // Deterministic per-card type: even = truth, odd = dare
-  const isTruth = cardIndex % 2 === 0
-  const prompt = isTruth
-    ? TRUTHS[cardIndex % TRUTHS.length]
-    : DARES[cardIndex % DARES.length]
-
-  const currentPlayer = players.length > 0 ? players[playerIndex] : null
-  const nextPlayer = players.length > 1 ? players[(playerIndex + 1) % players.length] : null
-
-  const cardBg = isTruth ? '#f7b8bc' : '#dc2827'
-  const cardTextColor = isTruth ? '#dc2827' : '#f7b8bc'
-
-  const advance = useCallback(() => {
-    if (isAnimating) return
-    setIsAnimating(true)
-    setTimeout(() => {
-      setCardIndex(i => i + 1)
-      setPlayerIndex(i => players.length > 0 ? (i + 1) % players.length : 0)
-      setCardKey(k => k + 1)
-      setIsAnimating(false)
-    }, 220)
-  }, [isAnimating, players.length])
+/* ─── Screen 3: Deck Size ─── */
+function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number) => void }) {
+  const [value, setValue] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+  const parsed   = parseInt(value, 10)
+  const valid    = !isNaN(parsed) && parsed > 0 && parsed <= 200
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px 40px 60px' }}>
-      {/* galaxy canvas from galaxy.ts provides the star background */}
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
-      {/* Current player label */}
-      {currentPlayer && (
-        <div style={{
-          position: 'relative', zIndex: 2,
-          marginBottom: '28px',
-          display: 'flex', alignItems: 'center', gap: '10px',
-        }}>
-          <div style={{
-            width: '28px', height: '28px', borderRadius: '50%',
-            background: currentPlayer.color, flexShrink: 0,
-            border: '2px solid rgba(255,255,255,0.2)',
-          }} />
-          <span style={{
-            fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-            fontSize: '18px', color: 'rgba(255,255,255,0.7)',
-            letterSpacing: '0.04em',
-          }}>
-            {currentPlayer.name.toUpperCase()}'S TURN
-          </span>
-          <span style={{
-            fontFamily: "'Staatliches', sans-serif", fontSize: '14px',
-            color: isTruth ? '#f7b8bc' : '#dc2827',
-            background: isTruth ? 'rgba(247,184,188,0.12)' : 'rgba(220,40,39,0.12)',
-            border: `1px solid ${isTruth ? 'rgba(247,184,188,0.3)' : 'rgba(220,40,39,0.3)'}`,
-            borderRadius: '999px',
-            padding: '3px 12px',
-            letterSpacing: '0.1em',
-          }}>
-            {isTruth ? 'TRUTH' : 'DARE'}
-          </span>
-        </div>
-      )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
+            DECK SIZE
+          </h2>
+          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0, textAlign: 'center' }}>
+            How many cards do you want to play?
+          </p>
 
-      {/* Card */}
-      <div
-        key={cardKey}
-        className="tod-card-enter"
-        style={{
-          position: 'relative', zIndex: 2,
-          background: cardBg,
-          borderRadius: '20px',
-          width: '400px', minHeight: '400px',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          padding: '48px 40px 36px',
-          gap: '32px',
-          boxShadow: `0 32px 80px ${isTruth ? 'rgba(247,100,100,0.25)' : 'rgba(220,40,39,0.45)'}`,
-          opacity: isAnimating ? 0 : 1,
-          transform: isAnimating ? 'translateY(16px) scale(0.96)' : 'translateY(0) scale(1)',
-          transition: 'opacity 0.22s ease, transform 0.22s ease',
-        }}
-      >
-        {/* Type label inside card */}
-        <div style={{
-          position: 'absolute', top: '20px', left: '50%', transform: 'translateX(-50%)',
-          fontFamily: "'Staatliches', sans-serif",
-          fontSize: '13px', letterSpacing: '0.18em',
-          color: cardTextColor, opacity: 0.65,
-          textTransform: 'uppercase',
-        }}>
-          {isTruth ? '— TRUTH —' : '— DARE —'}
+          <div
+            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text', width: '100%', marginTop: '16px', boxSizing: 'border-box' }}
+            onClick={() => inputRef.current?.focus()}
+          >
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '18px', lineHeight: 1 }}>#</span>
+            </div>
+            <input
+              ref={inputRef}
+              type="number"
+              min={1}
+              max={200}
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              placeholder="Enter number"
+              style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1, lineHeight: 'normal' }}
+            />
+          </div>
         </div>
 
-        {/* Prompt text */}
-        <p style={{
-          fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-          fontSize: '28px', color: cardTextColor,
-          textAlign: 'center', textTransform: 'uppercase',
-          lineHeight: 1.2, margin: 0,
-          letterSpacing: '0.02em',
-        }}>
-          {prompt}
-        </p>
-
-        {/* Player avatars at bottom */}
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {currentPlayer ? (
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '50%',
-              background: currentPlayer.color,
-              border: `2px solid ${cardTextColor}`,
-              opacity: 0.9,
-            }} />
-          ) : (
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '50%',
-              background: 'rgba(255,255,255,0.3)',
-            }} />
-          )}
-          <img src={HEART_FILLED} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} />
-          {nextPlayer && (
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '50%',
-              background: nextPlayer.color,
-              border: `2px solid ${cardTextColor}`,
-              opacity: 0.5,
-            }} />
-          )}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '292px' }}>
+          <button
+            onClick={onBack}
+            style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}
+          >
+            GO BACK
+          </button>
+          <button
+            onClick={() => valid && onStart(parsed)}
+            style={{
+              flex: 1, background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px',
+              padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
+              color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed',
+              textAlign: 'center', transition: 'background 0.2s, color 0.2s',
+              filter: valid ? 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' : 'none',
+            }}
+          >
+            START THE GAME
+          </button>
         </div>
-      </div>
-
-      {/* Card counter */}
-      <div style={{
-        position: 'relative', zIndex: 2,
-        marginTop: '20px',
-        fontFamily: "'Staatliches', sans-serif",
-        fontSize: '13px', color: 'rgba(255,255,255,0.25)',
-        letterSpacing: '0.12em',
-      }}>
-        CARD {cardIndex + 1}
-      </div>
-
-      {/* Buttons */}
-      <div style={{
-        position: 'relative', zIndex: 2,
-        display: 'flex', gap: '8px', alignItems: 'center',
-        width: '402px', marginTop: '28px',
-      }}>
-        <button
-          onClick={advance}
-          style={{
-            flex: 1,
-            border: '1px solid #fff', background: 'none', borderRadius: '999px',
-            padding: '12px 18px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-            color: '#fff', cursor: 'pointer', textAlign: 'center',
-            boxShadow: '0 10px 24px rgba(0,0,0,0.25)',
-            letterSpacing: '0.05em',
-          }}
-        >
-          SKIP FOR NOW
-        </button>
-        <button
-          onClick={advance}
-          style={{
-            flex: 1,
-            background: '#dc2827', border: 'none', borderRadius: '999px',
-            padding: '12px 18px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-            color: '#fff', cursor: 'pointer', textAlign: 'center',
-            filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))',
-            letterSpacing: '0.05em',
-          }}
-        >
-          NEXT
-        </button>
       </div>
     </div>
   )
 }
 
-/* ─── Root Game Component ─── */
-export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState('ageGate')
-  const [players, setPlayers] = useState<Player[]>([])
+/* ─── Screen 4: Get Ready ─── */
+function GetReady({ player, onReady }: { player: Player | null; onReady: () => void }) {
+  // Auto-advance after 2.4s (enough time for dot animation to feel complete)
+  useEffect(() => {
+    const id = setTimeout(onReady, 2400)
+    return () => clearTimeout(id)
+  }, [onReady])
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'transparent',
-      display: 'flex', flexDirection: 'column',
-      overflowY: 'auto',
-    }}>
+    <div
+      onClick={onReady}
+      style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', textTransform: 'uppercase' }}>
+          Get ready...
+        </h2>
+
+        {player && (
+          <div style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
+              {player.name.toUpperCase()}
+            </span>
+          </div>
+        )}
+
+        {/* Animated anticipation dots */}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '4px' }}>
+          <span className="get-ready-dot" />
+          <span className="get-ready-dot" />
+          <span className="get-ready-dot" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Screen 5: Game Play ─── */
+type CardState = 'picking' | 'truth' | 'dare'
+
+function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipCount, shuffledTruths, shuffledDares, onAdvance, onPlayAgain, onBrowseGames }: {
+  players: Player[]
+  cardIndex: number
+  totalCards: number
+  truthCount: number
+  dareCount: number
+  skipCount: number
+  shuffledTruths: string[]
+  shuffledDares: string[]
+  onAdvance: (type: 'truth' | 'dare' | 'skip') => void
+  onPlayAgain: () => void
+  onBrowseGames: () => void
+}) {
+  const [cardState, setCardState] = useState<CardState>('picking')
+  const [animating, setAnimating] = useState(false)
+
+  const currentPlayer = players.length > 0 ? players[cardIndex % players.length] : null
+
+  const truthPrompt = shuffledTruths[cardIndex % shuffledTruths.length]
+  const darePrompt  = shuffledDares[cardIndex % shuffledDares.length]
+
+  const pickChoice = useCallback((choice: 'truth' | 'dare') => {
+    if (animating || cardState !== 'picking') return
+    setAnimating(true)
+    setTimeout(() => { setCardState(choice); setAnimating(false) }, 200)
+  }, [animating, cardState])
+
+  const advance = (cb: () => void) => {
+    if (animating) return
+    setAnimating(true)
+    setTimeout(() => { setCardState('picking'); setAnimating(false); cb() }, 200)
+  }
+
+  const isDone = totalCards > 0 && cardIndex >= totalCards
+
+  if (isDone) {
+    return (
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px', padding: '40px' }}>
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+            You're Decked
+          </h2>
+          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+            You played all {totalCards} Truth or Dare cards
+          </p>
+        </div>
+
+        {/* Stats card */}
+        <div style={{
+          position: 'relative', zIndex: 2,
+          background: '#18181b', borderRadius: '12px',
+          display: 'flex', alignItems: 'center',
+          padding: '20px 32px', gap: '0',
+        }}>
+          {[
+            { count: truthCount, label: 'TRUTHS' },
+            { count: dareCount,  label: 'DARES'  },
+            { count: skipCount,  label: 'SKIPPED' },
+          ].map((stat, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+              {i > 0 && <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.1)', margin: '0 28px' }} />}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', lineHeight: 1 }}>
+                  {stat.count}
+                </span>
+                <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>
+                  {stat.label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Mini Truth or Dare card — matches Figma 797:66239 */}
+        <div style={{
+          position: 'relative', zIndex: 2,
+          width: '199px', height: '200px',
+          background: '#fff', borderRadius: '9px',
+          overflow: 'hidden',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          flexShrink: 0,
+        }}>
+          {/* Top red band: hearts at top, stripes toward inner edge */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '38px', background: '#dc2827', overflow: 'hidden' }}>
+            {/* Stripes near inner edge (bottom of top band) */}
+            <div style={{ position: 'absolute', top: '27px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '0.4px' }}>
+              <div style={{ height: '3px', background: '#ecc1c9', width: '100%' }} />
+              <div style={{ height: '1.7px', background: '#ecc1c9', width: '100%' }} />
+            </div>
+            {/* Hearts row centered */}
+            <div style={{ position: 'absolute', top: '6.5px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2.2px', alignItems: 'center', whiteSpace: 'nowrap' }}>
+              {Array.from({ length: 11 }, (_, i) => (
+                <img key={i} src={HEART_FILLED} alt="" style={{ width: '14px', height: '14px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Center text block — two overlapping layers create the shadow effect */}
+          <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '106px', height: '71px' }}>
+            {/* Black shadow layer */}
+            <p style={{ position: 'absolute', left: '1px', right: '-1px', top: '1px', fontFamily: "'Satoshi', sans-serif", fontWeight: 500, fontSize: '21.9px', color: '#000', textAlign: 'center', lineHeight: 1.2, margin: 0 }}>
+              TRUTH OR DARE
+            </p>
+            {/* Pink main text */}
+            <p style={{ position: 'absolute', left: '1px', right: '-1px', top: '0', fontFamily: "'Satoshi', sans-serif", fontWeight: 500, fontSize: '21.9px', color: '#d39293', textAlign: 'center', lineHeight: 1.2, margin: 0 }}>
+              TRUTH OR DARE
+            </p>
+            {/* FOR COUPLES */}
+            <p style={{ position: 'absolute', left: 0, right: 0, top: '60px', fontFamily: "'Satoshi', sans-serif", fontSize: '10.5px', color: '#181b25', textAlign: 'center', margin: 0 }}>
+              FOR COUPLES
+            </p>
+          </div>
+
+          {/* Bottom red band: stripes near inner edge (top of bottom band), hearts toward bottom */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '38px', background: '#dc2827', overflow: 'hidden' }}>
+            {/* Stripes near inner edge (top of bottom band) */}
+            <div style={{ position: 'absolute', top: '6px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '0.4px' }}>
+              <div style={{ height: '1.7px', background: '#ecc1c9', width: '100%' }} />
+              <div style={{ height: '3px', background: '#ecc1c9', width: '100%' }} />
+            </div>
+            {/* Hearts row centered */}
+            <div style={{ position: 'absolute', top: '17.5px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2.2px', alignItems: 'center', whiteSpace: 'nowrap' }}>
+              {Array.from({ length: 11 }, (_, i) => (
+                <img key={i} src={HEART_FILLED} alt="" style={{ width: '14px', height: '14px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            onClick={onBrowseGames}
+            style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}
+          >
+            BROWSE GAMES
+          </button>
+          <button
+            onClick={onPlayAgain}
+            style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))' }}
+          >
+            PLAY AGAIN
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  /* Split card (picking) */
+  if (cardState === 'picking') {
+    return (
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', padding: '40px 40px 60px', position: 'relative' }}>
+
+        {currentPlayer && (
+          <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)' }} />
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
+              {currentPlayer.name.toUpperCase()}'S TURN
+            </span>
+          </div>
+        )}
+
+        {/* Split card */}
+        <div
+          className="tod-card-enter"
+          style={{
+            position: 'relative', zIndex: 2,
+            width: '454px', height: '457px',
+            borderRadius: '20px',
+            overflow: 'hidden',
+            opacity: animating ? 0 : 1,
+            transform: animating ? 'scale(0.96)' : 'scale(1)',
+            transition: 'opacity 0.2s, transform 0.2s',
+            boxShadow: '0 32px 80px rgba(220,40,39,0.35)',
+          }}
+        >
+          {/* TRUTH — top half */}
+          <div
+            onClick={() => pickChoice('truth')}
+            style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '228.5px',
+              background: '#e9b1ba',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'filter 0.15s',
+            }}
+            onMouseOver={e => (e.currentTarget.style.filter = 'brightness(0.95)')}
+            onMouseOut={e => (e.currentTarget.style.filter = 'none')}
+          >
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#dd2a25', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              TRUTH
+            </span>
+          </div>
+
+          {/* DARE — bottom half */}
+          <div
+            onClick={() => pickChoice('dare')}
+            style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: '228.5px',
+              background: '#dd2a25',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'filter 0.15s',
+            }}
+            onMouseOver={e => (e.currentTarget.style.filter = 'brightness(0.9)')}
+            onMouseOut={e => (e.currentTarget.style.filter = 'none')}
+          >
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#e9b1ba', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              DARE
+            </span>
+          </div>
+
+          {/* Hearts at divider */}
+          <div style={{
+            position: 'absolute', left: '50%', top: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: 'flex', gap: '5px', alignItems: 'center',
+            zIndex: 3, pointerEvents: 'none',
+          }}>
+            <img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px' }} />
+            <img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px', transform: 'scaleY(-1)' }} />
+          </div>
+        </div>
+
+        {/* SKIP THIS CARD */}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
+          <button
+            onClick={() => advance(() => onAdvance('skip'))}
+            style={{
+              border: '1px solid #fff', background: 'none', borderRadius: '999px',
+              padding: '12px 18px', width: '160px',
+              fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
+              color: '#fff', cursor: 'pointer', textAlign: 'center',
+              boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em',
+            }}
+          >
+            SKIP THIS CARD
+          </button>
+        </div>
+
+        {/* Card counter */}
+        {totalCards > 0 && (
+          <div style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
+            CARD {cardIndex + 1} OF {totalCards}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  /* Revealed card (truth or dare) */
+  const isTruth    = cardState === 'truth'
+  const cardBg     = isTruth ? '#f7b8bc' : '#dc2827'
+  const cardText   = isTruth ? '#dc2827' : '#f7b8bc'
+  const prompt     = isTruth ? truthPrompt : darePrompt
+  const typeLabel  = isTruth ? '— TRUTH —' : '— DARE —'
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 40px 60px', gap: '24px', position: 'relative' }}>
+
+      {currentPlayer && (
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)' }} />
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
+            {currentPlayer.name.toUpperCase()}'S TURN
+          </span>
+          <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: isTruth ? '#f7b8bc' : '#dc2827', background: isTruth ? 'rgba(247,184,188,0.12)' : 'rgba(220,40,39,0.12)', border: `1px solid ${isTruth ? 'rgba(247,184,188,0.3)' : 'rgba(220,40,39,0.3)'}`, borderRadius: '999px', padding: '3px 12px', letterSpacing: '0.1em' }}>
+            {isTruth ? 'TRUTH' : 'DARE'}
+          </span>
+        </div>
+      )}
+
+      <div
+        key={`${cardIndex}-${cardState}`}
+        className="tod-card-enter"
+        style={{
+          position: 'relative', zIndex: 2,
+          background: cardBg, borderRadius: '20px',
+          width: '454px', minHeight: '400px',
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          padding: '52px 48px 44px', gap: '24px',
+          boxShadow: `0 32px 80px ${isTruth ? 'rgba(247,100,100,0.25)' : 'rgba(220,40,39,0.45)'}`,
+          opacity: animating ? 0 : 1,
+          transform: animating ? 'translateY(14px) scale(0.96)' : 'translateY(0) scale(1)',
+          transition: 'opacity 0.2s, transform 0.2s',
+        }}
+      >
+        <div style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: cardText, opacity: 0.65, textTransform: 'uppercase' }}>
+          {typeLabel}
+        </div>
+
+        <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '28px', color: cardText, textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.2, margin: 0, letterSpacing: '0.02em' }}>
+          {prompt}
+        </p>
+
+        {currentPlayer && (
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '8px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: currentPlayer.color, border: `2px solid ${cardText}`, opacity: 0.9 }} />
+            <img src={HEART_GAME} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} />
+          </div>
+        )}
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
+        <button
+          onClick={() => advance(() => onAdvance('skip'))}
+          style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}
+        >
+          SKIP
+        </button>
+        <button
+          onClick={() => advance(() => onAdvance(isTruth ? 'truth' : 'dare'))}
+          style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))', letterSpacing: '0.05em' }}
+        >
+          NEXT
+        </button>
+      </div>
+
+      {totalCards > 0 && (
+        <div style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
+          CARD {cardIndex + 1} OF {totalCards}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ─── Root Game Component ─── */
+type Step = 'ageGate' | 'playerSetup' | 'deckSize' | 'getReady' | 'game'
+
+export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
+  const [step,           setStep]           = useState<Step>('ageGate')
+  const [players,        setPlayers]        = useState<Player[]>([])
+  const [totalCards,     setTotalCards]     = useState(0)
+  const [cardIndex,      setCardIndex]      = useState(0)
+  const [playerIndex,    setPlayerIndex]    = useState(0)
+  const [truthCount,     setTruthCount]     = useState(0)
+  const [dareCount,      setDareCount]      = useState(0)
+  const [skipCount,      setSkipCount]      = useState(0)
+  const [shuffledTruths, setShuffledTruths] = useState(() => shuffle(TRUTHS))
+  const [shuffledDares,  setShuffledDares]  = useState(() => shuffle(DARES))
+
+  const currentPlayer = players.length > 0 ? players[playerIndex] : null
+
+  const handleAdvance = useCallback((type: 'truth' | 'dare' | 'skip') => {
+    if (type === 'truth')     setTruthCount(c => c + 1)
+    else if (type === 'dare') setDareCount(c => c + 1)
+    else                      setSkipCount(c => c + 1)
+    const nextCard   = cardIndex + 1
+    const nextPlayer = players.length > 0 ? (playerIndex + 1) % players.length : 0
+    setCardIndex(nextCard)
+    setPlayerIndex(nextPlayer)
+    if (totalCards > 0 && nextCard >= totalCards) {
+      setStep('game')
+    } else {
+      setStep('getReady')
+    }
+  }, [cardIndex, playerIndex, players.length, totalCards])
+
+  const goToGame = useCallback(() => setStep('game'), [])
+
+  const handlePlayAgain = useCallback(() => {
+    setCardIndex(0)
+    setPlayerIndex(0)
+    setTruthCount(0)
+    setDareCount(0)
+    setSkipCount(0)
+    setShuffledTruths(shuffle(TRUTHS))
+    setShuffledDares(shuffle(DARES))
+    setStep('getReady')
+  }, [])
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'transparent', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
       <GameNav onBack={onClose} />
 
       {step === 'ageGate' && (
         <AgeGate onBack={onClose} onConfirm={() => setStep('playerSetup')} />
       )}
+
       {step === 'playerSetup' && (
         <PlayerSetup
           players={players}
           setPlayers={setPlayers}
-          onSkip={() => setStep('game')}
-          onNext={() => setStep('game')}
+          onBack={() => setStep('ageGate')}
+          onNext={() => setStep('deckSize')}
         />
       )}
+
+      {step === 'deckSize' && (
+        <DeckSize
+          onBack={() => setStep('playerSetup')}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setShuffledTruths(shuffle(TRUTHS)); setShuffledDares(shuffle(DARES)); setStep('getReady') }}
+        />
+      )}
+
+      {step === 'getReady' && (
+        <GetReady
+          player={currentPlayer}
+          onReady={goToGame}
+        />
+      )}
+
       {step === 'game' && (
-        <GamePlay players={players} onBack={() => setStep('playerSetup')} />
+        <GamePlay
+          players={players}
+          cardIndex={cardIndex}
+          totalCards={totalCards}
+          truthCount={truthCount}
+          dareCount={dareCount}
+          skipCount={skipCount}
+          shuffledTruths={shuffledTruths}
+          shuffledDares={shuffledDares}
+          onAdvance={handleAdvance}
+          onPlayAgain={handlePlayAgain}
+          onBrowseGames={onClose}
+        />
       )}
 
       <GameFooter />
