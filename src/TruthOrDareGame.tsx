@@ -201,8 +201,15 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
               background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
               width: '97px', height: '96px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden', padding: '4px',
             }}>
-              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '52px', color: '#fff', letterSpacing: '1.44px', lineHeight: 1 }}>
+              {/* font-size scales "18+" to fill the circle — Anton is very condensed */}
+              <span style={{
+                fontFamily: "'Anton', sans-serif", fontSize: '60px', color: '#fff',
+                letterSpacing: '1px', lineHeight: 1, display: 'block',
+                textAlign: 'center', whiteSpace: 'nowrap',
+                transform: 'scaleX(1.15)',  /* horizontally stretch to fill circle width */
+              }}>
                 18+
               </span>
             </div>

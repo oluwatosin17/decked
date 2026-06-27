@@ -29,6 +29,7 @@ const SOCIAL_WHATSAPP = 'https://www.figma.com/api/mcp/asset/94019f0b-e964-4c74-
 
 interface Props {
   onPlayTruthOrDare: () => void
+  onPlaySpicyStarters: () => void
 }
 
 /* ── Truth or Dare card hearts band ───────────────────────────────── */
@@ -76,7 +77,7 @@ function HeartsRow({ top }: { top: boolean }) {
 }
 
 /* ── Main component ───────────────────────────────────────────────── */
-export default function HomePage({ onPlayTruthOrDare }: Props) {
+export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters }: Props) {
   return (
     <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
@@ -246,7 +247,7 @@ export default function HomePage({ onPlayTruthOrDare }: Props) {
               </div>
 
               {/* SPICY STARTERS */}
-              <div className="card-tile" style={{
+              <div className="card-tile" onClick={onPlaySpicyStarters} style={{
                 width: '277.948px', height: '348px', background: '#df91b5',
                 borderRadius: '9.039px', overflow: 'hidden', position: 'relative', flexShrink: 0,
               }}>
