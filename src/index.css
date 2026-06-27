@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: #0c0c0e; font-family: 'Satoshi', sans-serif; overflow-x: hidden; }
+
+/* ── Full-page star background (fixed, behind all content) ── */
+.hero-bg {
+  position: fixed;
+  inset: 0;
+  background-color: #0c0c0e;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#star-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Card hover effects */
+.card-tile {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.card-tile:hover {
+  transform: translateY(-6px) rotate(0deg) !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.hero-card {
+  transition: transform 0.3s ease;
+}
+.hero-card:hover {
+  transform: rotate(0deg) scale(1.04) !important;
+}
+
+.cards-section {
+  background: transparent;
+}
+
+/* ToD game input placeholder */
+input::placeholder {
+  color: rgba(255,255,255,0.35);
+  font-family: 'Anton SC', sans-serif;
+}
+
+/* ToD card entrance animation */
+@keyframes tod-card-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.tod-card-enter {
+  animation: tod-card-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
