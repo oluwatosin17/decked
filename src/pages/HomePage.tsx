@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+// React JSX handled by vite/react plugin — no explicit import needed
 
 /* ── Figma-hosted assets ─────────────────────────────────────────── */
 // Hero card images
@@ -29,278 +29,6 @@ const SOCIAL_WHATSAPP = 'https://www.figma.com/api/mcp/asset/94019f0b-e964-4c74-
 
 interface Props {
   onPlayTruthOrDare: () => void
-}
-
-/* ── Galaxy canvas — dense star field + shooting stars + parallax ─── */
-function StarCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')!
-
-    let W = window.innerWidth
-    let H = window.innerHeight
-
-    function resize() {
-      W = canvas!.width = window.innerWidth
-      H = canvas!.height = window.innerHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    // ── Mouse parallax tracking ──────────────────────────────────────
-    let mouseX = 0, mouseY = 0, targetMX = 0, targetMY = 0
-    function onMouseMove(e: MouseEvent) {
-      targetMX = (e.clientX / W - 0.5) * 2   // -1 to +1
-      targetMY = (e.clientY / H - 0.5) * 2
-    }
-    window.addEventListener('mousemove', onMouseMove)
-
-    // ── Star layers ──────────────────────────────────────────────────
-    // layer 0 = deep background (tiny, dim, slow drift)
-    // layer 1 = mid field
-    // layer 2 = foreground (larger, brighter, stronger parallax)
-    const LAYER_CFG = [
-      { count: 520, sMin: 0.4,  sMax: 1.0,  oMin: 0.28, oMax: 0.58, drift: 0.008, twAmp: 0.18, pFactor: 6  },
-      { count: 300, sMin: 0.8,  sMax: 1.8,  oMin: 0.45, oMax: 0.78, drift: 0.018, twAmp: 0.30, pFactor: 14 },
-      { count: 120, sMin: 1.4,  sMax: 3.0,  oMin: 0.65, oMax: 1.00, drift: 0.030, twAmp: 0.45, pFactor: 26 },
-    ]
-    // Occasional large bright star
-    const BRIGHT_CFG = { count: 22, sMin: 2.2, sMax: 4.0, oMin: 0.80, oMax: 1.00, drift: 0.025, twAmp: 0.55, pFactor: 20 }
-
-    // Subtle star color tints for realism
-    const STAR_COLORS = [
-      '#ffffff', '#ffffff', '#ffffff',  // mostly white
-      '#e8eeff', '#fff4e8', '#ffe8e8',  // blue-white, warm, red-tint
-      '#e8fff4', '#f0e8ff',             // green-tint, purple-tint
-    ]
-
-    type Star = {
-      x: number; y: number
-      size: number; baseOpacity: number
-      twSpeed: number; twOffset: number; twAmp: number
-      drift: number; driftY: number
-      pFactor: number
-      color: string
-      isBright: boolean
-    }
-
-    function makeStars(cfg: typeof LAYER_CFG[0], bright = false): Star[] {
-      return Array.from({ length: cfg.count }, () => ({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        size: cfg.sMin + Math.random() * (cfg.sMax - cfg.sMin),
-        baseOpacity: cfg.oMin + Math.random() * (cfg.oMax - cfg.oMin),
-        twSpeed: 0.004 + Math.random() * 0.016,
-        twOffset: Math.random() * Math.PI * 2,
-        twAmp: cfg.twAmp * (0.6 + Math.random() * 0.8),
-        drift: (Math.random() - 0.5) * cfg.drift,
-        driftY: (Math.random() - 0.5) * cfg.drift * 0.3,
-        pFactor: cfg.pFactor,
-        color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
-        isBright: bright,
-      }))
-    }
-
-    const stars: Star[] = [
-      ...makeStars(LAYER_CFG[0]),
-      ...makeStars(LAYER_CFG[1]),
-      ...makeStars(LAYER_CFG[2]),
-      ...makeStars(BRIGHT_CFG, true),
-    ]
-
-    // Glow cache for bright stars
-    function drawStarGlyph(cx: number, cy: number, r: number, opacity: number, color: string, bright: boolean) {
-      ctx.save()
-      if (bright && r >= 1.8) {
-        // Soft glow halo
-        const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 4)
-        grd.addColorStop(0, `rgba(255,255,255,${opacity * 0.6})`)
-        grd.addColorStop(0.3, `rgba(200,210,255,${opacity * 0.15})`)
-        grd.addColorStop(1, 'rgba(0,0,0,0)')
-        ctx.fillStyle = grd
-        ctx.beginPath()
-        ctx.arc(cx, cy, r * 4, 0, Math.PI * 2)
-        ctx.fill()
-      }
-      ctx.globalAlpha = opacity
-      if (r < 0.7) {
-        // Tiny stars — plain dot
-        ctx.fillStyle = color
-        ctx.beginPath()
-        ctx.arc(cx, cy, r, 0, Math.PI * 2)
-        ctx.fill()
-      } else {
-        // 4-pointed star cross
-        const inner = r * 0.22
-        ctx.fillStyle = color
-        ctx.beginPath()
-        ctx.moveTo(cx, cy - r)
-        ctx.lineTo(cx + inner, cy - inner)
-        ctx.lineTo(cx + r, cy)
-        ctx.lineTo(cx + inner, cy + inner)
-        ctx.lineTo(cx, cy + r)
-        ctx.lineTo(cx - inner, cy + inner)
-        ctx.lineTo(cx - r, cy)
-        ctx.lineTo(cx - inner, cy - inner)
-        ctx.closePath()
-        ctx.fill()
-      }
-      ctx.restore()
-    }
-
-    // ── Shooting stars ───────────────────────────────────────────────
-    type Shooter = {
-      active: boolean
-      x: number; y: number
-      vx: number; vy: number
-      trailLen: number; maxTrail: number
-      opacity: number
-      age: number; life: number
-      timer: number; delay: number
-    }
-
-    const NUM_SHOOTERS = 8
-    const shooters: Shooter[] = Array.from({ length: NUM_SHOOTERS }, (_, i) => ({
-      active: false, x: 0, y: 0, vx: 0, vy: 0,
-      trailLen: 0, maxTrail: 0, opacity: 0,
-      age: 0, life: 0,
-      timer: i * 600,          // staggered initial delays
-      delay: 1200 + Math.random() * 3800,
-    }))
-
-    function spawnShooter(s: Shooter) {
-      const angle = (18 + Math.random() * 40) * Math.PI / 180
-      const speed = 9 + Math.random() * 14
-      // Start from random point along top/left edges
-      if (Math.random() < 0.6) {
-        s.x = Math.random() * W
-        s.y = -10
-      } else {
-        s.x = -10
-        s.y = Math.random() * H * 0.5
-      }
-      s.vx = Math.cos(angle) * speed
-      s.vy = Math.sin(angle) * speed
-      s.maxTrail = 90 + Math.random() * 160
-      s.life = s.maxTrail / speed * 2.5
-      s.age = 0
-      s.opacity = 0
-      s.active = true
-    }
-
-    // ── Render loop ──────────────────────────────────────────────────
-    let t = 0
-    let lastTime = performance.now()
-    let rafId: number
-
-    function animate(now: number) {
-      const raw = Math.min(now - lastTime, 50)
-      const dt = raw / 16.67    // frames at 60fps
-      lastTime = now
-      t += dt
-
-      // Smooth mouse interpolation
-      mouseX += (targetMX - mouseX) * 0.04
-      mouseY += (targetMY - mouseY) * 0.04
-
-      ctx.clearRect(0, 0, W, H)
-
-      // ── Draw stars with parallax + twinkling ──
-      for (const s of stars) {
-        const px = ((s.x + mouseX * s.pFactor + W * 10) % W + W) % W
-        const py = ((s.y + mouseY * s.pFactor * 0.5 + H * 10) % H + H) % H
-
-        // Very slow drift wrapping
-        s.x = (s.x + s.drift * dt + W) % W
-        s.y = (s.y + s.driftY * dt + H) % H
-
-        const tw = Math.sin(t * s.twSpeed * 60 + s.twOffset)
-        const opacity = Math.max(0, Math.min(1, s.baseOpacity * (1 + tw * s.twAmp)))
-
-        drawStarGlyph(px, py, s.size, opacity, s.color, s.isBright)
-      }
-
-      // ── Draw shooting stars ──
-      for (const sh of shooters) {
-        if (!sh.active) {
-          sh.timer += raw
-          if (sh.timer >= sh.delay) {
-            sh.timer = 0
-            sh.delay = 1000 + Math.random() * 4500
-            spawnShooter(sh)
-          }
-          continue
-        }
-
-        sh.age += dt
-        const progress = sh.age / sh.life
-
-        // Fade in first 10%, sustain, fade out last 25%
-        const fadeIn = Math.min(sh.age / (sh.life * 0.1), 1)
-        const fadeOut = progress > 0.75 ? 1 - (progress - 0.75) / 0.25 : 1
-        sh.opacity = Math.max(0, Math.min(1, fadeIn * fadeOut))
-
-        sh.x += sh.vx * dt
-        sh.y += sh.vy * dt
-
-        const speed = Math.sqrt(sh.vx * sh.vx + sh.vy * sh.vy)
-        const trailFraction = Math.min(sh.age / (sh.life * 0.3), 1)
-        const trail = sh.maxTrail * trailFraction
-
-        if (sh.opacity > 0.02 && trail > 2) {
-          const tx = sh.x - (sh.vx / speed) * trail
-          const ty = sh.y - (sh.vy / speed) * trail
-
-          const grad = ctx.createLinearGradient(tx, ty, sh.x, sh.y)
-          grad.addColorStop(0, `rgba(255,255,255,0)`)
-          grad.addColorStop(0.4, `rgba(180,200,255,${sh.opacity * 0.25})`)
-          grad.addColorStop(0.8, `rgba(230,240,255,${sh.opacity * 0.6})`)
-          grad.addColorStop(1, `rgba(255,255,255,${sh.opacity})`)
-
-          ctx.save()
-          ctx.strokeStyle = grad
-          ctx.lineWidth = 1.8
-          ctx.lineCap = 'round'
-          ctx.beginPath()
-          ctx.moveTo(tx, ty)
-          ctx.lineTo(sh.x, sh.y)
-          ctx.stroke()
-
-          // Bright head with glow
-          const headGrd = ctx.createRadialGradient(sh.x, sh.y, 0, sh.x, sh.y, 5)
-          headGrd.addColorStop(0, `rgba(255,255,255,${sh.opacity})`)
-          headGrd.addColorStop(0.4, `rgba(200,220,255,${sh.opacity * 0.5})`)
-          headGrd.addColorStop(1, 'rgba(0,0,0,0)')
-          ctx.fillStyle = headGrd
-          ctx.beginPath()
-          ctx.arc(sh.x, sh.y, 5, 0, Math.PI * 2)
-          ctx.fill()
-          ctx.restore()
-        }
-
-        if (sh.age > sh.life || sh.x > W + 200 || sh.y > H + 200) {
-          sh.active = false
-          sh.timer = 0
-          sh.delay = 800 + Math.random() * 4000
-        }
-      }
-
-      rafId = requestAnimationFrame(animate)
-    }
-
-    rafId = requestAnimationFrame(animate)
-
-    return () => {
-      cancelAnimationFrame(rafId)
-      window.removeEventListener('resize', resize)
-      window.removeEventListener('mousemove', onMouseMove)
-    }
-  }, [])
-
-  return <canvas ref={canvasRef} id="star-canvas" />
 }
 
 /* ── Truth or Dare card hearts band ───────────────────────────────── */
@@ -350,42 +78,35 @@ function HeartsRow({ top }: { top: boolean }) {
 /* ── Main component ───────────────────────────────────────────────── */
 export default function HomePage({ onPlayTruthOrDare }: Props) {
   return (
-    <div style={{ background: '#0c0c0e', minHeight: '100vh' }}>
-      {/* Fixed star background */}
-      <div className="hero-bg">
-        <StarCanvas />
-      </div>
+    <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
       {/* ══════════════════════════════════════════════
           HERO SECTION  (943px tall)
       ══════════════════════════════════════════════ */}
       <section className="relative w-full overflow-hidden" style={{ height: '943px' }}>
 
-        {/* Nav */}
-        <nav className="relative z-20 flex items-center justify-between" style={{ height: '80px', padding: '0 60px' }}>
-          <span className="font-anton text-white" style={{ fontSize: '28px', letterSpacing: '0.56px' }}>DECKED</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div className="font-anton" style={{ display: 'flex', alignItems: 'center', gap: '24px', fontSize: '16px', color: 'rgba(255,255,255,0.4)' }}>
-              {['Browse Games', 'How to Play', 'About'].map(label => (
-                <a key={label} href="#" style={{ textDecoration: 'none', color: 'inherit', transition: 'color 0.2s' }}
-                  onMouseOver={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-                  onMouseOut={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}>
-                  {label}
-                </a>
-              ))}
-            </div>
-            <button className="font-staatliches" style={{
-              display: 'flex', alignItems: 'center', gap: '10px',
-              background: '#dc2827', color: 'white', fontSize: '16px',
-              padding: '12px 18px', borderRadius: '999px', border: 'none',
-              cursor: 'pointer', width: '124px',
-              boxShadow: '0 10px 12px rgba(220,40,39,0.25)', transition: 'background 0.2s',
-            }}
-              onMouseOver={e => (e.currentTarget.style.background = '#c41f1e')}
-              onMouseOut={e => (e.currentTarget.style.background = '#dc2827')}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
-              Play Now
-            </button>
+        {/* Nav — matches Figma: wordmark left, 3 text links right, no CTA button */}
+        <nav style={{
+          position: 'relative', zIndex: 20,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          height: '80px', padding: '0 60px',
+        }}>
+          <span className="font-anton" style={{ color: '#ffffff', fontSize: '28px', letterSpacing: '0.56px', lineHeight: 'normal', fontWeight: 400 }}>
+            DECKED
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            {['Browse Games', 'How to Play', 'About'].map(label => (
+              <a key={label} href="#" className="font-anton" style={{
+                textDecoration: 'none',
+                color: 'rgba(255,255,255,0.4)',
+                fontSize: '16px', fontWeight: 400, lineHeight: 'normal',
+                transition: 'color 0.2s',
+              }}
+                onMouseOver={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
+                onMouseOut={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}>
+                {label}
+              </a>
+            ))}
           </div>
         </nav>
 
