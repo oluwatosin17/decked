@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 type Player = { name: string; color: string }
 type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
@@ -59,28 +59,6 @@ const DARES = [
   "Show your most recent search on your phone.",
 ]
 
-/* ─── Deterministic starfield ─── */
-function makeStars(n = 150) {
-  let s = 0xdeadbeef
-  const r = () => { s = Math.imul(s ^ (s >>> 17), 0x45d9f3b); s ^= s << 5; return ((s >>> 0) / 0xffffffff) }
-  return Array.from({ length: n }, () => ({ x: r() * 100, y: r() * 100, size: r() * 2 + 0.5, opacity: r() * 0.4 + 0.1 }))
-}
-
-function Stars() {
-  const stars = useMemo(() => makeStars(), [])
-  return (
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-      {stars.map((s, i) => (
-        <div key={i} style={{
-          position: 'absolute', left: s.x + '%', top: s.y + '%',
-          width: s.size + 'px', height: s.size + 'px',
-          background: `rgba(255,255,255,${s.opacity.toFixed(2)})`,
-          borderRadius: '50%',
-        }} />
-      ))}
-    </div>
-  )
-}
 
 /* ─── Hearts band (top / bottom of age-gate card) ─── */
 function HeartsRow({ top }: { top: boolean }) {
@@ -127,7 +105,8 @@ function HeartsRow({ top }: { top: boolean }) {
 function GameNav({ onBack }: { onBack: () => void }) {
   return (
     <nav style={{
-      background: '#0c0c0e',
+      background: 'rgba(5,5,12,0.72)',
+      backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
     }}>
@@ -139,6 +118,8 @@ function GameNav({ onBack }: { onBack: () => void }) {
           <button
             key={label}
             onClick={label === 'Browse Games' ? onBack : undefined}
+            onMouseOver={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = '#ffffff' }}
+            onMouseOut={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
             style={{
               background: 'none', border: 'none',
               color: 'rgba(255,255,255,0.4)',
@@ -146,6 +127,7 @@ function GameNav({ onBack }: { onBack: () => void }) {
               fontSize: '16px', fontWeight: 400,
               cursor: label === 'Browse Games' ? 'pointer' : 'default',
               lineHeight: 'normal', padding: 0,
+              transition: 'color 0.2s',
             }}
           >
             {label}
@@ -160,7 +142,8 @@ function GameNav({ onBack }: { onBack: () => void }) {
 function GameFooter() {
   return (
     <footer style={{
-      background: '#0c0c0e',
+      background: 'rgba(5,5,12,0.72)',
+      backdropFilter: 'blur(4px)',
       padding: '32px 60px',
       display: 'flex', flexDirection: 'column', gap: '40px',
       flexShrink: 0,
@@ -201,7 +184,7 @@ function GameFooter() {
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
   return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <Stars />
+      {/* galaxy canvas from galaxy.ts provides the star background */}
       <div style={{
         background: '#fff', borderRadius: '20px',
         width: '454px', position: 'relative', overflow: 'hidden', zIndex: 2,
@@ -326,7 +309,7 @@ function PlayerSetup({ players, setPlayers, onSkip, onNext }: { players: Player[
 
   return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <Stars />
+      {/* galaxy canvas from galaxy.ts provides the star background */}
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
         {/* Title */}
@@ -525,7 +508,7 @@ function GamePlay({ players, onBack }: { players: Player[]; onBack: () => void }
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px 40px 60px' }}>
-      <Stars />
+      {/* galaxy canvas from galaxy.ts provides the star background */}
 
       {/* Current player label */}
       {currentPlayer && (
@@ -686,7 +669,7 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 100,
-      background: '#0a0a0a',
+      background: 'transparent',
       display: 'flex', flexDirection: 'column',
       overflowY: 'auto',
     }}>

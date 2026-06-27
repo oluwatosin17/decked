@@ -102,7 +102,7 @@ export default function HomePage({ onPlayTruthOrDare }: Props) {
                 fontSize: '16px', fontWeight: 400, lineHeight: 'normal',
                 transition: 'color 0.2s',
               }}
-                onMouseOver={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
+                onMouseOver={e => (e.currentTarget.style.color = '#ffffff')}
                 onMouseOut={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}>
                 {label}
               </a>
@@ -523,7 +523,7 @@ export default function HomePage({ onPlayTruthOrDare }: Props) {
       {/* ══════════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════════ */}
-      <footer style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px', padding: '32px 60px', background: '#0c0c0e' }}>
+      <footer style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px', padding: '32px 60px', background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '420px' }}>
             <p className="font-anton text-white" style={{ fontSize: '32px' }}>DECKED</p>
