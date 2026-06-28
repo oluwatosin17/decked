@@ -379,39 +379,44 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters 
 
   const filtered = allCards.filter(c => visibleIds.has(c.id))
 
-  return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gridAutoRows: '348px',
-      gap: '20px',
-    }}>
-      {filtered.map((card, i) => {
-        const isExiting = exitingIds.has(card.id)
-        const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
-                       : card.id === 'spicy-starters' ? onPlaySpicyStarters
-                       : undefined
+  // Split into rows of 4 — space-between per row preserves exact card sizes
+  const rows: typeof filtered[] = []
+  for (let i = 0; i < filtered.length; i += 4) rows.push(filtered.slice(i, i + 4))
 
-        return (
-          <div
-            key={`${card.id}-${staggerKey}`}
-            className="browse-card-wrap"
-            style={{
-              animation: isExiting
-                ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
-                : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 40}ms both`,
-            }}
-          >
-            {/* Playable badge */}
-            {card.playable && (
-              <div className="play-badge" aria-hidden="true">
-                ▶ PLAY
+  let cardIdx = 0
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      {rows.map((row, rowIdx) => (
+        <div key={rowIdx} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          {row.map((card) => {
+            const i = cardIdx++
+            const isExiting = exitingIds.has(card.id)
+            const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
+                           : card.id === 'spicy-starters' ? onPlaySpicyStarters
+                           : undefined
+
+            return (
+              <div
+                key={`${card.id}-${staggerKey}`}
+                className="browse-card-wrap"
+                style={{
+                  width: `${card.w}px`,
+                  height: `${card.h}px`,
+                  flexShrink: 0,
+                  animation: isExiting
+                    ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
+                    : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 40}ms both`,
+                }}
+              >
+                {card.playable && (
+                  <div className="play-badge" aria-hidden="true">▶ PLAY</div>
+                )}
+                {card.render(onClick)}
               </div>
-            )}
-            {card.render(onClick)}
-          </div>
-        )
-      })}
+            )
+          })}
+        </div>
+      ))}
     </div>
   )
 }

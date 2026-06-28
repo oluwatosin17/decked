@@ -61,19 +61,13 @@ input::placeholder {
   to   { opacity: 0; transform: translateY(-12px) scale(0.95); }
 }
 
-/* Wrapper fills grid cell; enables play badge + enhanced hover */
+/* Wrapper enables play badge + enhanced hover; card keeps natural size */
 .browse-card-wrap {
   position: relative;
-  width: 100%;
-  height: 100%;
-}
-.browse-card-wrap > div:last-child {
-  width: 100% !important;
-  height: 100% !important;
 }
 .browse-card-wrap .card-tile {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100%;
+  height: 100%;
   border-radius: 12px;
   transition: transform 0.25s var(--ease-out),
               box-shadow 0.25s var(--ease-out),
