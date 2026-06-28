@@ -260,7 +260,7 @@ function HowSpicy({ onSelect }: { onSelect: (level: SpiceLevel) => void }) {
   }
 
   return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
@@ -274,7 +274,7 @@ function HowSpicy({ onSelect }: { onSelect: (level: SpiceLevel) => void }) {
               <button
                 key={level}
                 onClick={() => handleSelect(level)}
-                className={`spicy-option${isSelected ? ' selected' : ''}`}
+                className={`spicy-option stagger-item${isSelected ? ' selected' : ''}`}
                 style={{
                   background: isSelected ? '#1e1e22' : '#111113',
                   border: '1px solid transparent',
@@ -335,7 +335,7 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
   }
 
   return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
@@ -344,7 +344,7 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {players.map((p, i) => (
-            <div key={i} style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px' }}>
+            <div key={i} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
                 <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
                 {editingIdx === i ? (
@@ -390,10 +390,10 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
-          <button onClick={onSkip ?? onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+          <button className="game-btn" onClick={onSkip ?? onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             SKIP FOR NOW
           </button>
-          <button onClick={onNext} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' }}>
+          <button className="game-btn-primary" onClick={onNext} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
             NEXT
           </button>
         </div>
@@ -549,6 +549,31 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
 /* ═══════════════════════════════════════════════════════
    SCREEN 7 — Game Cards
    ═══════════════════════════════════════════════════════ */
+type FlipPhase = 'idle' | 'out' | 'in'
+
+function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipPhase }) {
+  const cls = flipPhase === 'out' ? 'game-card-flip-out'
+            : flipPhase === 'in'  ? 'game-card-flip-in'
+            : ''
+  return (
+    <div className={cls} style={{
+      width: '365px', height: '457px', borderRadius: '12px', overflow: 'hidden',
+      position: 'relative', flexShrink: 0, zIndex: 2,
+      boxShadow: '0 32px 80px rgba(171,18,41,0.35)',
+    }}>
+      <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+      <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
+        <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+      <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#df91b5', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '29.7px', color: '#ab1229', textAlign: 'center', lineHeight: 'normal', margin: 0, padding: '0 16px' }}>
+          {question.toUpperCase()}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 function GameScreen({ questions, players, totalCards, onClose }: {
   questions: string[]
   players: Player[]
@@ -557,10 +582,10 @@ function GameScreen({ questions, players, totalCards, onClose }: {
 }) {
   const [idx, setIdx] = useState(0)
   const [playerIdx, setPlayerIdx] = useState(0)
-  const [flipping, setFlipping] = useState(false)
+  const [flipPhase, setFlipPhase] = useState<FlipPhase>('idle')
+  const [displayIdx, setDisplayIdx] = useState(0)  // what's actually shown
   const [skipCount, setSkipCount] = useState(0)
 
-  // Refs to avoid stale closures in setTimeout callbacks
   const flippingRef = useRef(false)
   const playersRef  = useRef(players)
   useEffect(() => { playersRef.current = players }, [players])
@@ -569,27 +594,37 @@ function GameScreen({ questions, players, totalCards, onClose }: {
     if (flippingRef.current) return
     if (skipped) setSkipCount(c => c + 1)
     flippingRef.current = true
-    setFlipping(true)
+
+    // Phase 1 — flip out
+    setFlipPhase('out')
+
     setTimeout(() => {
+      // Mid-flip: update content (card is edge-on, invisible)
       setIdx(i => i + 1)
+      setDisplayIdx(i => i + 1)
       setPlayerIdx(i => {
         const len = playersRef.current.length
         return len > 0 ? (i + 1) % len : 0
       })
-      flippingRef.current = false
-      setFlipping(false)
-    }, 220)
-  }, []) // stable — reads from refs
+
+      // Phase 2 — flip in
+      setFlipPhase('in')
+
+      setTimeout(() => {
+        setFlipPhase('idle')
+        flippingRef.current = false
+      }, 300)
+    }, 180)
+  }, [])
 
   const isDone = totalCards > 0 && idx >= totalCards
   const currentPlayer = players.length > 0 ? players[playerIdx] : null
-  const question = questions[idx % questions.length]
+  const question = questions[displayIdx % questions.length]
 
   if (isDone) {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px' }}>
-        {/* Heading */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+        <div className="done-heading" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
           <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>
             YOU'RE DECKED
           </h2>
@@ -598,12 +633,11 @@ function GameScreen({ questions, players, totalCards, onClose }: {
           </p>
         </div>
 
-        {/* Stats row */}
-        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
+        <div className="done-stats" style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
           {[
-            { count: totalCards, label: 'CARDS' },
-            { count: skipCount,  label: 'SKIPPED' },
-            { count: players.length, label: 'PLAYERS' },
+            { count: totalCards,      label: 'CARDS'   },
+            { count: skipCount,       label: 'SKIPPED' },
+            { count: players.length,  label: 'PLAYERS' },
           ].map((stat, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
               {i > 0 && <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.1)', margin: '0 28px' }} />}
@@ -615,28 +649,22 @@ function GameScreen({ questions, players, totalCards, onClose }: {
           ))}
         </div>
 
-        {/* Mini spicy starters card */}
-        <div style={{ position: 'relative', zIndex: 2, width: '199px', height: '200px', borderRadius: '9px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(183,0,18,0.4)', flexShrink: 0 }}>
+        <div className="done-card" style={{ position: 'relative', zIndex: 2, width: '199px', height: '200px', borderRadius: '9px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(183,0,18,0.4)', flexShrink: 0 }}>
           <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
           <div style={{ position: 'absolute', left: '-40px', top: 0, width: '260px', height: '200px', overflow: 'hidden' }}>
             <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div style={{ position: 'absolute', top: '13px', right: '13px', bottom: '12px', left: '11px', background: '#b70012', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ fontFamily: "'Stick', sans-serif", fontSize: '19px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>
-              spicy{'\n'}starters
-            </p>
-            <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '6px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: '8px 0 0' }}>
-              CONVERSATION CARDS TO SHARE
-            </p>
+            <p style={{ fontFamily: "'Stick', sans-serif", fontSize: '19px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>spicy{'\n'}starters</p>
+            <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '6px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: '8px 0 0' }}>CONVERSATION CARDS TO SHARE</p>
           </div>
         </div>
 
-        {/* Buttons */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px' }}>
-          <button onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+        <div className="done-btns" style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px' }}>
+          <button className="game-btn" onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             BROWSE GAMES
           </button>
-          <button onClick={() => { setIdx(0); setPlayerIdx(0); setSkipCount(0) }} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))' }}>
+          <button className="game-btn-primary" onClick={() => { setIdx(0); setDisplayIdx(0); setPlayerIdx(0); setSkipCount(0); setFlipPhase('idle') }} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
             PLAY AGAIN
           </button>
         </div>
@@ -648,53 +676,28 @@ function GameScreen({ questions, players, totalCards, onClose }: {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', position: 'relative', padding: '40px 40px 60px' }}>
 
       {currentPlayer && (
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)' }} />
+        <div key={currentPlayer.name} className="player-chip-enter" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.25)', boxShadow: `0 0 0 3px ${currentPlayer.color}33` }} />
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
             {currentPlayer.name.toUpperCase()}'S TURN
           </span>
         </div>
       )}
 
-      {/* Game card — pink with red checkerboard */}
-      <div key={idx} className="tod-card-enter" style={{
-        width: '365px', height: '457px', borderRadius: '12px', overflow: 'hidden',
-        position: 'relative', flexShrink: 0, zIndex: 2,
-        opacity: flipping ? 0 : 1,
-        transform: flipping ? 'scale(0.96)' : 'scale(1)',
-        transition: 'opacity 0.22s, transform 0.22s',
-        boxShadow: '0 32px 80px rgba(171,18,41,0.35)',
-      }}>
-        {/* Pink base */}
-        <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-        {/* Checkerboard image */}
-        <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
-          <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-        {/* Inner pink content area */}
-        <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#df91b5', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <p style={{
-            fontFamily: "'Staatliches', sans-serif",
-            fontSize: '29.7px', color: '#ab1229',
-            textAlign: 'center', lineHeight: 'normal',
-            margin: 0, padding: '0 16px',
-          }}>
-            {question.toUpperCase()}
-          </p>
-        </div>
-      </div>
+      {/* Game card with 3D flip */}
+      <SpicyCard question={question} flipPhase={flipPhase} />
 
       {totalCards > 0 && (
-        <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
+        <p key={`counter-${idx}`} className="counter-in" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
           CARD {idx + 1} OF {totalCards}
         </p>
       )}
 
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-        <button onClick={() => advance(true)} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}>
+        <button className="game-btn" onClick={() => advance(true)} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}>
           SKIP FOR NOW
         </button>
-        <button onClick={() => advance(false)} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))', letterSpacing: '0.05em' }}>
+        <button className="game-btn-primary" onClick={() => advance(false)} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}>
           NEXT
         </button>
       </div>

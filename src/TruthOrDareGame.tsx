@@ -511,7 +511,8 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
   onBrowseGames: () => void
 }) {
   const [cardState, setCardState] = useState<CardState>('picking')
-  const [animating, setAnimating] = useState(false)
+  const [flipPhase, setFlipPhase] = useState<'idle' | 'out' | 'in'>('idle')
+  const flippingRef = useRef(false)
 
   const currentPlayer = players.length > 0 ? players[cardIndex % players.length] : null
 
@@ -519,15 +520,25 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
   const darePrompt  = shuffledDares[cardIndex % shuffledDares.length]
 
   const pickChoice = useCallback((choice: 'truth' | 'dare') => {
-    if (animating || cardState !== 'picking') return
-    setAnimating(true)
-    setTimeout(() => { setCardState(choice); setAnimating(false) }, 200)
-  }, [animating, cardState])
+    if (flippingRef.current || cardState !== 'picking') return
+    flippingRef.current = true
+    setFlipPhase('out')
+    setTimeout(() => {
+      setCardState(choice)
+      setFlipPhase('in')
+      setTimeout(() => { setFlipPhase('idle'); flippingRef.current = false }, 300)
+    }, 160)
+  }, [cardState])
 
   const advance = (cb: () => void) => {
-    if (animating) return
-    setAnimating(true)
-    setTimeout(() => { setCardState('picking'); setAnimating(false); cb() }, 200)
+    if (flippingRef.current) return
+    flippingRef.current = true
+    setFlipPhase('out')
+    setTimeout(() => {
+      setCardState('picking')
+      setFlipPhase('in')
+      setTimeout(() => { setFlipPhase('idle'); flippingRef.current = false; cb() }, 300)
+    }, 160)
   }
 
   const isDone = totalCards > 0 && cardIndex >= totalCards
@@ -535,7 +546,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
   if (isDone) {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px', padding: '40px' }}>
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+        <div className="done-heading" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
           <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
             You're Decked
           </h2>
@@ -545,7 +556,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         </div>
 
         {/* Stats card */}
-        <div style={{
+        <div className="done-stats" style={{
           position: 'relative', zIndex: 2,
           background: '#18181b', borderRadius: '12px',
           display: 'flex', alignItems: 'center',
@@ -570,8 +581,8 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           ))}
         </div>
 
-        {/* Mini Truth or Dare card — matches Figma 797:66239 */}
-        <div style={{
+        {/* Mini Truth or Dare card */}
+        <div className="done-card" style={{
           position: 'relative', zIndex: 2,
           width: '199px', height: '200px',
           background: '#fff', borderRadius: '9px',
@@ -627,17 +638,11 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         </div>
 
         {/* Buttons */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button
-            onClick={onBrowseGames}
-            style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}
-          >
+        <div className="done-btns" style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             BROWSE GAMES
           </button>
-          <button
-            onClick={onPlayAgain}
-            style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))' }}
-          >
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
             PLAY AGAIN
           </button>
         </div>
@@ -661,30 +666,26 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
 
         {/* Split card */}
         <div
-          className="tod-card-enter"
+          className={`tod-split-card tod-card-enter${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
           style={{
             position: 'relative', zIndex: 2,
             width: '454px', height: '457px',
             borderRadius: '20px',
             overflow: 'hidden',
-            opacity: animating ? 0 : 1,
-            transform: animating ? 'scale(0.96)' : 'scale(1)',
-            transition: 'opacity 0.2s, transform 0.2s',
             boxShadow: '0 32px 80px rgba(220,40,39,0.35)',
           }}
         >
           {/* TRUTH — top half */}
           <div
+            className="tod-choice"
             onClick={() => pickChoice('truth')}
             style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: '228.5px',
               background: '#e9b1ba',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
-              transition: 'filter 0.15s',
+              transformOrigin: 'center bottom',
             }}
-            onMouseOver={e => (e.currentTarget.style.filter = 'brightness(0.95)')}
-            onMouseOut={e => (e.currentTarget.style.filter = 'none')}
           >
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#dd2a25', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               TRUTH
@@ -693,16 +694,15 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
 
           {/* DARE — bottom half */}
           <div
+            className="tod-choice"
             onClick={() => pickChoice('dare')}
             style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, height: '228.5px',
               background: '#dd2a25',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer',
-              transition: 'filter 0.15s',
+              transformOrigin: 'center top',
             }}
-            onMouseOver={e => (e.currentTarget.style.filter = 'brightness(0.9)')}
-            onMouseOut={e => (e.currentTarget.style.filter = 'none')}
           >
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#e9b1ba', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               DARE
@@ -710,7 +710,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           </div>
 
           {/* Hearts at divider */}
-          <div style={{
+          <div className="tod-hearts" style={{
             position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%, -50%)',
             display: 'flex', gap: '5px', alignItems: 'center',
@@ -724,12 +724,13 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         {/* SKIP THIS CARD */}
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
           <button
+            className="game-btn"
             onClick={() => advance(() => onAdvance('skip'))}
             style={{
               border: '1px solid #fff', background: 'none', borderRadius: '999px',
               padding: '12px 18px', width: '160px',
               fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-              color: '#fff', cursor: 'pointer', textAlign: 'center',
+              color: '#fff', textAlign: 'center',
               boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em',
             }}
           >
@@ -739,7 +740,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
 
         {/* Card counter */}
         {totalCards > 0 && (
-          <div style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
+          <div key={cardIndex} className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
             CARD {cardIndex + 1} OF {totalCards}
           </div>
         )}
@@ -758,8 +759,8 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 40px 60px', gap: '24px', position: 'relative' }}>
 
       {currentPlayer && (
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)' }} />
+        <div key={currentPlayer.name} className="player-chip-enter" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)', boxShadow: `0 0 0 3px ${currentPlayer.color}33` }} />
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
             {currentPlayer.name.toUpperCase()}'S TURN
           </span>
@@ -770,8 +771,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
       )}
 
       <div
-        key={`${cardIndex}-${cardState}`}
-        className="tod-card-enter"
+        className={`tod-card-enter${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
         style={{
           position: 'relative', zIndex: 2,
           background: cardBg, borderRadius: '20px',
@@ -780,9 +780,6 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           alignItems: 'center', justifyContent: 'center',
           padding: '52px 48px 44px', gap: '24px',
           boxShadow: `0 32px 80px ${isTruth ? 'rgba(247,100,100,0.25)' : 'rgba(220,40,39,0.45)'}`,
-          opacity: animating ? 0 : 1,
-          transform: animating ? 'translateY(14px) scale(0.96)' : 'translateY(0) scale(1)',
-          transition: 'opacity 0.2s, transform 0.2s',
         }}
       >
         <div style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: cardText, opacity: 0.65, textTransform: 'uppercase' }}>
@@ -802,22 +799,22 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
       </div>
 
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
-        <button
+        <button className="game-btn"
           onClick={() => advance(() => onAdvance('skip'))}
-          style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}
+          style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}
         >
           SKIP
         </button>
-        <button
+        <button className="game-btn-primary"
           onClick={() => advance(() => onAdvance(isTruth ? 'truth' : 'dare'))}
-          style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))', letterSpacing: '0.05em' }}
+          style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}
         >
           NEXT
         </button>
       </div>
 
       {totalCards > 0 && (
-        <div style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
+        <div key={cardIndex} className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
           CARD {cardIndex + 1} OF {totalCards}
         </div>
       )}
