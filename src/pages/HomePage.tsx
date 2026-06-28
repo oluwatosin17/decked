@@ -1,3 +1,4 @@
+import { HomeCardRows } from '../components/GameCardGrid'
 // React JSX handled by vite/react plugin — no explicit import needed
 
 /* ── Figma-hosted assets ─────────────────────────────────────────── */
@@ -212,7 +213,9 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onBro
             Pick your vibe.
           </h2>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} />
+
+          <div style={{ display: 'none' }}> {/* ── legacy rows kept for reference ── */}
 
             {/* ── ROW 1 ── */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

@@ -42,13 +42,68 @@ input::placeholder {
 
 /* ─── Homepage tiles ─── */
 .card-tile {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
   cursor: pointer;
+  will-change: transform;
 }
-.card-tile:hover { transform: translateY(-6px) rotate(0deg) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.card-tile:hover { transform: translateY(-6px) !important; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
 .hero-card { transition: transform 0.3s ease; }
 .hero-card:hover { transform: rotate(0deg) scale(1.04) !important; }
 .cards-section { background: transparent; }
+
+/* ─── Browse page card animations ─── */
+@keyframes browse-card-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes browse-card-exit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-12px) scale(0.95); }
+}
+
+/* Wrapper enables the play badge + enhanced hover */
+.browse-card-wrap {
+  position: relative;
+}
+.browse-card-wrap .card-tile {
+  height: 100%;
+  border-radius: 12px;
+  transition: transform 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out),
+              filter 0.25s;
+}
+.browse-card-wrap:hover .card-tile {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 28px 56px rgba(0,0,0,0.4);
+  filter: brightness(1.04);
+}
+.browse-card-wrap:active .card-tile {
+  transform: scale(0.97) !important;
+  transition-duration: 0.1s;
+}
+
+/* PLAY badge — fades in on playable card hover */
+.play-badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(220, 40, 39, 0.92);
+  color: #fff;
+  font-family: 'Staatliches', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.9);
+  transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-spring);
+  backdrop-filter: blur(4px);
+}
+.browse-card-wrap:hover .play-badge {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
 
 /* ═══════════════════════════════════════════════
    SCREEN TRANSITIONS — applied to every screen's
