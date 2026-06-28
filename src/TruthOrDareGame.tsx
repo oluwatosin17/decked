@@ -201,14 +201,13 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
               background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
               width: '97px', height: '96px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              overflow: 'hidden', padding: '4px',
+              padding: '4px',
+              /* No overflow:hidden — text overflows onto white card (invisible) */
             }}>
-              {/* font-size scales "18+" to fill the circle — Anton is very condensed */}
               <span style={{
-                fontFamily: "'Anton', sans-serif", fontSize: '60px', color: '#fff',
-                letterSpacing: '1px', lineHeight: 1, display: 'block',
+                fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff',
+                letterSpacing: '1.44px', lineHeight: '72px', display: 'block',
                 textAlign: 'center', whiteSpace: 'nowrap',
-                transform: 'scaleX(1.15)',  /* horizontally stretch to fill circle width */
               }}>
                 18+
               </span>
@@ -222,7 +221,7 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
             }}>
               MATURE CONTENT
             </h2>
-            <div style={{ textAlign: 'center', color: '#5d3f3c', fontSize: '14px', fontFamily: "'Inter', sans-serif", fontWeight: 400, lineHeight: '20px' }}>
+            <div style={{ textAlign: 'center', color: '#5d3f3c', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
               <p style={{ margin: 0 }}>Truth or Dare includes</p>
               <p style={{ margin: 0 }}>mature content for ages 18+</p>
               <p style={{ margin: '8px 0 0' }}>Continue?</p>

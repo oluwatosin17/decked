@@ -1,14 +1,16 @@
-import { useState, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 
-/* ─── Asset URLs (Figma MCP hosted) ─── */
-// Intro card — back of deck (red background, pink checkerboard)
-const SPICY_INTRO_BG  = 'https://www.figma.com/api/mcp/asset/ce496b8c-9b30-4b79-ab38-ff810a1fb8a4'
-// Game card — front (pink background, red checkerboard)
-const SPICY_CARD_BG   = 'https://www.figma.com/api/mcp/asset/20298f80-8b5f-4caf-b054-1a6346c38f30'
-// Social icons
+/* ─── Asset URLs ─── */
+const HEART_FILLED     = 'https://www.figma.com/api/mcp/asset/fed07084-3167-41dd-a881-248352a413c6'
+const CHILI_ICON       = 'https://www.figma.com/api/mcp/asset/4a491df1-5cdc-4b94-8cc4-e526056bcd6f'
+const SPICY_INTRO_BG   = 'https://www.figma.com/api/mcp/asset/ce496b8c-9b30-4b79-ab38-ff810a1fb8a4'
+const SPICY_CARD_BG    = 'https://www.figma.com/api/mcp/asset/20298f80-8b5f-4caf-b054-1a6346c38f30'
 const SOCIAL_TIKTOK    = 'https://www.figma.com/api/mcp/asset/52c80b9f-7611-4e1c-b0a1-b87cbde55222'
 const SOCIAL_INSTAGRAM = 'https://www.figma.com/api/mcp/asset/2fb330d3-8103-4715-98c4-977825083eae'
 const SOCIAL_WHATSAPP  = 'https://www.figma.com/api/mcp/asset/5e3391bc-c214-4266-8b20-9d5680742eef'
+
+type Player = { name: string; color: string }
+const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -19,27 +21,46 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-const QUESTIONS = [
+/* ─── Questions by spice level ─── */
+const MILD_QUESTIONS = [
   "What's one thing someone can do that instantly makes them more attractive?",
-  "If you could change one thing about how you typically communicate in relationships, what would it be?",
-  "What's something you find deeply attractive in a person that you rarely admit?",
   "What's the most meaningful conversation you've had this year?",
-  "What's something you wish people understood about you without you having to explain?",
-  "What's a small, everyday thing someone does that makes you feel truly appreciated?",
   "What topic could you talk about for hours without getting bored?",
+  "What's something you find deeply attractive in a person?",
+  "What makes you feel most like yourself?",
+  "What's a memory that makes you smile every time you think about it?",
+  "What does home feel like to you?",
+  "What's a small act of kindness someone did for you that stayed with you?",
+  "What's one thing you appreciate about the person next to you right now?",
+  "What makes you feel most understood by someone?",
+]
+
+const MEDIUM_QUESTIONS = [
+  "What's something you wish people understood about you without you having to explain?",
   "When did you last feel truly understood by someone?",
   "What's something you've been wanting to say but haven't found the right moment?",
-  "What's one thing you appreciate about the person sitting next to you right now?",
-  "What makes you feel most like yourself?",
   "What's a question you've always wanted to ask but been afraid to?",
-  "What's the best piece of advice you've ever received about love?",
   "What's one thing you're still learning about relationships?",
-  "What's a memory that makes you smile every time you think about it?",
   "What's something you used to believe about love that you no longer believe?",
-  "What's a small act of kindness someone did for you that stayed with you?",
   "What makes you feel most vulnerable in a relationship?",
-  "What does home feel like to you?",
-  "What's one thing you'd do differently if you could start a relationship over?",
+  "What's the best piece of advice you've ever received about love?",
+  "What do you find yourself craving most in your relationships right now?",
+  "What's a deal-breaker for you that you've never fully admitted?",
+  ...MILD_QUESTIONS,
+]
+
+const HOT_QUESTIONS = [
+  "What's one thing you'd do differently if you could start your last relationship over?",
+  "What's your biggest fear about intimacy that you rarely share?",
+  "Have you ever felt a connection with someone you shouldn't have? What happened?",
+  "What's something you've always wanted to try in a relationship but haven't?",
+  "What's the most honest thing you've ever said to a partner?",
+  "What do you find yourself hiding in relationships to seem more appealing?",
+  "What was the hardest thing you've had to forgive someone for?",
+  "What's a boundary you've crossed that you still think about?",
+  "When were you the most vulnerable with someone, and how did it go?",
+  "What's one truth about yourself in relationships you'd tell a stranger but not a friend?",
+  ...MEDIUM_QUESTIONS,
 ]
 
 /* ─── Shared nav ─── */
@@ -55,22 +76,12 @@ function GameNav({ onBack }: { onBack: () => void }) {
       </span>
       <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
         {['Browse Games', 'How to Play', 'About'].map(label => (
-          <button
-            key={label}
+          <button key={label}
             onClick={label === 'Browse Games' ? onBack : undefined}
-            onMouseOver={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = '#ffffff' }}
+            onMouseOver={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = '#fff' }}
             onMouseOut={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
-            style={{
-              background: 'none', border: 'none',
-              color: 'rgba(255,255,255,0.4)',
-              fontFamily: "'Anton SC', sans-serif",
-              fontSize: '16px', fontWeight: 400,
-              cursor: label === 'Browse Games' ? 'pointer' : 'default',
-              lineHeight: 'normal', padding: 0, transition: 'color 0.2s',
-            }}
-          >
-            {label}
-          </button>
+            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: label === 'Browse Games' ? 'pointer' : 'default', lineHeight: 'normal', padding: 0, transition: 'color 0.2s' }}
+          >{label}</button>
         ))}
       </div>
     </nav>
@@ -80,11 +91,7 @@ function GameNav({ onBack }: { onBack: () => void }) {
 /* ─── Shared footer ─── */
 function GameFooter() {
   return (
-    <footer style={{
-      background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)',
-      padding: '32px 60px',
-      display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0,
-    }}>
+    <footer style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px' }}>
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '32px', color: '#fff', lineHeight: 'normal' }}>DECKED</span>
@@ -100,14 +107,10 @@ function GameFooter() {
       </div>
       <div style={{ height: '1px', background: '#212326', width: '100%' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: '#9ca3af' }}>
-          © 2026 DECKED. All rights reserved.
-        </span>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: '#9ca3af' }}>© 2026 DECKED. All rights reserved.</span>
         <div style={{ display: 'flex', gap: '24px' }}>
           {['Privacy', 'Terms', 'Cookie'].map(l => (
-            <button key={l} style={{ background: 'none', border: 'none', color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', cursor: 'pointer', padding: 0 }}>
-              {l}
-            </button>
+            <button key={l} style={{ background: 'none', border: 'none', color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', cursor: 'pointer', padding: 0 }}>{l}</button>
           ))}
         </div>
       </div>
@@ -115,186 +118,583 @@ function GameFooter() {
   )
 }
 
-/* ─── Spicy Starters Card (reusable shell) ─── */
-function SpicyCard({
-  bgImage, innerBg, children, onClick, style = {},
-}: {
-  bgImage: string
-  innerBg: string
-  children?: React.ReactNode
-  onClick?: () => void
-  style?: React.CSSProperties
-}) {
-  // Card outer: 365×457px, pink base, checkerboard overlay image, inner content rect
-  // Based on Figma: image at left=-91.99px, 457×457px, inner rect at inset 6.62%/6.69%/6.1%/25.45%
-  // In card coords: inner rect ≈ top:30px, right:30px, bottom:28px, left:24px
+/* ─── Hearts row (age gate card top/bottom band) ─── */
+function HeartsRow({ top }: { top: boolean }) {
   return (
-    <div
-      onClick={onClick}
-      style={{
-        width: '365px', height: '457px',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        position: 'relative',
-        cursor: onClick ? 'pointer' : 'default',
-        flexShrink: 0,
-        ...style,
-      }}
-    >
-      {/* Pink base behind the checkerboard image */}
-      <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-
-      {/* Checkerboard border image — extends to the left to show full pattern */}
-      <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
-        <img src={bgImage} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+    <div style={{
+      position: 'absolute', [top ? 'top' : 'bottom']: top ? 0 : '-1px',
+      left: 0, right: 0, height: '87px',
+      background: '#dc2827', overflow: 'hidden',
+    }}>
+      {/* Stripes */}
+      <div style={{ position: 'absolute', [top ? 'top' : 'bottom']: '62px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '1px' }}>
+        {top
+          ? <><div style={{ height: '7px', background: '#ecc1c9', width: '100%' }} /><div style={{ height: '4px', background: '#ecc1c9', width: '100%' }} /></>
+          : <><div style={{ height: '4px', background: '#ecc1c9', width: '100%' }} /><div style={{ height: '7px', background: '#ecc1c9', width: '100%' }} /></>
+        }
       </div>
-
-      {/* Inner content area (inside the checkerboard border) */}
+      {/* Hearts */}
       <div style={{
-        position: 'absolute',
-        top: '30px', right: '30px', bottom: '28px', left: '24px',
-        background: innerBg,
-        overflow: 'hidden',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        position: 'absolute', left: '50%', transform: 'translateX(-50%)',
+        top: top ? '15px' : '40px',
+        display: 'flex', gap: '5px', alignItems: 'center', whiteSpace: 'nowrap',
       }}>
-        {children}
+        {Array.from({ length: 11 }, (_, i) => (
+          <img key={i} src={HEART_FILLED} alt=""
+            style={{ width: '32px', height: '32px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }}
+          />
+        ))}
       </div>
     </div>
   )
 }
 
-/* ─── Screen 1: Intro ─── */
-function IntroScreen({ onTap }: { onTap: () => void }) {
+/* ═══════════════════════════════════════════════════════
+   SCREEN 1 — Age Gate
+   ═══════════════════════════════════════════════════════ */
+function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
+  return (
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      {/* Outer card with checkerboard border */}
+      <div style={{
+        width: '392px', height: '504px', borderRadius: '12px', overflow: 'hidden',
+        position: 'relative', flexShrink: 0, zIndex: 2,
+        boxShadow: '0 32px 80px rgba(183,0,18,0.4)',
+      }}>
+        {/* Pink base layer */}
+        <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+        {/* Checkerboard border image */}
+        <div style={{ position: 'absolute', left: '-33px', top: 0, width: '457px', height: '504px', overflow: 'hidden' }}>
+          <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        {/* Inner red content area */}
+        <div style={{
+          position: 'absolute', top: '30px', right: '24px', bottom: '28px', left: '24px',
+          background: '#b70012', overflow: 'hidden',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px',
+          padding: '28px 40px',
+        }}>
+          {/* 18+ badge */}
+          <div style={{ width: '107px', height: '106px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ transform: 'rotate(-6deg)' }}>
+              <div style={{
+                background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
+                width: '97px', height: '96px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '4px',
+              }}>
+                <span style={{
+                  fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff',
+                  letterSpacing: '1.44px', lineHeight: '72px',
+                  display: 'block', textAlign: 'center', whiteSpace: 'nowrap',
+                }}>
+                  18+
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
+            <h2 style={{
+              fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+              fontSize: '36px', color: '#fff', margin: 0,
+              textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap',
+            }}>
+              MATURE CONTENT
+            </h2>
+            <div style={{ textAlign: 'center', color: '#fff', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
+              <p style={{ margin: 0 }}>Spicy Starters includes</p>
+              <p style={{ margin: 0 }}>mature content for ages 18+</p>
+              <p style={{ margin: '8px 0 0' }}>Continue?</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px', marginTop: '4px' }}>
+            <button onClick={onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+              No, go back
+            </button>
+            <button onClick={onConfirm} style={{ flex: 1, background: '#fff', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#b70012', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' }}>
+              YES, I'm 18+
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 2 — How Spicy Do You Like It
+   ═══════════════════════════════════════════════════════ */
+type SpiceLevel = 'mild' | 'medium' | 'hot'
+
+function ChiliIcon() {
+  return (
+    <div style={{
+      background: 'rgba(255,255,255,0.1)', borderRadius: '16px',
+      width: '32px', height: '32px', flexShrink: 0,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+    }}>
+      <div style={{ width: '32px', height: '32px', overflow: 'hidden', position: 'relative' }}>
+        {/* inset-[15.37%_28.22%] = top/bottom: 15.37% = 4.9px, left/right: 28.22% = 9px */}
+        <img src={CHILI_ICON} alt=""
+          style={{ position: 'absolute', top: '15.37%', left: '28.22%', right: '28.22%', bottom: '15.37%', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%' }}
+        />
+      </div>
+    </div>
+  )
+}
+
+function HowSpicy({ onSelect }: { onSelect: (level: SpiceLevel) => void }) {
+  const [selected, setSelected] = useState<SpiceLevel | null>(null)
+
+  const options: { level: SpiceLevel; label: string; count: number }[] = [
+    { level: 'mild', label: 'MILD', count: 1 },
+    { level: 'medium', label: 'MEDIUM', count: 2 },
+    { level: 'hot', label: 'HOT', count: 3 },
+  ]
+
+  const handleSelect = (level: SpiceLevel) => {
+    setSelected(level)
+    setTimeout(() => onSelect(level), 200)
+  }
+
+  return (
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
+          how spicy do you like it
+        </h2>
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {options.map(({ level, label, count }) => {
+            const isSelected = selected === level
+            return (
+              <button
+                key={level}
+                onClick={() => handleSelect(level)}
+                className={`spicy-option${isSelected ? ' selected' : ''}`}
+                style={{
+                  background: isSelected ? '#1e1e22' : '#111113',
+                  border: '1px solid transparent',
+                  borderRadius: '12px', height: '56px',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  padding: '12px', cursor: 'pointer', width: '100%',
+                }}
+              >
+                {Array.from({ length: count }, (_, i) => <ChiliIcon key={i} />)}
+                <span style={{
+                  fontFamily: "'Anton SC', sans-serif", fontSize: '18px',
+                  color: isSelected ? '#fff' : 'rgba(255,255,255,0.5)',
+                  lineHeight: 'normal', transition: 'color 0.15s',
+                }}>
+                  {label}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 3 — Who's Playing?
+   ═══════════════════════════════════════════════════════ */
+function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
+  players: Player[]
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>
+  onBack: () => void
+  onNext: () => void
+  onSkip?: () => void
+}) {
+  const [input, setInput] = useState('')
+  const [editingIdx, setEditingIdx] = useState<number | null>(null)
+  const [editValue, setEditValue] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+  const editRef = useRef<HTMLInputElement>(null)
+
+  const nextColor = PLAYER_COLORS[players.length % PLAYER_COLORS.length]
+  const hasInput = input.trim().length > 0
+
+  const addPlayer = () => {
+    const name = input.trim()
+    if (!name) return
+    setPlayers(prev => [...prev, { name, color: PLAYER_COLORS[prev.length % PLAYER_COLORS.length] }])
+    setInput('')
+    inputRef.current?.focus()
+  }
+
+  const commitEdit = () => {
+    const name = editValue.trim()
+    if (name && editingIdx !== null)
+      setPlayers(prev => prev.map((p, i) => i === editingIdx ? { ...p, name } : p))
+    setEditingIdx(null)
+  }
+
+  return (
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
+          Who's playing?
+        </h2>
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {players.map((p, i) => (
+            <div key={i} style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px' }}>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
+                {editingIdx === i ? (
+                  <input ref={editRef} value={editValue} onChange={e => setEditValue(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditingIdx(null) }}
+                    onBlur={commitEdit}
+                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1 }}
+                    autoFocus
+                  />
+                ) : (
+                  <span onClick={() => { setEditingIdx(i); setEditValue(p.name); setTimeout(() => editRef.current?.select(), 0) }}
+                    style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', cursor: 'text', flex: 1 }}>
+                    {p.name}
+                  </span>
+                )}
+              </div>
+              <button onClick={() => setPlayers(prev => prev.filter((_, j) => j !== i))}
+                style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', lineHeight: 1, padding: '0 4px' }} aria-label="Remove">
+                ×
+              </button>
+            </div>
+          ))}
+
+          <div style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text' }}
+            onClick={() => inputRef.current?.focus()}>
+            <button onClick={e => { e.stopPropagation(); addPlayer() }}
+              style={{ background: hasInput ? nextColor : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, color: hasInput ? '#fff' : 'rgba(255,255,255,0.6)', fontSize: hasInput ? '16px' : '20px', lineHeight: 1, transition: 'background 0.15s', boxShadow: hasInput ? '0 0 0 2.5px #ffffff' : 'none' }}>
+              {hasInput ? '✓' : '+'}
+            </button>
+            <input ref={inputRef} value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') addPlayer() }}
+              placeholder="Add a player..."
+              style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1 }}
+            />
+            {hasInput && (
+              <button onClick={e => { e.stopPropagation(); addPlayer() }}
+                style={{ background: 'none', border: 'none', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: nextColor, cursor: 'pointer', whiteSpace: 'nowrap', padding: 0, letterSpacing: '0.05em' }}>
+                TAP TO ADD →
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
+          <button onClick={onSkip ?? onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+            SKIP FOR NOW
+          </button>
+          <button onClick={onNext} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' }}>
+            NEXT
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 4 — Deck Size
+   ═══════════════════════════════════════════════════════ */
+function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number) => void }) {
+  const [value, setValue] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+  const parsed = parseInt(value, 10)
+  const valid = !isNaN(parsed) && parsed > 0 && parsed <= 200
+
+  return (
+    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
+            DECK SIZE
+          </h2>
+          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0, textAlign: 'center' }}>
+            How many cards do you want to play?
+          </p>
+
+          <div style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text', width: '100%', marginTop: '16px', boxSizing: 'border-box' }}
+            onClick={() => inputRef.current?.focus()}>
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '18px', lineHeight: 1 }}>#</span>
+            </div>
+            <input ref={inputRef} type="number" min={1} max={200} value={value}
+              onChange={e => setValue(e.target.value)}
+              placeholder="Enter number"
+              style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1 }}
+            />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '292px' }}>
+          <button onClick={onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+            GO BACK
+          </button>
+          <button onClick={() => valid && onStart(parsed)}
+            style={{ flex: 1, background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed', textAlign: 'center', transition: 'background 0.2s', filter: valid ? 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' : 'none' }}>
+            START THE GAME
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 5 — Get Ready
+   ═══════════════════════════════════════════════════════ */
+function GetReady({ player, onReady }: { player: Player | null; onReady: () => void }) {
+  const stableOnReady = useCallback(onReady, [])
+
+  useEffect(() => {
+    const id = setTimeout(stableOnReady, 2400)
+    return () => clearTimeout(id)
+  }, [stableOnReady])
+
+  return (
+    <div onClick={onReady} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', textTransform: 'uppercase' }}>
+          Get ready...
+        </h2>
+        {player && (
+          <div style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
+              {player.name.toUpperCase()}
+            </span>
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '4px' }}>
+          <span className="get-ready-dot" />
+          <span className="get-ready-dot" />
+          <span className="get-ready-dot" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 6 — Intro Card (real 3D flip)
+   ═══════════════════════════════════════════════════════ */
+function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion: string }) {
+  const [flipped, setFlipped] = useState(false)
+
+  const handleTap = () => {
+    if (flipped) return
+    setFlipped(true)
+    setTimeout(onTap, 800) // navigate after flip completes (matches 0.75s CSS)
+  }
+
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', position: 'relative', padding: '40px' }}>
-      {/* Intro card — back of deck */}
-      <SpicyCard
-        bgImage={SPICY_INTRO_BG}
-        innerBg="#b70012"
-        onClick={onTap}
-        style={{ boxShadow: '0 32px 80px rgba(183,0,18,0.4)', zIndex: 2 }}
+      {/* Flip container */}
+      <div
+        onClick={handleTap}
+        className="spicy-flip-container"
+        style={{ width: '365px', height: '457px', flexShrink: 0, zIndex: 2, cursor: 'pointer', boxShadow: '0 32px 80px rgba(183,0,18,0.4)', borderRadius: '12px' }}
       >
-        {/* Title: "spicy starters" in Stick font */}
-        <p style={{
-          fontFamily: "'Stick', sans-serif",
-          fontSize: '45px', color: '#df91b5',
-          textAlign: 'center', lineHeight: 'normal',
-          margin: 0, position: 'absolute',
-          left: '50%', transform: 'translateX(-50%)',
-          top: 'calc(50% - 138px)',
-          width: '280px',
-          whiteSpace: 'pre-line',
-        }}>
-          spicy{'\n'}starters
-        </p>
-        {/* Subtitle */}
-        <p style={{
-          fontFamily: "'Inter Tight', sans-serif",
-          fontWeight: 300, fontSize: '14px', color: '#df91b5',
-          textAlign: 'center', lineHeight: 'normal',
-          margin: 0, position: 'absolute',
-          left: '50%', transform: 'translateX(-50%)',
-          top: 'calc(50% + 135px)',
-          width: '148px',
-          whiteSpace: 'normal',
-        }}>
-          CONVERSATION CARDS TO SHARE
-        </p>
-      </SpicyCard>
+        <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
 
-      {/* Hint text */}
-      <p style={{
-        fontFamily: "'Inter', sans-serif", fontWeight: 400,
-        fontSize: '16px', color: 'rgba(255,255,255,0.5)',
-        margin: 0, position: 'relative', zIndex: 2,
-      }}>
+          {/* ── FRONT: spicy starters cover ── */}
+          <div className="spicy-flip-front">
+            <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+            <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
+              <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#b70012', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <p style={{ fontFamily: "'Stick', sans-serif", fontSize: '45px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 138px)', width: '280px' }}>
+                spicy{'\n'}starters
+              </p>
+              <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '14px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% + 135px)', width: '148px' }}>
+                CONVERSATION CARDS TO SHARE
+              </p>
+            </div>
+          </div>
+
+          {/* ── BACK: first question card ── */}
+          <div className="spicy-flip-back">
+            <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+            <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
+              <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#df91b5', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '29.7px', color: '#ab1229', textAlign: 'center', lineHeight: 'normal', margin: 0, padding: '0 16px' }}>
+                {firstQuestion.toUpperCase()}
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: '16px', color: flipped ? 'transparent' : 'rgba(255,255,255,0.5)', margin: 0, position: 'relative', zIndex: 2, transition: 'color 0.2s' }}>
         Tap the card to flip it.
       </p>
     </div>
   )
 }
 
-/* ─── Screen 2: Game ─── */
-function GameScreen({ questions, onClose }: { questions: string[]; onClose: () => void }) {
-  const [idx, setIdx]       = useState(0)
+/* ═══════════════════════════════════════════════════════
+   SCREEN 7 — Game Cards
+   ═══════════════════════════════════════════════════════ */
+function GameScreen({ questions, players, totalCards, onClose }: {
+  questions: string[]
+  players: Player[]
+  totalCards: number
+  onClose: () => void
+}) {
+  const [idx, setIdx] = useState(0)
+  const [playerIdx, setPlayerIdx] = useState(0)
   const [flipping, setFlipping] = useState(false)
+  const [skipCount, setSkipCount] = useState(0)
 
-  const advance = useCallback(() => {
-    if (flipping) return
+  // Refs to avoid stale closures in setTimeout callbacks
+  const flippingRef = useRef(false)
+  const playersRef  = useRef(players)
+  useEffect(() => { playersRef.current = players }, [players])
+
+  const advance = useCallback((skipped = false) => {
+    if (flippingRef.current) return
+    if (skipped) setSkipCount(c => c + 1)
+    flippingRef.current = true
     setFlipping(true)
     setTimeout(() => {
       setIdx(i => i + 1)
+      setPlayerIdx(i => {
+        const len = playersRef.current.length
+        return len > 0 ? (i + 1) % len : 0
+      })
+      flippingRef.current = false
       setFlipping(false)
     }, 220)
-  }, [flipping])
+  }, []) // stable — reads from refs
 
+  const isDone = totalCards > 0 && idx >= totalCards
+  const currentPlayer = players.length > 0 ? players[playerIdx] : null
   const question = questions[idx % questions.length]
 
-  return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', position: 'relative', padding: '40px 40px 60px' }}>
+  if (isDone) {
+    return (
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px' }}>
+        {/* Heading */}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>
+            YOU'RE DECKED
+          </h2>
+          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+            You played all {totalCards} spicy starters cards
+          </p>
+        </div>
 
-      {/* Game card — front side */}
-      <div
-        key={idx}
-        className="tod-card-enter"
-        style={{
-          opacity: flipping ? 0 : 1,
-          transform: flipping ? 'scale(0.96)' : 'scale(1)',
-          transition: 'opacity 0.22s, transform 0.22s',
-          zIndex: 2,
-        }}
-      >
-        <SpicyCard
-          bgImage={SPICY_CARD_BG}
-          innerBg="#df91b5"
-          style={{ boxShadow: '0 32px 80px rgba(171,18,41,0.35)' }}
-        >
-          {/* Question text — centered, slightly above middle */}
+        {/* Stats row */}
+        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
+          {[
+            { count: totalCards, label: 'CARDS' },
+            { count: skipCount,  label: 'SKIPPED' },
+            { count: players.length, label: 'PLAYERS' },
+          ].map((stat, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+              {i > 0 && <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.1)', margin: '0 28px' }} />}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', lineHeight: 1 }}>{stat.count}</span>
+                <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{stat.label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Mini spicy starters card */}
+        <div style={{ position: 'relative', zIndex: 2, width: '199px', height: '200px', borderRadius: '9px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(183,0,18,0.4)', flexShrink: 0 }}>
+          <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+          <div style={{ position: 'absolute', left: '-40px', top: 0, width: '260px', height: '200px', overflow: 'hidden' }}>
+            <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div style={{ position: 'absolute', top: '13px', right: '13px', bottom: '12px', left: '11px', background: '#b70012', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <p style={{ fontFamily: "'Stick', sans-serif", fontSize: '19px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>
+              spicy{'\n'}starters
+            </p>
+            <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '6px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: '8px 0 0' }}>
+              CONVERSATION CARDS TO SHARE
+            </p>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px' }}>
+          <button onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+            BROWSE GAMES
+          </button>
+          <button onClick={() => { setIdx(0); setPlayerIdx(0); setSkipCount(0) }} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', letterSpacing: '0.05em', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))' }}>
+            PLAY AGAIN
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', position: 'relative', padding: '40px 40px 60px' }}>
+
+      {currentPlayer && (
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: currentPlayer.color, flexShrink: 0, border: '2px solid rgba(255,255,255,0.2)' }} />
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
+            {currentPlayer.name.toUpperCase()}'S TURN
+          </span>
+        </div>
+      )}
+
+      {/* Game card — pink with red checkerboard */}
+      <div key={idx} className="tod-card-enter" style={{
+        width: '365px', height: '457px', borderRadius: '12px', overflow: 'hidden',
+        position: 'relative', flexShrink: 0, zIndex: 2,
+        opacity: flipping ? 0 : 1,
+        transform: flipping ? 'scale(0.96)' : 'scale(1)',
+        transition: 'opacity 0.22s, transform 0.22s',
+        boxShadow: '0 32px 80px rgba(171,18,41,0.35)',
+      }}>
+        {/* Pink base */}
+        <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+        {/* Checkerboard image */}
+        <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
+          <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        {/* Inner pink content area */}
+        <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#df91b5', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <p style={{
             fontFamily: "'Staatliches', sans-serif",
             fontSize: '29.7px', color: '#ab1229',
-            textAlign: 'center',
-            lineHeight: 'normal',
-            margin: 0,
-            padding: '0 16px',
-            position: 'absolute',
-            left: 0, right: 0,
-            top: '50%', transform: 'translateY(-50%)',
+            textAlign: 'center', lineHeight: 'normal',
+            margin: 0, padding: '0 16px',
           }}>
             {question.toUpperCase()}
           </p>
-        </SpicyCard>
+        </div>
       </div>
 
-      {/* Card counter */}
-      <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
-        CARD {idx + 1}
-      </p>
+      {totalCards > 0 && (
+        <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
+          CARD {idx + 1} OF {totalCards}
+        </p>
+      )}
 
-      {/* Buttons */}
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-        <button
-          onClick={advance}
-          style={{
-            border: '1px solid #fff', background: 'none', borderRadius: '999px',
-            padding: '12px 18px', width: '160px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-            color: '#fff', cursor: 'pointer', textAlign: 'center',
-            boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em',
-          }}
-        >
+        <button onClick={() => advance(true)} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}>
           SKIP FOR NOW
         </button>
-        <button
-          onClick={advance}
-          style={{
-            background: '#dc2827', border: 'none', borderRadius: '999px',
-            padding: '12px 18px', width: '160px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-            color: '#fff', cursor: 'pointer', textAlign: 'center',
-            filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))', letterSpacing: '0.05em',
-          }}
-        >
+        <button onClick={() => advance(false)} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.35))', letterSpacing: '0.05em' }}>
           NEXT
         </button>
       </div>
@@ -302,28 +702,83 @@ function GameScreen({ questions, onClose }: { questions: string[]; onClose: () =
   )
 }
 
-/* ─── Root Component ─── */
-type Step = 'intro' | 'game'
+/* ═══════════════════════════════════════════════════════
+   ROOT COMPONENT
+   ═══════════════════════════════════════════════════════ */
+type Step = 'ageGate' | 'howSpicy' | 'playerSetup' | 'deckSize' | 'getReady' | 'intro' | 'game'
 
 export default function SpicyStartersGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('intro')
-  const [questions] = useState(() => shuffle(QUESTIONS))
+  const [step, setStep]           = useState<Step>('ageGate')
+  const [spiceLevel, setSpiceLevel] = useState<SpiceLevel>('medium')
+  const [players, setPlayers]     = useState<Player[]>([])
+  const [totalCards, setTotalCards] = useState(0)
+  const [cardIndex, setCardIndex] = useState(0)
+  const [playerIndex, setPlayerIndex] = useState(0)
+  const [questions, setQuestions] = useState<string[]>(() => shuffle(MEDIUM_QUESTIONS))
+
+  const currentPlayer = players.length > 0 ? players[playerIndex] : null
+
+  const goToGame = useCallback(() => setStep('game'), [])
+
+  const handleSelectSpice = (level: SpiceLevel) => {
+    setSpiceLevel(level)
+    const bank = level === 'mild' ? MILD_QUESTIONS : level === 'hot' ? HOT_QUESTIONS : MEDIUM_QUESTIONS
+    setQuestions(shuffle(bank))
+    setStep('playerSetup')
+  }
+
+  const handleStart = (n: number) => {
+    setTotalCards(n)
+    setCardIndex(0)
+    setPlayerIndex(0)
+    setPlayers(prev => shuffle([...prev])) // shuffle player order each game
+    setStep('getReady')
+  }
+
+  const handleGetReadyDone = useCallback(() => {
+    setStep('intro')
+  }, [])
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'transparent',
-      display: 'flex', flexDirection: 'column',
-      overflowY: 'auto',
-    }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'transparent', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
       <GameNav onBack={onClose} />
 
+      {step === 'ageGate' && (
+        <AgeGate onBack={onClose} onConfirm={() => setStep('howSpicy')} />
+      )}
+
+      {step === 'howSpicy' && (
+        <HowSpicy onSelect={handleSelectSpice} />
+      )}
+
+      {step === 'playerSetup' && (
+        <PlayerSetup
+          players={players} setPlayers={setPlayers}
+          onBack={() => setStep('howSpicy')}
+          onNext={() => setStep('deckSize')}
+          onSkip={() => { setPlayers([]); setStep('deckSize') }}
+        />
+      )}
+
+      {step === 'deckSize' && (
+        <DeckSize onBack={() => setStep('playerSetup')} onStart={handleStart} />
+      )}
+
+      {step === 'getReady' && (
+        <GetReady player={currentPlayer} onReady={handleGetReadyDone} />
+      )}
+
       {step === 'intro' && (
-        <IntroScreen onTap={() => setStep('game')} />
+        <IntroCard onTap={goToGame} firstQuestion={questions[0] ?? ''} />
       )}
 
       {step === 'game' && (
-        <GameScreen questions={questions} onClose={onClose} />
+        <GameScreen
+          questions={questions}
+          players={players}
+          totalCards={totalCards}
+          onClose={onClose}
+        />
       )}
 
       <GameFooter />
