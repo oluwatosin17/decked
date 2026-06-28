@@ -30,6 +30,7 @@ const SOCIAL_WHATSAPP = 'https://www.figma.com/api/mcp/asset/94019f0b-e964-4c74-
 interface Props {
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
+  onBrowse: () => void
 }
 
 /* ── Truth or Dare card hearts band ───────────────────────────────── */
@@ -77,7 +78,7 @@ function HeartsRow({ top }: { top: boolean }) {
 }
 
 /* ── Main component ───────────────────────────────────────────────── */
-export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters }: Props) {
+export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onBrowse }: Props) {
   return (
     <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
@@ -97,16 +98,16 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters }: Pro
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             {['Browse Games', 'How to Play', 'About'].map(label => (
-              <a key={label} href="#" className="font-anton" style={{
-                textDecoration: 'none',
-                color: 'rgba(255,255,255,0.4)',
-                fontSize: '16px', fontWeight: 400, lineHeight: 'normal',
-                transition: 'color 0.2s',
-              }}
-                onMouseOver={e => (e.currentTarget.style.color = '#ffffff')}
-                onMouseOut={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}>
+              <button key={label} onClick={label === 'Browse Games' ? onBrowse : undefined}
+                className="font-anton game-btn"
+                style={{
+                  background: 'none', border: 'none', padding: 0,
+                  color: 'rgba(255,255,255,0.4)',
+                  fontSize: '16px', fontWeight: 400, lineHeight: 'normal',
+                  cursor: label === 'Browse Games' ? 'pointer' : 'default',
+                }}>
                 {label}
-              </a>
+              </button>
             ))}
           </div>
         </nav>

@@ -484,15 +484,18 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
     }, 160)
   }, [cardState])
 
+  // advance: flip current card OUT then immediately call cb().
+  // GamePlay will unmount (step → getReady), so no flip-in needed —
+  // next card starts fresh with cardState='picking' on remount.
   const advance = (cb: () => void) => {
     if (flippingRef.current) return
     flippingRef.current = true
     setFlipPhase('out')
     setTimeout(() => {
-      setCardState('picking')
-      setFlipPhase('in')
-      setTimeout(() => { setFlipPhase('idle'); flippingRef.current = false; cb() }, 300)
-    }, 160)
+      flippingRef.current = false
+      setFlipPhase('idle')
+      cb() // → handleAdvance → step='getReady'
+    }, 220)
   }
 
   const isDone = totalCards > 0 && cardIndex >= totalCards
