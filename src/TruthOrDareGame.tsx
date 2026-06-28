@@ -189,8 +189,8 @@ function GameFooter() {
 /* ─── Screen 1: Age Gate ─── */
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
   return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div className="card-float-up" style={{
         background: '#fff', borderRadius: '20px',
         width: '454px', position: 'relative', overflow: 'hidden', zIndex: 2,
       }}>
@@ -200,25 +200,15 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
             <div style={{
               background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
               width: '97px', height: '96px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              padding: '4px',
-              /* No overflow:hidden — text overflows onto white card (invisible) */
+              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px',
             }}>
-              <span style={{
-                fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff',
-                letterSpacing: '1.44px', lineHeight: '72px', display: 'block',
-                textAlign: 'center', whiteSpace: 'nowrap',
-              }}>
+              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff', letterSpacing: '1.44px', lineHeight: '72px', display: 'block', textAlign: 'center', whiteSpace: 'nowrap' }}>
                 18+
               </span>
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
-            <h2 style={{
-              fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-              fontSize: '36px', color: '#000', margin: 0,
-              textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap',
-            }}>
+            <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#000', margin: 0, textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap' }}>
               MATURE CONTENT
             </h2>
             <div style={{ textAlign: 'center', color: '#5d3f3c', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
@@ -228,28 +218,10 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
             </div>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px', marginTop: '4px' }}>
-            <button
-              onClick={onBack}
-              style={{
-                flex: 1, border: '1px solid #000', background: 'none', borderRadius: '999px',
-                padding: '12px 18px',
-                fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-                color: '#131416', cursor: 'pointer', textAlign: 'center',
-                boxShadow: '0 10px 24px rgba(0,0,0,0.25)',
-              }}
-            >
+            <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #000', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#131416', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
               No, go back
             </button>
-            <button
-              onClick={onConfirm}
-              style={{
-                flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px',
-                padding: '12px 18px',
-                fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-                color: '#fff', cursor: 'pointer', textAlign: 'center',
-                filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))',
-              }}
-            >
+            <button className="game-btn-primary" onClick={() => setTimeout(onConfirm, 100)} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
               YES, I'm 18+
             </button>
           </div>
@@ -300,7 +272,7 @@ function PlayerSetup({ players, setPlayers, onBack, onNext }: {
   const cancelEdit = () => { setEditingIdx(null); setEditValue('') }
 
   return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
@@ -309,7 +281,7 @@ function PlayerSetup({ players, setPlayers, onBack, onNext }: {
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {players.map((p: Player, i: number) => (
-            <div key={i} style={{
+            <div key={i} className="stagger-item" style={{
               background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
               borderRadius: '12px', height: '56px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px',
@@ -374,16 +346,10 @@ function PlayerSetup({ players, setPlayers, onBack, onNext }: {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
-          <button
-            onClick={onBack}
-            style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}
-          >
+          <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             GO BACK
           </button>
-          <button
-            onClick={onNext}
-            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' }}
-          >
+          <button className="game-btn-primary" onClick={() => setTimeout(onNext, 100)} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
             NEXT
           </button>
         </div>
@@ -400,7 +366,7 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
   const valid    = !isNaN(parsed) && parsed > 0 && parsed <= 200
 
   return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
@@ -438,15 +404,8 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
           >
             GO BACK
           </button>
-          <button
-            onClick={() => valid && onStart(parsed)}
-            style={{
-              flex: 1, background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px',
-              padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-              color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed',
-              textAlign: 'center', transition: 'background 0.2s, color 0.2s',
-              filter: valid ? 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' : 'none',
-            }}
+          <button className={valid ? 'game-btn-primary' : ''} onClick={() => valid && setTimeout(() => onStart(parsed), 100)}
+            style={{ flex: 1, background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed', textAlign: 'center', transition: 'background 0.2s, color 0.2s' }}
           >
             START THE GAME
           </button>
@@ -458,24 +417,20 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
 
 /* ─── Screen 4: Get Ready ─── */
 function GetReady({ player, onReady }: { player: Player | null; onReady: () => void }) {
-  // Auto-advance after 2.4s (enough time for dot animation to feel complete)
   useEffect(() => {
     const id = setTimeout(onReady, 2400)
     return () => clearTimeout(id)
   }, [onReady])
 
   return (
-    <div
-      onClick={onReady}
-      style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}
-    >
+    <div className="screen-enter" onClick={onReady} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', textTransform: 'uppercase' }}>
           Get ready...
         </h2>
 
         {player && (
-          <div style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+          <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
               {player.name.toUpperCase()}
@@ -483,7 +438,6 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
           </div>
         )}
 
-        {/* Animated anticipation dots */}
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '4px' }}>
           <span className="get-ready-dot" />
           <span className="get-ready-dot" />
@@ -546,36 +500,27 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
   if (isDone) {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px', padding: '40px' }}>
-        <div className="done-heading" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+          <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
             You're Decked
           </h2>
-          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
             You played all {totalCards} Truth or Dare cards
           </p>
         </div>
 
         {/* Stats card */}
-        <div className="done-stats" style={{
-          position: 'relative', zIndex: 2,
-          background: '#18181b', borderRadius: '12px',
-          display: 'flex', alignItems: 'center',
-          padding: '20px 32px', gap: '0',
-        }}>
+        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: '0' }}>
           {[
-            { count: truthCount, label: 'TRUTHS' },
-            { count: dareCount,  label: 'DARES'  },
-            { count: skipCount,  label: 'SKIPPED' },
+            { count: truthCount, label: 'TRUTHS',  cls: 'done-stat-1' },
+            { count: dareCount,  label: 'DARES',   cls: 'done-stat-2' },
+            { count: skipCount,  label: 'SKIPPED', cls: 'done-stat-3' },
           ].map((stat, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+            <div key={i} className={stat.cls} style={{ display: 'flex', alignItems: 'center' }}>
               {i > 0 && <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.1)', margin: '0 28px' }} />}
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', lineHeight: 1 }}>
-                  {stat.count}
-                </span>
-                <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>
-                  {stat.label}
-                </span>
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', lineHeight: 1 }}>{stat.count}</span>
+                <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{stat.label}</span>
               </div>
             </div>
           ))}
@@ -677,34 +622,30 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         >
           {/* TRUTH — top half */}
           <div
-            className="tod-choice"
+            className="tod-truth-half"
             onClick={() => pickChoice('truth')}
             style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: '228.5px',
               background: '#e9b1ba',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer',
-              transformOrigin: 'center bottom',
             }}
           >
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#dd2a25', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#dd2a25', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               TRUTH
             </span>
           </div>
 
           {/* DARE — bottom half */}
           <div
-            className="tod-choice"
+            className="tod-dare-half"
             onClick={() => pickChoice('dare')}
             style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, height: '228.5px',
               background: '#dd2a25',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer',
-              transformOrigin: 'center top',
             }}
           >
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#e9b1ba', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#e9b1ba', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               DARE
             </span>
           </div>

@@ -2,12 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Motion Tokens ─── */
+/* ═══════════════════════════════════════════════
+   MOTION TOKENS
+   ═══════════════════════════════════════════════ */
 :root {
   --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in:     cubic-bezier(0.64, 0, 0.78, 0);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-flip:   cubic-bezier(0.645, 0.045, 0.355, 1);
+  --dur-press:   80ms;
+  --dur-hover:   180ms;
+  --dur-enter:   380ms;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,7 +21,7 @@ body {
   background:
     radial-gradient(ellipse 70% 55% at 15% 35%, rgba(30,14,70,0.55) 0%, transparent 65%),
     radial-gradient(ellipse 55% 45% at 85% 65%, rgba(10,24,58,0.50) 0%, transparent 60%),
-    radial-gradient(ellipse 90% 70% at 55% 5%,  rgba(8, 6,28,0.65) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 55% 5%,  rgba(8,6,28,0.65) 0%, transparent 55%),
     radial-gradient(ellipse 40% 35% at 70% 30%, rgba(38,10,50,0.35) 0%, transparent 55%),
     #05050a;
   font-family: 'Satoshi', sans-serif;
@@ -25,66 +30,81 @@ body {
 
 #galaxy-canvas {
   position: fixed !important;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none;
-  z-index: 0 !important;
+  inset: 0; width: 100% !important; height: 100% !important;
+  pointer-events: none; z-index: 0 !important;
 }
+#root { position: relative; z-index: 1; }
 
-#root {
-  position: relative;
-  z-index: 1;
-}
-
-/* ─── Homepage card tiles ─── */
-.card-tile {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: pointer;
-}
-.card-tile:hover {
-  transform: translateY(-6px) rotate(0deg) !important;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-}
-.hero-card {
-  transition: transform 0.3s ease;
-}
-.hero-card:hover {
-  transform: rotate(0deg) scale(1.04) !important;
-}
-.cards-section { background: transparent; }
-
-/* ─── Input placeholder ─── */
 input::placeholder {
   color: rgba(255,255,255,0.35);
   font-family: 'Anton SC', sans-serif;
 }
 
+/* ─── Homepage tiles ─── */
+.card-tile {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.card-tile:hover { transform: translateY(-6px) rotate(0deg) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.hero-card { transition: transform 0.3s ease; }
+.hero-card:hover { transform: rotate(0deg) scale(1.04) !important; }
+.cards-section { background: transparent; }
+
 /* ═══════════════════════════════════════════════
-   SCREEN TRANSITIONS
+   SCREEN TRANSITIONS — applied to every screen's
+   outermost flex-1 div so all entrances are smooth
    ═══════════════════════════════════════════════ */
 @keyframes screen-enter {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(22px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 .screen-enter {
-  animation: screen-enter 0.38s var(--ease-out) both;
+  animation: screen-enter var(--dur-enter) var(--ease-out) both;
 }
-
 @keyframes screen-enter-fast {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .screen-enter-fast {
-  animation: screen-enter-fast 0.25s var(--ease-out) both;
+  animation: screen-enter-fast 0.22s var(--ease-out) both;
 }
 
 /* ═══════════════════════════════════════════════
-   CARD FLIP SYSTEM (Spicy Starters NEXT)
+   CARD FLOAT-UP  (age gates + revealed cards)
    ═══════════════════════════════════════════════ */
+@keyframes card-float-up {
+  0%   { opacity: 0; transform: translateY(40px) scale(0.96); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.card-float-up { animation: card-float-up 0.5s var(--ease-out) 0.05s both; }
 
-/* Intro card flip (cover → first question) */
-.spicy-flip-container { perspective: 1000px; }
+/* ═══════════════════════════════════════════════
+   INTRO CARD HOVER (Spicy Starters tap-to-flip)
+   ═══════════════════════════════════════════════ */
+.intro-card-hover-wrap {
+  border-radius: 12px;
+  box-shadow: 0 32px 80px rgba(183,0,18,0.4);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  cursor: pointer;
+  will-change: transform;
+}
+.intro-card-hover-wrap:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 52px 110px rgba(183,0,18,0.58);
+}
+.intro-card-hover-wrap:active {
+  transform: translateY(-4px) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+/* ═══════════════════════════════════════════════
+   SPICY STARTERS CARD FLIP SYSTEM
+   ═══════════════════════════════════════════════ */
+.spicy-flip-container {
+  perspective: 1000px;
+  width: 100%; height: 100%;
+}
 .spicy-flip-inner {
   position: relative;
   width: 100%; height: 100%;
@@ -102,148 +122,97 @@ input::placeholder {
 }
 .spicy-flip-back { transform: rotateY(180deg); }
 
-/* Game card flip (NEXT → new question) */
+/* Game card flip (NEXT → next question) */
 @keyframes game-card-flip-out {
+  0%   { transform: perspective(900px) rotateY(0deg) scale(1); }
+  100% { transform: perspective(900px) rotateY(90deg) scale(0.95); }
+}
+@keyframes game-card-flip-in {
+  0%   { transform: perspective(900px) rotateY(-90deg) scale(0.95); }
+  100% { transform: perspective(900px) rotateY(0deg) scale(1); }
+}
+.game-card-flip-out { animation: game-card-flip-out 0.18s cubic-bezier(0.4, 0, 1, 1) both; }
+.game-card-flip-in  { animation: game-card-flip-in  0.28s var(--ease-out) both; }
+
+/* ═══════════════════════════════════════════════
+   TRUTH OR DARE SPLIT CARD
+   ═══════════════════════════════════════════════ */
+.tod-split-card { cursor: pointer; }
+
+.tod-truth-half,
+.tod-dare-half {
+  cursor: pointer;
+  transition: background 0.2s var(--ease-out), filter 0.2s;
+}
+
+/* Hovering one half dims the other */
+.tod-split-card:has(.tod-truth-half:hover) .tod-dare-half  { filter: brightness(0.82); }
+.tod-split-card:has(.tod-dare-half:hover)  .tod-truth-half { filter: brightness(0.88); }
+
+.tod-truth-half:hover { background: #f2c5ce !important; }
+.tod-dare-half:hover  { background: #c52020 !important; }
+
+/* Label text scales on hover — gives tactile punch */
+.tod-half-label {
+  display: inline-block;
+  transition: transform 0.22s var(--ease-spring), letter-spacing 0.22s;
+  will-change: transform;
+}
+.tod-truth-half:hover .tod-half-label {
+  transform: scale(1.08);
+  letter-spacing: 0.07em;
+}
+.tod-dare-half:hover .tod-half-label {
+  transform: scale(1.08);
+  letter-spacing: 0.07em;
+}
+.tod-truth-half:active .tod-half-label,
+.tod-dare-half:active .tod-half-label {
+  transform: scale(0.94);
+  transition-duration: 0.08s;
+}
+
+/* Hearts divider bounces on card hover */
+.tod-hearts {
+  transition: transform 0.25s var(--ease-spring);
+}
+.tod-split-card:hover .tod-hearts {
+  transform: translate(-50%, -50%) scale(1.14);
+}
+
+/* Truth or Dare card flip — smoother with overshoot settle */
+@keyframes tod-flip-out {
   0%   { transform: perspective(900px) rotateY(0deg) scale(1); }
   100% { transform: perspective(900px) rotateY(90deg) scale(0.96); }
 }
-@keyframes game-card-flip-in {
-  0%   { transform: perspective(900px) rotateY(-90deg) scale(0.96); }
-  100% { transform: perspective(900px) rotateY(0deg) scale(1); }
-}
-.game-card-flip-out {
-  animation: game-card-flip-out 0.18s cubic-bezier(0.4, 0, 1, 1) both;
-}
-.game-card-flip-in {
-  animation: game-card-flip-in 0.28s var(--ease-out) both;
-}
-
-/* Truth or Dare card choice reveal flip */
-@keyframes tod-flip-out {
-  0%   { transform: perspective(900px) rotateY(0deg) scale(1); }
-  100% { transform: perspective(900px) rotateY(90deg) scale(0.97); }
-}
 @keyframes tod-flip-in {
-  0%   { transform: perspective(900px) rotateY(-90deg) scale(0.97); }
+  0%   { transform: perspective(900px) rotateY(-90deg) scale(0.96); }
+  72%  { transform: perspective(900px) rotateY(-7deg) scale(1.015); }
   100% { transform: perspective(900px) rotateY(0deg) scale(1); }
 }
-.tod-flip-out {
-  animation: tod-flip-out 0.16s cubic-bezier(0.4, 0, 1, 1) both;
-}
-.tod-flip-in {
-  animation: tod-flip-in 0.28s var(--ease-out) both;
-}
+.tod-flip-out { animation: tod-flip-out 0.2s  cubic-bezier(0.55, 0, 0.55, 1) both; }
+.tod-flip-in  { animation: tod-flip-in  0.38s var(--ease-out) both; }
 
-/* ═══════════════════════════════════════════════
-   CARD ENTRANCE
-   ═══════════════════════════════════════════════ */
-@keyframes card-float-up {
-  0%   { opacity: 0; transform: translateY(36px) scale(0.96); }
-  60%  { opacity: 1; }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-.card-float-up {
-  animation: card-float-up 0.45s var(--ease-out) both;
-}
-
-/* Improved ToD card entrance */
+/* ToD card entrance */
 @keyframes tod-card-in {
-  0%   { opacity: 0; transform: translateY(28px) scale(0.95); }
+  0%   { opacity: 0; transform: translateY(30px) scale(0.96); }
   60%  { opacity: 1; }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
-.tod-card-enter {
-  animation: tod-card-in 0.38s var(--ease-out) both;
-}
+.tod-card-enter { animation: tod-card-in 0.4s var(--ease-out) both; }
 
 /* ═══════════════════════════════════════════════
-   PLAYER CHIP / TURN INDICATOR
+   PLAYER CHIP — slide in from left on turn change
    ═══════════════════════════════════════════════ */
 @keyframes player-chip-enter {
-  from { opacity: 0; transform: translateX(-14px); }
+  from { opacity: 0; transform: translateX(-16px); }
   to   { opacity: 1; transform: translateX(0); }
 }
-.player-chip-enter {
-  animation: player-chip-enter 0.3s var(--ease-out) both;
-}
-
-@keyframes player-dot-pulse {
-  0%   { box-shadow: 0 0 0 0 currentColor; }
-  50%  { box-shadow: 0 0 0 4px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
-}
+.player-chip-enter { animation: player-chip-enter 0.3s var(--ease-out) both; }
 
 /* ═══════════════════════════════════════════════
-   BUTTON MICRO-INTERACTIONS
+   WHO'S PLAYING — staggered list
    ═══════════════════════════════════════════════ */
-.game-btn {
-  transition: transform 0.12s var(--ease-out),
-              box-shadow 0.12s var(--ease-out),
-              background 0.15s,
-              opacity 0.15s;
-  cursor: pointer;
-}
-.game-btn:hover  { transform: translateY(-1px); }
-.game-btn:active { transform: scale(0.96) translateY(0) !important; transition-duration: 0.08s; }
-
-.game-btn-primary {
-  transition: transform 0.12s var(--ease-out), filter 0.15s, background 0.15s;
-  cursor: pointer;
-}
-.game-btn-primary:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1) drop-shadow(0 14px 18px rgba(220,40,39,0.45));
-}
-.game-btn-primary:active {
-  transform: scale(0.95) translateY(0) !important;
-  transition-duration: 0.08s;
-}
-
-/* ═══════════════════════════════════════════════
-   TRUTH OR DARE — SPLIT CARD
-   ═══════════════════════════════════════════════ */
-.tod-choice {
-  transition: filter 0.15s ease-out, transform 0.15s ease-out;
-}
-.tod-choice:hover {
-  filter: brightness(0.9);
-  transform: scaleY(1.01);
-}
-.tod-choice:active {
-  filter: brightness(0.8);
-  transform: scaleY(0.99);
-  transition-duration: 0.08s;
-}
-
-/* Hearts divider bounce on card hover */
-.tod-hearts {
-  transition: transform 0.2s var(--ease-spring);
-}
-.tod-split-card:hover .tod-hearts {
-  transform: translate(-50%, -50%) scale(1.12);
-}
-
-/* ═══════════════════════════════════════════════
-   HOW SPICY OPTIONS
-   ═══════════════════════════════════════════════ */
-.spicy-option {
-  transition: background 0.15s, transform 0.15s var(--ease-out),
-              box-shadow 0.15s;
-}
-.spicy-option:hover {
-  background: #1a1a1e !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-}
-.spicy-option:active {
-  transform: scale(0.98) translateY(0) !important;
-  transition-duration: 0.08s;
-}
-.spicy-option.selected {
-  background: #1e1e22 !important;
-}
-
-/* Staggered list entrance */
 .stagger-item {
   opacity: 0;
   animation: screen-enter 0.32s var(--ease-out) both;
@@ -256,29 +225,97 @@ input::placeholder {
 .stagger-item:nth-child(6) { animation-delay: 0.29s; }
 
 /* ═══════════════════════════════════════════════
-   DONE SCREEN
+   HOW SPICY OPTIONS
+   ═══════════════════════════════════════════════ */
+.spicy-option {
+  transition: background 0.15s, transform 0.18s var(--ease-out), box-shadow 0.18s;
+}
+.spicy-option:hover {
+  background: #1a1a1e !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.spicy-option:active {
+  transform: scale(0.98) translateY(0) !important;
+  transition-duration: var(--dur-press);
+}
+.spicy-option.selected { background: #1e1e22 !important; }
+
+/* ═══════════════════════════════════════════════
+   GLOBAL BUTTON MICRO-INTERACTIONS
+   .game-btn     = outlined / secondary
+   .game-btn-primary = filled red / CTA
+   ═══════════════════════════════════════════════ */
+.game-btn {
+  transition: transform var(--dur-hover) var(--ease-out),
+              box-shadow var(--dur-hover) var(--ease-out),
+              opacity 0.15s;
+  cursor: pointer;
+}
+.game-btn:hover  { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+.game-btn:active { transform: scale(0.95) translateY(0) !important; transition-duration: var(--dur-press); }
+
+.game-btn-primary {
+  transition: transform var(--dur-hover) var(--ease-out),
+              filter var(--dur-hover),
+              background 0.15s;
+  cursor: pointer;
+}
+.game-btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12) drop-shadow(0 14px 20px rgba(220,40,39,0.48));
+}
+.game-btn-primary:active {
+  transform: scale(0.95) translateY(0) !important;
+  filter: brightness(0.95) !important;
+  transition-duration: var(--dur-press);
+}
+
+/* ═══════════════════════════════════════════════
+   YOU'RE DECKED — exciting entrance sequence
    ═══════════════════════════════════════════════ */
 @keyframes done-heading {
-  0%   { opacity: 0; transform: scale(0.88) translateY(10px); }
-  65%  { transform: scale(1.03) translateY(-3px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+  0%   { opacity: 0; transform: scale(0.7) rotate(-4deg) translateY(18px); }
+  55%  { opacity: 1; transform: scale(1.06) rotate(1.5deg) translateY(-6px); }
+  78%  { transform: scale(0.97) rotate(-0.5deg) translateY(1px); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg) translateY(0); }
 }
-@keyframes done-stats {
-  from { opacity: 0; transform: translateY(16px); }
+@keyframes done-subtitle {
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.done-heading {
-  animation: done-heading 0.55s var(--ease-spring) both;
+@keyframes done-stat-pop {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.72); }
+  62%  { transform: translateY(-5px) scale(1.1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
-.done-stats {
-  animation: done-stats 0.38s var(--ease-out) 0.15s both;
+@keyframes done-card-arrive {
+  0%   { opacity: 0; transform: translateY(50px) rotate(-8deg) scale(0.86); }
+  60%  { opacity: 1; transform: translateY(-6px) rotate(3deg) scale(1.03); }
+  82%  { transform: translateY(2px) rotate(-1deg) scale(0.99); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
 }
-.done-card {
-  animation: card-float-up 0.45s var(--ease-out) 0.28s both;
+@keyframes done-btns {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.done-btns {
-  animation: screen-enter 0.32s var(--ease-out) 0.38s both;
+
+.done-heading  { animation: done-heading     0.6s var(--ease-spring) both; }
+.done-subtitle { animation: done-subtitle    0.3s var(--ease-out) 0.18s both; }
+.done-stat-1   { animation: done-stat-pop    0.42s var(--ease-spring) 0.2s both; }
+.done-stat-2   { animation: done-stat-pop    0.42s var(--ease-spring) 0.28s both; }
+.done-stat-3   { animation: done-stat-pop    0.42s var(--ease-spring) 0.36s both; }
+.done-card     { animation: done-card-arrive 0.55s var(--ease-spring) 0.3s both; }
+.done-btns     { animation: done-btns        0.32s var(--ease-out)   0.48s both; }
+
+/* ═══════════════════════════════════════════════
+   CARD COUNTER  (fades + scales on each new card)
+   ═══════════════════════════════════════════════ */
+@keyframes counter-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
 }
+.counter-in { animation: counter-in 0.25s var(--ease-out) both; }
 
 /* ═══════════════════════════════════════════════
    GET READY DOTS
@@ -290,10 +327,8 @@ input::placeholder {
   100% { opacity: 0.9;  transform: scale(1) translateY(0); }
 }
 .get-ready-dot {
-  display: inline-block;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: #fff;
+  display: inline-block; width: 10px; height: 10px;
+  border-radius: 50%; background: #fff;
   animation: get-ready-dot 1.6s ease-in-out infinite;
 }
 .get-ready-dot:nth-child(1) { animation-delay: 0s; }
@@ -301,23 +336,10 @@ input::placeholder {
 .get-ready-dot:nth-child(3) { animation-delay: 0.5s; }
 
 /* ═══════════════════════════════════════════════
-   CARD COUNTER
-   ═══════════════════════════════════════════════ */
-@keyframes counter-in {
-  from { opacity: 0; transform: scale(0.8); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.counter-in {
-  animation: counter-in 0.25s var(--ease-out) both;
-}
-
-/* ═══════════════════════════════════════════════
-   REDUCED MOTION
+   REDUCED MOTION FALLBACK
    ═══════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

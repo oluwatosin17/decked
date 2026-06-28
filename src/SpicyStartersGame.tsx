@@ -154,40 +154,31 @@ function HeartsRow({ top }: { top: boolean }) {
    ═══════════════════════════════════════════════════════ */
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
   return (
-    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      {/* Outer card with checkerboard border */}
-      <div style={{
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      {/* Outer card with checkerboard border — floats up into view */}
+      <div className="card-float-up" style={{
         width: '392px', height: '504px', borderRadius: '12px', overflow: 'hidden',
         position: 'relative', flexShrink: 0, zIndex: 2,
         boxShadow: '0 32px 80px rgba(183,0,18,0.4)',
       }}>
-        {/* Pink base layer */}
         <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-        {/* Checkerboard border image */}
         <div style={{ position: 'absolute', left: '-33px', top: 0, width: '457px', height: '504px', overflow: 'hidden' }}>
           <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
-        {/* Inner red content area */}
         <div style={{
           position: 'absolute', top: '30px', right: '24px', bottom: '28px', left: '24px',
           background: '#b70012', overflow: 'hidden',
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px',
           padding: '28px 40px',
         }}>
-          {/* 18+ badge */}
           <div style={{ width: '107px', height: '106px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ transform: 'rotate(-6deg)' }}>
               <div style={{
                 background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
                 width: '97px', height: '96px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: '4px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px',
               }}>
-                <span style={{
-                  fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff',
-                  letterSpacing: '1.44px', lineHeight: '72px',
-                  display: 'block', textAlign: 'center', whiteSpace: 'nowrap',
-                }}>
+                <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff', letterSpacing: '1.44px', lineHeight: '72px', display: 'block', textAlign: 'center', whiteSpace: 'nowrap' }}>
                   18+
                 </span>
               </div>
@@ -195,11 +186,7 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
-            <h2 style={{
-              fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-              fontSize: '36px', color: '#fff', margin: 0,
-              textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap',
-            }}>
+            <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap' }}>
               MATURE CONTENT
             </h2>
             <div style={{ textAlign: 'center', color: '#fff', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
@@ -210,10 +197,10 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
           </div>
 
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px', marginTop: '4px' }}>
-            <button onClick={onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+            <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
               No, go back
             </button>
-            <button onClick={onConfirm} style={{ flex: 1, background: '#fff', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#b70012', cursor: 'pointer', textAlign: 'center', filter: 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' }}>
+            <button className="game-btn-primary" onClick={() => setTimeout(onConfirm, 100)} style={{ flex: 1, background: '#fff', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#b70012', textAlign: 'center' }}>
               YES, I'm 18+
             </button>
           </div>
@@ -437,11 +424,11 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
         </div>
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '292px' }}>
-          <button onClick={onBack} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+          <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             GO BACK
           </button>
-          <button onClick={() => valid && onStart(parsed)}
-            style={{ flex: 1, background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed', textAlign: 'center', transition: 'background 0.2s', filter: valid ? 'drop-shadow(0 10px 12px rgba(220,40,39,0.25))' : 'none' }}>
+          <button className={valid ? 'game-btn-primary' : ''} onClick={() => valid && setTimeout(() => onStart(parsed), 100)}
+            style={{ flex: 1, background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed', textAlign: 'center', transition: 'background 0.2s' }}>
             START THE GAME
           </button>
         </div>
@@ -462,13 +449,13 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
   }, [stableOnReady])
 
   return (
-    <div onClick={onReady} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}>
+    <div className="screen-enter" onClick={onReady} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', textTransform: 'uppercase' }}>
           Get ready...
         </h2>
         {player && (
-          <div style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+          <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
               {player.name.toUpperCase()}
@@ -498,13 +485,14 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
   }
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', position: 'relative', padding: '40px' }}>
-      {/* Flip container */}
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', position: 'relative', padding: '40px' }}>
+      {/* Hover wrapper provides lift + shadow; flip container provides perspective */}
       <div
         onClick={handleTap}
-        className="spicy-flip-container"
-        style={{ width: '365px', height: '457px', flexShrink: 0, zIndex: 2, cursor: 'pointer', boxShadow: '0 32px 80px rgba(183,0,18,0.4)', borderRadius: '12px' }}
+        className="intro-card-hover-wrap"
+        style={{ width: '365px', height: '457px', flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
+        <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
         <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
 
           {/* ── FRONT: spicy starters cover ── */}
@@ -537,9 +525,10 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
           </div>
 
         </div>
-      </div>
+        </div> {/* spicy-flip-container */}
+      </div> {/* intro-card-hover-wrap */}
 
-      <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: '16px', color: flipped ? 'transparent' : 'rgba(255,255,255,0.5)', margin: 0, position: 'relative', zIndex: 2, transition: 'color 0.2s' }}>
+      <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: '16px', color: flipped ? 'transparent' : 'rgba(255,255,255,0.5)', margin: 0, position: 'relative', zIndex: 2, transition: 'color 0.3s' }}>
         Tap the card to flip it.
       </p>
     </div>
@@ -624,22 +613,22 @@ function GameScreen({ questions, players, totalCards, onClose }: {
   if (isDone) {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px' }}>
-        <div className="done-heading" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+          <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>
             YOU'RE DECKED
           </h2>
-          <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
             You played all {totalCards} spicy starters cards
           </p>
         </div>
 
-        <div className="done-stats" style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
+        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
           {[
-            { count: totalCards,      label: 'CARDS'   },
-            { count: skipCount,       label: 'SKIPPED' },
-            { count: players.length,  label: 'PLAYERS' },
+            { count: totalCards,      label: 'CARDS',   cls: 'done-stat-1' },
+            { count: skipCount,       label: 'SKIPPED', cls: 'done-stat-2' },
+            { count: players.length,  label: 'PLAYERS', cls: 'done-stat-3' },
           ].map((stat, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+            <div key={i} className={stat.cls} style={{ display: 'flex', alignItems: 'center' }}>
               {i > 0 && <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.1)', margin: '0 28px' }} />}
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                 <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', lineHeight: 1 }}>{stat.count}</span>
