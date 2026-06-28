@@ -72,32 +72,32 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
       <main className="screen-enter" style={{ flex: 1, padding: '48px 60px 80px' }}>
         <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
 
-          {/* Category filter pills */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {CATEGORIES.map((cat, i) => {
+          {/* Category filter pills — matches Figma 764-33446 */}
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+            {CATEGORIES.map(cat => {
               const isActive = active === cat.id
               return (
                 <button
                   key={cat.id}
                   onClick={() => setActive(cat.id)}
                   style={{
-                    border: `1px solid ${isActive ? '#fff' : 'rgba(255,255,255,0.2)'}`,
-                    background: isActive ? '#fff' : 'transparent',
-                    borderRadius: '999px',
-                    padding: '9px 22px',
+                    background: isActive ? '#18181b' : '#0e0e10',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '6px 12px',
                     fontFamily: "'Anton SC', sans-serif",
-                    fontSize: '14px',
-                    color: isActive ? '#000' : '#fff',
+                    fontSize: '18px',
+                    color: isActive ? '#ffffff' : '#999999',
                     cursor: 'pointer',
-                    letterSpacing: '0.02em',
-                    transition: 'background 0.18s, border-color 0.18s, color 0.18s, transform 0.18s var(--ease-out), box-shadow 0.18s',
-                    animationDelay: `${i * 40}ms`,
-                    animation: 'browse-card-enter 0.4s var(--ease-out) both',
+                    letterSpacing: 'normal',
+                    lineHeight: 'normal',
+                    whiteSpace: 'nowrap',
+                    transition: 'background 0.15s, color 0.15s, transform 0.15s var(--ease-out)',
                   }}
-                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(-1px)' } }}
-                  onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'none' } }}
-                  onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.95)' }}
-                  onMouseUp={e => { e.currentTarget.style.transform = isActive ? 'none' : 'translateY(-1px)' }}
+                  onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.background = '#1a1a1d'; (e.currentTarget as HTMLButtonElement).style.color = '#ccc'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)' } }}
+                  onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.background = '#0e0e10'; (e.currentTarget as HTMLButtonElement).style.color = '#999'; (e.currentTarget as HTMLButtonElement).style.transform = 'none' } }}
+                  onMouseDown={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(0.96)' }}
+                  onMouseUp={e => { (e.currentTarget as HTMLButtonElement).style.transform = isActive ? 'none' : 'translateY(-1px)' }}
                 >
                   {cat.label}
                 </button>

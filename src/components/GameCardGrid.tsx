@@ -381,10 +381,10 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters 
 
   return (
     <div style={{
-      display: 'flex',
-      flexWrap: 'wrap',
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gridAutoRows: '348px',
       gap: '20px',
-      justifyContent: 'flex-start',
     }}>
       {filtered.map((card, i) => {
         const isExiting = exitingIds.has(card.id)
@@ -397,9 +397,6 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters 
             key={`${card.id}-${staggerKey}`}
             className="browse-card-wrap"
             style={{
-              width: `${card.w}px`,
-              height: `${card.h}px`,
-              flexShrink: 0,
               animation: isExiting
                 ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
                 : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 40}ms both`,
