@@ -112,9 +112,9 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'dinner-table', categories: ['deep-talk'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'dinner-table', categories: ['deep-talk'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <img src="/assets/games/dinner-table.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div className="font-staatliches" style={{ position: 'absolute', left: '10.85px', top: '28.92px', fontSize: '27.117px', color: '#e8e6e3', lineHeight: 'normal', whiteSpace: 'nowrap', pointerEvents: 'none' }}>
           <p style={{ margin: 0 }}>DINNER TABLE</p>
@@ -349,9 +349,10 @@ interface BrowseGridProps {
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
+  onPlayDinnerTable?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks }: BrowseGridProps) {
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable }: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
@@ -397,6 +398,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
             const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
                            : card.id === 'spicy-starters' ? onPlaySpicyStarters
                            : card.id === 'late-night-talks' ? onPlayLateNightTalks
+                           : card.id === 'dinner-table' ? onPlayDinnerTable
                            : undefined
 
             return (
