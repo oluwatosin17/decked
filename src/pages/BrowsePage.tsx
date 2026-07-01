@@ -20,9 +20,10 @@ interface Props {
   onHome: () => void
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
+  onPlayLateNightTalks: () => void
 }
 
-export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters }: Props) {
+export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks }: Props) {
   const [active, setActive] = useState<Category>('all')
 
   return (
@@ -110,6 +111,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             filter={active}
             onPlayTruthOrDare={onPlayTruthOrDare}
             onPlaySpicyStarters={onPlaySpicyStarters}
+            onPlayLateNightTalks={onPlayLateNightTalks}
           />
         </div>
       </main>

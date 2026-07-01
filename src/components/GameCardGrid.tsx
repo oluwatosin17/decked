@@ -59,6 +59,7 @@ interface CardDef {
 export const GAME_CARDS = (
   onPlayTruthOrDare: () => void,
   onPlaySpicyStarters: () => void,
+  onPlayLateNightTalks?: () => void,
 ): CardDef[] => [
   {
     id: 'truth-or-dare', categories: ['couples'], w: 345.716, h: 348, playable: true,
@@ -123,9 +124,9 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'late-night-talks', categories: ['deep-talk'], w: 359.601, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', position: 'relative', display: 'inline-grid', placeItems: 'start', cursor: 'default', borderRadius: '0', overflow: 'hidden' }}>
+    id: 'late-night-talks', categories: ['deep-talk'], w: 359.601, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', position: 'relative', display: 'inline-grid', placeItems: 'start', cursor: onClick ? 'pointer' : 'default', borderRadius: '0', overflow: 'hidden' }}>
         <img src={LATE_NIGHT_OUTER} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
         <img src={LATE_NIGHT_MID} alt="" style={{ gridColumn: 1, gridRow: 1, marginLeft: '54.78px', marginTop: '59.62px', width: '252.632px', height: '239.488px', objectFit: 'contain' }} />
         <img src={LATE_NIGHT_INNER} alt="" style={{ gridColumn: 1, gridRow: 1, marginLeft: '59.79px', marginTop: '65.66px', width: '242.609px', height: '227.392px', objectFit: 'contain' }} />
@@ -287,10 +288,11 @@ export const GAME_CARDS = (
 interface HomeGridProps {
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
+  onPlayLateNightTalks: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters }: HomeGridProps) {
-  const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters)
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks }: HomeGridProps) {
+  const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
   const getEl = (id: string, onClick?: () => void, style?: React.CSSProperties) => {
@@ -319,7 +321,7 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters }: HomeGri
       </>)}
       {row(<>
         {getEl('dinner-table')}
-        {getEl('late-night-talks')}
+        {getEl('late-night-talks', onPlayLateNightTalks)}
         {getEl('everyday-conversation')}
         {getEl('charades')}
       </>)}
@@ -346,10 +348,11 @@ interface BrowseGridProps {
   filter: Category
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
+  onPlayLateNightTalks: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters }: BrowseGridProps) {
-  const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters)
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks }: BrowseGridProps) {
+  const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
   const prevFilter = useRef<Category>('all')
@@ -393,6 +396,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters 
             const isExiting = exitingIds.has(card.id)
             const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
                            : card.id === 'spicy-starters' ? onPlaySpicyStarters
+                           : card.id === 'late-night-talks' ? onPlayLateNightTalks
                            : undefined
 
             return (

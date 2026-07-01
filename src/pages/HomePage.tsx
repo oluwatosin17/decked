@@ -31,6 +31,7 @@ const SOCIAL_WHATSAPP = 'https://www.figma.com/api/mcp/asset/94019f0b-e964-4c74-
 interface Props {
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
+  onPlayLateNightTalks: () => void
   onBrowse: () => void
 }
 
@@ -79,7 +80,7 @@ function HeartsRow({ top }: { top: boolean }) {
 }
 
 /* ── Main component ───────────────────────────────────────────────── */
-export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onBrowse }: Props) {
+export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }: Props) {
   return (
     <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
@@ -213,7 +214,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onBro
             Pick your vibe.
           </h2>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} />
 
           <div style={{ display: 'none' }}> {/* ── legacy rows kept for reference ── */}
 

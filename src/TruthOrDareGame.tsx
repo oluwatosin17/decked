@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useRef, useEffect, useCallback } from 'react'
+import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 
-type Player = { name: string; color: string }
 type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
 
 function shuffle<T>(arr: T[]): T[] {
@@ -233,130 +233,7 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
 }
 
 /* ─── Screen 2: Player Setup ─── */
-function PlayerSetup({ players, setPlayers, onBack, onNext }: {
-  players: Player[]; setPlayers: SetPlayers; onBack: () => void; onNext: () => void
-}) {
-  const [input, setInput] = useState('')
-  const [editingIdx, setEditingIdx] = useState<number | null>(null)
-  const [editValue, setEditValue] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
-  const editRef  = useRef<HTMLInputElement>(null)
-
-  const nextColor = PLAYER_COLORS[players.length % PLAYER_COLORS.length]
-  const hasInput  = input.trim().length > 0
-
-  const addPlayer = () => {
-    const name = input.trim()
-    if (!name) return
-    setPlayers((prev: Player[]) => [...prev, { name, color: PLAYER_COLORS[prev.length % PLAYER_COLORS.length] }])
-    setInput('')
-    inputRef.current?.focus()
-  }
-
-  const removePlayer = (idx: number) => setPlayers((prev: Player[]) => prev.filter((_: Player, i: number) => i !== idx))
-
-  const startEdit = (idx: number) => {
-    setEditingIdx(idx)
-    setEditValue(players[idx].name)
-    setTimeout(() => editRef.current?.select(), 0)
-  }
-
-  const commitEdit = () => {
-    const name = editValue.trim()
-    if (name && editingIdx !== null)
-      setPlayers((prev: Player[]) => prev.map((p: Player, i: number) => i === editingIdx ? { ...p, name } : p))
-    setEditingIdx(null)
-    setEditValue('')
-  }
-
-  const cancelEdit = () => { setEditingIdx(null); setEditValue('') }
-
-  return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
-
-        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
-          Who's playing?
-        </h2>
-
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {players.map((p: Player, i: number) => (
-            <div key={i} className="stagger-item" style={{
-              background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
-              borderRadius: '12px', height: '56px',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px',
-            }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
-                {editingIdx === i ? (
-                  <input
-                    ref={editRef}
-                    value={editValue}
-                    onChange={e => setEditValue(e.target.value)}
-                    onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') cancelEdit() }}
-                    onBlur={commitEdit}
-                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1, lineHeight: 'normal' }}
-                  />
-                ) : (
-                  <span onClick={() => startEdit(i)} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', cursor: 'text', flex: 1 }}>
-                    {p.name}
-                  </span>
-                )}
-              </div>
-              <button onClick={() => removePlayer(i)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', lineHeight: 1, padding: '0 4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-label="Remove player">
-                ×
-              </button>
-            </div>
-          ))}
-
-          <div
-            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text' }}
-            onClick={() => inputRef.current?.focus()}
-          >
-            <button
-              onClick={e => { e.stopPropagation(); addPlayer() }}
-              style={{
-                background: hasInput ? nextColor : 'rgba(255,255,255,0.1)', border: 'none',
-                borderRadius: '16px', width: '32px', height: '32px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', flexShrink: 0,
-                color: hasInput ? '#fff' : 'rgba(255,255,255,0.6)',
-                fontSize: hasInput ? '16px' : '20px', fontWeight: 400, lineHeight: 1,
-                transition: 'background 0.15s',
-                boxShadow: hasInput ? '0 0 0 2.5px #ffffff' : 'none',
-              }}
-              aria-label="Add player"
-            >
-              {hasInput ? '✓' : '+'}
-            </button>
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') addPlayer() }}
-              placeholder="Add a player..."
-              style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1, lineHeight: 'normal' }}
-            />
-            {hasInput && (
-              <button onClick={e => { e.stopPropagation(); addPlayer() }} style={{ background: 'none', border: 'none', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: nextColor, cursor: 'pointer', whiteSpace: 'nowrap', padding: 0, letterSpacing: '0.05em' }}>
-                TAP TO ADD →
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
-          <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
-            GO BACK
-          </button>
-          <button className="game-btn-primary" onClick={() => setTimeout(onNext, 100)} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
-            NEXT
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
+/* ─── Screen 2: Player Setup — uses shared component ─── */
 
 /* ─── Screen 3: Deck Size ─── */
 function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number) => void }) {
@@ -820,11 +697,11 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
       )}
 
       {step === 'playerSetup' && (
-        <PlayerSetup
-          players={players}
-          setPlayers={setPlayers}
-          onBack={() => setStep('ageGate')}
-          onNext={() => setStep('deckSize')}
+        <SharedPlayerSetup
+          initialPlayers={players}
+          skipLabel="GO BACK"
+          onSkip={() => setStep('ageGate')}
+          onNext={p => { setPlayers(p); setStep('deckSize') }}
         />
       )}
 
