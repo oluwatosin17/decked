@@ -206,14 +206,15 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
         }}>
           {/* Dots */}
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
-          {/* Challenge text — white fill, purple stroke (matches Figma) */}
+          {/* Challenge text — white fill, purple stroke + shadow for legibility */}
           <p style={{
             position: 'absolute',
             left: '50%', top: '50%', transform: 'translate(-50%, -60%)',
-            width: `${248 * scale}px`,
+            width: `${252 * scale}px`,
             fontFamily: "'Gasoek One', sans-serif", fontSize: `${26 * scale}px`,
-            color: '#f6f0f1', textAlign: 'center', margin: 0, lineHeight: 1.35,
-            WebkitTextStroke: `${4.5 * scale}px #755aa7`, paintOrder: 'stroke fill',
+            color: '#ffffff', textAlign: 'center', margin: 0, lineHeight: 1.4,
+            WebkitTextStroke: `${2.5 * scale}px #4a2d7a`, paintOrder: 'stroke fill',
+            textShadow: `0 2px 10px rgba(0,0,0,0.35)`,
           }}>
             {challenge}
           </p>
@@ -426,12 +427,11 @@ function GameplayScreen({ challenge, seconds, onDone }: { challenge: string; sec
 
 /* ─── Who Laughed? ─── */
 function WhoLaughedScreen({
-  players, livesMap, maxLives, hasHadRound, onNext,
+  players, livesMap, maxLives, onNext,
 }: {
   players: Player[]
   livesMap: Record<string, number>
   maxLives: number
-  hasHadRound: boolean
   onNext: (laughedKeys: string[]) => void
 }) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -464,11 +464,11 @@ function WhoLaughedScreen({
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   background: '#111113',
-                  border: '1px dashed rgba(255,255,255,0.1)',
+                  border: `1px dashed ${isSelected ? 'rgba(220,40,39,0.5)' : 'rgba(255,255,255,0.1)'}`,
                   borderRadius: '12px', padding: '12px', height: '56px',
                   cursor: isOut ? 'default' : 'pointer',
                   opacity: isOut ? 0.4 : 1,
-                  transition: 'opacity 0.2s',
+                  transition: 'border-color 0.15s, opacity 0.2s',
                   boxSizing: 'border-box',
                 }}
               >
@@ -480,34 +480,18 @@ function WhoLaughedScreen({
                   </span>
                 </div>
 
-                {/* Right: toggle OR lives */}
+                {/* Right: toggle circle — always shown (every round) */}
                 {!isOut && (
-                  hasHadRound ? (
-                    /* Show life icons */
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      {Array.from({ length: maxLives }, (_, i) => (
-                        <div key={i} style={{
-                          background: 'rgba(255,255,255,0.1)', borderRadius: '16px',
-                          width: '32px', height: '32px',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                          opacity: i < lives ? 1 : 0.3,
-                        }}>
-                          <img src={ICON_LIVE} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    /* Show toggle circle */
-                    <div style={{
-                      background: 'rgba(255,255,255,0.1)', borderRadius: '16px',
-                      width: '32px', height: '32px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    }}>
-                      {isSelected && (
-                        <img src={ICON_CHECK} alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }} />
-                      )}
-                    </div>
-                  )
+                  <div style={{
+                    background: isSelected ? 'rgba(220,40,39,0.2)' : 'rgba(255,255,255,0.1)',
+                    borderRadius: '16px', width: '32px', height: '32px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    transition: 'background 0.15s',
+                  }}>
+                    {isSelected && (
+                      <img src={ICON_CHECK} alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }} />
+                    )}
+                  </div>
                 )}
               </div>
             )
@@ -655,7 +639,6 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
   const [winner,        setWinner]        = useState<Player | null>(null)
 
   const currentChallenge = challenges[challengeIdx % challenges.length]
-  const hasHadRound = roundNum > 0
 
   const startGame = useCallback((p: Player[], lives: number) => {
     const map: Record<string, number> = {}
@@ -742,7 +725,6 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
           players={players}
           livesMap={livesMap}
           maxLives={maxLives}
-          hasHadRound={hasHadRound}
           onNext={handleLaughed}
         />
       )}
