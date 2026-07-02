@@ -6,11 +6,13 @@ import SpicyStartersGame from './SpicyStartersGame'
 import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
 import LateNightTalksGame from './LateNightTalksGame'
 import DinnerTableGame from './DinnerTableGame'
+import LaughYouAreOutGame from './LaughYouAreOutGame'
 
 type Screen =
   | 'home' | 'browse'
   | 'lnt-select' | 'late-night-talks'
   | 'dtc-select' | 'dinner-table'
+  | 'you-laugh'
   | 'truth-or-dare' | 'spicy-starters'
 
 export default function App() {
@@ -46,6 +48,10 @@ export default function App() {
     return <DinnerTableGame onClose={() => setScreen('browse')} />
   }
 
+  if (screen === 'you-laugh') {
+    return <LaughYouAreOutGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Other games ── */
   if (screen === 'truth-or-dare') {
     return <TruthOrDareGame onClose={() => setScreen('browse')} />
@@ -64,6 +70,7 @@ export default function App() {
         onPlaySpicyStarters={() => setScreen('spicy-starters')}
         onPlayLateNightTalks={() => setScreen('lnt-select')}
         onPlayDinnerTable={() => setScreen('dtc-select')}
+        onPlayYouLaugh={() => setScreen('you-laugh')}
       />
     )
   }

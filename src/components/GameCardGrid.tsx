@@ -248,9 +248,9 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#36a6bb', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#36a6bb', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.25) 2px, transparent 2px)', backgroundSize: '18px 18px' }} />
         <p className="font-gasoek" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 158.18px)', fontSize: '36.156px', color: '#755aa7', textAlign: 'center', whiteSpace: 'nowrap', WebkitTextStroke: '2.5px white', paintOrder: 'stroke fill' as const }}>YOU</p>
         <div style={{ position: 'absolute', left: '52.88px', top: '61.92px', width: '172.418px', height: '103.044px' }}>
@@ -350,9 +350,10 @@ interface BrowseGridProps {
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
   onPlayDinnerTable?: () => void
+  onPlayYouLaugh?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable }: BrowseGridProps) {
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh }: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
@@ -399,6 +400,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                            : card.id === 'spicy-starters' ? onPlaySpicyStarters
                            : card.id === 'late-night-talks' ? onPlayLateNightTalks
                            : card.id === 'dinner-table' ? onPlayDinnerTable
+                           : card.id === 'you-laugh' ? onPlayYouLaugh
                            : undefined
 
             return (
