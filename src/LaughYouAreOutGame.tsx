@@ -124,8 +124,11 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
   return (
     <div
       onClick={!flipped ? onFlip : undefined}
+      className={!flipped ? 'lyao-card-wrap' : ''}
       style={{ width: `${W}px`, height: `${H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
     >
+      {/* Idle float wrapper — only while unflipped */}
+      <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
       <div style={{
         width: '100%', height: '100%', position: 'relative',
         transformStyle: 'preserve-3d',
@@ -227,6 +230,7 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
             #YOULAUGHYOUAREOUT
           </p>
         </div>
+      </div>
       </div>
     </div>
   )
@@ -408,7 +412,7 @@ function GameplayScreen({ challenge, seconds, onDone }: { challenge: string; sec
           <div style={{ width: '200px', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${pct * 100}%`, background: urgentColor, borderRadius: '3px', transition: 'width 1s linear, background 0.3s' }} />
           </div>
-          <p style={{
+          <p className={remaining <= 5 ? 'timer-pulse' : ''} style={{
             fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
             fontSize: '36px', color: urgentColor, margin: 0, letterSpacing: '0.05em',
             transition: 'color 0.3s',
@@ -461,6 +465,7 @@ function WhoLaughedScreen({
             return (
               <div
                 key={p.name}
+                className="stagger-item lyao-row"
                 onClick={() => !isOut && toggle(p.name)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -472,15 +477,15 @@ function WhoLaughedScreen({
                   boxSizing: 'border-box',
                 }}
               >
-                {/* Left: avatar + name */}
+                {/* Left: avatar (white ring, matching Who's Playing) + name */}
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
                   <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', whiteSpace: 'nowrap' }}>
                     {p.name}
                   </span>
                 </div>
 
-                {/* Right: toggle circle — gray always, checkmark when selected */}
+                {/* Right: toggle circle — gray always, checkmark pops in when selected */}
                 {!isOut && (
                   <div style={{
                     background: 'rgba(255,255,255,0.12)',
@@ -488,7 +493,7 @@ function WhoLaughedScreen({
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}>
                     {isSelected && (
-                      <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
+                      <svg key="check" className="check-pop" width="14" height="11" viewBox="0 0 14 11" fill="none">
                         <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     )}
@@ -537,29 +542,31 @@ function LivesRemainingScreen({
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>LIVES REMAINING</h2>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {players.map(p => {
+          {players.map((p, rowIdx) => {
             const lives = livesMap[p.name] ?? maxLives
             const isOut = lives <= 0
             return (
-              <div key={p.name} style={{
+              <div key={p.name} className="stagger-item lyao-row" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
                 borderRadius: '12px', padding: '12px', height: '56px',
                 opacity: isOut ? 0.4 : 1, boxSizing: 'border-box',
+                animationDelay: `${0.05 + rowIdx * 0.06}s`,
               }}>
-                {/* Left: avatar + name */}
+                {/* Left: avatar (white ring) + name */}
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
                   <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>{p.name}</span>
                 </div>
-                {/* Right: life icons — filled = active, dim = lost */}
+                {/* Right: life icons with pop-in stagger */}
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                   {Array.from({ length: maxLives }, (_, i) => (
-                    <div key={i} style={{
+                    <div key={i} className="live-pop" style={{
                       background: 'rgba(255,255,255,0.1)', borderRadius: '10px',
                       width: '32px', height: '32px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       opacity: i < lives ? 1 : 0.25,
+                      animationDelay: `${0.1 + rowIdx * 0.07 + i * 0.055}s`,
                     }}>
                       <img src={ICON_LIVE} alt="" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
                     </div>
@@ -594,7 +601,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
 
       {/* Heading */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0 }}>
+        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textAlign: 'center' }}>
           {isTie ? "IT'S A TIE" : 'GAME OVER'}
         </h2>
         <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
@@ -623,7 +630,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
         </div>
       )}
 
-      <MiniLYAOCard />
+      <div className="done-card"><MiniLYAOCard /></div>
 
       {/* Buttons */}
       <div className="done-btns" style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
