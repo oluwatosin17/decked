@@ -207,25 +207,25 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
           overflow: 'hidden', outline: '2px solid rgba(255,255,255,0.25)',
           boxShadow: '0 20px 50px rgba(54,166,187,0.4)',
         }}>
-          {/* Dots */}
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
-          {/* Challenge text — white fill, purple stroke + shadow for legibility */}
+          {/* Dots — subtle on back face */}
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.10) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
+          {/* Challenge text — Anton SC, white fill, 4px outside purple stroke */}
           <p style={{
             position: 'absolute',
             left: '50%', top: '50%', transform: 'translate(-50%, -60%)',
             width: `${252 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${26 * scale}px`,
-            color: '#ffffff', textAlign: 'center', margin: 0, lineHeight: 1.4,
-            WebkitTextStroke: `${2.5 * scale}px #4a2d7a`, paintOrder: 'stroke fill',
-            textShadow: `0 2px 10px rgba(0,0,0,0.35)`,
+            fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+            fontSize: `${22 * scale}px`,
+            color: '#ffffff', textAlign: 'center', margin: 0, lineHeight: 1.45,
+            WebkitTextStroke: `${4 * scale}px #755aa7`, paintOrder: 'stroke fill',
           }}>
             {challenge}
           </p>
           {/* Hashtag */}
           <p style={{
             position: 'absolute', right: `${14 * scale}px`, bottom: `${14 * scale}px`,
-            fontFamily: "'Satoshi', sans-serif", fontWeight: 700,
-            fontSize: `${10 * scale}px`, color: 'rgba(255,255,255,0.7)', margin: 0, letterSpacing: '0.04em',
+            fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+            fontSize: `${9 * scale}px`, color: 'rgba(255,255,255,0.6)', margin: 0, letterSpacing: '0.06em',
           }}>
             #YOULAUGHYOUAREOUT
           </p>
@@ -558,19 +558,29 @@ function LivesRemainingScreen({
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
                   <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>{p.name}</span>
                 </div>
-                {/* Right: life icons with pop-in stagger */}
+                {/* Right: life icons — colored = remaining, greyscale = lost */}
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                  {Array.from({ length: maxLives }, (_, i) => (
-                    <div key={i} className="live-pop" style={{
-                      background: 'rgba(255,255,255,0.1)', borderRadius: '10px',
-                      width: '32px', height: '32px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      opacity: i < lives ? 1 : 0.25,
-                      animationDelay: `${0.1 + rowIdx * 0.07 + i * 0.055}s`,
-                    }}>
-                      <img src={ICON_LIVE} alt="" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
-                    </div>
-                  ))}
+                  {Array.from({ length: maxLives }, (_, i) => {
+                    const isActive = i < lives
+                    return (
+                      <div key={i} className="live-pop" style={{
+                        background: isActive ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.05)',
+                        borderRadius: '10px', width: '32px', height: '32px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        animationDelay: `${0.1 + rowIdx * 0.07 + i * 0.055}s`,
+                        transition: 'background 0.2s',
+                      }}>
+                        <img
+                          src={ICON_LIVE} alt=""
+                          style={{
+                            width: '22px', height: '22px', objectFit: 'contain',
+                            filter: isActive ? 'none' : 'grayscale(1) brightness(0.55)',
+                            transition: 'filter 0.3s',
+                          }}
+                        />
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )
