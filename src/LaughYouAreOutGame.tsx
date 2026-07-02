@@ -118,7 +118,7 @@ function GameFooter() {
 /* ─── LYAO Card (flip-capable) ─── */
 function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: boolean; onFlip: () => void }) {
   const W = 320
-  const H = 400
+  const H = 420
   const scale = W / 386
 
   return (
@@ -133,75 +133,95 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
         transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)',
       }}>
 
-        {/* Front face */}
+        {/* ── Front face ── */}
         <div style={{
           position: 'absolute', inset: 0,
           backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          background: '#36a6bb', borderRadius: `${13 * scale}px`,
+          background: '#36a6bb', borderRadius: `${14 * scale}px`,
           overflow: 'hidden', outline: '2px solid rgba(255,255,255,0.25)',
           boxShadow: '0 20px 50px rgba(54,166,187,0.4)',
         }}>
           {/* Dots */}
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
+
           {/* YOU */}
           <p style={{
             position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-            top: `${22 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${50 * scale}px`,
+            top: `${28 * scale}px`,
+            fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`,
             color: '#755aa7', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            WebkitTextStroke: `${2.5 * scale}px white`, paintOrder: 'stroke fill',
+            WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill',
           }}>YOU</p>
-          {/* LAUGH banner */}
-          <div style={{ position: 'absolute', left: `${73 * scale}px`, top: `${86 * scale}px`, width: `${240 * scale}px`, height: `${143 * scale}px` }}>
-            <img src={BANNER_LAUGH} alt="" style={{ position: 'absolute', width: '101%', height: '102%', inset: '-0.36% -0.52% -0.74% -0.27%', objectFit: 'fill' }} />
-            <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${54 * scale}px`, color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0 }}>LAUGH</p>
+
+          {/* LAUGH banner — wide, slight CCW tilt */}
+          <div style={{
+            position: 'absolute',
+            left: '50%', transform: 'translateX(-50%) rotate(-4deg)',
+            top: `${112 * scale}px`,
+            width: `${330 * scale}px`, height: `${110 * scale}px`,
+          }}>
+            <img src={BANNER_LAUGH} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
+            <p style={{
+              position: 'absolute', left: '50%', top: '50%',
+              transform: 'translate(-50%, -50%)',
+              fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`,
+              color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
+            }}>LAUGH</p>
           </div>
+
           {/* YOU'RE */}
           <p style={{
             position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-            top: `${255 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${50 * scale}px`,
+            top: `${246 * scale}px`,
+            fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`,
             color: '#fd587c', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            WebkitTextStroke: `${2.5 * scale}px white`, paintOrder: 'stroke fill',
+            WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill',
           }}>YOU'RE</p>
-          {/* OUT banner */}
-          <div style={{ position: 'absolute', left: `${110 * scale}px`, top: `${312 * scale}px`, width: `${167 * scale}px`, height: `${143 * scale}px`, transform: 'scaleY(-1) rotate(180deg)' }}>
-            <img src={BANNER_OUT} alt="" style={{ position: 'absolute', width: '102%', height: '101%', inset: '-0.12% -0.75% -0.67% -0.52%', objectFit: 'fill' }} />
+
+          {/* OUT banner — narrower, slight CW tilt, text inside */}
+          <div style={{
+            position: 'absolute',
+            left: '50%', transform: 'translateX(-50%) rotate(3deg)',
+            top: `${330 * scale}px`,
+            width: `${210 * scale}px`, height: `${95 * scale}px`,
+          }}>
+            <img src={BANNER_OUT} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
+            <p style={{
+              position: 'absolute', left: '50%', top: '50%',
+              transform: 'translate(-50%, -50%)',
+              fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`,
+              color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
+            }}>OUT</p>
           </div>
-          <p style={{
-            position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-            bottom: `${22 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${54 * scale}px`,
-            color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-          }}>OUT</p>
         </div>
 
-        {/* Back face — challenge */}
+        {/* ── Back face — challenge ── */}
         <div style={{
           position: 'absolute', inset: 0,
           backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
           transform: 'rotateY(180deg)',
-          background: '#36a6bb', borderRadius: `${13 * scale}px`,
+          background: '#36a6bb', borderRadius: `${14 * scale}px`,
           overflow: 'hidden', outline: '2px solid rgba(255,255,255,0.25)',
           boxShadow: '0 20px 50px rgba(54,166,187,0.4)',
         }}>
           {/* Dots */}
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
-          {/* Challenge text */}
+          {/* Challenge text — white fill, purple stroke (matches Figma) */}
           <p style={{
             position: 'absolute',
-            left: '50%', top: '50%', transform: 'translate(-50%, -65%)',
-            width: `${238 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${25 * scale}px`,
-            color: '#f6f0f1', textAlign: 'center', margin: 0, lineHeight: 1.3,
+            left: '50%', top: '50%', transform: 'translate(-50%, -60%)',
+            width: `${248 * scale}px`,
+            fontFamily: "'Gasoek One', sans-serif", fontSize: `${26 * scale}px`,
+            color: '#f6f0f1', textAlign: 'center', margin: 0, lineHeight: 1.35,
+            WebkitTextStroke: `${1.5 * scale}px #755aa7`, paintOrder: 'stroke fill',
           }}>
             {challenge}
           </p>
           {/* Hashtag */}
           <p style={{
-            position: 'absolute', right: `${14 * scale}px`, bottom: `${12 * scale}px`,
+            position: 'absolute', right: `${14 * scale}px`, bottom: `${14 * scale}px`,
             fontFamily: "'Satoshi', sans-serif", fontWeight: 700,
-            fontSize: `${10 * scale}px`, color: '#fff', margin: 0, letterSpacing: '0.04em',
+            fontSize: `${10 * scale}px`, color: 'rgba(255,255,255,0.7)', margin: 0, letterSpacing: '0.04em',
           }}>
             #YOULAUGHYOUAREOUT
           </p>
@@ -211,22 +231,26 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
   )
 }
 
-/* ─── Mini LYAO Card (winner screen) ─── */
+/* ─── Mini LYAO Card (game over screen) ─── */
 function MiniLYAOCard() {
-  const W = 160, H = 200, scale = W / 386
+  const W = 150, H = 195, scale = W / 386
   return (
-    <div style={{ width: `${W}px`, height: `${H}px`, background: '#36a6bb', borderRadius: `${13 * scale}px`, overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '10px 10px' }} />
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${22 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${50 * scale}px`, color: '#755aa7', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${2.5 * scale}px white`, paintOrder: 'stroke fill' }}>YOU</p>
-      <div style={{ position: 'absolute', left: `${73 * scale}px`, top: `${86 * scale}px`, width: `${240 * scale}px`, height: `${143 * scale}px` }}>
-        <img src={BANNER_LAUGH_SM} alt="" style={{ position: 'absolute', width: '101%', height: '102%', inset: '-0.36% -0.52% -0.74% -0.27%', objectFit: 'fill' }} />
-        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${54 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>LAUGH</p>
+    <div style={{ width: `${W}px`, height: `${H}px`, background: '#36a6bb', borderRadius: `${14 * scale}px`, overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', outline: '2px solid rgba(255,255,255,0.2)' }}>
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '9px 9px' }} />
+      {/* YOU */}
+      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${28 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#755aa7', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>YOU</p>
+      {/* LAUGH banner */}
+      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%) rotate(-4deg)', top: `${112 * scale}px`, width: `${330 * scale}px`, height: `${110 * scale}px` }}>
+        <img src={BANNER_LAUGH_SM} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
+        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>LAUGH</p>
       </div>
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${255 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${50 * scale}px`, color: '#fd587c', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${2.5 * scale}px white`, paintOrder: 'stroke fill' }}>YOU'RE</p>
-      <div style={{ position: 'absolute', left: `${110 * scale}px`, top: `${312 * scale}px`, width: `${167 * scale}px`, height: `${143 * scale}px`, transform: 'scaleY(-1) rotate(180deg)' }}>
-        <img src={BANNER_OUT_SM} alt="" style={{ position: 'absolute', width: '102%', height: '101%', inset: '-0.12% -0.75% -0.67% -0.52%', objectFit: 'fill' }} />
+      {/* YOU'RE */}
+      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${246 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#fd587c', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>YOU'RE</p>
+      {/* OUT banner */}
+      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%) rotate(3deg)', top: `${330 * scale}px`, width: `${210 * scale}px`, height: `${95 * scale}px` }}>
+        <img src={BANNER_OUT_SM} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
+        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>OUT</p>
       </div>
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: `${22 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${54 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>OUT</p>
     </div>
   )
 }
@@ -516,13 +540,18 @@ function WhoLaughedScreen({
   )
 }
 
-/* ─── Winner screen ─── */
-function WinnerScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { winner: Player | null; roundsPlayed: number; onPlayAgain: () => void; onBrowseGames: () => void }) {
+/* ─── Game Over screen ─── */
+function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { winner: Player | null; roundsPlayed: number; onPlayAgain: () => void; onBrowseGames: () => void }) {
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', padding: '40px', position: 'relative', zIndex: 2 }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', position: 'relative', zIndex: 2 }}>
+      {/* Trophy icon */}
+      <img src="/icons/trophy.svg" alt="Trophy" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>WE HAVE A WINNER</h2>
-        <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>You played {roundsPlayed} round{roundsPlayed !== 1 ? 's' : ''}</p>
+        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>GAME OVER</h2>
+        <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          {winner ? `${winner.name} survived the longest!` : `You played ${roundsPlayed} round${roundsPlayed !== 1 ? 's' : ''}`}
+        </p>
       </div>
 
       {winner && (
@@ -533,7 +562,6 @@ function WinnerScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { wi
         }}>
           <div style={{ width: '31px', height: '31px', borderRadius: '50%', background: winner.color, flexShrink: 0 }} />
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff' }}>{winner.name}</span>
-          <span style={{ fontSize: '20px', marginLeft: '4px' }}>🏆</span>
         </div>
       )}
 
@@ -665,7 +693,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
       )}
 
       {step === 'winner' && (
-        <WinnerScreen
+        <GameOverScreen
           winner={winner}
           roundsPlayed={roundNum}
           onPlayAgain={handlePlayAgain}
