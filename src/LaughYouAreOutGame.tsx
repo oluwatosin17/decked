@@ -449,12 +449,7 @@ function WhoLaughedScreen({
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center' }}>
 
-        {/* Title — Galindo with visible stroke */}
-        <h2 style={{
-          fontFamily: "'Galindo', cursive", fontSize: '40px', color: '#fff', margin: 0, textAlign: 'center',
-          WebkitTextStroke: '3px #2a1a4a', paintOrder: 'stroke fill',
-          textShadow: '0 2px 8px rgba(0,0,0,0.4)',
-        }}>WHO LAUGHED?</h2>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>WHO LAUGHED?</h2>
 
         {/* Player rows */}
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -480,9 +475,7 @@ function WhoLaughedScreen({
                 {/* Left: avatar + name */}
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-                  <span style={{
-                    fontFamily: "'Galindo', cursive", fontSize: '20px', color: '#fff', whiteSpace: 'nowrap',
-                  }}>
+                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>
                     {p.name}
                   </span>
                 </div>
@@ -514,7 +507,7 @@ function WhoLaughedScreen({
             width: '100%',
             background: canNext ? '#dc2827' : '#2a2a2a',
             border: 'none', borderRadius: '999px', padding: '16px 18px',
-            fontFamily: "'Galindo', cursive", fontSize: '18px',
+            fontFamily: "'Staatliches', sans-serif", fontSize: '18px', letterSpacing: '0.05em',
             color: canNext ? '#fff' : '#666',
             cursor: canNext ? 'pointer' : 'default',
             textAlign: 'center',
@@ -602,11 +595,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
 
       {/* Heading */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-        <h2 className="done-heading" style={{
-          fontFamily: "'Galindo', cursive", fontSize: '48px', color: '#fff', margin: 0,
-          WebkitTextStroke: '3px #2a1a4a', paintOrder: 'stroke fill',
-          textShadow: '0 2px 10px rgba(0,0,0,0.4)',
-        }}>
+        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0 }}>
           {isTie ? "IT'S A TIE" : 'GAME OVER'}
         </h2>
         <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
@@ -621,7 +610,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
           borderRadius: '999px', padding: '10px 20px',
           display: 'inline-flex', alignItems: 'center',
         }}>
-          <span style={{ fontFamily: "'Galindo', cursive", fontSize: '16px', color: '#fff' }}>No winner</span>
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff' }}>No winner</span>
         </div>
       ) : winner && (
         <div className="stagger-item" style={{
@@ -630,7 +619,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
           display: 'flex', alignItems: 'center', gap: '10px',
         }}>
           <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: winner.color, flexShrink: 0 }} />
-          <span style={{ fontFamily: "'Galindo', cursive", fontSize: '18px', color: '#fff' }}>{winner.name}</span>
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff' }}>{winner.name}</span>
           <img src="/icons/trophy.svg" alt="" style={{ width: '24px', height: '24px', marginLeft: '4px' }} />
         </div>
       )}
@@ -640,11 +629,11 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
       {/* Buttons */}
       <div className="done-btns" style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
         <button className="game-btn" onClick={onBrowseGames}
-          style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Galindo', cursive", fontSize: '15px', color: '#fff', textAlign: 'center', cursor: 'pointer' }}>
+          style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', letterSpacing: '0.05em', color: '#fff', textAlign: 'center', cursor: 'pointer' }}>
           BROWSE GAMES
         </button>
         <button className="game-btn-primary" onClick={onPlayAgain}
-          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Galindo', cursive", fontSize: '15px', color: '#fff', textAlign: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', letterSpacing: '0.05em', color: '#fff', textAlign: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
           PLAY AGAIN
         </button>
       </div>
