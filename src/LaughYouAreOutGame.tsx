@@ -447,12 +447,12 @@ function WhoLaughedScreen({
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center' }}>
+      <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center' }}>
 
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>WHO LAUGHED?</h2>
 
         {/* Player rows */}
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {players.map(p => {
             const lives     = livesMap[p.name] ?? maxLives
             const isOut     = lives <= 0
@@ -466,31 +466,30 @@ function WhoLaughedScreen({
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   background: '#111113',
                   border: '1px dashed rgba(255,255,255,0.12)',
-                  borderRadius: '12px', padding: '12px 16px', height: '60px',
+                  borderRadius: '12px', padding: '10px 14px', height: '56px',
                   cursor: isOut ? 'default' : 'pointer',
                   opacity: isOut ? 0.4 : 1,
                   boxSizing: 'border-box',
                 }}
               >
                 {/* Left: avatar + name */}
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', whiteSpace: 'nowrap' }}>
                     {p.name}
                   </span>
                 </div>
 
-                {/* Right: toggle circle */}
+                {/* Right: toggle circle — gray always, checkmark when selected */}
                 {!isOut && (
                   <div style={{
-                    background: isSelected ? '#dc2827' : 'rgba(255,255,255,0.12)',
-                    borderRadius: '50%', width: '34px', height: '34px',
+                    background: 'rgba(255,255,255,0.12)',
+                    borderRadius: '50%', width: '32px', height: '32px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    transition: 'background 0.15s',
                   }}>
                     {isSelected && (
-                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-                        <path d="M1.5 6L6 10.5L14.5 1.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
+                        <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     )}
                   </div>
