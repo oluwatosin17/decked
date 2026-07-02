@@ -213,7 +213,7 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
             width: `${248 * scale}px`,
             fontFamily: "'Gasoek One', sans-serif", fontSize: `${26 * scale}px`,
             color: '#f6f0f1', textAlign: 'center', margin: 0, lineHeight: 1.35,
-            WebkitTextStroke: `${1.5 * scale}px #755aa7`, paintOrder: 'stroke fill',
+            WebkitTextStroke: `${4.5 * scale}px #755aa7`, paintOrder: 'stroke fill',
           }}>
             {challenge}
           </p>
@@ -426,14 +426,12 @@ function GameplayScreen({ challenge, seconds, onDone }: { challenge: string; sec
 
 /* ─── Who Laughed? ─── */
 function WhoLaughedScreen({
-  players, livesMap, maxLives, hasHadRound,
-  onSkip, onNext,
+  players, livesMap, maxLives, hasHadRound, onNext,
 }: {
   players: Player[]
   livesMap: Record<string, number>
   maxLives: number
   hasHadRound: boolean
-  onSkip: () => void
   onNext: (laughedKeys: string[]) => void
 }) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -516,22 +514,83 @@ function WhoLaughedScreen({
           })}
         </div>
 
+        <button
+          onClick={() => canNext && onNext([...selected])}
+          style={{
+            width: '300px',
+            background: canNext ? '#dc2827' : '#626262',
+            border: 'none', borderRadius: '999px', padding: '14px 18px',
+            fontFamily: "'Staatliches', sans-serif", fontSize: '18px',
+            color: canNext ? '#fff' : '#a0a0a0',
+            cursor: canNext ? 'pointer' : 'default',
+            textAlign: 'center', letterSpacing: '0.05em',
+            transition: 'background 0.2s',
+            boxShadow: canNext ? '0 10px 12px rgba(220,40,39,0.25)' : 'none',
+          }}>
+          NEXT
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Lives Remaining screen ─── */
+function LivesRemainingScreen({
+  players, livesMap, maxLives, onSkip, onNext,
+}: {
+  players: Player[]
+  livesMap: Record<string, number>
+  maxLives: number
+  onSkip: () => void
+  onNext: () => void
+}) {
+  return (
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>LIVES REMAINING</h2>
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {players.map(p => {
+            const lives = livesMap[p.name] ?? maxLives
+            const isOut = lives <= 0
+            return (
+              <div key={p.name} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+                borderRadius: '12px', padding: '12px', height: '56px',
+                opacity: isOut ? 0.4 : 1, boxSizing: 'border-box',
+              }}>
+                {/* Left: avatar + name */}
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>{p.name}</span>
+                </div>
+                {/* Right: life icons — filled = active, dim = lost */}
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  {Array.from({ length: maxLives }, (_, i) => (
+                    <div key={i} style={{
+                      background: 'rgba(255,255,255,0.1)', borderRadius: '10px',
+                      width: '32px', height: '32px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      opacity: i < lives ? 1 : 0.25,
+                    }}>
+                      <img src={ICON_LIVE} alt="" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
         <div style={{ display: 'flex', gap: '8px', width: '402px' }}>
           <button className="game-btn" onClick={onSkip}
             style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             SKIP FOR NOW
           </button>
-          <button
-            onClick={() => onNext([...selected])}
-            style={{
-              flex: 1, background: canNext ? '#dc2827' : '#626262',
-              border: 'none', borderRadius: '999px', padding: '12px 18px',
-              fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
-              color: canNext ? '#fff' : '#a0a0a0',
-              cursor: 'pointer', textAlign: 'center', letterSpacing: '0.05em',
-              transition: 'background 0.2s',
-              boxShadow: canNext ? '0 10px 12px rgba(220,40,39,0.25)' : 'none',
-            }}>
+          <button className="game-btn-primary" onClick={onNext}
+            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em', boxShadow: '0 10px 12px rgba(220,40,39,0.25)' }}>
             NEXT
           </button>
         </div>
@@ -582,7 +641,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
 }
 
 /* ─── Root ─── */
-type Step = 'playerSetup' | 'roundLength' | 'livesSetup' | 'gameplay' | 'whoLaughed' | 'winner'
+type Step = 'playerSetup' | 'roundLength' | 'livesSetup' | 'gameplay' | 'whoLaughed' | 'livesRemaining' | 'winner'
 
 export default function LaughYouAreOutGame({ onClose }: { onClose: () => void }) {
   const [step,          setStep]          = useState<Step>('playerSetup')
@@ -609,30 +668,27 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
   }, [])
 
   const handleLaughed = useCallback((laughedKeys: string[]) => {
-    let newMap: Record<string, number> = {}
-
+    // Deduct lives and show Lives Remaining before moving on
     setLivesMap(prev => {
       const next = { ...prev }
       laughedKeys.forEach(name => { if (next[name] > 0) next[name]-- })
-      newMap = next
       return next
     })
+    setChallengeIdx(i => i + 1)
+    setRoundNum(r => r + 1)
+    setStep('livesRemaining')
+  }, [])
 
-    const nextIdx = challengeIdx + 1
-    const nextRound = roundNum + 1
-    setChallengeIdx(nextIdx)
-    setRoundNum(nextRound)
-
-    setTimeout(() => {
-      const alive = players.filter(p => (newMap[p.name] ?? maxLives) > 0)
-      if (alive.length <= 1) {
-        setWinner(alive[0] ?? null)
-        setStep('winner')
-      } else {
-        setStep('gameplay')
-      }
-    }, 50)
-  }, [challengeIdx, roundNum, players, maxLives])
+  const handleLivesNext = useCallback(() => {
+    // Check if game is over after seeing lives remaining
+    const alive = players.filter(p => (livesMap[p.name] ?? maxLives) > 0)
+    if (alive.length <= 1) {
+      setWinner(alive[0] ?? null)
+      setStep('winner')
+    } else {
+      setStep('gameplay')
+    }
+  }, [players, livesMap, maxLives])
 
   const handlePlayAgain = useCallback(() => {
     const map: Record<string, number> = {}
@@ -687,8 +743,17 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
           livesMap={livesMap}
           maxLives={maxLives}
           hasHadRound={hasHadRound}
-          onSkip={() => { setChallengeIdx(i => i + 1); setRoundNum(r => r + 1); setStep('gameplay') }}
           onNext={handleLaughed}
+        />
+      )}
+
+      {step === 'livesRemaining' && (
+        <LivesRemainingScreen
+          players={players}
+          livesMap={livesMap}
+          maxLives={maxLives}
+          onSkip={() => setStep('gameplay')}
+          onNext={handleLivesNext}
         />
       )}
 
