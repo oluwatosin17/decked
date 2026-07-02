@@ -447,11 +447,17 @@ function WhoLaughedScreen({
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+      <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center' }}>
 
-        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>WHO LAUGHED?</h2>
+        {/* Title — Galindo with visible stroke */}
+        <h2 style={{
+          fontFamily: "'Galindo', cursive", fontSize: '40px', color: '#fff', margin: 0, textAlign: 'center',
+          WebkitTextStroke: '3px #2a1a4a', paintOrder: 'stroke fill',
+          textShadow: '0 2px 8px rgba(0,0,0,0.4)',
+        }}>WHO LAUGHED?</h2>
 
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {/* Player rows */}
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {players.map(p => {
             const lives     = livesMap[p.name] ?? maxLives
             const isOut     = lives <= 0
@@ -464,32 +470,35 @@ function WhoLaughedScreen({
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   background: '#111113',
-                  border: `1px dashed ${isSelected ? 'rgba(220,40,39,0.5)' : 'rgba(255,255,255,0.1)'}`,
-                  borderRadius: '12px', padding: '12px', height: '56px',
+                  border: '1px dashed rgba(255,255,255,0.12)',
+                  borderRadius: '12px', padding: '12px 16px', height: '60px',
                   cursor: isOut ? 'default' : 'pointer',
                   opacity: isOut ? 0.4 : 1,
-                  transition: 'border-color 0.15s, opacity 0.2s',
                   boxSizing: 'border-box',
                 }}
               >
                 {/* Left: avatar + name */}
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                  <span style={{
+                    fontFamily: "'Galindo', cursive", fontSize: '20px', color: '#fff', whiteSpace: 'nowrap',
+                  }}>
                     {p.name}
                   </span>
                 </div>
 
-                {/* Right: toggle circle — always shown (every round) */}
+                {/* Right: toggle circle */}
                 {!isOut && (
                   <div style={{
-                    background: isSelected ? 'rgba(220,40,39,0.2)' : 'rgba(255,255,255,0.1)',
-                    borderRadius: '16px', width: '32px', height: '32px',
+                    background: isSelected ? '#dc2827' : 'rgba(255,255,255,0.12)',
+                    borderRadius: '50%', width: '34px', height: '34px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                     transition: 'background 0.15s',
                   }}>
                     {isSelected && (
-                      <img src={ICON_CHECK} alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }} />
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                        <path d="M1.5 6L6 10.5L14.5 1.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                     )}
                   </div>
                 )}
@@ -498,18 +507,19 @@ function WhoLaughedScreen({
           })}
         </div>
 
+        {/* Full-width NEXT button */}
         <button
           onClick={() => canNext && onNext([...selected])}
           style={{
-            width: '300px',
-            background: canNext ? '#dc2827' : '#626262',
-            border: 'none', borderRadius: '999px', padding: '14px 18px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '18px',
-            color: canNext ? '#fff' : '#a0a0a0',
+            width: '100%',
+            background: canNext ? '#dc2827' : '#2a2a2a',
+            border: 'none', borderRadius: '999px', padding: '16px 18px',
+            fontFamily: "'Galindo', cursive", fontSize: '18px',
+            color: canNext ? '#fff' : '#666',
             cursor: canNext ? 'pointer' : 'default',
-            textAlign: 'center', letterSpacing: '0.05em',
+            textAlign: 'center',
             transition: 'background 0.2s',
-            boxShadow: canNext ? '0 10px 12px rgba(220,40,39,0.25)' : 'none',
+            boxShadow: canNext ? '0 10px 20px rgba(220,40,39,0.3)' : 'none',
           }}>
           NEXT
         </button>
@@ -583,40 +593,58 @@ function LivesRemainingScreen({
   )
 }
 
-/* ─── Game Over screen ─── */
+/* ─── Game Over / Tie screen ─── */
 function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { winner: Player | null; roundsPlayed: number; onPlayAgain: () => void; onBrowseGames: () => void }) {
-  return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', position: 'relative', zIndex: 2 }}>
-      {/* Trophy icon */}
-      <img src="/icons/trophy.svg" alt="Trophy" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+  const isTie = winner === null
 
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px', position: 'relative', zIndex: 2 }}>
+
+      {/* Heading */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>GAME OVER</h2>
-        <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-          {winner ? `${winner.name} survived the longest!` : `You played ${roundsPlayed} round${roundsPlayed !== 1 ? 's' : ''}`}
+        <h2 className="done-heading" style={{
+          fontFamily: "'Galindo', cursive", fontSize: '48px', color: '#fff', margin: 0,
+          WebkitTextStroke: '3px #2a1a4a', paintOrder: 'stroke fill',
+          textShadow: '0 2px 10px rgba(0,0,0,0.4)',
+        }}>
+          {isTie ? "IT'S A TIE" : 'GAME OVER'}
+        </h2>
+        <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          You played {roundsPlayed} round{roundsPlayed !== 1 ? 's' : ''}
         </p>
       </div>
 
-      {winner && (
+      {/* Winner chip OR "No winner" chip */}
+      {isTie ? (
         <div className="stagger-item" style={{
-          background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
-          borderRadius: '12px', padding: '12px 20px', height: '54px',
-          display: 'flex', alignItems: 'center', gap: '8px',
+          background: '#111113', border: '1px solid rgba(255,255,255,0.15)',
+          borderRadius: '999px', padding: '10px 20px',
+          display: 'inline-flex', alignItems: 'center',
         }}>
-          <div style={{ width: '31px', height: '31px', borderRadius: '50%', background: winner.color, flexShrink: 0 }} />
-          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff' }}>{winner.name}</span>
+          <span style={{ fontFamily: "'Galindo', cursive", fontSize: '16px', color: '#fff' }}>No winner</span>
+        </div>
+      ) : winner && (
+        <div className="stagger-item" style={{
+          background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+          borderRadius: '12px', padding: '12px 20px', height: '54px',
+          display: 'flex', alignItems: 'center', gap: '10px',
+        }}>
+          <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: winner.color, flexShrink: 0 }} />
+          <span style={{ fontFamily: "'Galindo', cursive", fontSize: '18px', color: '#fff' }}>{winner.name}</span>
+          <img src="/icons/trophy.svg" alt="" style={{ width: '24px', height: '24px', marginLeft: '4px' }} />
         </div>
       )}
 
       <MiniLYAOCard />
 
-      <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+      {/* Buttons */}
+      <div className="done-btns" style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
         <button className="game-btn" onClick={onBrowseGames}
-          style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
+          style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Galindo', cursive", fontSize: '15px', color: '#fff', textAlign: 'center', cursor: 'pointer' }}>
           BROWSE GAMES
         </button>
         <button className="game-btn-primary" onClick={onPlayAgain}
-          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em', boxShadow: '0 10px 12px rgba(220,40,39,0.25)' }}>
+          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Galindo', cursive", fontSize: '15px', color: '#fff', textAlign: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
           PLAY AGAIN
         </button>
       </div>
