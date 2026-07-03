@@ -21,6 +21,13 @@ export const LNT_MODES: GameMode[] = [
   { id: 'random',             label: 'Random',             icon: '/icons/random.svg' },
 ]
 
+export const NHIE_MODES: GameMode[] = [
+  { id: 'classic',      label: 'Classic',      icon: '/icons/nhie-classic.svg' },
+  { id: 'spicy',        label: 'Spicy',        icon: '/icons/nhie-spicy.svg' },
+  { id: 'confessions',  label: 'Confessions',  icon: '/icons/nhie-confessions.svg' },
+  { id: 'drinking',     label: 'Drinking',     icon: '/icons/nhie-drinking.svg' },
+]
+
 export const DTC_MODES: GameMode[] = [
   { id: 'date-night',         label: 'Date Night',         icon: '/icons/couples.svg' },
   { id: 'friends-night',      label: 'Friends Night',      icon: '/icons/friends.svg' },

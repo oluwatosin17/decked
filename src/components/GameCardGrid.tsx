@@ -194,8 +194,9 @@ export const GAME_CARDS = (
   },
   {
     id: 'never-have-i-ever', categories: ['drinking', 'party-games'], w: 277.981, h: 348.041,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#cc66ff', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#cc66ff', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '26.22px', width: '198.429px', height: '198.429px', background: '#fefefe', borderRadius: '2.712px' }} />
         <p className="font-single-day" style={{ position: 'absolute', top: '13.9%', left: '18.37%', right: '18.21%', bottom: '43.01%', fontSize: '49.72px', color: '#bb33ff', textAlign: 'center', lineHeight: '49.72px' }}>NEVER HAVE I EVER</p>
         <div style={{ position: 'absolute', left: '109.38px', top: '196.17px', width: '59.212px', height: '59.212px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -351,9 +352,10 @@ interface BrowseGridProps {
   onPlayLateNightTalks: () => void
   onPlayDinnerTable?: () => void
   onPlayYouLaugh?: () => void
+  onPlayNeverHaveIEver?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh }: BrowseGridProps) {
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver }: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
@@ -401,6 +403,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                            : card.id === 'late-night-talks' ? onPlayLateNightTalks
                            : card.id === 'dinner-table' ? onPlayDinnerTable
                            : card.id === 'you-laugh' ? onPlayYouLaugh
+                           : card.id === 'never-have-i-ever' ? onPlayNeverHaveIEver
                            : undefined
 
             return (
