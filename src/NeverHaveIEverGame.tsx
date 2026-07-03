@@ -581,6 +581,17 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
     setStep('getReady')
   }
 
+  /* ── Mode select renders standalone (full-screen overlay) ── */
+  if (step === 'modeSelect') {
+    return (
+      <SelectGameMode
+        modes={NHIE_MODES}
+        onBack={() => setStep('playerSetup')}
+        onSelect={() => setStep('deckSize')}
+      />
+    )
+  }
+
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
       <GameNav onBack={onClose} />
@@ -591,14 +602,6 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
           skipLabel="GO BACK"
           onSkip={onClose}
           onNext={p => { setPlayers(p); setStep('modeSelect') }}
-        />
-      )}
-
-      {step === 'modeSelect' && (
-        <SelectGameMode
-          modes={NHIE_MODES}
-          onBack={() => setStep('playerSetup')}
-          onSelect={() => setStep('deckSize')}
         />
       )}
 
