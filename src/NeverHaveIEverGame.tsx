@@ -138,7 +138,7 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <p style={{
-                  fontFamily: "'Slackey', cursive", fontSize: `${W * 0.175}px`, color: PURPLE,
+                  fontFamily: "'Single Day', cursive", fontSize: `${W * 0.175}px`, color: PURPLE,
                   textAlign: 'center', lineHeight: 1.12, margin: 0, padding: '8px 16px',
                 }}>
                   NEVER<br />HAVE I<br />EVER
@@ -176,7 +176,7 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
             {/* Mini bubble badge */}
             <div style={{ alignSelf: 'flex-start', position: 'relative', marginBottom: '24px' }}>
               <div style={{ background: PURPLE, borderRadius: '8px', padding: '8px 10px', display: 'inline-block' }}>
-                <p style={{ fontFamily: "'Slackey', cursive", fontSize: '11px', color: '#fff', textAlign: 'center', lineHeight: 1.2, margin: 0 }}>
+                <p style={{ fontFamily: "'Single Day', cursive", fontSize: '11px', color: '#fff', textAlign: 'center', lineHeight: 1.2, margin: 0 }}>
                   NEVER<br />HAVE I<br />EVER
                 </p>
               </div>
@@ -217,8 +217,8 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
           style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
           onClick={() => inputRef.current?.focus()}
         >
-          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: '#fff', fontSize: '20px', fontWeight: 300, lineHeight: 1 }}>+</span>
+          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 300, lineHeight: 1 }}>+</span>
           </div>
           <input
             ref={inputRef} type="number" min={1} max={100}
@@ -246,23 +246,21 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
 /* ─── 2. Get Ready ─── */
 function GetReadyScreen({ players, onDone }: { players: Player[]; onDone: () => void }) {
   const [playerIdx, setPlayerIdx] = useState(0)
-  const [fadeIn, setFadeIn] = useState(true)
 
   useEffect(() => {
-    if (players.length === 0) { setTimeout(onDone, 1500); return }
-    const cycle = () => {
-      if (playerIdx < players.length - 1) {
-        setFadeIn(false)
-        setTimeout(() => { setPlayerIdx(i => i + 1); setFadeIn(true) }, 300)
+    const isLast = playerIdx >= Math.max(players.length - 1, 0)
+    const delay = isLast ? 1200 : 1400
+    const t = setTimeout(() => {
+      if (isLast) {
+        onDone()
       } else {
-        setTimeout(onDone, 900)
+        setPlayerIdx(i => i + 1)
       }
-    }
-    const t = setTimeout(cycle, playerIdx === players.length - 1 ? 900 : 1000)
+    }, delay)
     return () => clearTimeout(t)
   }, [playerIdx, players.length, onDone])
 
-  const current = players[playerIdx]
+  const current = players.length > 0 ? players[playerIdx] : null
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', position: 'relative', zIndex: 2 }}>
@@ -274,13 +272,11 @@ function GetReadyScreen({ players, onDone }: { players: Player[]; onDone: () => 
       </h2>
 
       {current && (
-        <div style={{
+        /* key forces remount/re-animate on each new player — only one ever visible */
+        <div key={playerIdx} className="screen-enter-fast" style={{
           background: '#111113', borderRadius: '999px',
           padding: '10px 20px 10px 12px',
           display: 'flex', alignItems: 'center', gap: '10px',
-          opacity: fadeIn ? 1 : 0,
-          transform: fadeIn ? 'scale(1)' : 'scale(0.9)',
-          transition: 'opacity 0.25s var(--ease-out), transform 0.25s var(--ease-spring)',
         }}>
           <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: current.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', letterSpacing: '0.04em' }}>
@@ -322,12 +318,14 @@ function GameScreen({
         {String(idx + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
       </p>
 
-      <NHIECard
-        key={idx}
-        flipped={flipped}
-        prompt={prompts[idx]}
-        onFlip={() => setFlipped(true)}
-      />
+      <div className={!flipped ? 'nhie-card-enter' : ''} key={idx}>
+        <NHIECard
+          key={idx}
+          flipped={flipped}
+          prompt={prompts[idx]}
+          onFlip={() => setFlipped(true)}
+        />
+      </div>
 
       {!flipped ? (
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
@@ -377,13 +375,13 @@ function IveDoneItScreen({
           {players.map((p, i) => {
             const isSel = selected.has(p.name)
             return (
-              <div key={p.name} className="stagger-item lyao-row" onClick={() => toggle(p.name)}
+              <div key={p.name} className="nhie-row-enter nhie-row" onClick={() => toggle(p.name)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
                   borderRadius: '12px', padding: '10px 14px', height: '56px',
                   cursor: 'pointer', boxSizing: 'border-box',
-                  animationDelay: `${0.04 + i * 0.05}s`,
+                  animationDelay: `${0.05 + i * 0.06}s`,
                 }}
               >
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -434,20 +432,20 @@ function PointsGainedScreen({
             const gained = newPoints[p.name] ?? 0
             const total  = pointsMap[p.name] ?? 0
             return (
-              <div key={p.name} className="stagger-item" style={{
+              <div key={p.name} className="nhie-row-enter" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
                 borderRadius: '12px', padding: '10px 14px', height: '56px',
-                boxSizing: 'border-box', animationDelay: `${0.04 + i * 0.06}s`,
+                boxSizing: 'border-box', animationDelay: `${0.06 + i * 0.07}s`,
               }}>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
                   <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', whiteSpace: 'nowrap' }}>{p.name}</span>
                 </div>
-                <span className={gained > 0 ? 'counter-in' : ''} style={{
+                <span className={gained > 0 ? 'nhie-points-pop' : ''} style={{
                   fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
                   fontSize: '16px', letterSpacing: '0.06em',
-                  color: gained > 0 ? PURPLE : 'rgba(255,255,255,0.35)',
+                  color: gained > 0 ? '#fff' : 'rgba(255,255,255,0.3)',
                 }}>
                   {gained > 0 ? `${total} PTS` : '0 PT'}
                 </span>
@@ -471,60 +469,91 @@ function PointsGainedScreen({
   )
 }
 
-/* ─── 6. Done ─── */
-function DoneScreen({ players, pointsMap, onPlayAgain, onBrowse }: {
-  players: Player[]; pointsMap: Record<string, number>; onPlayAgain: () => void; onBrowse: () => void
+/* ─── Mini NHIE card (reused in end screens) ─── */
+function MiniNHIECard() {
+  return (
+    <div className="done-card" style={{ width: '150px', height: '196px', background: PURPLE, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.45)', position: 'relative' }}>
+      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ background: '#fff', borderRadius: '10px', width: '112px', height: '118px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p style={{ fontFamily: "'Single Day', cursive", fontSize: '21px', color: PURPLE, textAlign: 'center', lineHeight: 1.2, margin: 0 }}>NEVER<br />HAVE I<br />EVER</p>
+        </div>
+        <div style={{ width: 0, height: 0, borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderTop: '16px solid #fff', marginTop: '-1px' }} />
+      </div>
+      <p style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)', fontFamily: "'Anton SC', sans-serif", fontSize: '7px', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em', whiteSpace: 'nowrap', margin: 0 }}>GAME OF POOR DECISIONS</p>
+    </div>
+  )
+}
+
+/* ─── End screen buttons ─── */
+function EndButtons({ onBrowse, onPlayAgain }: { onBrowse: () => void; onPlayAgain: () => void }) {
+  return (
+    <div className="done-btns" style={{ display: 'flex', gap: '12px' }}>
+      <button className="game-btn" onClick={onBrowse}
+        style={{ border: '1px solid rgba(255,255,255,0.6)', background: 'none', borderRadius: '999px', padding: '14px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
+        BROWSE GAMES
+      </button>
+      <button className="game-btn-primary" onClick={onPlayAgain}
+        style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '14px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+        PLAY AGAIN
+      </button>
+    </div>
+  )
+}
+
+/* ─── 6. Done — Winner or Tie ─── */
+function DoneScreen({ players, pointsMap, roundsPlayed, onPlayAgain, onBrowse }: {
+  players: Player[]
+  pointsMap: Record<string, number>
+  roundsPlayed: number
+  onPlayAgain: () => void
+  onBrowse: () => void
 }) {
   const sorted = [...players].sort((a, b) => (pointsMap[b.name] ?? 0) - (pointsMap[a.name] ?? 0))
-  const winner = sorted[0]
+  const topScore = pointsMap[sorted[0]?.name] ?? 0
+  const topPlayers = sorted.filter(p => (pointsMap[p.name] ?? 0) === topScore)
+  const isTie = topPlayers.length > 1
+  const winner = isTie ? null : sorted[0]
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px', zIndex: 2, position: 'relative' }}>
-      <div style={{ textAlign: 'center' }}>
-        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: '0 0 8px' }}>YOU'RE DECKED!</h2>
-        {winner && <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-          {winner.name} leads with {pointsMap[winner.name] ?? 0} pts
-        </p>}
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '40px', zIndex: 2, position: 'relative' }}>
+
+      {/* Heading */}
+      <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <h2 className="done-heading" style={{
+          fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+          fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em',
+        }}>
+          {isTie ? "IT'S A TIE" : 'WE HAVE A WINNER'}
+        </h2>
+        <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          You played {roundsPlayed} round{roundsPlayed !== 1 ? 's' : ''}
+        </p>
       </div>
 
-      {/* Leaderboard */}
-      <div className="stagger-item" style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {sorted.map((p, i) => (
-          <div key={p.name} style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            background: '#111113', border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '12px', padding: '10px 16px', height: '52px',
-          }}>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.3)', width: '18px' }}>{i + 1}</span>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
-              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff' }}>{p.name}</span>
-            </div>
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '15px', color: PURPLE, letterSpacing: '0.05em' }}>
-              {pointsMap[p.name] ?? 0} PTS
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* Mini card */}
-      <div className="done-card" style={{ width: '120px', height: '160px', background: PURPLE, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 24px rgba(191,90,242,0.45)` }}>
-        <div style={{ background: '#fff', borderRadius: '8px', width: '84px', height: '92px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-          <p style={{ fontFamily: "'Slackey', cursive", fontSize: '13px', color: PURPLE, textAlign: 'center', lineHeight: 1.2, margin: 0 }}>NEVER<br />HAVE I<br />EVER</p>
-          <div style={{ position: 'absolute', bottom: '-9px', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '7px solid transparent', borderRight: '7px solid transparent', borderTop: '10px solid #fff' }} />
+      {/* Winner chip OR No Winner chip */}
+      {isTie ? (
+        <div className="nhie-chip-enter" style={{
+          background: '#111113', border: '1px dashed rgba(255,255,255,0.2)',
+          borderRadius: '999px', padding: '10px 22px',
+          display: 'inline-flex', alignItems: 'center',
+        }}>
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff', letterSpacing: '0.04em' }}>NO WINNER</span>
         </div>
-      </div>
+      ) : winner ? (
+        <div className="nhie-chip-enter" style={{
+          background: '#111113', border: '1px dashed rgba(255,255,255,0.2)',
+          borderRadius: '999px', padding: '10px 22px',
+          display: 'inline-flex', alignItems: 'center', gap: '10px',
+        }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: winner.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff', letterSpacing: '0.04em' }}>{winner.name}</span>
+          <span style={{ fontSize: '18px' }}>🏆</span>
+        </div>
+      ) : null}
 
-      <div className="done-btns" style={{ display: 'flex', gap: '8px' }}>
-        <button className="game-btn" onClick={onBrowse}
-          style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
-          BROWSE GAMES
-        </button>
-        <button className="game-btn-primary" onClick={onPlayAgain}
-          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
-          PLAY AGAIN
-        </button>
-      </div>
+      <MiniNHIECard />
+
+      <EndButtons onBrowse={onBrowse} onPlayAgain={onPlayAgain} />
     </div>
   )
 }
@@ -641,6 +670,7 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
         <DoneScreen
           players={players}
           pointsMap={pointsMap}
+          roundsPlayed={prompts.length}
           onPlayAgain={handlePlayAgain}
           onBrowse={onClose}
         />

@@ -450,6 +450,50 @@ input::placeholder {
 .live-pop { animation: live-pop 0.32s var(--ease-spring) both; }
 
 /* ═══════════════════════════════════════════════
+   NHIE MICRO-INTERACTIONS
+   ═══════════════════════════════════════════════ */
+
+/* Card entrance — floats up with subtle rotation */
+@keyframes nhie-card-enter {
+  0%   { opacity: 0; transform: translateY(40px) scale(0.9) rotate(-1.5deg); }
+  60%  { opacity: 1; transform: translateY(-6px) scale(1.02) rotate(0.5deg); }
+  80%  { transform: translateY(2px) scale(0.99) rotate(-0.2deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+.nhie-card-enter { animation: nhie-card-enter 0.48s var(--ease-spring) both; }
+
+/* Row entrance — slides in from left, staggered */
+@keyframes nhie-row-enter {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.nhie-row-enter { animation: nhie-row-enter 0.28s var(--ease-out) both; }
+
+/* Points pop — spring scale from center */
+@keyframes nhie-points-pop {
+  0%   { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+  55%  { transform: scale(1.18) rotate(4deg); opacity: 1; }
+  75%  { transform: scale(0.94) rotate(-1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+.nhie-points-pop { animation: nhie-points-pop 0.38s var(--ease-spring) both; }
+
+/* Chip entrance — bounces in from below with overshoot */
+@keyframes nhie-chip-enter {
+  0%   { opacity: 0; transform: scale(0.6) translateY(10px); }
+  55%  { opacity: 1; transform: scale(1.08) translateY(-4px); }
+  75%  { transform: scale(0.96) translateY(1px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.nhie-chip-enter { animation: nhie-chip-enter 0.42s var(--ease-spring) both; }
+
+/* I've Done It / Points Gained row hover */
+.nhie-row {
+  transition: transform 0.1s var(--ease-out), background 0.15s;
+}
+.nhie-row:active { transform: scale(0.975) !important; transition-duration: 0.07s; }
+
+/* ═══════════════════════════════════════════════
    REDUCED MOTION FALLBACK
    ═══════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
