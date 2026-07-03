@@ -367,8 +367,8 @@ function IveDoneItScreen({
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
       <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-        <h2 style={{ fontFamily: "'Slackey', cursive", fontSize: '38px', color: '#fff', margin: 0, textAlign: 'center' }}>
-          I've Done It
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
+          I'VE DONE IT
         </h2>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
