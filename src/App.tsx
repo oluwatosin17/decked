@@ -3,7 +3,7 @@ import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
 import TruthOrDareGame from './TruthOrDareGame'
 import SpicyStartersGame from './SpicyStartersGame'
-import SelectGameMode, { LNT_MODES, DTC_MODES, NHIE_MODES } from './SelectGameMode'
+import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
 import LateNightTalksGame from './LateNightTalksGame'
 import DinnerTableGame from './DinnerTableGame'
 import LaughYouAreOutGame from './LaughYouAreOutGame'
@@ -14,7 +14,7 @@ type Screen =
   | 'lnt-select' | 'late-night-talks'
   | 'dtc-select' | 'dinner-table'
   | 'you-laugh'
-  | 'nhie-select' | 'never-have-i-ever'
+  | 'never-have-i-ever'
   | 'truth-or-dare' | 'spicy-starters'
 
 export default function App() {
@@ -56,16 +56,6 @@ export default function App() {
   }
 
   /* ── Never Have I Ever ── */
-  if (screen === 'nhie-select') {
-    return (
-      <SelectGameMode
-        modes={NHIE_MODES}
-        onBack={() => setScreen('browse')}
-        onSelect={() => setScreen('never-have-i-ever')}
-      />
-    )
-  }
-
   if (screen === 'never-have-i-ever') {
     return <NeverHaveIEverGame onClose={() => setScreen('browse')} />
   }
@@ -89,7 +79,7 @@ export default function App() {
         onPlayLateNightTalks={() => setScreen('lnt-select')}
         onPlayDinnerTable={() => setScreen('dtc-select')}
         onPlayYouLaugh={() => setScreen('you-laugh')}
-        onPlayNeverHaveIEver={() => setScreen('nhie-select')}
+        onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
       />
     )
   }

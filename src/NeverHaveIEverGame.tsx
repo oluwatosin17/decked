@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import SelectGameMode, { NHIE_MODES } from './SelectGameMode'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -103,8 +104,15 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
   return (
     <div
       onClick={!flipped ? onFlip : undefined}
-      className={!flipped ? 'lyao-card-wrap' : ''}
-      style={{ width: `${W}px`, height: `${H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer', flexShrink: 0 }}
+      style={{
+        width: `${W}px`, height: `${H}px`, perspective: '1000px',
+        cursor: flipped ? 'default' : 'pointer', flexShrink: 0,
+        transition: 'transform 0.22s var(--ease-out)',
+      }}
+      onMouseEnter={e => { if (!flipped) (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-6px)' }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)' }}
+      onMouseDown={e => { if (!flipped) (e.currentTarget as HTMLDivElement).style.transform = 'scale(0.97)' }}
+      onMouseUp={e => { if (!flipped) (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-6px)' }}
     >
       <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
         <div style={{
@@ -118,20 +126,20 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
           <div style={{
             position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
             background: PURPLE, borderRadius: '16px',
-            boxShadow: '0 24px 60px rgba(191,90,242,0.5)',
+            boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           }}>
-            {/* Speech bubble wrapper */}
+            {/* Speech bubble — larger, fills more of the card */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               {/* White box */}
               <div style={{
-                background: '#fff', borderRadius: '12px',
-                width: '238px', height: '262px',
+                background: '#fff', borderRadius: '14px',
+                width: `${W - 52}px`, height: `${Math.round(H * 0.6)}px`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <p style={{
-                  fontFamily: "'Slackey', cursive", fontSize: '52px', color: PURPLE,
-                  textAlign: 'center', lineHeight: 1.12, margin: 0, padding: '8px 12px',
+                  fontFamily: "'Slackey', cursive", fontSize: `${W * 0.175}px`, color: PURPLE,
+                  textAlign: 'center', lineHeight: 1.12, margin: 0, padding: '8px 16px',
                 }}>
                   NEVER<br />HAVE I<br />EVER
                 </p>
@@ -139,9 +147,9 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
               {/* Triangle pointer downward */}
               <div style={{
                 width: 0, height: 0,
-                borderLeft: '20px solid transparent',
-                borderRight: '20px solid transparent',
-                borderTop: '28px solid #fff',
+                borderLeft: '22px solid transparent',
+                borderRight: '22px solid transparent',
+                borderTop: '30px solid #fff',
                 marginTop: '-1px',
               }} />
             </div>
@@ -162,7 +170,7 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
             transform: 'rotateY(180deg)',
             background: '#fff', borderRadius: '16px',
             border: `3px solid ${PURPLE}`,
-            boxShadow: '0 24px 60px rgba(191,90,242,0.35)',
+            boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
             display: 'flex', flexDirection: 'column', padding: '18px',
           }}>
             {/* Mini bubble badge */}
@@ -522,7 +530,7 @@ function DoneScreen({ players, pointsMap, onPlayAgain, onBrowse }: {
 }
 
 /* ─── Root ─── */
-type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game' | 'iveDoneIt' | 'pointsGained' | 'done'
+type Step = 'playerSetup' | 'modeSelect' | 'deckSize' | 'getReady' | 'game' | 'iveDoneIt' | 'pointsGained' | 'done'
 
 export default function NeverHaveIEverGame({ onClose }: { onClose: () => void }) {
   const [step,       setStep]       = useState<Step>('playerSetup')
@@ -582,12 +590,20 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
           initialPlayers={players}
           skipLabel="GO BACK"
           onSkip={onClose}
-          onNext={p => { setPlayers(p); setStep('deckSize') }}
+          onNext={p => { setPlayers(p); setStep('modeSelect') }}
+        />
+      )}
+
+      {step === 'modeSelect' && (
+        <SelectGameMode
+          modes={NHIE_MODES}
+          onBack={() => setStep('playerSetup')}
+          onSelect={() => setStep('deckSize')}
         />
       )}
 
       {step === 'deckSize' && (
-        <DeckSizeScreen onBack={() => setStep('playerSetup')} onNext={startGame} />
+        <DeckSizeScreen onBack={() => setStep('modeSelect')} onNext={startGame} />
       )}
 
       {step === 'getReady' && (
