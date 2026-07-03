@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 
 function shuffle<T>(arr: T[]): T[] {
@@ -44,127 +44,14 @@ const ALL_PROMPTS = [
   "Watched a video on someone else's phone without saying anything.",
 ]
 
-/* ─── NHIE Card ─── */
 const PURPLE = '#bf5af2'
 
-function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
-  const W = 320, H = 420
-
-  return (
-    <div
-      onClick={!flipped ? onFlip : undefined}
-      className={!flipped ? 'lyao-card-wrap' : ''}
-      style={{ width: `${W}px`, height: `${H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
-    >
-      <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
-        <div style={{
-          width: '100%', height: '100%', position: 'relative',
-          transformStyle: 'preserve-3d',
-          transition: 'transform 0.55s cubic-bezier(0.4, 0, 0.2, 1)',
-          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)',
-        }}>
-
-          {/* ── Front face ── */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            background: PURPLE, borderRadius: '16px',
-            overflow: 'hidden', boxShadow: '0 20px 50px rgba(191,90,242,0.45)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          }}>
-            {/* Speech bubble */}
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/* Bubble box */}
-              <div style={{
-                background: '#fff', borderRadius: '14px',
-                width: '220px', height: '220px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                position: 'relative', zIndex: 1,
-              }}>
-                <p style={{
-                  fontFamily: "'Slackey', cursive", fontSize: '42px', color: PURPLE,
-                  textAlign: 'center', lineHeight: 1.15, margin: 0, padding: '10px',
-                }}>
-                  NEVER<br />HAVE I<br />EVER
-                </p>
-              </div>
-              {/* Triangle pointer */}
-              <div style={{
-                position: 'absolute', bottom: '-22px', left: '50%',
-                transform: 'translateX(-50%)',
-                width: 0, height: 0,
-                borderLeft: '16px solid transparent',
-                borderRight: '16px solid transparent',
-                borderTop: '24px solid #fff',
-                zIndex: 0,
-              }} />
-            </div>
-
-            {/* Bottom label */}
-            <p style={{
-              position: 'absolute', bottom: '18px', left: '50%', transform: 'translateX(-50%)',
-              fontFamily: "'Anton SC', sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.75)',
-              letterSpacing: '0.12em', whiteSpace: 'nowrap', margin: 0,
-            }}>
-              GAME OF POOR DECISIONS
-            </p>
-          </div>
-
-          {/* ── Back face — prompt ── */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
-            background: '#fff', borderRadius: '16px',
-            border: `3px solid ${PURPLE}`,
-            boxShadow: '0 20px 50px rgba(191,90,242,0.35)',
-            display: 'flex', flexDirection: 'column', padding: '16px',
-          }}>
-            {/* Mini bubble badge top-left */}
-            <div style={{ alignSelf: 'flex-start', position: 'relative', marginBottom: '20px' }}>
-              <div style={{
-                background: PURPLE, borderRadius: '8px',
-                padding: '8px 10px',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <p style={{
-                  fontFamily: "'Slackey', cursive", fontSize: '11px', color: '#fff',
-                  textAlign: 'center', lineHeight: 1.2, margin: 0,
-                }}>
-                  NEVER<br />HAVE I<br />EVER
-                </p>
-              </div>
-              {/* Mini triangle */}
-              <div style={{
-                position: 'absolute', bottom: '-10px', left: '12px',
-                width: 0, height: 0,
-                borderLeft: '8px solid transparent',
-                borderRight: '8px solid transparent',
-                borderTop: `11px solid ${PURPLE}`,
-              }} />
-            </div>
-
-            {/* Prompt text */}
-            <p style={{
-              fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-              fontSize: '22px', color: '#111', lineHeight: 1.35, margin: 0,
-              flex: 1, display: 'flex', alignItems: 'flex-start',
-            }}>
-              {prompt.toUpperCase()}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/* ─── Nav ─── */
+/* ─── Shared Nav ─── */
 function GameNav({ onBack }: { onBack: () => void }) {
   return (
-    <nav style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10 }}>
+    <nav style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 60px', height: '80px', flexShrink: 0, zIndex: 10, position: 'relative' }}>
       <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '28px', color: '#fff', letterSpacing: '0.56px', fontWeight: 400 }}>DECKED</span>
-      <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '24px' }}>
         {['Browse Games', 'How to Play', 'About'].map(label => (
           <button key={label} onClick={label === 'Browse Games' ? onBack : undefined}
             style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', cursor: label === 'Browse Games' ? 'pointer' : 'default', padding: 0, transition: 'color 0.2s' }}
@@ -190,7 +77,7 @@ function GameFooter() {
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '32px', color: '#fff' }}>DECKED</span>
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: '#9ca3af', lineHeight: 1.5, margin: 0 }}>Pick a deck, pass the phone, and let the chaos begin. 10+ party card games, no app, no login, no excuses.</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px' }}>
           {[SOCIAL_TIKTOK, SOCIAL_INSTAGRAM, SOCIAL_WHATSAPP].map((src, i) => (
             <img key={i} src={src} alt="" style={{ width: '20px', height: '20px', borderRadius: '8px', objectFit: 'contain' }} />
           ))}
@@ -209,9 +96,103 @@ function GameFooter() {
   )
 }
 
-/* ─── Deck Size screen ─── */
+/* ─── NHIE Card ─── */
+function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
+  const W = 320, H = 480
+
+  return (
+    <div
+      onClick={!flipped ? onFlip : undefined}
+      className={!flipped ? 'lyao-card-wrap' : ''}
+      style={{ width: `${W}px`, height: `${H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer', flexShrink: 0 }}
+    >
+      <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
+        <div style={{
+          width: '100%', height: '100%', position: 'relative',
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)',
+        }}>
+
+          {/* ── Front: purple card + white speech bubble ── */}
+          <div style={{
+            position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+            background: PURPLE, borderRadius: '16px',
+            boxShadow: '0 24px 60px rgba(191,90,242,0.5)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {/* Speech bubble wrapper */}
+            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              {/* White box */}
+              <div style={{
+                background: '#fff', borderRadius: '12px',
+                width: '238px', height: '262px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <p style={{
+                  fontFamily: "'Slackey', cursive", fontSize: '52px', color: PURPLE,
+                  textAlign: 'center', lineHeight: 1.12, margin: 0, padding: '8px 12px',
+                }}>
+                  NEVER<br />HAVE I<br />EVER
+                </p>
+              </div>
+              {/* Triangle pointer downward */}
+              <div style={{
+                width: 0, height: 0,
+                borderLeft: '20px solid transparent',
+                borderRight: '20px solid transparent',
+                borderTop: '28px solid #fff',
+                marginTop: '-1px',
+              }} />
+            </div>
+
+            {/* Bottom label */}
+            <p style={{
+              position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)',
+              fontFamily: "'Anton SC', sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.7)',
+              letterSpacing: '0.12em', whiteSpace: 'nowrap', margin: 0,
+            }}>
+              GAME OF POOR DECISIONS
+            </p>
+          </div>
+
+          {/* ── Back: white card with prompt ── */}
+          <div style={{
+            position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+            background: '#fff', borderRadius: '16px',
+            border: `3px solid ${PURPLE}`,
+            boxShadow: '0 24px 60px rgba(191,90,242,0.35)',
+            display: 'flex', flexDirection: 'column', padding: '18px',
+          }}>
+            {/* Mini bubble badge */}
+            <div style={{ alignSelf: 'flex-start', position: 'relative', marginBottom: '24px' }}>
+              <div style={{ background: PURPLE, borderRadius: '8px', padding: '8px 10px', display: 'inline-block' }}>
+                <p style={{ fontFamily: "'Slackey', cursive", fontSize: '11px', color: '#fff', textAlign: 'center', lineHeight: 1.2, margin: 0 }}>
+                  NEVER<br />HAVE I<br />EVER
+                </p>
+              </div>
+              <div style={{ position: 'absolute', bottom: '-10px', left: '14px', width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderTop: `11px solid ${PURPLE}` }} />
+            </div>
+
+            {/* Prompt text */}
+            <p style={{
+              fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+              fontSize: '21px', color: '#111', lineHeight: 1.38, margin: 0,
+              textTransform: 'uppercase',
+            }}>
+              {prompt}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── 1. Deck Size ─── */
 function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: number) => void }) {
-  const [value, setValue] = useState('10')
+  const [value, setValue] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const parsed = parseInt(value, 10)
   const valid = !isNaN(parsed) && parsed >= 1 && parsed <= 100
@@ -219,8 +200,8 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
       <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', margin: '0 0 10px', letterSpacing: '0.04em' }}>DECK SIZE</h2>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', margin: 0, letterSpacing: '0.04em' }}>DECK SIZE</h2>
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>How many cards do you want to play?</p>
         </div>
 
@@ -229,13 +210,13 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
           onClick={() => inputRef.current?.focus()}
         >
           <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: '#fff', fontSize: '18px', fontWeight: 300, lineHeight: 1 }}>+</span>
+            <span style={{ color: '#fff', fontSize: '20px', fontWeight: 300, lineHeight: 1 }}>+</span>
           </div>
           <input
             ref={inputRef} type="number" min={1} max={100}
             value={value} onChange={e => setValue(e.target.value)}
-            placeholder="10"
-            style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '20px', color: '#fff', flex: 1, letterSpacing: '0.06em' }}
+            placeholder="ENTER NUMBER"
+            style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', flex: 1, letterSpacing: '0.06em' }}
           />
         </div>
 
@@ -244,9 +225,8 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
             style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
             GO BACK
           </button>
-          <button onClick={() => valid && onNext(parsed)}
-            className="game-btn-primary"
-            style={{ flex: 1, background: valid ? '#dc2827' : '#333', border: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: valid ? '#fff' : '#666', cursor: valid ? 'pointer' : 'not-allowed', letterSpacing: '0.05em', transition: 'background 0.2s' }}>
+          <button onClick={() => valid && onNext(parsed)} className={valid ? 'game-btn-primary' : ''}
+            style={{ flex: 1, background: valid ? '#dc2827' : '#2a2a2a', border: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: valid ? '#fff' : '#555', cursor: valid ? 'pointer' : 'not-allowed', letterSpacing: '0.05em', transition: 'background 0.2s, color 0.2s' }}>
             START THE GAME
           </button>
         </div>
@@ -255,27 +235,82 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
   )
 }
 
-/* ─── Game screen ─── */
-function GameScreen({ prompts, onDone }: { prompts: string[]; onDone: (stats: { cards: number; skipped: number }) => void }) {
-  const [idx, setIdx] = useState(0)
-  const [flipped, setFlipped] = useState(false)
-  const [skipped, setSkipped] = useState(0)
-  const total = prompts.length
+/* ─── 2. Get Ready ─── */
+function GetReadyScreen({ players, onDone }: { players: Player[]; onDone: () => void }) {
+  const [playerIdx, setPlayerIdx] = useState(0)
+  const [fadeIn, setFadeIn] = useState(true)
 
-  const goNext = (wasSkipped = false) => {
-    if (wasSkipped) setSkipped(s => s + 1)
-    if (idx + 1 >= total) {
-      onDone({ cards: total, skipped: wasSkipped ? skipped + 1 : skipped })
-    } else {
-      setFlipped(false)
-      setTimeout(() => setIdx(i => i + 1), 80)
+  useEffect(() => {
+    if (players.length === 0) { setTimeout(onDone, 1500); return }
+    const cycle = () => {
+      if (playerIdx < players.length - 1) {
+        setFadeIn(false)
+        setTimeout(() => { setPlayerIdx(i => i + 1); setFadeIn(true) }, 300)
+      } else {
+        setTimeout(onDone, 900)
+      }
     }
-  }
+    const t = setTimeout(cycle, playerIdx === players.length - 1 ? 900 : 1000)
+    return () => clearTimeout(t)
+  }, [playerIdx, players.length, onDone])
+
+  const current = players[playerIdx]
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', position: 'relative', zIndex: 2 }}>
+      <h2 style={{
+        fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff',
+        margin: 0, letterSpacing: '0.04em',
+      }}>
+        GET READY...
+      </h2>
+
+      {current && (
+        <div style={{
+          background: '#111113', borderRadius: '999px',
+          padding: '10px 20px 10px 12px',
+          display: 'flex', alignItems: 'center', gap: '10px',
+          opacity: fadeIn ? 1 : 0,
+          transform: fadeIn ? 'scale(1)' : 'scale(0.9)',
+          transition: 'opacity 0.25s var(--ease-out), transform 0.25s var(--ease-spring)',
+        }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: current.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', letterSpacing: '0.04em' }}>
+            {current.name}
+          </span>
+        </div>
+      )}
+
+      {players.length === 0 && (
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <span className="get-ready-dot" />
+          <span className="get-ready-dot" />
+          <span className="get-ready-dot" />
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ─── 3. Game (card flip) ─── */
+function GameScreen({
+  prompts, idx, onSkip, onReveal,
+}: {
+  prompts: string[]
+  idx: number
+  onSkip: () => void
+  onReveal: () => void
+}) {
+  const [flipped, setFlipped] = useState(false)
+  const total = prompts.length
+
+  // Reset flip when card changes
+  useEffect(() => { setFlipped(false) }, [idx])
+
+  return (
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '24px 40px', position: 'relative', zIndex: 2 }}>
       {/* Counter */}
-      <p className="counter-in" key={idx} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>
+      <p className="counter-in" key={idx} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>
         {String(idx + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
       </p>
 
@@ -288,17 +323,17 @@ function GameScreen({ prompts, onDone }: { prompts: string[]; onDone: (stats: { 
 
       {!flipped ? (
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
-          Tap the card to reveal
+          Tap the card to flip it.
         </p>
       ) : (
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button className="game-btn" onClick={() => goNext(true)}
-            style={{ border: '1px solid rgba(255,255,255,0.4)', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.05em', cursor: 'pointer' }}>
-            SKIP
+        <div className="screen-enter-fast" style={{ display: 'flex', gap: '8px' }}>
+          <button className="game-btn" onClick={onSkip}
+            style={{ border: '1px solid rgba(255,255,255,0.4)', background: 'none', borderRadius: '999px', padding: '13px 28px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.05em', cursor: 'pointer' }}>
+            SKIP FOR NOW
           </button>
-          <button className="game-btn-primary" onClick={() => goNext(false)}
-            style={{ background: PURPLE, border: 'none', borderRadius: '999px', padding: '12px 28px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(191,90,242,0.4)' }}>
-            NEXT CARD
+          <button className="game-btn-primary" onClick={onReveal}
+            style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 32px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.35)' }}>
+            NEXT
           </button>
         </div>
       )}
@@ -306,39 +341,169 @@ function GameScreen({ prompts, onDone }: { prompts: string[]; onDone: (stats: { 
   )
 }
 
-/* ─── Done screen ─── */
-function DoneScreen({ stats, players, onPlayAgain, onBrowse }: { stats: { cards: number; skipped: number }; players: Player[]; onPlayAgain: () => void; onBrowse: () => void }) {
+/* ─── 4. I've Done It ─── */
+function IveDoneItScreen({
+  players, onNext,
+}: {
+  players: Player[]
+  onNext: (didIt: string[]) => void
+}) {
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+
+  const toggle = (name: string) => {
+    setSelected(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
+  }
+
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', position: 'relative', zIndex: 2 }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+      <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <h2 style={{ fontFamily: "'Slackey', cursive", fontSize: '38px', color: '#fff', margin: 0, textAlign: 'center' }}>
+          I've Done It
+        </h2>
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {players.map((p, i) => {
+            const isSel = selected.has(p.name)
+            return (
+              <div key={p.name} className="stagger-item lyao-row" onClick={() => toggle(p.name)}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+                  borderRadius: '12px', padding: '10px 14px', height: '56px',
+                  cursor: 'pointer', boxSizing: 'border-box',
+                  animationDelay: `${0.04 + i * 0.05}s`,
+                }}
+              >
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
+                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', whiteSpace: 'nowrap' }}>{p.name}</span>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {isSel && (
+                    <svg key="check" className="check-pop" width="14" height="11" viewBox="0 0 14 11" fill="none">
+                      <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Full-width NEXT — always active (could be 0 selections = nobody did it) */}
+        <button className="game-btn-primary" onClick={() => onNext([...selected])}
+          style={{ width: '100%', background: '#dc2827', border: 'none', borderRadius: '999px', padding: '15px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '18px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+          NEXT
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/* ─── 5. Points Gained ─── */
+function PointsGainedScreen({
+  players, pointsMap, newPoints, onSkip, onNext,
+}: {
+  players: Player[]
+  pointsMap: Record<string, number>
+  newPoints: Record<string, number>
+  onSkip: () => void
+  onNext: () => void
+}) {
+  return (
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+      <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', letterSpacing: '0.04em' }}>
+          POINTS GAINED
+        </h2>
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {players.map((p, i) => {
+            const gained = newPoints[p.name] ?? 0
+            const total  = pointsMap[p.name] ?? 0
+            return (
+              <div key={p.name} className="stagger-item" style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+                borderRadius: '12px', padding: '10px 14px', height: '56px',
+                boxSizing: 'border-box', animationDelay: `${0.04 + i * 0.06}s`,
+              }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
+                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', whiteSpace: 'nowrap' }}>{p.name}</span>
+                </div>
+                <span className={gained > 0 ? 'counter-in' : ''} style={{
+                  fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+                  fontSize: '16px', letterSpacing: '0.06em',
+                  color: gained > 0 ? PURPLE : 'rgba(255,255,255,0.35)',
+                }}>
+                  {gained > 0 ? `${total} PTS` : '0 PT'}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+          <button className="game-btn" onClick={onSkip}
+            style={{ flex: 1, border: '1px solid rgba(255,255,255,0.5)', background: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
+            SKIP FOR NOW
+          </button>
+          <button className="game-btn-primary" onClick={onNext}
+            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+            NEXT
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── 6. Done ─── */
+function DoneScreen({ players, pointsMap, onPlayAgain, onBrowse }: {
+  players: Player[]; pointsMap: Record<string, number>; onPlayAgain: () => void; onBrowse: () => void
+}) {
+  const sorted = [...players].sort((a, b) => (pointsMap[b.name] ?? 0) - (pointsMap[a.name] ?? 0))
+  const winner = sorted[0]
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px', zIndex: 2, position: 'relative' }}>
       <div style={{ textAlign: 'center' }}>
         <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: '0 0 8px' }}>YOU'RE DECKED!</h2>
-        <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-          {players.length > 0 ? `${players.map(p => p.name).join(', ')} played ${stats.cards} cards` : `${stats.cards} cards played`}
-        </p>
+        {winner && <p className="done-subtitle" style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          {winner.name} leads with {pointsMap[winner.name] ?? 0} pts
+        </p>}
       </div>
 
-      <div style={{ display: 'flex', gap: '16px' }}>
-        {[
-          { label: 'CARDS', value: stats.cards },
-          { label: 'SKIPPED', value: stats.skipped },
-          { label: 'PLAYERS', value: players.length || '—' },
-        ].map((s, i) => (
-          <div key={s.label} className={`done-stat-${i + 1}`} style={{ background: '#111113', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '16px 24px', textAlign: 'center', minWidth: '90px' }}>
-            <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '28px', color: '#fff', margin: '0 0 4px' }}>{s.value}</p>
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>{s.label}</p>
+      {/* Leaderboard */}
+      <div className="stagger-item" style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {sorted.map((p, i) => (
+          <div key={p.name} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: '#111113', border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '12px', padding: '10px 16px', height: '52px',
+          }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.3)', width: '18px' }}>{i + 1}</span>
+              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
+              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff' }}>{p.name}</span>
+            </div>
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '15px', color: PURPLE, letterSpacing: '0.05em' }}>
+              {pointsMap[p.name] ?? 0} PTS
+            </span>
           </div>
         ))}
       </div>
 
-      {/* Mini NHIE card */}
-      <div className="done-card" style={{
-        width: '130px', height: '170px', background: PURPLE, borderRadius: '12px',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 8px 24px rgba(191,90,242,0.45)',
-      }}>
-        <div style={{ background: '#fff', borderRadius: '8px', width: '90px', height: '90px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-          <p style={{ fontFamily: "'Slackey', cursive", fontSize: '14px', color: PURPLE, textAlign: 'center', lineHeight: 1.2, margin: 0 }}>NEVER<br />HAVE I<br />EVER</p>
-          <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '7px solid transparent', borderRight: '7px solid transparent', borderTop: '9px solid #fff' }} />
+      {/* Mini card */}
+      <div className="done-card" style={{ width: '120px', height: '160px', background: PURPLE, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 24px rgba(191,90,242,0.45)` }}>
+        <div style={{ background: '#fff', borderRadius: '8px', width: '84px', height: '92px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <p style={{ fontFamily: "'Slackey', cursive", fontSize: '13px', color: PURPLE, textAlign: 'center', lineHeight: 1.2, margin: 0 }}>NEVER<br />HAVE I<br />EVER</p>
+          <div style={{ position: 'absolute', bottom: '-9px', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '7px solid transparent', borderRight: '7px solid transparent', borderTop: '10px solid #fff' }} />
         </div>
       </div>
 
@@ -357,22 +522,55 @@ function DoneScreen({ stats, players, onPlayAgain, onBrowse }: { stats: { cards:
 }
 
 /* ─── Root ─── */
-type Step = 'playerSetup' | 'deckSize' | 'game' | 'done'
+type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game' | 'iveDoneIt' | 'pointsGained' | 'done'
 
 export default function NeverHaveIEverGame({ onClose }: { onClose: () => void }) {
-  const [step,    setStep]    = useState<Step>('playerSetup')
-  const [players, setPlayers] = useState<Player[]>([])
-  const [prompts, setPrompts] = useState<string[]>([])
-  const [stats,   setStats]   = useState({ cards: 0, skipped: 0 })
+  const [step,       setStep]       = useState<Step>('playerSetup')
+  const [players,    setPlayers]    = useState<Player[]>([])
+  const [prompts,    setPrompts]    = useState<string[]>([])
+  const [cardIdx,    setCardIdx]    = useState(0)
+  const [pointsMap,  setPointsMap]  = useState<Record<string, number>>({})
+  const [lastPoints, setLastPoints] = useState<Record<string, number>>({})
 
   const startGame = (deckSize: number) => {
     setPrompts(shuffle(ALL_PROMPTS).slice(0, Math.min(deckSize, ALL_PROMPTS.length)))
-    setStep('game')
+    setCardIdx(0)
+    const init: Record<string, number> = {}
+    players.forEach(p => { init[p.name] = 0 })
+    setPointsMap(init)
+    setStep('getReady')
   }
+
+  const handleIveDoneIt = useCallback((didIt: string[]) => {
+    const gained: Record<string, number> = {}
+    const next = { ...pointsMap }
+    players.forEach(p => {
+      const g = didIt.includes(p.name) ? 1 : 0
+      gained[p.name] = g
+      next[p.name] = (next[p.name] ?? 0) + g
+    })
+    setLastPoints(gained)
+    setPointsMap(next)
+    setStep('pointsGained')
+  }, [pointsMap, players])
+
+  const advanceCard = useCallback(() => {
+    const next = cardIdx + 1
+    if (next >= prompts.length) {
+      setStep('done')
+    } else {
+      setCardIdx(next)
+      setStep('game')
+    }
+  }, [cardIdx, prompts.length])
 
   const handlePlayAgain = () => {
     setPrompts(shuffle(ALL_PROMPTS).slice(0, prompts.length))
-    setStep('game')
+    setCardIdx(0)
+    const init: Record<string, number> = {}
+    players.forEach(p => { init[p.name] = 0 })
+    setPointsMap(init)
+    setStep('getReady')
   }
 
   return (
@@ -389,23 +587,41 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
       )}
 
       {step === 'deckSize' && (
-        <DeckSizeScreen
-          onBack={() => setStep('playerSetup')}
-          onNext={startGame}
-        />
+        <DeckSizeScreen onBack={() => setStep('playerSetup')} onNext={startGame} />
+      )}
+
+      {step === 'getReady' && (
+        <GetReadyScreen players={players} onDone={() => setStep('game')} />
       )}
 
       {step === 'game' && (
         <GameScreen
+          key={cardIdx}
           prompts={prompts}
-          onDone={s => { setStats(s); setStep('done') }}
+          idx={cardIdx}
+          onSkip={advanceCard}
+          onReveal={() => setStep('iveDoneIt')}
+        />
+      )}
+
+      {step === 'iveDoneIt' && (
+        <IveDoneItScreen players={players} onNext={handleIveDoneIt} />
+      )}
+
+      {step === 'pointsGained' && (
+        <PointsGainedScreen
+          players={players}
+          pointsMap={pointsMap}
+          newPoints={lastPoints}
+          onSkip={advanceCard}
+          onNext={advanceCard}
         />
       )}
 
       {step === 'done' && (
         <DoneScreen
-          stats={stats}
           players={players}
+          pointsMap={pointsMap}
           onPlayAgain={handlePlayAgain}
           onBrowse={onClose}
         />
