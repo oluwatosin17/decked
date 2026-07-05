@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import SelectGameMode, { NHIE_MODES } from './SelectGameMode'
+import { haptic } from './haptics'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -103,7 +104,7 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
 
   return (
     <div
-      onClick={!flipped ? onFlip : undefined}
+      onClick={!flipped ? () => { haptic('medium'); onFlip() } : undefined}
       style={{
         width: `${W}px`, height: `${H}px`, perspective: '1000px',
         cursor: flipped ? 'default' : 'pointer', flexShrink: 0,
@@ -228,13 +229,13 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-          <button onClick={onBack} className="game-btn"
-            style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <button onClick={() => { haptic('light'); onBack() }} className="game-btn"
+            style={{ width: '142px', height: '44px', boxSizing: 'border-box', border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
             GO BACK
           </button>
-          <button onClick={() => valid && onNext(parsed)} className={valid ? 'game-btn-primary' : ''}
-            style={{ flex: 1, background: valid ? '#dc2827' : '#2a2a2a', border: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: valid ? '#fff' : '#555', cursor: valid ? 'pointer' : 'not-allowed', letterSpacing: '0.05em', transition: 'background 0.2s, color 0.2s' }}>
+          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} className={valid ? 'game-btn-primary' : ''}
+            style={{ width: '142px', height: '44px', boxSizing: 'border-box', background: valid ? '#dc2827' : '#626262', border: 'none', borderRadius: '999px', padding: '12px 18px', boxShadow: valid ? '0 10px 12px rgba(220,40,39,0.25)' : 'none', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: valid ? '#fff' : '#a0a0a0', cursor: valid ? 'pointer' : 'not-allowed', letterSpacing: '0.05em', transition: 'background 0.2s, color 0.2s' }}>
             START THE GAME
           </button>
         </div>
@@ -314,11 +315,11 @@ function GameScreen({
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '24px 40px', position: 'relative', zIndex: 2 }}>
       {/* Counter */}
-      <p className="counter-in" key={idx} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>
+      <p className="counter-in" key={`counter-${idx}`} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>
         {String(idx + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
       </p>
 
-      <div className={!flipped ? 'nhie-card-enter' : ''} key={idx}>
+      <div className={!flipped ? 'nhie-card-enter' : ''} key={`card-${idx}`}>
         <NHIECard
           key={idx}
           flipped={flipped}
@@ -333,12 +334,12 @@ function GameScreen({
         </p>
       ) : (
         <div className="screen-enter-fast" style={{ display: 'flex', gap: '8px' }}>
-          <button className="game-btn" onClick={onSkip}
-            style={{ border: '1px solid rgba(255,255,255,0.4)', background: 'none', borderRadius: '999px', padding: '13px 28px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.05em', cursor: 'pointer' }}>
+          <button className="game-btn" onClick={() => { haptic('light'); onSkip() }}
+            style={{ width: '160px', height: '44px', boxSizing: 'border-box', border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
             SKIP FOR NOW
           </button>
-          <button className="game-btn-primary" onClick={onReveal}
-            style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 32px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.35)' }}>
+          <button className="game-btn-primary" onClick={() => { haptic('light'); onReveal() }}
+            style={{ width: '160px', height: '44px', boxSizing: 'border-box', background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', boxShadow: '0 10px 12px rgba(220,40,39,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
             NEXT
           </button>
         </div>
@@ -357,6 +358,7 @@ function IveDoneItScreen({
   const [selected, setSelected] = useState<Set<string>>(new Set())
 
   const toggle = (name: string) => {
+    haptic('light')
     setSelected(prev => {
       const next = new Set(prev)
       next.has(name) ? next.delete(name) : next.add(name)
@@ -401,8 +403,8 @@ function IveDoneItScreen({
         </div>
 
         {/* Full-width NEXT — always active (could be 0 selections = nobody did it) */}
-        <button className="game-btn-primary" onClick={() => onNext([...selected])}
-          style={{ width: '100%', background: '#dc2827', border: 'none', borderRadius: '999px', padding: '15px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '18px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+        <button className="game-btn-primary" onClick={() => { haptic('medium'); onNext([...selected]) }}
+          style={{ width: '402px', maxWidth: '100%', height: '44px', boxSizing: 'border-box', background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 10px 12px rgba(220,40,39,0.25)' }}>
           NEXT
         </button>
       </div>
@@ -420,6 +422,10 @@ function PointsGainedScreen({
   onSkip: () => void
   onNext: () => void
 }) {
+  useEffect(() => {
+    if (Object.values(newPoints).some(g => g > 0)) haptic('success')
+  }, [newPoints])
+
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
       <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
@@ -454,13 +460,13 @@ function PointsGainedScreen({
           })}
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-          <button className="game-btn" onClick={onSkip}
-            style={{ flex: 1, border: '1px solid rgba(255,255,255,0.5)', background: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <button className="game-btn" onClick={() => { haptic('light'); onSkip() }}
+            style={{ width: '197px', height: '44px', boxSizing: 'border-box', border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
             SKIP FOR NOW
           </button>
-          <button className="game-btn-primary" onClick={onNext}
-            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '14px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+          <button className="game-btn-primary" onClick={() => { haptic('light'); onNext() }}
+            style={{ width: '197px', height: '44px', boxSizing: 'border-box', background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', boxShadow: '0 10px 12px rgba(220,40,39,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
             NEXT
           </button>
         </div>
@@ -487,13 +493,13 @@ function MiniNHIECard() {
 /* ─── End screen buttons ─── */
 function EndButtons({ onBrowse, onPlayAgain }: { onBrowse: () => void; onPlayAgain: () => void }) {
   return (
-    <div className="done-btns" style={{ display: 'flex', gap: '12px' }}>
-      <button className="game-btn" onClick={onBrowse}
-        style={{ border: '1px solid rgba(255,255,255,0.6)', background: 'none', borderRadius: '999px', padding: '14px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
+    <div className="done-btns" style={{ display: 'flex', gap: '8px' }}>
+      <button className="game-btn" onClick={() => { haptic('light'); onBrowse() }}
+        style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', height: '44px', boxSizing: 'border-box', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
         BROWSE GAMES
       </button>
-      <button className="game-btn-primary" onClick={onPlayAgain}
-        style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '14px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '17px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
+      <button className="game-btn-primary" onClick={() => { haptic('light'); onPlayAgain() }}
+        style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', height: '44px', boxSizing: 'border-box', boxShadow: '0 10px 12px rgba(220,40,39,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
         PLAY AGAIN
       </button>
     </div>
