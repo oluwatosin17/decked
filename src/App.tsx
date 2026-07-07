@@ -8,6 +8,7 @@ import LateNightTalksGame from './LateNightTalksGame'
 import DinnerTableGame from './DinnerTableGame'
 import LaughYouAreOutGame from './LaughYouAreOutGame'
 import NeverHaveIEverGame from './NeverHaveIEverGame'
+import CharadesGame from './CharadesGame'
 
 type Screen =
   | 'home' | 'browse'
@@ -15,6 +16,7 @@ type Screen =
   | 'dtc-select' | 'dinner-table'
   | 'you-laugh'
   | 'never-have-i-ever'
+  | 'charades'
   | 'truth-or-dare' | 'spicy-starters'
 
 export default function App() {
@@ -60,6 +62,11 @@ export default function App() {
     return <NeverHaveIEverGame onClose={() => setScreen('browse')} />
   }
 
+  /* ── Charades ── */
+  if (screen === 'charades') {
+    return <CharadesGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Other games ── */
   if (screen === 'truth-or-dare') {
     return <TruthOrDareGame onClose={() => setScreen('browse')} />
@@ -80,6 +87,7 @@ export default function App() {
         onPlayDinnerTable={() => setScreen('dtc-select')}
         onPlayYouLaugh={() => setScreen('you-laugh')}
         onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
+        onPlayCharades={() => setScreen('charades')}
       />
     )
   }

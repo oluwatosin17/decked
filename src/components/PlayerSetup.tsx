@@ -8,11 +8,13 @@ interface Props {
   initialPlayers?: Player[]
   /** Label for the secondary/back button */
   skipLabel?: string
+  /** Minimum number of players required before NEXT activates (default 1) */
+  minPlayers?: number
   onSkip: () => void
   onNext: (players: Player[]) => void
 }
 
-export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR NOW', onSkip, onNext }: Props) {
+export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR NOW', minPlayers = 1, onSkip, onNext }: Props) {
   const [players, setPlayers]   = useState<Player[]>(initialPlayers)
   const [input, setInput]       = useState('')
   const [editingIdx, setEditingIdx] = useState<number | null>(null)
@@ -22,7 +24,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
 
   const nextColor = PLAYER_COLORS[players.length % PLAYER_COLORS.length]
   const hasInput  = input.trim().length > 0
-  const canNext   = players.length > 0
+  const canNext   = players.length >= minPlayers
 
   const addPlayer = () => {
     const name = input.trim()
@@ -57,12 +59,19 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
         width: '500px', position: 'relative', zIndex: 2,
         display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center',
       }}>
-        <h2 style={{
-          fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-          fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center',
-        }}>
-          Who's Playing?
-        </h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+          <h2 style={{
+            fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+            fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center',
+          }}>
+            Who's Playing?
+          </h2>
+          {minPlayers > 1 && (
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+              Add at least {minPlayers} players to continue
+            </p>
+          )}
+        </div>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {players.map((p, i) => (

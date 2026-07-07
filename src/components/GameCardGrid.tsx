@@ -167,8 +167,9 @@ export const GAME_CARDS = (
   },
   {
     id: 'charades', categories: ['party-games'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#ed3844', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ed3844', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <p className="font-slackey" style={{ position: 'absolute', left: 'calc(50% - 124.06px)', top: 'calc(50% - 29.38px)', fontSize: '42.55px', color: '#e8e6e3', whiteSpace: 'nowrap' }}>Charades</p>
       </div>
     ),
@@ -353,9 +354,10 @@ interface BrowseGridProps {
   onPlayDinnerTable?: () => void
   onPlayYouLaugh?: () => void
   onPlayNeverHaveIEver?: () => void
+  onPlayCharades?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver }: BrowseGridProps) {
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades }: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
@@ -404,6 +406,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                            : card.id === 'dinner-table' ? onPlayDinnerTable
                            : card.id === 'you-laugh' ? onPlayYouLaugh
                            : card.id === 'never-have-i-ever' ? onPlayNeverHaveIEver
+                           : card.id === 'charades' ? onPlayCharades
                            : undefined
 
             return (
