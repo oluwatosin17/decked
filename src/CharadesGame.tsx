@@ -4,26 +4,28 @@ import { CHARADES_CATEGORIES, buildCharadesDeck } from './charadesData'
 import { haptic } from './haptics'
 
 const RED = '#ed3844'
-const STORAGE_KEY = 'charades-game-state-v1'
+const STORAGE_KEY = 'charades-game-state-v2'
+const TEAM_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
-type Team = 'A' | 'B'
+interface GameTeam { id: string; name: string; color: string; players: Player[] }
+
 type Step =
-  | 'playerSetup' | 'teamAssign' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
+  | 'playerSetup' | 'teamMode' | 'teamBuilder' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
   | 'getReady' | 'game' | 'didTheyGetIt' | 'pointsGained' | 'done'
 
 interface Snapshot {
   step: Step
   players: Player[]
-  teams: Record<Team, Player[]>
+  teams: GameTeam[]
   selectedCategories: string[]
   deckSize: number
   customCards: string[]
   roundLength: number
   deck: string[]
   cardIdx: number
-  currentTeam: Team
-  actorIdxByTeam: Record<Team, number>
-  scores: Record<Team, number>
+  currentTeamIdx: number
+  actorIdxByTeam: Record<string, number>
+  scores: Record<string, number>
   lastYes: boolean
 }
 
@@ -45,11 +47,10 @@ function clearSnapshot() {
   try { localStorage.removeItem(STORAGE_KEY) } catch { /* ignore */ }
 }
 
-function assignTeams(players: Player[]): Record<Team, Player[]> {
-  const A: Player[] = []
-  const B: Player[] = []
-  players.forEach((p, i) => (i % 2 === 0 ? A : B).push(p))
-  return { A, B }
+const newTeamId = () => crypto.randomUUID()
+
+function buildFreeForAllTeams(players: Player[]): GameTeam[] {
+  return players.map(p => ({ id: newTeamId(), name: p.name, color: p.color, players: [p] }))
 }
 
 /* ─── Shared Nav ─── */
@@ -132,65 +133,154 @@ const CheckIcon = () => (
   </svg>
 )
 
-/* ─── 0. Team Assignment ─── */
-function TeamAssignScreen({
-  teams, onBack, onNext,
-}: {
-  teams: Record<Team, Player[]>
-  onBack: () => void
-  onNext: (teams: Record<Team, Player[]>) => void
-}) {
-  const [assign, setAssign] = useState<Record<Team, Player[]>>(teams)
-  const canNext = assign.A.length > 0 && assign.B.length > 0
-
-  const movePlayer = (from: Team, player: Player) => {
-    haptic('light')
-    const to: Team = from === 'A' ? 'B' : 'A'
-    setAssign(prev => ({
-      ...prev,
-      [from]: prev[from].filter(p => p !== player),
-      [to]: [...prev[to], player],
-    }))
-  }
-
+/* ─── 0a. How would you like to play? ─── */
+function TeamModeScreen({ onBack, onSelect }: { onBack: () => void; onSelect: (mode: 'ffa' | 'teams') => void }) {
+  const options: { mode: 'ffa' | 'teams'; title: string; desc: string }[] = [
+    { mode: 'ffa',   title: 'FREE-FOR-ALL',  desc: 'Each player competes individually' },
+    { mode: 'teams', title: 'TEAMS',         desc: 'Group players into custom teams' },
+  ]
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-      <div style={{ width: '600px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0 }}>
-            Assign Teams
-          </h2>
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-            Tap a player to move them to the other team
-          </p>
-        </div>
+      <div style={{ width: '500px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
+          How would you like to play?
+        </h2>
 
-        <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
-          {(['A', 'B'] as Team[]).map(t => (
-            <div key={t} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>TEAM {t}</span>
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>({assign[t].length})</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '56px' }}>
-                {assign[t].map(p => (
-                  <div key={p.name} onClick={() => movePlayer(t, p)} className="stagger-item" style={{
-                    background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
-                    borderRadius: '12px', height: '52px', display: 'flex', alignItems: 'center', gap: '10px',
-                    padding: '10px 12px', cursor: 'pointer', boxSizing: 'border-box',
-                  }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
-                    <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</span>
-                  </div>
-                ))}
-              </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+          {options.map(opt => (
+            <div key={opt.mode} className="nhie-row" onClick={() => { haptic('medium'); onSelect(opt.mode) }}
+              style={{
+                background: '#111113', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px',
+                padding: '18px 20px', cursor: 'pointer', boxSizing: 'border-box',
+                display: 'flex', flexDirection: 'column', gap: '4px',
+              }}
+            >
+              <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '20px', color: '#fff', letterSpacing: '0.04em' }}>{opt.title}</span>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{opt.desc}</span>
             </div>
           ))}
         </div>
 
+        <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
+      </div>
+    </div>
+  )
+}
+
+/* ─── 0b. Team Builder ─── */
+function TeamBuilderScreen({
+  players, initialTeams, onBack, onNext,
+}: {
+  players: Player[]
+  initialTeams: GameTeam[]
+  onBack: () => void
+  onNext: (teams: GameTeam[]) => void
+}) {
+  const [teams, setTeams] = useState<GameTeam[]>(initialTeams)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editValue, setEditValue] = useState('')
+
+  const unassigned = players.filter(p => !teams.some(t => t.players.includes(p)))
+  const canNext = teams.length >= 2 && unassigned.length === 0 && teams.every(t => t.players.length > 0)
+
+  const addTeam = () => {
+    haptic('light')
+    const id = newTeamId()
+    const color = TEAM_COLORS[teams.length % TEAM_COLORS.length]
+    setTeams(prev => [...prev, { id, name: `Team ${prev.length + 1}`, color, players: [] }])
+    setEditingId(id)
+    setEditValue(`Team ${teams.length + 1}`)
+  }
+  const removeTeam = (id: string) => { haptic('light'); setTeams(prev => prev.filter(t => t.id !== id)) }
+  const startRename = (t: GameTeam) => { setEditingId(t.id); setEditValue(t.name) }
+  const commitRename = () => {
+    const name = editValue.trim()
+    if (name && editingId) setTeams(prev => prev.map(t => t.id === editingId ? { ...t, name } : t))
+    setEditingId(null)
+    setEditValue('')
+  }
+  const assignPlayer = (player: Player, teamId: string) => {
+    haptic('light')
+    setTeams(prev => prev.map(t => t.id === teamId ? { ...t, players: [...t.players, player] } : t))
+  }
+  const unassignPlayer = (player: Player) => {
+    haptic('light')
+    setTeams(prev => prev.map(t => ({ ...t, players: t.players.filter(p => p !== player) })))
+  }
+
+  return (
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+      <div style={{ width: '560px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0 }}>
+            Build Your Teams
+          </h2>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+            Create teams, name them, and assign every player
+          </p>
+        </div>
+
+        <div style={{ width: '100%', maxHeight: '360px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {teams.map(t => (
+            <div key={t.id} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: t.color, flexShrink: 0 }} />
+                {editingId === t.id ? (
+                  <input
+                    autoFocus value={editValue}
+                    onChange={e => setEditValue(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setEditingId(null) }}
+                    onBlur={commitRename}
+                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', flex: 1 }}
+                  />
+                ) : (
+                  <span onClick={() => startRename(t)} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', flex: 1, cursor: 'text' }}>{t.name}</span>
+                )}
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>({t.players.length})</span>
+                <button onClick={() => removeTeam(t.id)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', padding: '0 2px' }} aria-label="Delete team">×</button>
+              </div>
+
+              {t.players.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {t.players.map(p => (
+                    <div key={p.name} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '999px', padding: '4px 6px 4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{p.name}</span>
+                      <button onClick={() => unassignPlayer(p)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '14px', padding: '0 2px' }} aria-label="Remove from team">×</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          <button onClick={addTeam} style={{ background: 'none', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px', color: 'rgba(255,255,255,0.6)', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', letterSpacing: '0.05em', cursor: 'pointer' }}>
+            + ADD TEAM
+          </button>
+
+          {unassigned.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.06em' }}>UNASSIGNED</span>
+              {unassigned.map(p => (
+                <div key={p.name} style={{ background: '#111113', border: '1px dashed rgba(237,56,68,0.4)', borderRadius: '12px', height: '52px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', boxSizing: 'border-box' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
+                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, minWidth: 0 }}>{p.name}</span>
+                  <select
+                    defaultValue=""
+                    onChange={e => { if (e.target.value) assignPlayer(p, e.target.value) }}
+                    style={{ background: '#1a1a1d', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', padding: '6px 8px' }}
+                  >
+                    <option value="" disabled>Choose team…</option>
+                    {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                  </select>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
           <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (canNext) { haptic('medium'); onNext(assign) } }} style={ctaPrimary(142, !canNext)}>NEXT</button>
+          <button onClick={() => { if (canNext) { haptic('medium'); onNext(teams) } }} style={ctaPrimary(142, !canNext)}>NEXT</button>
         </div>
       </div>
     </div>
@@ -404,18 +494,18 @@ function RoundLengthScreen({ onBack, onNext }: { onBack: () => void; onNext: (se
 }
 
 /* ─── Score badges (persistent header during gameplay) ─── */
-function ScoreHeader({ scores, currentTeam }: { scores: Record<Team, number>; currentTeam: Team }) {
+function ScoreHeader({ scores, teams, currentTeamId }: { scores: Record<string, number>; teams: GameTeam[]; currentTeamId: string }) {
   return (
-    <div style={{ display: 'flex', gap: '10px' }}>
-      {(['A', 'B'] as Team[]).map(t => (
-        <div key={t} style={{
+    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
+      {teams.map(t => (
+        <div key={t.id} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
-          background: t === currentTeam ? 'rgba(237,56,68,0.15)' : '#111113',
-          border: t === currentTeam ? '1px solid rgba(237,56,68,0.5)' : '1px solid rgba(255,255,255,0.1)',
+          background: t.id === currentTeamId ? 'rgba(237,56,68,0.15)' : '#111113',
+          border: t.id === currentTeamId ? '1px solid rgba(237,56,68,0.5)' : '1px solid rgba(255,255,255,0.1)',
           borderRadius: '999px', padding: '8px 16px', transition: 'background 0.2s, border-color 0.2s',
         }}>
-          <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: t === currentTeam ? '#fff' : 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>TEAM {t}</span>
-          <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff', letterSpacing: '0.05em' }}>{scores[t]}</span>
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: t.id === currentTeamId ? '#fff' : 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}>{t.name.toUpperCase()}</span>
+          <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff', letterSpacing: '0.05em' }}>{scores[t.id] ?? 0}</span>
         </div>
       ))}
     </div>
@@ -423,7 +513,7 @@ function ScoreHeader({ scores, currentTeam }: { scores: Record<Team, number>; cu
 }
 
 /* ─── Get Ready (per turn) ─── */
-function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: Team; actor: Player | null; turnNumber: number; onDone: () => void }) {
+function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: GameTeam; actor: Player | null; turnNumber: number; onDone: () => void }) {
   useEffect(() => {
     const t = setTimeout(onDone, 1500)
     return () => clearTimeout(t)
@@ -436,11 +526,11 @@ function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: Team; actor
         GET READY...
       </h2>
       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '18px', color: 'rgba(255,255,255,0.6)', margin: 0 }}>
-        TEAM {team}'s turn
+        {team.name.toUpperCase()}'S TURN
       </p>
 
       {actor && (
-        <div key={`${team}-${actor.name}`} className="nhie-chip-enter" style={{
+        <div key={`${team.id}-${actor.name}`} className="nhie-chip-enter" style={{
           background: '#111113', borderRadius: '999px', padding: '10px 20px 10px 12px',
           display: 'flex', alignItems: 'center', gap: '10px',
         }}>
@@ -498,14 +588,15 @@ function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: s
 
 /* ─── 5. Game (prompt + timer) ─── */
 function GameScreen({
-  prompt, idx, total, roundLength, scores, currentTeam, onTimeUp,
+  prompt, idx, total, roundLength, scores, teams, currentTeamId, onTimeUp,
 }: {
   prompt: string
   idx: number
   total: number
   roundLength: number
-  scores: Record<Team, number>
-  currentTeam: Team
+  scores: Record<string, number>
+  teams: GameTeam[]
+  currentTeamId: string
   onTimeUp: () => void
 }) {
   const [flipped, setFlipped] = useState(false)
@@ -529,7 +620,7 @@ function GameScreen({
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '24px 40px', position: 'relative', zIndex: 2 }}>
-      <ScoreHeader scores={scores} currentTeam={currentTeam} />
+      <ScoreHeader scores={scores} teams={teams} currentTeamId={currentTeamId} />
 
       <p className="counter-in" key={`counter-${idx}`} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>
         CARD {String(idx + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
@@ -580,7 +671,7 @@ function DidTheyGetItScreen({ onResult }: { onResult: (yes: boolean) => void }) 
 }
 
 /* ─── 7. Points Gained ─── */
-function PointsGainedScreen({ scores, lastYes, currentTeam, onNext }: { scores: Record<Team, number>; lastYes: boolean; currentTeam: Team; onNext: () => void }) {
+function PointsGainedScreen({ scores, lastYes, teams, currentTeamId, onNext }: { scores: Record<string, number>; lastYes: boolean; teams: GameTeam[]; currentTeamId: string; onNext: () => void }) {
   useEffect(() => { if (lastYes) haptic('success') }, [lastYes])
 
   return (
@@ -590,18 +681,18 @@ function PointsGainedScreen({ scores, lastYes, currentTeam, onNext }: { scores: 
           POINTS GAINED
         </h2>
 
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {(['A', 'B'] as Team[]).map(t => {
-            const gained = t === currentTeam && lastYes
+        <div style={{ width: '100%', maxHeight: '320px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {teams.map(t => {
+            const gained = t.id === currentTeamId && lastYes
             return (
-              <div key={t} className="nhie-row-enter" style={{
+              <div key={t.id} className="nhie-row-enter" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
                 borderRadius: '12px', padding: '10px 14px', height: '56px', boxSizing: 'border-box',
               }}>
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff' }}>TEAM {t}</span>
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff' }}>{t.name.toUpperCase()}</span>
                 <span className={gained ? 'nhie-points-pop' : ''} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', letterSpacing: '0.06em', color: '#fff' }}>
-                  {scores[t]} PTS
+                  {scores[t.id] ?? 0} PTS
                 </span>
               </div>
             )
@@ -625,16 +716,18 @@ function MiniCharadesCard() {
 
 /* ─── 8. Done ─── */
 function DoneScreen({
-  scores, turnsPlayed, onPlayAgain, onNewGame, onHome,
+  scores, teams, turnsPlayed, onPlayAgain, onNewGame, onHome,
 }: {
-  scores: Record<Team, number>
+  scores: Record<string, number>
+  teams: GameTeam[]
   turnsPlayed: number
   onPlayAgain: () => void
   onNewGame: () => void
   onHome: () => void
 }) {
-  const isTie = scores.A === scores.B
-  const winner: Team | null = isTie ? null : (scores.A > scores.B ? 'A' : 'B')
+  const maxScore = Math.max(...teams.map(t => scores[t.id] ?? 0))
+  const winners = teams.filter(t => (scores[t.id] ?? 0) === maxScore)
+  const isTie = winners.length > 1
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '40px', zIndex: 2, position: 'relative' }}>
@@ -647,18 +740,18 @@ function DoneScreen({
         </p>
       </div>
 
-      <div className="nhie-chip-enter" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '999px', padding: '10px 22px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff', letterSpacing: '0.04em' }}>
-          {isTie ? 'NO WINNER' : `TEAM ${winner}`}
+      <div className="nhie-chip-enter" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '999px', padding: '10px 22px', display: 'inline-flex', alignItems: 'center', gap: '10px', maxWidth: '90%' }}>
+        <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff', letterSpacing: '0.04em', textAlign: 'center' }}>
+          {isTie ? winners.map(w => w.name.toUpperCase()).join(' & ') : winners[0].name.toUpperCase()}
         </span>
-        {!isTie && <img src={TROPHY_ICON} alt="" style={{ width: '18px', height: '18px' }} />}
+        {!isTie && <img src={TROPHY_ICON} alt="" style={{ width: '18px', height: '18px', flexShrink: 0 }} />}
       </div>
 
-      <div style={{ display: 'flex', gap: '8px' }}>
-        {(['A', 'B'] as Team[]).map(t => (
-          <div key={t} style={{ background: '#111113', borderRadius: '999px', padding: '8px 18px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>TEAM {t}</span>
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{scores[t]}</span>
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
+        {teams.map(t => (
+          <div key={t.id} style={{ background: '#111113', borderRadius: '999px', padding: '8px 18px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{t.name.toUpperCase()}</span>
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{scores[t.id] ?? 0}</span>
           </div>
         ))}
       </div>
@@ -684,84 +777,86 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
 
   const [step, setStep] = useState<Step>(restored.current?.step ?? 'playerSetup')
   const [players, setPlayers] = useState<Player[]>(restored.current?.players ?? [])
-  const [teams, setTeams] = useState<Record<Team, Player[]>>(restored.current?.teams ?? { A: [], B: [] })
+  const [teams, setTeams] = useState<GameTeam[]>(restored.current?.teams ?? [])
   const [selectedCategories, setSelectedCategories] = useState<string[]>(restored.current?.selectedCategories ?? [])
   const [deckSize, setDeckSize] = useState(restored.current?.deckSize ?? 20)
   const [customCards, setCustomCards] = useState<string[]>(restored.current?.customCards ?? [])
   const [roundLength, setRoundLength] = useState(restored.current?.roundLength ?? 60)
   const [deck, setDeck] = useState<string[]>(restored.current?.deck ?? [])
   const [cardIdx, setCardIdx] = useState(restored.current?.cardIdx ?? 0)
-  const [currentTeam, setCurrentTeam] = useState<Team>(restored.current?.currentTeam ?? 'A')
-  const [actorIdxByTeam, setActorIdxByTeam] = useState<Record<Team, number>>(restored.current?.actorIdxByTeam ?? { A: 0, B: 0 })
-  const [scores, setScores] = useState<Record<Team, number>>(restored.current?.scores ?? { A: 0, B: 0 })
+  const [currentTeamIdx, setCurrentTeamIdx] = useState(restored.current?.currentTeamIdx ?? 0)
+  const [actorIdxByTeam, setActorIdxByTeam] = useState<Record<string, number>>(restored.current?.actorIdxByTeam ?? {})
+  const [scores, setScores] = useState<Record<string, number>>(restored.current?.scores ?? {})
   const [lastYes, setLastYes] = useState(restored.current?.lastYes ?? false)
 
   // Persist state on every change (skipped once game is back at the start screen)
   useEffect(() => {
     if (step === 'playerSetup') { clearSnapshot(); return }
-    saveSnapshot({ step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeam, actorIdxByTeam, scores, lastYes })
-  }, [step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeam, actorIdxByTeam, scores, lastYes])
+    saveSnapshot({ step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastYes })
+  }, [step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastYes])
 
   const startGame = () => {
     const builtDeck = buildCharadesDeck(customCards, selectedCategories, deckSize)
     setDeck(builtDeck)
     setCardIdx(0)
-    setScores({ A: 0, B: 0 })
-    setCurrentTeam('A')
-    setActorIdxByTeam({ A: 0, B: 0 })
+    setScores(Object.fromEntries(teams.map(t => [t.id, 0])))
+    setCurrentTeamIdx(0)
+    setActorIdxByTeam(Object.fromEntries(teams.map(t => [t.id, 0])))
     setStep('getReady')
   }
 
   const handleResult = useCallback((yes: boolean) => {
     setLastYes(yes)
-    if (yes) setScores(prev => ({ ...prev, [currentTeam]: prev[currentTeam] + 1 }))
+    const teamId = teams[currentTeamIdx]?.id
+    if (yes && teamId) setScores(prev => ({ ...prev, [teamId]: (prev[teamId] ?? 0) + 1 }))
     setStep('pointsGained')
-  }, [currentTeam])
+  }, [currentTeamIdx, teams])
 
   const advanceTurn = useCallback(() => {
     const next = cardIdx + 1
     // rotate the actor for the team that just finished
-    setActorIdxByTeam(prev => ({ ...prev, [currentTeam]: prev[currentTeam] + 1 }))
+    const teamId = teams[currentTeamIdx]?.id
+    if (teamId) setActorIdxByTeam(prev => ({ ...prev, [teamId]: (prev[teamId] ?? 0) + 1 }))
     if (next >= deck.length) {
       setStep('done')
       return
     }
     setCardIdx(next)
-    setCurrentTeam(t => (t === 'A' ? 'B' : 'A'))
+    setCurrentTeamIdx(i => (i + 1) % teams.length)
     setStep('getReady')
-  }, [cardIdx, deck.length, currentTeam])
+  }, [cardIdx, deck.length, currentTeamIdx, teams])
 
   const handlePlayAgain = () => {
     const builtDeck = buildCharadesDeck(customCards, selectedCategories, deckSize)
     setDeck(builtDeck)
     setCardIdx(0)
-    setScores({ A: 0, B: 0 })
-    setCurrentTeam('A')
-    setActorIdxByTeam({ A: 0, B: 0 })
+    setScores(Object.fromEntries(teams.map(t => [t.id, 0])))
+    setCurrentTeamIdx(0)
+    setActorIdxByTeam(Object.fromEntries(teams.map(t => [t.id, 0])))
     setStep('getReady')
   }
 
   const handleNewGame = () => {
     clearSnapshot()
     setPlayers([])
-    setTeams({ A: [], B: [] })
+    setTeams([])
     setSelectedCategories([])
     setDeckSize(20)
     setCustomCards([])
     setRoundLength(60)
     setDeck([])
     setCardIdx(0)
-    setCurrentTeam('A')
-    setActorIdxByTeam({ A: 0, B: 0 })
-    setScores({ A: 0, B: 0 })
+    setCurrentTeamIdx(0)
+    setActorIdxByTeam({})
+    setScores({})
     setStep('playerSetup')
   }
 
   const handleHome = () => { clearSnapshot(); onClose() }
 
-  const currentTeamPlayers = teams[currentTeam]
-  const currentActor = currentTeamPlayers.length > 0
-    ? currentTeamPlayers[actorIdxByTeam[currentTeam] % currentTeamPlayers.length]
+  const currentTeam = teams[currentTeamIdx] ?? null
+  const currentActor = currentTeam && currentTeam.players.length > 0
+    ? currentTeam.players[(actorIdxByTeam[currentTeam.id] ?? 0) % currentTeam.players.length]
     : null
 
   return (
@@ -774,21 +869,32 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
           skipLabel="GO BACK"
           minPlayers={2}
           onSkip={onClose}
-          onNext={p => { setPlayers(p); setTeams(assignTeams(p)); setStep('teamAssign') }}
+          onNext={p => { setPlayers(p); setStep('teamMode') }}
         />
       )}
 
-      {step === 'teamAssign' && (
-        <TeamAssignScreen
-          teams={teams}
+      {step === 'teamMode' && (
+        <TeamModeScreen
           onBack={() => setStep('playerSetup')}
+          onSelect={mode => {
+            if (mode === 'ffa') { setTeams(buildFreeForAllTeams(players)); setStep('categorySelect') }
+            else setStep('teamBuilder')
+          }}
+        />
+      )}
+
+      {step === 'teamBuilder' && (
+        <TeamBuilderScreen
+          players={players}
+          initialTeams={teams}
+          onBack={() => setStep('teamMode')}
           onNext={t => { setTeams(t); setStep('categorySelect') }}
         />
       )}
 
       {step === 'categorySelect' && (
         <CategorySelectScreen
-          onBack={() => setStep('teamAssign')}
+          onBack={() => setStep('teamMode')}
           onNext={ids => { setSelectedCategories(ids); setStep('deckSize') }}
         />
       )}
@@ -815,7 +921,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
         />
       )}
 
-      {step === 'getReady' && (
+      {step === 'getReady' && currentTeam && (
         <GetReadyScreen
           team={currentTeam}
           actor={currentActor}
@@ -824,7 +930,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
         />
       )}
 
-      {step === 'game' && deck.length > 0 && (
+      {step === 'game' && deck.length > 0 && currentTeam && (
         <GameScreen
           key={cardIdx}
           prompt={deck[cardIdx]}
@@ -832,7 +938,8 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
           total={deck.length}
           roundLength={roundLength}
           scores={scores}
-          currentTeam={currentTeam}
+          teams={teams}
+          currentTeamId={currentTeam.id}
           onTimeUp={() => setStep('didTheyGetIt')}
         />
       )}
@@ -841,13 +948,14 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
         <DidTheyGetItScreen onResult={handleResult} />
       )}
 
-      {step === 'pointsGained' && (
-        <PointsGainedScreen scores={scores} lastYes={lastYes} currentTeam={currentTeam} onNext={advanceTurn} />
+      {step === 'pointsGained' && currentTeam && (
+        <PointsGainedScreen scores={scores} lastYes={lastYes} teams={teams} currentTeamId={currentTeam.id} onNext={advanceTurn} />
       )}
 
       {step === 'done' && (
         <DoneScreen
           scores={scores}
+          teams={teams}
           turnsPlayed={deck.length}
           onPlayAgain={handlePlayAgain}
           onNewGame={handleNewGame}
