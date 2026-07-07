@@ -494,6 +494,54 @@ input::placeholder {
 .nhie-row:active { transform: scale(0.975) !important; transition-duration: 0.07s; }
 
 /* ═══════════════════════════════════════════════
+   CHARADES: team-mode select, team builder, FFA guesser picker
+   ═══════════════════════════════════════════════ */
+
+/* How-would-you-like-to-play option rows: lift on hover, settle on press */
+.mode-row {
+  transition: transform var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out);
+}
+.mode-row:not(.mode-row-locked):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+  border-color: rgba(255,255,255,0.15) !important;
+}
+.mode-row:not(.mode-row-locked):active { transform: scale(0.98) translateY(0); transition-duration: var(--dur-press); }
+
+/* Locked-mode hint: quick shake to draw the eye to why it's disabled */
+@keyframes mode-locked-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+.mode-row-locked:active .mode-locked-hint { animation: mode-locked-shake 0.3s var(--ease-out); }
+
+/* Who-guessed-it-first rows (FFA) — same lift/press language as mode-row */
+.guesser-row {
+  transition: transform var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out);
+}
+.guesser-row:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); border-color: rgba(237,56,68,0.4) !important; }
+.guesser-row:active { transform: scale(0.97); transition-duration: var(--dur-press); }
+
+/* Team-builder player chip: spring pop when assigned to a team */
+@keyframes chip-pop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.chip-pop { animation: chip-pop 0.32s var(--ease-spring) both; }
+
+/* Small × icon buttons (remove team / unassign player) — quick press feedback */
+.icon-x-btn { transition: transform var(--dur-press) var(--ease-out), color 0.15s; }
+.icon-x-btn:hover { color: #fff !important; }
+.icon-x-btn:active { transform: scale(0.8); }
+
+/* + ADD TEAM dashed button */
+.add-team-btn { transition: border-color 0.15s, color 0.15s, transform var(--dur-press) var(--ease-out); }
+.add-team-btn:hover { border-color: rgba(255,255,255,0.4) !important; color: rgba(255,255,255,0.9) !important; }
+.add-team-btn:active { transform: scale(0.98); }
+
+/* ═══════════════════════════════════════════════
    REDUCED MOTION FALLBACK
    ═══════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {

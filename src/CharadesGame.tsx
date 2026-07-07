@@ -4,10 +4,13 @@ import { CHARADES_CATEGORIES, buildCharadesDeck } from './charadesData'
 import { haptic } from './haptics'
 
 const RED = '#ed3844'
-const STORAGE_KEY = 'charades-game-state-v2'
+const STORAGE_KEY = 'charades-game-state-v3'
 const TEAM_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
+const MIN_TEAM_MODE_PLAYERS = 4
+const MIN_PLAYERS_PER_TEAM = 2
 
 interface GameTeam { id: string; name: string; color: string; players: Player[] }
+type PlayMode = 'ffa' | 'teams'
 
 type Step =
   | 'playerSetup' | 'teamMode' | 'teamBuilder' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
@@ -16,6 +19,7 @@ type Step =
 interface Snapshot {
   step: Step
   players: Player[]
+  mode: PlayMode
   teams: GameTeam[]
   selectedCategories: string[]
   deckSize: number
@@ -26,7 +30,7 @@ interface Snapshot {
   currentTeamIdx: number
   actorIdxByTeam: Record<string, number>
   scores: Record<string, number>
-  lastYes: boolean
+  lastWinnerId: string | null
 }
 
 function loadSnapshot(): Snapshot | null {
@@ -134,8 +138,9 @@ const CheckIcon = () => (
 )
 
 /* ─── 0a. How would you like to play? ─── */
-function TeamModeScreen({ onBack, onSelect }: { onBack: () => void; onSelect: (mode: 'ffa' | 'teams') => void }) {
-  const options: { mode: 'ffa' | 'teams'; title: string; desc: string }[] = [
+function TeamModeScreen({ playerCount, onBack, onSelect }: { playerCount: number; onBack: () => void; onSelect: (mode: PlayMode) => void }) {
+  const teamsLocked = playerCount < MIN_TEAM_MODE_PLAYERS
+  const options: { mode: PlayMode; title: string; desc: string }[] = [
     { mode: 'ffa',   title: 'FREE-FOR-ALL',  desc: 'Each player competes individually' },
     { mode: 'teams', title: 'TEAMS',         desc: 'Group players into custom teams' },
   ]
@@ -147,18 +152,27 @@ function TeamModeScreen({ onBack, onSelect }: { onBack: () => void; onSelect: (m
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-          {options.map(opt => (
-            <div key={opt.mode} className="nhie-row" onClick={() => { haptic('medium'); onSelect(opt.mode) }}
-              style={{
-                background: '#111113', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px',
-                padding: '18px 20px', cursor: 'pointer', boxSizing: 'border-box',
-                display: 'flex', flexDirection: 'column', gap: '4px',
-              }}
-            >
-              <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '20px', color: '#fff', letterSpacing: '0.04em' }}>{opt.title}</span>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{opt.desc}</span>
-            </div>
-          ))}
+          {options.map((opt, i) => {
+            const locked = opt.mode === 'teams' && teamsLocked
+            return (
+              <div key={opt.mode} className={`stagger-item mode-row${locked ? ' mode-row-locked' : ''}`} onClick={() => { if (locked) { haptic('light'); return }; haptic('medium'); onSelect(opt.mode) }}
+                style={{
+                  background: '#111113', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px',
+                  padding: '18px 20px', cursor: locked ? 'not-allowed' : 'pointer', boxSizing: 'border-box',
+                  display: 'flex', flexDirection: 'column', gap: '4px', opacity: locked ? 0.45 : 1,
+                  transition: 'opacity 0.2s', animationDelay: `${0.04 + i * 0.05}s`,
+                }}
+              >
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '20px', color: '#fff', letterSpacing: '0.04em' }}>{opt.title}</span>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{opt.desc}</span>
+                {locked && (
+                  <span className="mode-locked-hint" style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '12px', color: RED, letterSpacing: '0.05em', marginTop: '2px' }}>
+                    NEED AT LEAST {MIN_TEAM_MODE_PLAYERS} PLAYERS
+                  </span>
+                )}
+              </div>
+            )
+          })}
         </div>
 
         <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
@@ -181,7 +195,7 @@ function TeamBuilderScreen({
   const [editValue, setEditValue] = useState('')
 
   const unassigned = players.filter(p => !teams.some(t => t.players.includes(p)))
-  const canNext = teams.length >= 2 && unassigned.length === 0 && teams.every(t => t.players.length > 0)
+  const canNext = teams.length >= 2 && unassigned.length === 0 && teams.every(t => t.players.length >= MIN_PLAYERS_PER_TEAM)
 
   const addTeam = () => {
     haptic('light')
@@ -237,23 +251,28 @@ function TeamBuilderScreen({
                   <span onClick={() => startRename(t)} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', flex: 1, cursor: 'text' }}>{t.name}</span>
                 )}
                 <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>({t.players.length})</span>
-                <button onClick={() => removeTeam(t.id)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', padding: '0 2px' }} aria-label="Delete team">×</button>
+                <button onClick={() => removeTeam(t.id)} className="icon-x-btn" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', padding: '0 2px' }} aria-label="Delete team">×</button>
               </div>
 
               {t.players.length > 0 && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                   {t.players.map(p => (
-                    <div key={p.name} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '999px', padding: '4px 6px 4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div key={p.name} className="chip-pop" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '999px', padding: '4px 6px 4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{p.name}</span>
-                      <button onClick={() => unassignPlayer(p)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '14px', padding: '0 2px' }} aria-label="Remove from team">×</button>
+                      <button onClick={() => unassignPlayer(p)} className="icon-x-btn" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '14px', padding: '0 2px' }} aria-label="Remove from team">×</button>
                     </div>
                   ))}
                 </div>
               )}
+              {t.players.length > 0 && t.players.length < MIN_PLAYERS_PER_TEAM && (
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '12px', color: RED, letterSpacing: '0.04em' }}>
+                  ADD {MIN_PLAYERS_PER_TEAM - t.players.length} MORE PLAYER{MIN_PLAYERS_PER_TEAM - t.players.length > 1 ? 'S' : ''}
+                </span>
+              )}
             </div>
           ))}
 
-          <button onClick={addTeam} style={{ background: 'none', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px', color: 'rgba(255,255,255,0.6)', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', letterSpacing: '0.05em', cursor: 'pointer' }}>
+          <button onClick={addTeam} className="add-team-btn" style={{ background: 'none', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px', color: 'rgba(255,255,255,0.6)', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', letterSpacing: '0.05em', cursor: 'pointer' }}>
             + ADD TEAM
           </button>
 
@@ -261,7 +280,7 @@ function TeamBuilderScreen({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
               <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.06em' }}>UNASSIGNED</span>
               {unassigned.map(p => (
-                <div key={p.name} style={{ background: '#111113', border: '1px dashed rgba(237,56,68,0.4)', borderRadius: '12px', height: '52px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', boxSizing: 'border-box' }}>
+                <div key={p.name} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(237,56,68,0.4)', borderRadius: '12px', height: '52px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', boxSizing: 'border-box' }}>
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
                   <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, minWidth: 0 }}>{p.name}</span>
                   <select
@@ -654,25 +673,68 @@ function GameScreen({
 }
 
 /* ─── 6. Did They Get It ─── */
-function DidTheyGetItScreen({ onResult }: { onResult: (yes: boolean) => void }) {
+function DidTheyGetItScreen({
+  mode, teams, currentTeamId, onResult,
+}: {
+  mode: PlayMode
+  teams: GameTeam[]
+  currentTeamId: string
+  onResult: (winnerTeamId: string | null) => void
+}) {
+  if (mode === 'teams') {
+    return (
+      <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+        <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
+            Did They Get It?
+          </h2>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+            <button onClick={() => { haptic('light'); onResult(null) }} style={ctaOutline(160)}>NO</button>
+            <button onClick={() => { haptic('success'); onResult(currentTeamId) }} style={ctaPrimary(160)}>YES</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Free-for-all: everyone but the actor is guessing — host taps whoever shouted the right answer first.
+  const guessers = teams.filter(t => t.id !== currentTeamId)
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-      <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
-          Did They Get It?
-        </h2>
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onResult(false) }} style={ctaOutline(160)}>NO</button>
-          <button onClick={() => { haptic('success'); onResult(true) }} style={ctaPrimary(160)}>YES</button>
+      <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '32px', color: '#fff', margin: 0 }}>
+            Who Guessed It First?
+          </h2>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+            Tap whoever shouted the right answer first
+          </p>
         </div>
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {guessers.map((t, i) => (
+            <div key={t.id} className="stagger-item guesser-row" onClick={() => { haptic('success'); onResult(t.id) }}
+              style={{
+                background: '#111113', border: '1px dashed rgba(255,255,255,0.12)', borderRadius: '12px',
+                height: '56px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                boxSizing: 'border-box', cursor: 'pointer', animationDelay: `${0.03 + i * 0.04}s`,
+              }}
+            >
+              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: t.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
+              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '17px', color: '#fff', flex: 1, minWidth: 0 }}>{t.name}</span>
+            </div>
+          ))}
+        </div>
+
+        <button onClick={() => { haptic('light'); onResult(null) }} style={ctaOutline(197)}>NO ONE GOT IT</button>
       </div>
     </div>
   )
 }
 
 /* ─── 7. Points Gained ─── */
-function PointsGainedScreen({ scores, lastYes, teams, currentTeamId, onNext }: { scores: Record<string, number>; lastYes: boolean; teams: GameTeam[]; currentTeamId: string; onNext: () => void }) {
-  useEffect(() => { if (lastYes) haptic('success') }, [lastYes])
+function PointsGainedScreen({ scores, lastWinnerId, teams, onNext }: { scores: Record<string, number>; lastWinnerId: string | null; teams: GameTeam[]; onNext: () => void }) {
+  useEffect(() => { if (lastWinnerId) haptic('success') }, [lastWinnerId])
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
@@ -683,7 +745,7 @@ function PointsGainedScreen({ scores, lastYes, teams, currentTeamId, onNext }: {
 
         <div style={{ width: '100%', maxHeight: '320px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {teams.map(t => {
-            const gained = t.id === currentTeamId && lastYes
+            const gained = t.id === lastWinnerId
             return (
               <div key={t.id} className="nhie-row-enter" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -777,6 +839,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
 
   const [step, setStep] = useState<Step>(restored.current?.step ?? 'playerSetup')
   const [players, setPlayers] = useState<Player[]>(restored.current?.players ?? [])
+  const [mode, setMode] = useState<PlayMode>(restored.current?.mode ?? 'ffa')
   const [teams, setTeams] = useState<GameTeam[]>(restored.current?.teams ?? [])
   const [selectedCategories, setSelectedCategories] = useState<string[]>(restored.current?.selectedCategories ?? [])
   const [deckSize, setDeckSize] = useState(restored.current?.deckSize ?? 20)
@@ -787,13 +850,13 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
   const [currentTeamIdx, setCurrentTeamIdx] = useState(restored.current?.currentTeamIdx ?? 0)
   const [actorIdxByTeam, setActorIdxByTeam] = useState<Record<string, number>>(restored.current?.actorIdxByTeam ?? {})
   const [scores, setScores] = useState<Record<string, number>>(restored.current?.scores ?? {})
-  const [lastYes, setLastYes] = useState(restored.current?.lastYes ?? false)
+  const [lastWinnerId, setLastWinnerId] = useState<string | null>(restored.current?.lastWinnerId ?? null)
 
   // Persist state on every change (skipped once game is back at the start screen)
   useEffect(() => {
     if (step === 'playerSetup') { clearSnapshot(); return }
-    saveSnapshot({ step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastYes })
-  }, [step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastYes])
+    saveSnapshot({ step, players, mode, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastWinnerId })
+  }, [step, players, mode, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastWinnerId])
 
   const startGame = () => {
     const builtDeck = buildCharadesDeck(customCards, selectedCategories, deckSize)
@@ -805,12 +868,11 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
     setStep('getReady')
   }
 
-  const handleResult = useCallback((yes: boolean) => {
-    setLastYes(yes)
-    const teamId = teams[currentTeamIdx]?.id
-    if (yes && teamId) setScores(prev => ({ ...prev, [teamId]: (prev[teamId] ?? 0) + 1 }))
+  const handleRoundResult = useCallback((winnerTeamId: string | null) => {
+    setLastWinnerId(winnerTeamId)
+    if (winnerTeamId) setScores(prev => ({ ...prev, [winnerTeamId]: (prev[winnerTeamId] ?? 0) + 1 }))
     setStep('pointsGained')
-  }, [currentTeamIdx, teams])
+  }, [])
 
   const advanceTurn = useCallback(() => {
     const next = cardIdx + 1
@@ -839,6 +901,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
   const handleNewGame = () => {
     clearSnapshot()
     setPlayers([])
+    setMode('ffa')
     setTeams([])
     setSelectedCategories([])
     setDeckSize(20)
@@ -875,9 +938,11 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
 
       {step === 'teamMode' && (
         <TeamModeScreen
+          playerCount={players.length}
           onBack={() => setStep('playerSetup')}
-          onSelect={mode => {
-            if (mode === 'ffa') { setTeams(buildFreeForAllTeams(players)); setStep('categorySelect') }
+          onSelect={selected => {
+            setMode(selected)
+            if (selected === 'ffa') { setTeams(buildFreeForAllTeams(players)); setStep('categorySelect') }
             else setStep('teamBuilder')
           }}
         />
@@ -944,12 +1009,12 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
         />
       )}
 
-      {step === 'didTheyGetIt' && (
-        <DidTheyGetItScreen onResult={handleResult} />
+      {step === 'didTheyGetIt' && currentTeam && (
+        <DidTheyGetItScreen mode={mode} teams={teams} currentTeamId={currentTeam.id} onResult={handleRoundResult} />
       )}
 
-      {step === 'pointsGained' && currentTeam && (
-        <PointsGainedScreen scores={scores} lastYes={lastYes} teams={teams} currentTeamId={currentTeam.id} onNext={advanceTurn} />
+      {step === 'pointsGained' && (
+        <PointsGainedScreen scores={scores} lastWinnerId={lastWinnerId} teams={teams} onNext={advanceTurn} />
       )}
 
       {step === 'done' && (

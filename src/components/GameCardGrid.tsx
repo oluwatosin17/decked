@@ -1,48 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 
 /* ── Assets ── */
-const HEART_FILLED     = 'https://www.figma.com/api/mcp/asset/19850587-e4a6-40f3-b8cb-3013457f4350'
-const HEART_OUTLINE    = 'https://www.figma.com/api/mcp/asset/e05fbcbd-1a73-4232-8ed0-834f5deb7143'
 const SPICY_BG         = 'https://www.figma.com/api/mcp/asset/c6c6bacb-a434-4ccf-aa10-19832dd03ffe'
-const LATE_NIGHT_OUTER = 'https://www.figma.com/api/mcp/asset/501e22f1-6dc4-438b-92ad-f653be26cdfd'
-const LATE_NIGHT_MID   = 'https://www.figma.com/api/mcp/asset/a76352f1-92c5-4093-93e3-0b3a39e23a10'
-const LATE_NIGHT_INNER = 'https://www.figma.com/api/mcp/asset/6b924388-5737-4918-bd6d-a0c21cee9eda'
-const LATE_NIGHT_CHAT  = 'https://www.figma.com/api/mcp/asset/9ffded60-567b-481b-a0ea-4fe2afd8c789'
-const LATE_NIGHT_SPARK1= 'https://www.figma.com/api/mcp/asset/64837b09-e033-463d-a1a5-3e950a54f0bf'
-const LATE_NIGHT_SPARK2= 'https://www.figma.com/api/mcp/asset/95e34e79-e165-4a6f-a872-0f44980b5acb'
-const NEVER_BUBBLE     = 'https://www.figma.com/api/mcp/asset/0cb08488-1314-4e8e-b5af-d378137ec03f'
-const RECONNECT_DOT1   = 'https://www.figma.com/api/mcp/asset/41c118af-cfdc-47e3-8768-9aee9451ba33'
-const RECONNECT_DOT2   = 'https://www.figma.com/api/mcp/asset/51046d80-3d02-42b4-8d17-29b32fcaaca0'
-const YOU_LAUGH_BANNER1= 'https://www.figma.com/api/mcp/asset/9f218abd-7c4e-4644-a8b9-13c31f50281b'
-const YOU_LAUGH_BANNER2= 'https://www.figma.com/api/mcp/asset/1ed26443-62c6-4281-8a89-2fbd70ce4f0e'
+const LATE_NIGHT_OUTER = '/icons/late-night-outer.svg'
+const LATE_NIGHT_MID   = '/icons/late-night-mid.svg'
+const LATE_NIGHT_INNER = '/icons/late-night-inner.svg'
+const LATE_NIGHT_CHAT  = '/icons/late-night-chat.svg'
+const LATE_NIGHT_SPARK1= '/icons/late-night-spark1.svg'
+const LATE_NIGHT_SPARK2= '/icons/late-night-spark2.svg'
+const NEVER_BUBBLE     = '/icons/never-bubble.svg'
+const RECONNECT_HEART  = '/icons/reconnect-heart.svg'
+const YOU_LAUGH_BANNER1= '/icons/you-laugh-banner-purple.svg'
+const YOU_LAUGH_BANNER2= '/icons/you-laugh-banner-pink.svg'
 
 export type Category = 'all' | 'icebreakers' | 'deep-talk' | 'drinking' | 'couples' | 'party-games'
-
-/* ── Shared hearts band (Truth or Dare card) ── */
-export function HeartsRow({ top }: { top: boolean }) {
-  const hearts = [
-    HEART_FILLED, HEART_FILLED, HEART_FILLED, HEART_FILLED, HEART_OUTLINE,
-    HEART_FILLED, HEART_FILLED, HEART_OUTLINE, HEART_FILLED, HEART_FILLED, HEART_FILLED,
-  ]
-  return (
-    <div style={{
-      position: 'absolute', [top ? 'top' : 'bottom']: 0,
-      left: 0, right: 0, height: '66.25px', background: '#dc2827', overflow: 'hidden',
-    }}>
-      <div style={{ position: 'absolute', left: 0, right: 0, [top ? 'top' : 'bottom']: '47.21px', display: 'flex', flexDirection: 'column', gap: '0.761px' }}>
-        {top
-          ? <><div style={{ height: '5.33px', background: '#ecc1c9', width: '100%' }} /><div style={{ height: '3.046px', background: '#ecc1c9', width: '100%' }} /></>
-          : <><div style={{ height: '3.046px', background: '#ecc1c9', width: '100%' }} /><div style={{ height: '5.33px', background: '#ecc1c9', width: '100%' }} /></>
-        }
-      </div>
-      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: top ? '11.42px' : '30.46px', display: 'flex', gap: '3.807px', alignItems: 'center', whiteSpace: 'nowrap' }}>
-        {hearts.map((src, i) => (
-          <img key={i} src={src} alt="" style={{ width: '24.368px', height: '24.368px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }} />
-        ))}
-      </div>
-    </div>
-  )
-}
 
 /* ── 16 card render functions — exact designs from Pick Your Vibe ── */
 // Each returns { w, h, jsx } so the grid can know card dimensions
@@ -64,9 +35,8 @@ export const GAME_CARDS = (
   {
     id: 'truth-or-dare', categories: ['couples'], w: 345.716, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: 'white', borderRadius: '15.23px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <HeartsRow top={true} />
-        <HeartsRow top={false} />
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15.23px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
+        <img src="/assets/games/truth-or-dare.png" alt="Truth or Dare" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: '183.906px', height: '123.677px' }}>
           <p className="font-satoshi" style={{ position: 'absolute', left: '2.29px', right: '-2.29px', top: '1.52px', fontSize: '38.074px', fontWeight: 500, color: '#000', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>TRUTH OR DARE</p>
           <p className="font-satoshi" style={{ position: 'absolute', left: '2.29px', right: '-2.29px', top: 0, fontSize: '38.074px', fontWeight: 500, color: '#d39293', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>TRUTH OR DARE</p>
@@ -215,9 +185,9 @@ export const GAME_CARDS = (
       <div className="card-tile" style={{ width: '100%', height: '100%', background: '#e9b1ba', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
         <p className="font-luckiest" style={{ position: 'absolute', left: '138.99px', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#d22f49', textAlign: 'center', lineHeight: 1.15 }}>Let's reconnect</p>
         <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '296.06px', display: 'flex', alignItems: 'flex-start' }}>
-          <img src={RECONNECT_DOT1} alt="" style={{ width: '19.436px', height: '19.436px' }} />
-          <img src={RECONNECT_DOT1} alt="" style={{ width: '19.436px', height: '19.436px' }} />
-          <img src={RECONNECT_DOT2} alt="" style={{ width: '19.436px', height: '19.436px' }} />
+          <img src={RECONNECT_HEART} alt="" style={{ width: '19.436px', height: '19.436px' }} />
+          <img src={RECONNECT_HEART} alt="" style={{ width: '19.436px', height: '19.436px' }} />
+          <img src={RECONNECT_HEART} alt="" style={{ width: '19.436px', height: '19.436px' }} />
         </div>
       </div>
     ),
