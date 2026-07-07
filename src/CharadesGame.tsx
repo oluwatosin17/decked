@@ -8,7 +8,7 @@ const STORAGE_KEY = 'charades-game-state-v1'
 
 type Team = 'A' | 'B'
 type Step =
-  | 'playerSetup' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
+  | 'playerSetup' | 'teamAssign' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
   | 'getReady' | 'game' | 'didTheyGetIt' | 'pointsGained' | 'done'
 
 interface Snapshot {
@@ -71,9 +71,10 @@ function GameNav({ onBack }: { onBack: () => void }) {
 }
 
 /* ─── Shared Footer ─── */
-const SOCIAL_TIKTOK    = 'https://www.figma.com/api/mcp/asset/52c80b9f-7611-4e1c-b0a1-b87cbde55222'
-const SOCIAL_INSTAGRAM = 'https://www.figma.com/api/mcp/asset/2fb330d3-8103-4715-98c4-977825083eae'
-const SOCIAL_WHATSAPP  = 'https://www.figma.com/api/mcp/asset/5e3391bc-c214-4266-8b20-9d5680742eef'
+const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
+const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
+const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
+const TROPHY_ICON      = '/icons/trophy.svg'
 
 function GameFooter() {
   return (
@@ -131,6 +132,71 @@ const CheckIcon = () => (
   </svg>
 )
 
+/* ─── 0. Team Assignment ─── */
+function TeamAssignScreen({
+  teams, onBack, onNext,
+}: {
+  teams: Record<Team, Player[]>
+  onBack: () => void
+  onNext: (teams: Record<Team, Player[]>) => void
+}) {
+  const [assign, setAssign] = useState<Record<Team, Player[]>>(teams)
+  const canNext = assign.A.length > 0 && assign.B.length > 0
+
+  const movePlayer = (from: Team, player: Player) => {
+    haptic('light')
+    const to: Team = from === 'A' ? 'B' : 'A'
+    setAssign(prev => ({
+      ...prev,
+      [from]: prev[from].filter(p => p !== player),
+      [to]: [...prev[to], player],
+    }))
+  }
+
+  return (
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+      <div style={{ width: '600px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0 }}>
+            Assign Teams
+          </h2>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+            Tap a player to move them to the other team
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
+          {(['A', 'B'] as Team[]).map(t => (
+            <div key={t} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>TEAM {t}</span>
+                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>({assign[t].length})</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '56px' }}>
+                {assign[t].map(p => (
+                  <div key={p.name} onClick={() => movePlayer(t, p)} className="stagger-item" style={{
+                    background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+                    borderRadius: '12px', height: '52px', display: 'flex', alignItems: 'center', gap: '10px',
+                    padding: '10px 12px', cursor: 'pointer', boxSizing: 'border-box',
+                  }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
+                    <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
+          <button onClick={() => { if (canNext) { haptic('medium'); onNext(assign) } }} style={ctaPrimary(142, !canNext)}>NEXT</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─── 1. Select Categories ─── */
 function CategorySelectScreen({ onBack, onNext }: { onBack: () => void; onNext: (ids: string[]) => void }) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -159,7 +225,7 @@ function CategorySelectScreen({ onBack, onNext }: { onBack: () => void; onNext: 
               <div key={cat.id} className="nhie-row-enter nhie-row" onClick={() => toggle(cat.id)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  background: '#111113', border: isSel ? '1px solid rgba(237,56,68,0.5)' : '1px solid rgba(255,255,255,0.05)',
+                  background: '#111113', border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', height: '56px', minWidth: 0, width: '100%',
                   cursor: 'pointer', boxSizing: 'border-box',
                   animationDelay: `${0.03 + i * 0.02}s`,
@@ -281,6 +347,11 @@ function CustomCardsScreen({ deckSize, onBack, onNext }: { deckSize: number; onB
               placeholder="Type custom prompt"
               style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, letterSpacing: '0.04em', textTransform: 'uppercase' }}
             />
+            {hasInput && (
+              <button onClick={e => { e.stopPropagation(); addCard() }} style={{ background: 'none', border: 'none', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: RED, cursor: 'pointer', whiteSpace: 'nowrap', padding: 0, letterSpacing: '0.05em' }}>
+                TAP TO ADD →
+              </button>
+            )}
           </div>
         </div>
 
@@ -406,15 +477,18 @@ function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: s
           {/* Back */}
           <div style={{
             position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)', background: '#fff', borderRadius: '16px', border: `3px solid ${RED}`,
-            boxShadow: '0 16px 40px rgba(0,0,0,0.4)', display: 'flex', flexDirection: 'column', padding: '18px',
+            transform: 'rotateY(180deg)', borderRadius: '16px', padding: '20px', boxSizing: 'border-box',
+            background: `repeating-linear-gradient(45deg, ${RED} 0 14px, #fff 14px 28px)`,
+            boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
           }}>
-            <div style={{ alignSelf: 'flex-start', background: RED, borderRadius: '8px', padding: '6px 10px', marginBottom: '24px' }}>
-              <p className="font-slackey" style={{ fontSize: '11px', color: '#fff', margin: 0 }}>CHARADES</p>
+            <div style={{
+              width: '100%', height: '100%', background: RED, borderRadius: '10px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', boxSizing: 'border-box',
+            }}>
+              <p className="font-slackey" style={{ fontSize: '32px', color: '#e8e6e3', lineHeight: 1.3, margin: 0, textAlign: 'center' }}>
+                {prompt}
+              </p>
             </div>
-            <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '28px', color: '#111', lineHeight: 1.25, margin: 0, textTransform: 'uppercase' }}>
-              {prompt}
-            </p>
           </div>
         </div>
       </div>
@@ -435,20 +509,22 @@ function GameScreen({
   onTimeUp: () => void
 }) {
   const [flipped, setFlipped] = useState(false)
+  const [timerStarted, setTimerStarted] = useState(false)
   const [timeLeft, setTimeLeft] = useState(roundLength)
   const timeUpRef = useRef(onTimeUp)
   timeUpRef.current = onTimeUp
 
-  useEffect(() => { setFlipped(false); setTimeLeft(roundLength) }, [idx, roundLength])
+  useEffect(() => { setFlipped(false); setTimerStarted(false); setTimeLeft(roundLength) }, [idx, roundLength])
 
   useEffect(() => {
-    if (!flipped) return
+    if (!flipped || !timerStarted) return
     if (timeLeft <= 0) { timeUpRef.current(); return }
     const t = setTimeout(() => setTimeLeft(s => s - 1), 1000)
     return () => clearTimeout(t)
-  }, [flipped, timeLeft])
+  }, [flipped, timerStarted, timeLeft])
 
   const handleFlip = () => { haptic('medium'); setFlipped(true) }
+  const handleStartTimer = () => { haptic('medium'); setTimerStarted(true) }
   const handleStop = () => { haptic('light'); onTimeUp() }
 
   return (
@@ -467,6 +543,13 @@ function GameScreen({
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
           Tap the card to flip it. Act only — no talking, no spelling!
         </p>
+      ) : !timerStarted ? (
+        <div className="screen-enter-fast" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
+            Ready? Start the timer when everyone's watching.
+          </p>
+          <button onClick={handleStartTimer} style={ctaPrimary(160)}>START TIMER</button>
+        </div>
       ) : (
         <div className="screen-enter-fast" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
           <p className={timeLeft <= 5 ? 'timer-pulse' : ''} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '56px', color: timeLeft <= 5 ? RED : '#fff', margin: 0, letterSpacing: '0.02em' }}>
@@ -568,7 +651,7 @@ function DoneScreen({
         <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff', letterSpacing: '0.04em' }}>
           {isTie ? 'NO WINNER' : `TEAM ${winner}`}
         </span>
-        {!isTie && <span style={{ fontSize: '18px' }}>🏆</span>}
+        {!isTie && <img src={TROPHY_ICON} alt="" style={{ width: '18px', height: '18px' }} />}
       </div>
 
       <div style={{ display: 'flex', gap: '8px' }}>
@@ -691,13 +774,21 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
           skipLabel="GO BACK"
           minPlayers={2}
           onSkip={onClose}
-          onNext={p => { setPlayers(p); setTeams(assignTeams(p)); setStep('categorySelect') }}
+          onNext={p => { setPlayers(p); setTeams(assignTeams(p)); setStep('teamAssign') }}
+        />
+      )}
+
+      {step === 'teamAssign' && (
+        <TeamAssignScreen
+          teams={teams}
+          onBack={() => setStep('playerSetup')}
+          onNext={t => { setTeams(t); setStep('categorySelect') }}
         />
       )}
 
       {step === 'categorySelect' && (
         <CategorySelectScreen
-          onBack={() => setStep('playerSetup')}
+          onBack={() => setStep('teamAssign')}
           onNext={ids => { setSelectedCategories(ids); setStep('deckSize') }}
         />
       )}

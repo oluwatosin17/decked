@@ -13,9 +13,9 @@ function shuffle<T>(arr: T[]): T[] {
 /* ─── Assets ─── */
 const DTC_BOW = 'https://www.figma.com/api/mcp/asset/058155f3-e036-4776-a744-090ea223bdaa'
 
-const SOCIAL_TIKTOK    = 'https://www.figma.com/api/mcp/asset/52c80b9f-7611-4e1c-b0a1-b87cbde55222'
-const SOCIAL_INSTAGRAM = 'https://www.figma.com/api/mcp/asset/2fb330d3-8103-4715-98c4-977825083eae'
-const SOCIAL_WHATSAPP  = 'https://www.figma.com/api/mcp/asset/5e3391bc-c214-4266-8b20-9d5680742eef'
+const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
+const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
+const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
 
 /* ─── Questions ─── */
 const QUESTIONS = [

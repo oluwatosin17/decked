@@ -24,9 +24,9 @@ const RECONNECT_DOT2  = 'https://www.figma.com/api/mcp/asset/51046d80-3d02-42b4-
 const YOU_LAUGH_BANNER1 = 'https://www.figma.com/api/mcp/asset/9f218abd-7c4e-4644-a8b9-13c31f50281b'
 const YOU_LAUGH_BANNER2 = 'https://www.figma.com/api/mcp/asset/1ed26443-62c6-4281-8a89-2fbd70ce4f0e'
 // Footer social icons
-const SOCIAL_TIKTOK   = 'https://www.figma.com/api/mcp/asset/95bd2c19-cbff-47df-888f-c2dcd17eb88c'
-const SOCIAL_INSTAGRAM = 'https://www.figma.com/api/mcp/asset/48f45e3e-baf4-48c6-8fd2-e665f8a64015'
-const SOCIAL_WHATSAPP = 'https://www.figma.com/api/mcp/asset/94019f0b-e964-4c74-9a75-a02630ef9f90'
+const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
+const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
+const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
 
 interface Props {
   onPlayTruthOrDare: () => void

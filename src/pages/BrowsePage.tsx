@@ -3,9 +3,9 @@ import { BrowseCardGrid, type Category } from '../components/GameCardGrid'
 
 /* ── Assets ── */
 const PLAY_ICON       = 'https://www.figma.com/api/mcp/asset/08c7add6-bff9-40bd-bd8a-9c08a58a6b3e'
-const SOCIAL_TIKTOK   = 'https://www.figma.com/api/mcp/asset/95bd2c19-cbff-47df-888f-c2dcd17eb88c'
-const SOCIAL_INSTAGRAM = 'https://www.figma.com/api/mcp/asset/48f45e3e-baf4-48c6-8fd2-e665f8a64015'
-const SOCIAL_WHATSAPP = 'https://www.figma.com/api/mcp/asset/94019f0b-e964-4c74-9a75-a02630ef9f90'
+const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
+const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
+const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
 
 const CATEGORIES: { id: Category; label: string }[] = [
   { id: 'all',         label: 'All' },
