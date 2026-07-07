@@ -2,11 +2,11 @@ import { HomeCardRows } from '../components/GameCardGrid'
 // React JSX handled by vite/react plugin — no explicit import needed
 
 /* ── Figma-hosted assets ─────────────────────────────────────────── */
-// Hero card images
-const HERO_RED_IMG    = 'https://www.figma.com/api/mcp/asset/5142f7b4-d5cd-4f24-b0ce-052defd6bc6e'
-const HERO_CREAM_IMG  = 'https://www.figma.com/api/mcp/asset/4abb3ef5-d029-4038-9a14-68601f218261'
-const HERO_BLUE_IMG   = 'https://www.figma.com/api/mcp/asset/485de5ec-df05-426b-af8a-52b165e138f8'
-const HERO_GREEN_IMG  = 'https://www.figma.com/api/mcp/asset/d60df7b9-e444-48c9-bca9-7b0e376d357c'
+// Hero card images (permanently hosted on Cloudinary — see /decked folder)
+const HERO_RED_IMG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-red'
+const HERO_CREAM_IMG  = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-cream'
+const HERO_BLUE_IMG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-blue'
+const HERO_GREEN_IMG  = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-green'
 // Truth or Dare card assets
 const HEART_FILLED    = 'https://www.figma.com/api/mcp/asset/19850587-e4a6-40f3-b8cb-3013457f4350'
 const HEART_OUTLINE   = 'https://www.figma.com/api/mcp/asset/e05fbcbd-1a73-4232-8ed0-834f5deb7143'
