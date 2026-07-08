@@ -10,8 +10,8 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-/* ─── Assets ─── */
-const DTC_BOW = 'https://www.figma.com/api/mcp/asset/058155f3-e036-4776-a744-090ea223bdaa'
+/* ─── Assets (permanently hosted on Cloudinary) ─── */
+const DTC_BOW = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/dtc-bow.svg'
 
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'

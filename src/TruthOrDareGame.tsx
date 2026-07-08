@@ -13,9 +13,9 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-/* ─── Asset URLs ─── */
-const HEART_FILLED     = 'https://www.figma.com/api/mcp/asset/7d1c3e18-e7bf-4c69-8b59-a7e40df03a36'
-const HEART_GAME       = 'https://www.figma.com/api/mcp/asset/122700e6-327d-412c-8572-0eabbb934e20'
+/* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
+const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
+const HEART_GAME       = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'

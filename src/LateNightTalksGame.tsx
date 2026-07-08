@@ -10,13 +10,13 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-/* ─── Assets ─── */
-const LNT_OUTER  = 'https://www.figma.com/api/mcp/asset/507aa3ce-b14c-4dfd-bfb6-21e0d961e8c6'
-const LNT_INNER  = 'https://www.figma.com/api/mcp/asset/6bfe659f-3464-48e0-a4e2-94d4d27d1586'
-const LNT_INNER2 = 'https://www.figma.com/api/mcp/asset/04b634a0-1c37-4b47-8a5a-3ad9a26e6f41'
-const LNT_CHAT   = 'https://www.figma.com/api/mcp/asset/874fdf51-481c-4660-836c-bcc971cbe12b'
-const LNT_SPARK1 = 'https://www.figma.com/api/mcp/asset/a79aec31-5dd2-4f81-9d98-53639cab845f'
-const LNT_SPARK2 = 'https://www.figma.com/api/mcp/asset/8117f7b4-3ad4-485c-b58a-28511a4df4c9'
+/* ─── Assets (permanently hosted on Cloudinary — see decked/game-assets folder) ─── */
+const LNT_OUTER  = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-outer.svg'
+const LNT_INNER  = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-inner.svg'
+const LNT_INNER2 = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-inner2.svg'
+const LNT_CHAT   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-chat.svg'
+const LNT_SPARK1 = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-spark1.svg'
+const LNT_SPARK2 = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-spark2.svg'
 
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 
 function shuffle<T>(arr: T[]): T[] {
@@ -10,17 +10,25 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-/* ─── Assets ─── */
+/* ─── Assets (permanently hosted on Cloudinary) ─── */
 // Card banners
-const BANNER_LAUGH = 'https://www.figma.com/api/mcp/asset/6e7df7b5-930a-4c46-a416-37a7af883d76'
-const BANNER_OUT   = 'https://www.figma.com/api/mcp/asset/05cd71dc-dae2-40dc-b802-34109914e5d5'
-// Winner mini-card banners (smaller versions)
-const BANNER_LAUGH_SM = 'https://www.figma.com/api/mcp/asset/2ff366a9-dd85-4dde-8e1f-2b0df23da2a5'
-const BANNER_OUT_SM   = 'https://www.figma.com/api/mcp/asset/b89a9388-edc1-4b90-9bc3-e7365e5a0fc6'
-// Icons
-const ICON_WATCH  = 'https://www.figma.com/api/mcp/asset/a92e1699-bdb5-421d-b6b3-3fd74c0e1ef8'
-const ICON_CHECK  = 'https://www.figma.com/api/mcp/asset/997ba070-b293-4dbe-864d-131dae47dce9'
+const BANNER_LAUGH = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-laugh.svg'
+const BANNER_OUT   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-out.svg'
+// Winner mini-card banners (smaller versions — same art, reused at a smaller size)
+const BANNER_LAUGH_SM = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-laugh.svg'
+const BANNER_OUT_SM   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-out.svg'
 const ICON_LIVE   = '/icons/live.svg'
+
+/* Hand-authored (no hosting needed — can never 404) */
+function WatchIcon({ style }: { style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" style={style}>
+      <circle cx="12" cy="13" r="8" stroke="#fff" strokeWidth="1.8" />
+      <path d="M12 9v4l3 2" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9.5 2.5h5M12 2.5V5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
@@ -277,7 +285,7 @@ function SetRoundLength({ onBack, onNext }: { onBack: () => void; onNext: (secs:
         >
           {/* Correct watch icon from Figma */}
           <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <img src={ICON_WATCH} alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
+            <WatchIcon style={{ width: '16px', height: '16px' }} />
           </div>
           <input
             ref={inputRef} type="number" min={5} max={300}

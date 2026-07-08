@@ -1,11 +1,19 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { BrowseCardGrid, type Category } from '../components/GameCardGrid'
 
 /* ── Assets ── */
-const PLAY_ICON       = 'https://www.figma.com/api/mcp/asset/08c7add6-bff9-40bd-bd8a-9c08a58a6b3e'
 const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
+
+/* Hand-authored (no hosting needed — can never 404) */
+function PlayIcon({ style }: { style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" style={style}>
+      <path d="M5.5 3.6c0-1 1.1-1.6 1.9-1.1l9 5.9c.8.5.8 1.7 0 2.2l-9 5.9c-.8.5-1.9-.1-1.9-1.1V3.6Z" fill="#fff" />
+    </svg>
+  )
+}
 
 const CATEGORIES: { id: Category; label: string }[] = [
   { id: 'all',         label: 'All' },
@@ -65,7 +73,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             background: '#dc2827', border: 'none', borderRadius: '999px',
             padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '8px',
           }}>
-            <img src={PLAY_ICON} alt="" style={{ width: '20px', height: '20px' }} />
+            <PlayIcon style={{ width: '20px', height: '20px' }} />
             <span className="font-staatliches" style={{ fontSize: '16px', color: '#fff', whiteSpace: 'nowrap' }}>
               Play Now
             </span>

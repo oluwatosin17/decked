@@ -4,9 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
 const SPICY_CARD_BG      = '/icons/spicy-card-bg.svg'
 const NEVER_CARD_BG      = '/icons/never-have-i-ever-card-bg.svg'
-const RECONNECT_HEART    = '/icons/reconnect-heart.svg'
-const YOU_LAUGH_BANNER1  = '/icons/you-laugh-banner-purple.svg'
-const YOU_LAUGH_BANNER2  = '/icons/you-laugh-banner-pink.svg'
+const RECONNECT_CARD_BG  = '/icons/reconnect-card-bg.svg'
+const YOU_LAUGH_CARD_BG  = '/icons/you-laugh-card-bg.svg'
 
 export type Category = 'all' | 'icebreakers' | 'deep-talk' | 'drinking' | 'couples' | 'party-games'
 
@@ -163,13 +162,9 @@ export const GAME_CARDS = (
   {
     id: 'reconnect', categories: ['deep-talk', 'couples'], w: 277.981, h: 348.041,
     render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#e9b1ba', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+        <img src={RECONNECT_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         <p className="font-luckiest" style={{ position: 'absolute', left: '138.99px', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#d22f49', textAlign: 'center', lineHeight: 1.15 }}>Let's reconnect</p>
-        <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '296.06px', display: 'flex', alignItems: 'flex-start' }}>
-          <img src={RECONNECT_HEART} alt="" style={{ width: '19.436px', height: '19.436px' }} />
-          <img src={RECONNECT_HEART} alt="" style={{ width: '19.436px', height: '19.436px' }} />
-          <img src={RECONNECT_HEART} alt="" style={{ width: '19.436px', height: '19.436px' }} />
-        </div>
       </div>
     ),
   },
@@ -203,20 +198,8 @@ export const GAME_CARDS = (
   {
     id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#36a6bb', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.25) 2px, transparent 2px)', backgroundSize: '18px 18px' }} />
-        <p className="font-gasoek" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 158.18px)', fontSize: '36.156px', color: '#755aa7', textAlign: 'center', whiteSpace: 'nowrap', WebkitTextStroke: '2.5px white', paintOrder: 'stroke fill' as const }}>YOU</p>
-        <div style={{ position: 'absolute', left: '52.88px', top: '61.92px', width: '172.418px', height: '103.044px' }}>
-          <img src={YOU_LAUGH_BANNER1} alt="" style={{ position: 'absolute', inset: '-0.36% -0.52% -0.74% -0.27%', width: 'calc(100% + 0.79px)', height: 'calc(100% + 1.1px)', objectFit: 'fill' }} />
-        </div>
-        <p className="font-gasoek" style={{ position: 'absolute', left: 'calc(50% + 3px)', transform: 'translateX(-50%)', top: 'calc(50% - 86.78px)', fontSize: '39.039px', color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap' }}>LAUGH</p>
-        <div style={{ position: 'absolute', left: '79.09px', top: '225.07px', width: '120.218px', height: '103.044px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ transform: 'scaleY(-1) rotate(180deg)', width: '100%', height: '100%' }}>
-            <img src={YOU_LAUGH_BANNER2} alt="" style={{ position: 'absolute', inset: '-0.12% -0.75% -0.67% -0.52%', width: 'calc(100% + 1.27px)', height: 'calc(100% + 0.79px)', objectFit: 'fill' }} />
-          </div>
-        </div>
-        <p className="font-gasoek" style={{ position: 'absolute', left: 'calc(50% + 0.22px)', transform: 'translateX(-50%)', top: 'calc(50% - 9.04px)', fontSize: '36.156px', color: '#fd587c', textAlign: 'center', whiteSpace: 'nowrap', WebkitTextStroke: '2.5px white', paintOrder: 'stroke fill' as const }}>YOU'RE</p>
-        <p className="font-gasoek" style={{ position: 'absolute', left: 'calc(50% - 0.92px)', transform: 'translateX(-50%)', top: 'calc(50% + 77.73px)', fontSize: '39.039px', color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap' }}>OUT</p>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
+        <img src={YOU_LAUGH_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     ),
   },

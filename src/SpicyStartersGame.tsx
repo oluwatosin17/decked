@@ -1,13 +1,22 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, type CSSProperties } from 'react'
 
-/* ─── Asset URLs ─── */
-const HEART_FILLED     = 'https://www.figma.com/api/mcp/asset/fed07084-3167-41dd-a881-248352a413c6'
-const CHILI_ICON       = 'https://www.figma.com/api/mcp/asset/4a491df1-5cdc-4b94-8cc4-e526056bcd6f'
-const SPICY_INTRO_BG   = 'https://www.figma.com/api/mcp/asset/ce496b8c-9b30-4b79-ab38-ff810a1fb8a4'
-const SPICY_CARD_BG    = 'https://www.figma.com/api/mcp/asset/20298f80-8b5f-4caf-b054-1a6346c38f30'
+/* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
+const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
+const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-card-bg.svg'
+const SPICY_CARD_BG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-card-bg.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
+
+/* Hand-authored (no hosting needed — can never 404) */
+function ChiliGlyph({ style }: { style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" style={style}>
+      <path d="M8 3.5c1.2-1 2.4-1.4 3.2-.6.6.6.4 1.6-.3 2.6 2.8-.2 5 1 5.9 3.2 1.2 2.9-.1 6.7-2.9 9.5-2.9 2.9-6.6 4-9.3 2.7A5.6 5.6 0 0 1 2 15.8c0-3.3 2-6.8 5-9.3.3-1.1.4-2.1 1-3z" fill="#E63946" />
+      <path d="M8 3.5c1.2-1 2.4-1.4 3.2-.6.6.6.4 1.6-.3 2.6" stroke="#5B8C3E" strokeWidth="1.4" strokeLinecap="round" fill="none" />
+    </svg>
+  )
+}
 
 type Player = { name: string; color: string }
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
@@ -224,9 +233,7 @@ function ChiliIcon() {
     }}>
       <div style={{ width: '32px', height: '32px', overflow: 'hidden', position: 'relative' }}>
         {/* inset-[15.37%_28.22%] = top/bottom: 15.37% = 4.9px, left/right: 28.22% = 9px */}
-        <img src={CHILI_ICON} alt=""
-          style={{ position: 'absolute', top: '15.37%', left: '28.22%', right: '28.22%', bottom: '15.37%', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%' }}
-        />
+        <ChiliGlyph style={{ position: 'absolute', top: '15.37%', left: '28.22%', right: '28.22%', bottom: '15.37%', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
       </div>
     </div>
   )
