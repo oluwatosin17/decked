@@ -365,6 +365,28 @@ input::placeholder {
 .done-btns     { animation: done-btns        0.32s var(--ease-out)   0.48s both; }
 
 /* ═══════════════════════════════════════════════
+   CHARADES WINNER CELEBRATION (trophy + confetti)
+   ═══════════════════════════════════════════════ */
+@keyframes trophy-drop-in {
+  0%   { opacity: 0; transform: translateY(-40px) scale(0.5) rotate(-15deg); }
+  60%  { opacity: 1; transform: translateY(6px) scale(1.15) rotate(8deg); }
+  80%  { transform: translateY(-3px) scale(0.97) rotate(-3deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+.trophy-drop-in { animation: trophy-drop-in 0.7s var(--ease-spring) both; }
+
+@keyframes confetti-fall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--drift), 640px) rotate(var(--rotate)); opacity: 0; }
+}
+.confetti-piece {
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  border-radius: 1px;
+}
+
+/* ═══════════════════════════════════════════════
    CARD COUNTER  (fades + scales on each new card)
    ═══════════════════════════════════════════════ */
 @keyframes counter-in {
@@ -497,6 +519,10 @@ input::placeholder {
    CHARADES: team-mode select, team builder, FFA guesser picker
    ═══════════════════════════════════════════════ */
 
+/* Shared press feedback for every CTA button across the Charades flow */
+.cta-btn { transition: transform var(--dur-press) var(--ease-out), filter var(--dur-press) var(--ease-out); }
+.cta-btn:active { transform: scale(0.95); filter: brightness(0.92); }
+
 /* How-would-you-like-to-play option rows: lift on hover, settle on press */
 .mode-row {
   transition: transform var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out);
@@ -540,6 +566,14 @@ input::placeholder {
 .add-team-btn { transition: border-color 0.15s, color 0.15s, transform var(--dur-press) var(--ease-out); }
 .add-team-btn:hover { border-color: rgba(255,255,255,0.4) !important; color: rgba(255,255,255,0.9) !important; }
 .add-team-btn:active { transform: scale(0.98); }
+
+/* Countdown ring: gentle constant "breathing" so it reads as alive the moment
+   the timer starts, not just in the final urgency-pulse seconds */
+@keyframes timer-ring-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.02); }
+}
+.timer-ring-breathe { animation: timer-ring-breathe 1.6s ease-in-out infinite; }
 
 /* ═══════════════════════════════════════════════
    REDUCED MOTION FALLBACK

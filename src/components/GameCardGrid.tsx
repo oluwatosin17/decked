@@ -1,17 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 
 /* ── Assets ── */
-const SPICY_BG         = 'https://www.figma.com/api/mcp/asset/c6c6bacb-a434-4ccf-aa10-19832dd03ffe'
-const LATE_NIGHT_OUTER = '/icons/late-night-outer.svg'
-const LATE_NIGHT_MID   = '/icons/late-night-mid.svg'
-const LATE_NIGHT_INNER = '/icons/late-night-inner.svg'
-const LATE_NIGHT_CHAT  = '/icons/late-night-chat.svg'
-const LATE_NIGHT_SPARK1= '/icons/late-night-spark1.svg'
-const LATE_NIGHT_SPARK2= '/icons/late-night-spark2.svg'
-const NEVER_BUBBLE     = '/icons/never-bubble.svg'
-const RECONNECT_HEART  = '/icons/reconnect-heart.svg'
-const YOU_LAUGH_BANNER1= '/icons/you-laugh-banner-purple.svg'
-const YOU_LAUGH_BANNER2= '/icons/you-laugh-banner-pink.svg'
+const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
+const SPICY_CARD_BG      = '/icons/spicy-card-bg.svg'
+const NEVER_CARD_BG      = '/icons/never-have-i-ever-card-bg.svg'
+const RECONNECT_HEART    = '/icons/reconnect-heart.svg'
+const YOU_LAUGH_BANNER1  = '/icons/you-laugh-banner-purple.svg'
+const YOU_LAUGH_BANNER2  = '/icons/you-laugh-banner-pink.svg'
 
 export type Category = 'all' | 'icebreakers' | 'deep-talk' | 'drinking' | 'couples' | 'party-games'
 
@@ -48,11 +43,8 @@ export const GAME_CARDS = (
   {
     id: 'spicy-starters', categories: ['couples', 'deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#df91b5', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <div style={{ position: 'absolute', left: '-70.05px', top: 0, width: '348px', height: '348px', overflow: 'hidden' }}>
-          <img src={SPICY_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', top: '6.62%', left: '25.45%', right: '6.69%', bottom: '6.1%', background: '#b70012' }} />
-        </div>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
+        <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         <p className="font-stick" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 124.3px)', width: '272.19px', fontSize: '48px', color: '#df91b5', textAlign: 'center', lineHeight: 1 }}>spicy<br />starters</p>
         <p className="font-inter-tight" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% + 102.59px)', width: '112.54px', fontSize: '10.85px', color: '#df91b5', textAlign: 'center', fontWeight: 300 }}>CONVERSATION CARDS TO SHARE</p>
       </div>
@@ -97,17 +89,12 @@ export const GAME_CARDS = (
     id: 'late-night-talks', categories: ['deep-talk'], w: 359.601, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', position: 'relative', display: 'inline-grid', placeItems: 'start', cursor: onClick ? 'pointer' : 'default', borderRadius: '0', overflow: 'hidden' }}>
-        <img src={LATE_NIGHT_OUTER} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
-        <img src={LATE_NIGHT_MID} alt="" style={{ gridColumn: 1, gridRow: 1, marginLeft: '54.78px', marginTop: '59.62px', width: '252.632px', height: '239.488px', objectFit: 'contain' }} />
-        <img src={LATE_NIGHT_INNER} alt="" style={{ gridColumn: 1, gridRow: 1, marginLeft: '59.79px', marginTop: '65.66px', width: '242.609px', height: '227.392px', objectFit: 'contain' }} />
+        <img src={LATE_NIGHT_CARD_BG} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
         <div style={{ gridColumn: 1, gridRow: 1, marginLeft: '77.41px', marginTop: '156px', width: '168.435px', display: 'flex', flexDirection: 'column', gap: '3.75px', position: 'relative' }}>
           <p className="font-slackey" style={{ fontSize: '33.78px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Late</p>
           <p className="font-slackey" style={{ fontSize: '33.78px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Night</p>
           <p className="font-slackey" style={{ fontSize: '51.61px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Talks</p>
-          <img src={LATE_NIGHT_CHAT} alt="" style={{ position: 'absolute', left: '106.21px', top: '-17.07px', width: '82.889px', height: '82.889px' }} />
         </div>
-        <img src={LATE_NIGHT_SPARK1} alt="" style={{ gridColumn: 1, gridRow: 1, marginLeft: '279.89px', marginTop: '15.74px', width: '32.915px', height: '11.717px' }} />
-        <img src={LATE_NIGHT_SPARK2} alt="" style={{ gridColumn: 1, gridRow: 1, marginLeft: '321.05px', marginTop: '27.71px', width: '6.837px', height: '4.297px' }} />
       </div>
     ),
   },
@@ -167,15 +154,9 @@ export const GAME_CARDS = (
     id: 'never-have-i-ever', categories: ['drinking', 'party-games'], w: 277.981, h: 348.041,
     playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#cc66ff', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '26.22px', width: '198.429px', height: '198.429px', background: '#fefefe', borderRadius: '2.712px' }} />
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
+        <img src={NEVER_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         <p className="font-single-day" style={{ position: 'absolute', top: '13.9%', left: '18.37%', right: '18.21%', bottom: '43.01%', fontSize: '49.72px', color: '#bb33ff', textAlign: 'center', lineHeight: '49.72px' }}>NEVER HAVE I EVER</p>
-        <div style={{ position: 'absolute', left: '109.38px', top: '196.17px', width: '59.212px', height: '59.212px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ transform: 'scaleY(-1)' }}>
-            <img src={NEVER_BUBBLE} alt="" style={{ width: '55.5px', height: '44.4px', objectFit: 'contain' }} />
-          </div>
-        </div>
-        <p className="font-satoshi" style={{ position: 'absolute', left: 'calc(50% - 48.14px)', top: '326.8px', fontSize: '7.232px', fontWeight: 700, color: '#fefefe', whiteSpace: 'nowrap', textTransform: 'uppercase' }}>GAME OF POOR DECISIONS</p>
       </div>
     ),
   },

@@ -175,7 +175,7 @@ function TeamModeScreen({ playerCount, onBack, onSelect }: { playerCount: number
           })}
         </div>
 
-        <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
+        <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
       </div>
     </div>
   )
@@ -298,8 +298,8 @@ function TeamBuilderScreen({
         </div>
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (canNext) { haptic('medium'); onNext(teams) } }} style={ctaPrimary(142, !canNext)}>NEXT</button>
+          <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
+          <button onClick={() => { if (canNext) { haptic('medium'); onNext(teams) } }} className="cta-btn" style={ctaPrimary(142, !canNext)}>NEXT</button>
         </div>
       </div>
     </div>
@@ -307,8 +307,8 @@ function TeamBuilderScreen({
 }
 
 /* ─── 1. Select Categories ─── */
-function CategorySelectScreen({ onBack, onNext }: { onBack: () => void; onNext: (ids: string[]) => void }) {
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+function CategorySelectScreen({ initialSelected, onBack, onNext }: { initialSelected: string[]; onBack: () => void; onNext: (ids: string[]) => void }) {
+  const [selected, setSelected] = useState<Set<string>>(new Set(initialSelected))
   const canNext = selected.size > 0
 
   const toggle = (id: string) => {
@@ -355,8 +355,8 @@ function CategorySelectScreen({ onBack, onNext }: { onBack: () => void; onNext: 
         </div>
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (canNext) { haptic('medium'); onNext([...selected]) } }} style={ctaPrimary(142, !canNext)}>NEXT</button>
+          <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
+          <button onClick={() => { if (canNext) { haptic('medium'); onNext([...selected]) } }} className="cta-btn" style={ctaPrimary(142, !canNext)}>NEXT</button>
         </div>
       </div>
     </div>
@@ -364,8 +364,8 @@ function CategorySelectScreen({ onBack, onNext }: { onBack: () => void; onNext: 
 }
 
 /* ─── 2. Deck Size ─── */
-function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: number) => void }) {
-  const [value, setValue] = useState('')
+function DeckSizeScreen({ initialValue, onBack, onNext }: { initialValue: number; onBack: () => void; onNext: (n: number) => void }) {
+  const [value, setValue] = useState(initialValue ? String(initialValue) : '')
   const inputRef = useRef<HTMLInputElement>(null)
   const parsed = parseInt(value, 10)
   const valid = !isNaN(parsed) && parsed >= 1 && parsed <= 100
@@ -394,8 +394,8 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
         </div>
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} style={ctaPrimary(142, !valid)}>NEXT</button>
+          <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
+          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} className="cta-btn" style={ctaPrimary(142, !valid)}>NEXT</button>
         </div>
       </div>
     </div>
@@ -403,8 +403,8 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
 }
 
 /* ─── 3. Custom Cards (optional) ─── */
-function CustomCardsScreen({ deckSize, onBack, onNext }: { deckSize: number; onBack: () => void; onNext: (cards: string[]) => void }) {
-  const [cards, setCards] = useState<string[]>([])
+function CustomCardsScreen({ deckSize, initialCards, onBack, onNext }: { deckSize: number; initialCards: string[]; onBack: () => void; onNext: (cards: string[]) => void }) {
+  const [cards, setCards] = useState<string[]>(initialCards)
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const remaining = deckSize - cards.length
@@ -465,8 +465,8 @@ function CustomCardsScreen({ deckSize, onBack, onNext }: { deckSize: number; onB
         </div>
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { haptic('medium'); onNext(cards) }} style={ctaPrimary(142)}>NEXT</button>
+          <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
+          <button onClick={() => { haptic('medium'); onNext(cards) }} className="cta-btn" style={ctaPrimary(142)}>NEXT</button>
         </div>
       </div>
     </div>
@@ -474,8 +474,8 @@ function CustomCardsScreen({ deckSize, onBack, onNext }: { deckSize: number; onB
 }
 
 /* ─── 4. Round Length ─── */
-function RoundLengthScreen({ onBack, onNext }: { onBack: () => void; onNext: (seconds: number) => void }) {
-  const [value, setValue] = useState('')
+function RoundLengthScreen({ initialValue, onBack, onNext }: { initialValue: number; onBack: () => void; onNext: (seconds: number) => void }) {
+  const [value, setValue] = useState(initialValue ? String(initialValue) : '')
   const inputRef = useRef<HTMLInputElement>(null)
   const parsed = parseInt(value, 10)
   const valid = !isNaN(parsed) && parsed >= 5 && parsed <= 300
@@ -504,8 +504,8 @@ function RoundLengthScreen({ onBack, onNext }: { onBack: () => void; onNext: (se
         </div>
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onBack() }} style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} style={ctaPrimary(142, !valid)}>START GAME</button>
+          <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
+          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} className="cta-btn" style={ctaPrimary(142, !valid)}>START GAME</button>
         </div>
       </div>
     </div>
@@ -605,6 +605,38 @@ function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: s
   )
 }
 
+/* ─── Circular countdown ring — the timer is the centerpiece once running ─── */
+function TimerRing({ timeLeft, roundLength }: { timeLeft: number; roundLength: number }) {
+  const size = 168
+  const stroke = 8
+  const radius = (size - stroke) / 2
+  const circumference = 2 * Math.PI * radius
+  const ratio = roundLength > 0 ? Math.max(0, timeLeft / roundLength) : 0
+  const offset = circumference * (1 - ratio)
+  const urgent = timeLeft <= 5
+
+  return (
+    <div className="timer-ring-breathe" style={{ position: 'relative', width: `${size}px`, height: `${size}px` }}>
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={stroke} />
+        <circle
+          cx={size / 2} cy={size / 2} r={radius} fill="none"
+          stroke={RED} strokeWidth={stroke} strokeLinecap="round"
+          strokeDasharray={circumference} strokeDashoffset={offset}
+          style={{ transition: 'stroke-dashoffset 1s linear', filter: urgent ? 'drop-shadow(0 0 10px rgba(237,56,68,0.8))' : 'drop-shadow(0 0 6px rgba(237,56,68,0.4))' }}
+        />
+      </svg>
+      <p className={urgent ? 'timer-pulse' : ''} style={{
+        position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '64px', margin: 0,
+        color: urgent ? RED : '#fff', letterSpacing: '0.02em',
+      }}>
+        {timeLeft}
+      </p>
+    </div>
+  )
+}
+
 /* ─── 5. Game (prompt + timer) ─── */
 function GameScreen({
   prompt, idx, total, roundLength, scores, teams, currentTeamId, onTimeUp,
@@ -628,7 +660,7 @@ function GameScreen({
 
   useEffect(() => {
     if (!flipped || !timerStarted) return
-    if (timeLeft <= 0) { timeUpRef.current(); return }
+    if (timeLeft <= 0) { haptic('medium'); timeUpRef.current(); return }
     const t = setTimeout(() => setTimeLeft(s => s - 1), 1000)
     return () => clearTimeout(t)
   }, [flipped, timerStarted, timeLeft])
@@ -658,14 +690,12 @@ function GameScreen({
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
             Ready? Start the timer when everyone's watching.
           </p>
-          <button onClick={handleStartTimer} style={ctaPrimary(160)}>START TIMER</button>
+          <button onClick={handleStartTimer} className="cta-btn" style={ctaPrimary(160)}>START TIMER</button>
         </div>
       ) : (
         <div className="screen-enter-fast" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-          <p className={timeLeft <= 5 ? 'timer-pulse' : ''} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '56px', color: timeLeft <= 5 ? RED : '#fff', margin: 0, letterSpacing: '0.02em' }}>
-            {timeLeft}
-          </p>
-          <button onClick={handleStop} style={ctaOutline(160)}>STOP TIMER</button>
+          <TimerRing timeLeft={timeLeft} roundLength={roundLength} />
+          <button onClick={handleStop} className="cta-btn" style={ctaOutline(160)}>STOP TIMER</button>
         </div>
       )}
     </div>
@@ -689,8 +719,8 @@ function DidTheyGetItScreen({
             Did They Get It?
           </h2>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-            <button onClick={() => { haptic('light'); onResult(null) }} style={ctaOutline(160)}>NO</button>
-            <button onClick={() => { haptic('success'); onResult(currentTeamId) }} style={ctaPrimary(160)}>YES</button>
+            <button onClick={() => { haptic('light'); onResult(null) }} className="cta-btn" style={ctaOutline(160)}>NO</button>
+            <button onClick={() => { haptic('success'); onResult(currentTeamId) }} className="cta-btn" style={ctaPrimary(160)}>YES</button>
           </div>
         </div>
       </div>
@@ -726,7 +756,7 @@ function DidTheyGetItScreen({
           ))}
         </div>
 
-        <button onClick={() => { haptic('light'); onResult(null) }} style={ctaOutline(197)}>NO ONE GOT IT</button>
+        <button onClick={() => { haptic('light'); onResult(null) }} className="cta-btn" style={ctaOutline(197)}>NO ONE GOT IT</button>
       </div>
     </div>
   )
@@ -767,6 +797,65 @@ function PointsGainedScreen({ scores, lastWinnerId, teams, onNext }: { scores: R
   )
 }
 
+/* ─── Count-up number (score reveal) ─── */
+function useCountUp(target: number, durationMs = 900): number {
+  const [value, setValue] = useState(0)
+  useEffect(() => {
+    let raf: number
+    const start = performance.now()
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - start) / durationMs)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setValue(Math.round(eased * target))
+      if (progress < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target])
+  return value
+}
+
+/* ─── Confetti burst (winner reveal only) ─── */
+function Confetti() {
+  const pieces = useState(() =>
+    Array.from({ length: 32 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      color: TEAM_COLORS[i % TEAM_COLORS.length],
+      delay: Math.random() * 0.4,
+      duration: 2.2 + Math.random() * 1.4,
+      rotate: Math.random() * 360,
+      drift: (Math.random() - 0.5) * 120,
+      size: 6 + Math.random() * 6,
+    }))
+  )[0]
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
+      {pieces.map(p => (
+        <div key={p.id} className="confetti-piece" style={{
+          position: 'absolute', top: '-20px', left: `${p.left}%`,
+          width: `${p.size}px`, height: `${p.size * 0.4}px`, background: p.color,
+          animationDelay: `${p.delay}s`, animationDuration: `${p.duration}s`,
+          ['--drift' as string]: `${p.drift}px`, ['--rotate' as string]: `${p.rotate}deg`,
+        }} />
+      ))}
+    </div>
+  )
+}
+
+/* ─── Score pill with count-up (Done screen) ─── */
+function ScorePill({ team, score, delay }: { team: GameTeam; score: number; delay: number }) {
+  const animated = useCountUp(score)
+  return (
+    <div className="stagger-item" style={{ background: '#111113', borderRadius: '999px', padding: '8px 18px', display: 'flex', gap: '8px', alignItems: 'center', animationDelay: `${delay}s` }}>
+      <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{team.name.toUpperCase()}</span>
+      <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{animated}</span>
+    </div>
+  )
+}
+
 /* ─── Mini card (end screens) ─── */
 function MiniCharadesCard() {
   return (
@@ -791,8 +880,16 @@ function DoneScreen({
   const winners = teams.filter(t => (scores[t.id] ?? 0) === maxScore)
   const isTie = winners.length > 1
 
+  useEffect(() => { if (!isTie) haptic('celebrate') }, [isTie])
+
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '40px', zIndex: 2, position: 'relative' }}>
+      {!isTie && <Confetti />}
+
+      {!isTie && (
+        <img src={TROPHY_ICON} alt="" className="trophy-drop-in" style={{ width: '64px', height: '64px' }} />
+      )}
+
       <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em' }}>
           {isTie ? "IT'S A TIE" : 'WE HAVE A WINNER'}
@@ -810,11 +907,8 @@ function DoneScreen({
       </div>
 
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
-        {teams.map(t => (
-          <div key={t.id} style={{ background: '#111113', borderRadius: '999px', padding: '8px 18px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{t.name.toUpperCase()}</span>
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{scores[t.id] ?? 0}</span>
-          </div>
+        {teams.map((t, i) => (
+          <ScorePill key={t.id} team={t} score={scores[t.id] ?? 0} delay={0.32 + i * 0.06} />
         ))}
       </div>
 
@@ -822,8 +916,8 @@ function DoneScreen({
 
       <div className="done-btns" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '8px' }}>
-          <button onClick={() => { haptic('light'); onNewGame() }} style={ctaOutline(160)}>NEW GAME</button>
-          <button onClick={() => { haptic('medium'); onPlayAgain() }} style={ctaPrimary(160)}>PLAY AGAIN</button>
+          <button onClick={() => { haptic('light'); onNewGame() }} className="cta-btn" style={ctaOutline(160)}>NEW GAME</button>
+          <button onClick={() => { haptic('medium'); onPlayAgain() }} className="cta-btn" style={ctaPrimary(160)}>PLAY AGAIN</button>
         </div>
         <button onClick={() => { haptic('light'); onHome() }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontFamily: "'Inter', sans-serif", fontSize: '14px', cursor: 'pointer', textDecoration: 'underline' }}>
           Return Home
@@ -959,6 +1053,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
 
       {step === 'categorySelect' && (
         <CategorySelectScreen
+          initialSelected={selectedCategories}
           onBack={() => setStep('teamMode')}
           onNext={ids => { setSelectedCategories(ids); setStep('deckSize') }}
         />
@@ -966,6 +1061,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
 
       {step === 'deckSize' && (
         <DeckSizeScreen
+          initialValue={deckSize}
           onBack={() => setStep('categorySelect')}
           onNext={n => { setDeckSize(n); setStep('customCards') }}
         />
@@ -974,6 +1070,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
       {step === 'customCards' && (
         <CustomCardsScreen
           deckSize={deckSize}
+          initialCards={customCards}
           onBack={() => setStep('deckSize')}
           onNext={cards => { setCustomCards(cards); setStep('roundLength') }}
         />
@@ -981,6 +1078,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
 
       {step === 'roundLength' && (
         <RoundLengthScreen
+          initialValue={roundLength}
           onBack={() => setStep('customCards')}
           onNext={seconds => { setRoundLength(seconds); startGame() }}
         />
