@@ -333,26 +333,17 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
 
   const filtered = allCards.filter(c => visibleIds.has(c.id))
 
+  // Split into rows of 4 — space-between per row preserves exact card sizes
+  const rows: typeof filtered[] = []
+  for (let i = 0; i < filtered.length; i += 4) rows.push(filtered.slice(i, i + 4))
+
+  let cardIdx = 0
   return (
-    <>
-      <style>{`
-        .browse-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-          gap: 20px;
-        }
-        @media (min-width: 1200px) {
-          .browse-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        @media (max-width: 600px) {
-          .browse-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        }
-        @media (max-width: 380px) {
-          .browse-grid { grid-template-columns: 1fr; }
-        }
-      `}</style>
-      <div className="browse-grid">
-        {filtered.map((card, i) => {
+    <div className="browse-card-grid" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      {rows.map((row, rowIdx) => (
+        <div key={rowIdx} className="browse-card-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          {row.map((card) => {
+            const i = cardIdx++
             const isExiting = exitingIds.has(card.id)
             const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
                            : card.id === 'spicy-starters' ? onPlaySpicyStarters
@@ -375,8 +366,9 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                 key={`${card.id}-${staggerKey}`}
                 className="browse-card-wrap"
                 style={{
-                  aspectRatio: `${card.w} / ${card.h}`,
-                  width: '100%',
+                  width: `${card.w}px`,
+                  height: `${card.h}px`,
+                  flexShrink: 0,
                   animation: isExiting
                     ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
                     : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 40}ms both`,
@@ -389,7 +381,8 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
               </div>
             )
           })}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   )
 }

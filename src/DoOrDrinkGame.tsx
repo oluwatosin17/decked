@@ -202,8 +202,8 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
                   {opt.label}
                 </span>
                 {isSel && (
-                  <div style={{ marginLeft: 'auto', width: '20px', height: '20px', borderRadius: '50%', background: '#ed8251', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div style={{ marginLeft: 'auto', width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                 )}
               </button>

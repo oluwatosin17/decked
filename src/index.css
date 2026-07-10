@@ -576,10 +576,10 @@ input::placeholder {
 .timer-ring-breathe { animation: timer-ring-breathe 1.6s ease-in-out infinite; }
 
 /* ═══════════════════════════════════════════════
-   MOBILE-FIRST RESPONSIVE
+   MOBILE-FIRST PWA RESPONSIVE SYSTEM
    ═══════════════════════════════════════════════ */
 
-/* Safe area padding for notched devices */
+/* Safe area padding for notched devices (PWA) */
 @supports (padding: env(safe-area-inset-top)) {
   body {
     padding-top: env(safe-area-inset-top);
@@ -589,54 +589,74 @@ input::placeholder {
   }
 }
 
-/* Prevent horizontal overflow on mobile */
+/* Prevent horizontal overflow */
 html, body, #root {
   max-width: 100vw;
   overflow-x: hidden;
 }
 
-/* Mobile touch optimizations */
+/* PWA standalone mode: hide browser UI artifacts */
+@media (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ─── Touch device optimizations ─── */
 @media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch — they stick on mobile */
   .card-tile:hover { transform: none !important; box-shadow: none !important; }
   .browse-card-wrap:hover .card-tile { transform: none !important; box-shadow: none !important; filter: none !important; }
   .game-btn:hover { transform: none !important; box-shadow: none !important; }
   .game-btn-primary:hover { transform: none !important; filter: none !important; }
   .spicy-option:hover { background: inherit !important; transform: none !important; box-shadow: none !important; }
+  .mode-row:not(.mode-row-locked):hover { transform: none !important; box-shadow: none !important; }
 
-  /* Larger touch targets */
+  /* 44px minimum touch targets (Apple HIG / Material) */
   button { min-height: 44px; }
+
+  /* Better active states for touch */
+  .game-btn:active { transform: scale(0.95) !important; transition-duration: 60ms !important; }
+  .game-btn-primary:active { transform: scale(0.95) !important; filter: brightness(0.9) !important; transition-duration: 60ms !important; }
 }
 
-/* Small phones (up to 480px) */
-@media (max-width: 480px) {
-  /* Game nav */
+/* ─── Tablet breakpoint (≤768px) ─── */
+@media (max-width: 768px) {
+  /* Game nav: hide desktop links */
   .game-nav-desktop { display: none !important; }
 
-  /* Game screens — reduce padding */
+  /* Game setup screens: fluid padding */
+  .screen-enter { padding: 28px 20px !important; }
+}
+
+/* ─── Phone breakpoint (≤480px) ─── */
+@media (max-width: 480px) {
+  /* Tighter padding for small screens */
   .screen-enter { padding: 20px 16px !important; }
 
-  /* Card sizes — scale down for mobile */
-  .game-card-mobile { width: 280px !important; height: 370px !important; }
+  /* Scale game cards for phones */
+  [style*="perspective"] {
+    max-width: calc(100vw - 32px);
+  }
+
+  /* Done screen responsive stats */
+  .done-heading { font-size: 36px !important; }
+
+  /* Responsive footer inside games */
+  footer { padding: 20px 16px !important; }
+  footer .font-anton, footer span[style*="font-size: 32px"] {
+    font-size: 24px !important;
+  }
 }
 
-/* Tablets and larger phones */
-@media (min-width: 481px) and (max-width: 768px) {
-  .screen-enter { padding: 32px 24px !important; }
+/* ─── Page transition for screen changes ─── */
+@keyframes page-slide-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
-
-/* Touch-friendly active states */
-@media (hover: none) {
-  .game-btn:active { transform: scale(0.95) !important; }
-  .game-btn-primary:active { transform: scale(0.95) !important; filter: brightness(0.92) !important; }
-}
-
-/* ═══════════════════════════════════════════════
-   ANIMATED FAVICON (card deck flip)
-   ═══════════════════════════════════════════════ */
-@keyframes favicon-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-4px) rotate(2deg); }
-}
+.page-slide-in { animation: page-slide-in 0.3s var(--ease-out) both; }
 
 /* ═══════════════════════════════════════════════
    REDUCED MOTION FALLBACK

@@ -52,13 +52,13 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
       <nav style={{
         background: 'rgba(12,12,14,0.92)', backdropFilter: 'blur(8px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 clamp(16px, 4vw, 60px)', height: '64px', flexShrink: 0,
+        padding: '0 60px', height: '64px', flexShrink: 0,
         position: 'sticky', top: 0, zIndex: 50,
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
         <button onClick={onHome} className="font-anton game-btn" style={{
           background: 'none', border: 'none', color: '#fff',
-          fontSize: 'clamp(22px, 3vw, 28px)', letterSpacing: '0.56px', cursor: 'pointer', padding: 0,
+          fontSize: '28px', letterSpacing: '0.56px', cursor: 'pointer', padding: 0,
         }}>
           DECKED
         </button>
@@ -89,14 +89,36 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
       </nav>
 
       <style>{`
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
           .browse-nav-links { display: none !important; }
+          .browse-main { padding: 24px 16px 40px !important; }
+          .browse-content { width: 100% !important; }
+          .browse-card-row {
+            flex-wrap: wrap !important;
+            gap: 12px !important;
+            justify-content: center !important;
+          }
+          .browse-card-wrap {
+            width: calc(50% - 6px) !important;
+            height: auto !important;
+            aspect-ratio: 1 / 1.2;
+          }
+          .browse-card-wrap .card-tile {
+            border-radius: 10px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .browse-main { padding: 16px 12px 32px !important; }
+          .browse-card-row { gap: 8px !important; }
+          .browse-card-wrap {
+            width: calc(50% - 4px) !important;
+          }
         }
       `}</style>
 
       {/* ── Main ── */}
-      <main className="screen-enter" style={{ flex: 1, padding: 'clamp(24px, 4vw, 48px) clamp(16px, 4vw, 60px) clamp(40px, 6vw, 80px)' }}>
-        <div style={{ width: '100%', maxWidth: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
+      <main className="screen-enter browse-main" style={{ flex: 1, padding: '48px 60px 80px' }}>
+        <div className="browse-content" style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
 
           {/* Category filter pills — matches Figma 764-33446 */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
