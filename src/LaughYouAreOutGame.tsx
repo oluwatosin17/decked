@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -128,12 +129,14 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
   const W = 320
   const H = 420
   const scale = W / 386
+  const { wrapperStyle, cardStyle } = useScaledCard(W, H)
 
   return (
+    <div style={wrapperStyle}>
     <div
       onClick={!flipped ? onFlip : undefined}
-      className={!flipped ? 'lyao-card-wrap' : ''}
-      style={{ width: `${W}px`, height: `${H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
+      className={`game-card${!flipped ? ' lyao-card-wrap' : ''}`}
+      style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
     >
       {/* Idle float wrapper — only while unflipped */}
       <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
@@ -240,6 +243,7 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
         </div>
       </div>
       </div>
+    </div>
     </div>
   )
 }

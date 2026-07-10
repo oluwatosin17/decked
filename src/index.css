@@ -577,9 +577,13 @@ input::placeholder {
 
 /* ═══════════════════════════════════════════════
    MOBILE-FIRST PWA RESPONSIVE SYSTEM
+   Desktop (>768px) is UNCHANGED — all rules below
+   are mobile-only via @media queries.
    ═══════════════════════════════════════════════ */
 
-/* Safe area padding for notched devices (PWA) */
+/* ─── Global: overflow & safe areas ─── */
+html, body, #root { max-width: 100vw; overflow-x: hidden; }
+
 @supports (padding: env(safe-area-inset-top)) {
   body {
     padding-top: env(safe-area-inset-top);
@@ -589,77 +593,81 @@ input::placeholder {
   }
 }
 
-/* Prevent horizontal overflow */
-html, body, #root {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-/* PWA standalone mode: hide browser UI artifacts */
+/* ─── PWA standalone feel ─── */
 @media (display-mode: standalone) {
   body {
-    -webkit-user-select: none;
-    user-select: none;
+    -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain; /* prevent pull-to-refresh */
   }
 }
 
-/* ─── Touch device optimizations ─── */
+/* ─── Touch devices: disable hover, improve active ─── */
 @media (hover: none) and (pointer: coarse) {
-  /* Disable hover effects on touch — they stick on mobile */
-  .card-tile:hover { transform: none !important; box-shadow: none !important; }
+  .card-tile:hover,
   .browse-card-wrap:hover .card-tile { transform: none !important; box-shadow: none !important; filter: none !important; }
   .game-btn:hover { transform: none !important; box-shadow: none !important; }
   .game-btn-primary:hover { transform: none !important; filter: none !important; }
   .spicy-option:hover { background: inherit !important; transform: none !important; box-shadow: none !important; }
   .mode-row:not(.mode-row-locked):hover { transform: none !important; box-shadow: none !important; }
 
-  /* 44px minimum touch targets (Apple HIG / Material) */
-  button { min-height: 44px; }
-
-  /* Better active states for touch */
+  button { min-height: 44px; }  /* Apple HIG / Material touch target */
   .game-btn:active { transform: scale(0.95) !important; transition-duration: 60ms !important; }
   .game-btn-primary:active { transform: scale(0.95) !important; filter: brightness(0.9) !important; transition-duration: 60ms !important; }
 }
 
-/* ─── Tablet breakpoint (≤768px) ─── */
+/* ═══════════════════════════════════════════════
+   TABLET (≤768px)
+   ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* Game nav: hide desktop links */
   .game-nav-desktop { display: none !important; }
+  .screen-enter { padding: 24px 20px !important; }
 
-  /* Game setup screens: fluid padding */
-  .screen-enter { padding: 28px 20px !important; }
+  /* Setup containers (shared components) — fluid width */
+  .setup-container { width: 100% !important; max-width: 500px; }
+  .setup-buttons { width: 100% !important; max-width: 380px; }
+  .setup-title { font-size: 32px !important; }
+
+  /* Game footer */
+  .game-footer { padding: 24px 20px !important; }
 }
-
-/* ─── Phone breakpoint (≤480px) ─── */
-@media (max-width: 480px) {
-  /* Tighter padding for small screens */
-  .screen-enter { padding: 20px 16px !important; }
-
-  /* Scale game cards for phones */
-  [style*="perspective"] {
-    max-width: calc(100vw - 32px);
-  }
-
-  /* Done screen responsive stats */
-  .done-heading { font-size: 36px !important; }
-
-  /* Responsive footer inside games */
-  footer { padding: 20px 16px !important; }
-  footer .font-anton, footer span[style*="font-size: 32px"] {
-    font-size: 24px !important;
-  }
-}
-
-/* ─── Page transition for screen changes ─── */
-@keyframes page-slide-in {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-.page-slide-in { animation: page-slide-in 0.3s var(--ease-out) both; }
 
 /* ═══════════════════════════════════════════════
-   REDUCED MOTION FALLBACK
+   PHONE (≤480px)
+   ═══════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .screen-enter { padding: 16px 16px !important; }
+
+  /* ─── Game cards: proportional scaling ───
+     Uses max-width + aspect-ratio so cards scale down
+     while keeping their exact proportions. The inner
+     content (fonts, spacing, images) scales with CSS
+     transform for pixel-perfect results. */
+  .game-card {
+    max-width: calc(100vw - 32px) !important;
+    /* Height auto-adjusts via the inline style,
+       but we ensure it doesn't overflow */
+    overflow: visible;
+  }
+
+  /* Done screen */
+  .done-heading { font-size: 32px !important; }
+  .done-subtitle { font-size: 14px !important; }
+
+  /* Footer compact */
+  footer, .game-footer { padding: 16px 16px !important; gap: 20px !important; }
+}
+
+/* ═══════════════════════════════════════════════
+   SMALL PHONE (≤375px)
+   ═══════════════════════════════════════════════ */
+@media (max-width: 375px) {
+  .screen-enter { padding: 12px 12px !important; }
+  .setup-buttons { flex-direction: column; }
+}
+
+/* ═══════════════════════════════════════════════
+   REDUCED MOTION
    ═══════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

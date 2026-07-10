@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, type CSSProperties } from 'react'
+import { useScaledCard } from './hooks/useCardScale'
 
 /* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
 const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
@@ -496,7 +497,7 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
       {/* Hover wrapper provides lift + shadow; flip container provides perspective */}
       <div
         onClick={handleTap}
-        className="intro-card-hover-wrap"
+        className="intro-card-hover-wrap game-card"
         style={{ width: '365px', height: '457px', flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
         <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
@@ -552,7 +553,7 @@ function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipP
             : flipPhase === 'in'  ? 'game-card-flip-in'
             : ''
   return (
-    <div className={cls} style={{
+    <div className={`${cls} game-card`} style={{
       width: '365px', height: '457px', borderRadius: '12px', overflow: 'hidden',
       position: 'relative', flexShrink: 0, zIndex: 2,
       boxShadow: '0 32px 80px rgba(171,18,41,0.35)',

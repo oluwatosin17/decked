@@ -44,11 +44,11 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
   return (
     <div className="screen-enter" style={{
       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-      position: 'relative', padding: 'clamp(20px, 4vw, 40px)',
+      position: 'relative', padding: '40px',
     }}>
-      <div style={{
-        width: '100%', maxWidth: '500px', position: 'relative', zIndex: 2,
-        display: 'flex', flexDirection: 'column', gap: 'clamp(20px, 3vw, 32px)', alignItems: 'center',
+      <div className="setup-container" style={{
+        width: '500px', position: 'relative', zIndex: 2,
+        display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
           <h2 style={{
@@ -152,7 +152,7 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
           )}
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '100%', maxWidth: '380px' }}>
+        <div className="setup-buttons" style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '380px' }}>
           <button
             className="game-btn"
             onClick={onBack}

@@ -13,10 +13,10 @@ export default function DeckSize({ onBack, onNext, nextLabel = 'START THE GAME' 
   const valid = !isNaN(parsed) && parsed > 0 && parsed <= 200
 
   return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: 'clamp(20px, 4vw, 40px)' }}>
-      <div style={{ width: '100%', maxWidth: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 'clamp(24px, 4vw, 40px)', alignItems: 'center' }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div className="setup-container" style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>DECK SIZE</h2>
+          <h2 className="setup-title" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>DECK SIZE</h2>
           <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>How many cards do you want to play?</p>
           <div
             style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
@@ -35,7 +35,7 @@ export default function DeckSize({ onBack, onNext, nextLabel = 'START THE GAME' 
             />
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '292px' }}>
+        <div className="setup-buttons" style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '292px' }}>
           <button onClick={onBack} className="game-btn" style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', cursor: 'pointer', textAlign: 'center', letterSpacing: '0.05em' }}>
             GO BACK
           </button>

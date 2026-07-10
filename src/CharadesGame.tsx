@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 import { CHARADES_CATEGORIES, buildCharadesDeck } from './charadesData'
 import { haptic } from './haptics'
 
@@ -566,10 +567,13 @@ function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: GameTeam; a
 /* ─── Charades card (flip) ─── */
 function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
   const W = 320, H = 480
+  const { wrapperStyle, cardStyle } = useScaledCard(W, H)
   return (
+    <div style={wrapperStyle}>
     <div
+      className="game-card"
       onClick={!flipped ? onFlip : undefined}
-      style={{ width: `${W}px`, height: `${H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer', flexShrink: 0 }}
+      style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer', flexShrink: 0 }}
     >
       <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
         <div style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)', transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)' }}>
@@ -601,6 +605,7 @@ function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: s
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

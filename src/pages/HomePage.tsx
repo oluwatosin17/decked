@@ -27,10 +27,22 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
       {/* ══════════════════════════════════════════════
           HERO SECTION  (943px tall)
       ══════════════════════════════════════════════ */}
-      <section className="relative w-full overflow-hidden" style={{ height: '943px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .home-hero { height: auto !important; min-height: 100vh; padding-bottom: 40px; }
+          .home-nav { padding: 0 16px !important; height: 56px !important; }
+          .home-nav-links { display: none !important; }
+          .home-hero-copy { position: relative !important; top: auto !important; left: auto !important; transform: none !important; width: 100% !important; padding: 40px 20px 0 !important; }
+          .home-hero-cards { display: none !important; }
+          .home-cards-section { padding: 32px 16px 48px !important; }
+          .home-cards-section > div { width: 100% !important; }
+          .home-footer { padding: 24px 16px !important; }
+        }
+      `}</style>
+      <section className="home-hero relative w-full overflow-hidden" style={{ height: '943px' }}>
 
-        {/* Nav — matches Figma: wordmark left, 3 text links right, no CTA button */}
-        <nav style={{
+        {/* Nav */}
+        <nav className="home-nav" style={{
           position: 'relative', zIndex: 20,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           height: '80px', padding: '0 60px',
@@ -38,7 +50,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
           <span className="font-anton" style={{ color: '#ffffff', fontSize: '28px', letterSpacing: '0.56px', lineHeight: 'normal', fontWeight: 400 }}>
             DECKED
           </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             {['Browse Games', 'How to Play', 'About'].map(label => (
               <button key={label} onClick={label === 'Browse Games' ? onBrowse : undefined}
                 className="font-anton game-btn"
@@ -54,8 +66,8 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
           </div>
         </nav>
 
-        {/* Hero copy — centered in the 1440px frame */}
-        <div className="absolute z-20" style={{
+        {/* Hero copy */}
+        <div className="home-hero-copy absolute z-20" style={{
           top: '108px', left: '50%', transform: 'translateX(-50%)',
           width: '435px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '25px',
         }}>
@@ -92,7 +104,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
         </div>
 
         {/* Floating hero cards (Group 7, x=232 y=432 in Figma) */}
-        <div className="absolute z-10" style={{ left: 'calc(50% - 488.5px)', top: '432px', width: '977px', height: '483px' }}>
+        <div className="home-hero-cards absolute z-10" style={{ left: 'calc(50% - 488.5px)', top: '432px', width: '977px', height: '483px' }}>
 
           {/* Card 1: Red, -6.38deg */}
           <div className="hero-card absolute flex items-center justify-center" style={{ left: 0, top: 0, width: '317px', height: '380px' }}>
@@ -147,7 +159,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
       {/* ══════════════════════════════════════════════
           CARD LIBRARY SECTION
       ══════════════════════════════════════════════ */}
-      <section className="cards-section w-full" style={{ paddingTop: '90px', paddingBottom: '80px' }}>
+      <section className="cards-section home-cards-section w-full" style={{ paddingTop: '90px', paddingBottom: '80px' }}>
         <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
           <h2 className="font-spicy" style={{ color: 'white', fontSize: '60px', lineHeight: 'normal', margin: 0 }}>

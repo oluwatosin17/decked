@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -244,11 +245,14 @@ function GameFooter() {
 
 /* ─── LNT Card (the scalloped orange card) ─── */
 function LNTCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
+  const { wrapperStyle, cardStyle } = useScaledCard(400, 387)
   return (
+    <div style={wrapperStyle}>
     <div
+      className="game-card"
       onClick={!flipped ? onFlip : undefined}
       style={{
-        width: '400px', height: '387px',
+        ...cardStyle,
         position: 'relative', cursor: flipped ? 'default' : 'pointer',
         perspective: '1000px',
       }}
@@ -313,6 +317,7 @@ function LNTCard({ question, flipped, onFlip }: { question: string; flipped: boo
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
@@ -177,10 +178,12 @@ function getQuestions(theme: Theme): string[] {
 
 /* ─── Everyday Conversation Card ─── */
 function ECCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
+  const { wrapperStyle, cardStyle } = useScaledCard(320, 400)
   return (
+    <div style={wrapperStyle}>
     <div
       onClick={!flipped ? onFlip : undefined}
-      style={{ width: '320px', height: '400px', perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
+      className="game-card" style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative',
@@ -224,6 +227,7 @@ function ECCard({ question, flipped, onFlip }: { question: string; flipped: bool
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

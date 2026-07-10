@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 
 type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
 
@@ -491,7 +492,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
 
         {/* Split card */}
         <div
-          className={`tod-split-card tod-card-enter${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
+          className={`tod-split-card tod-card-enter game-card${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
           style={{
             position: 'relative', zIndex: 2,
             width: '454px', height: '457px',
@@ -592,7 +593,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
       )}
 
       <div
-        className={`tod-card-enter${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
+        className={`tod-card-enter game-card${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
         style={{
           position: 'relative', zIndex: 2,
           background: cardBg, borderRadius: '20px',

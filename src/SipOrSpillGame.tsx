@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
@@ -230,10 +231,12 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
 
 /* ---- Sip or Spill Card ---- */
 function SipOrSpillCard({ prompt, flipped, onFlip }: { prompt: string; flipped: boolean; onFlip: () => void }) {
+  const { wrapperStyle, cardStyle } = useScaledCard(340, 460)
   return (
+    <div style={wrapperStyle}>
     <div
       onClick={!flipped ? onFlip : undefined}
-      style={{ width: '340px', height: '460px', perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
+      className="game-card" style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative',
@@ -300,6 +303,7 @@ function SipOrSpillCard({ prompt, flipped, onFlip }: { prompt: string; flipped: 
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

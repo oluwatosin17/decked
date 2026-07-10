@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 import SelectGameMode, { NHIE_MODES } from './SelectGameMode'
 import { haptic } from './haptics'
 
@@ -101,12 +102,15 @@ function GameFooter() {
 /* ─── NHIE Card ─── */
 function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
   const W = 320, H = 480
+  const { wrapperStyle, cardStyle } = useScaledCard(W, H)
 
   return (
+    <div style={wrapperStyle}>
     <div
+      className="game-card"
       onClick={!flipped ? () => { haptic('medium'); onFlip() } : undefined}
       style={{
-        width: `${W}px`, height: `${H}px`, perspective: '1000px',
+        ...cardStyle, perspective: '1000px',
         cursor: flipped ? 'default' : 'pointer', flexShrink: 0,
         transition: 'transform 0.22s var(--ease-out)',
       }}
@@ -195,6 +199,7 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

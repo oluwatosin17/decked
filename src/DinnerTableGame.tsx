@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
+import { useScaledCard } from './hooks/useCardScale'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -230,11 +231,14 @@ function GameFooter() {
 function DTCCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
   const CARD_W = 320
   const CARD_H = 400
+  const { wrapperStyle, cardStyle } = useScaledCard(CARD_W, CARD_H)
 
   return (
+    <div style={wrapperStyle}>
     <div
+      className="game-card"
       onClick={!flipped ? onFlip : undefined}
-      style={{ width: `${CARD_W}px`, height: `${CARD_H}px`, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
+      style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative',
@@ -289,6 +293,7 @@ function DTCCard({ question, flipped, onFlip }: { question: string; flipped: boo
           }} />
         </div>
       </div>
+    </div>
     </div>
   )
 }

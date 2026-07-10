@@ -53,11 +53,11 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
   return (
     <div className="screen-enter" style={{
       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-      position: 'relative', padding: 'clamp(20px, 4vw, 40px)',
+      position: 'relative', padding: '40px',
     }}>
-      <div style={{
-        width: '100%', maxWidth: '500px', position: 'relative', zIndex: 2,
-        display: 'flex', flexDirection: 'column', gap: 'clamp(24px, 4vw, 40px)', alignItems: 'center',
+      <div className="setup-container" style={{
+        width: '500px', position: 'relative', zIndex: 2,
+        display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
           <h2 style={{
@@ -154,7 +154,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '100%', maxWidth: '380px' }}>
+        <div className="setup-buttons" style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '380px' }}>
           <button
             className="game-btn"
             onClick={onSkip}
