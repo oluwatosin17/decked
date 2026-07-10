@@ -5,7 +5,7 @@ const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
 export function GameNav({ onBack }: { onBack: () => void }) {
   return (
     <>
-      <nav style={{
+      <nav className="game-nav-bar" style={{
         background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
@@ -27,6 +27,7 @@ export function GameNav({ onBack }: { onBack: () => void }) {
         <button
           className="game-nav-mobile-btn"
           onClick={onBack}
+          aria-label="Back to games"
           style={{
             display: 'none', background: 'rgba(255,255,255,0.08)', border: 'none',
             color: '#fff', fontFamily: "'Anton SC', sans-serif", fontSize: '14px',
@@ -42,13 +43,18 @@ export function GameNav({ onBack }: { onBack: () => void }) {
         @media (max-width: 768px) {
           .game-nav-desktop { display: none !important; }
           .game-nav-mobile-btn { display: block !important; }
-          nav { padding: 0 16px !important; height: 56px !important; }
+          .game-nav-bar { padding: 0 16px !important; height: 52px !important; }
+          .game-nav-bar span { font-size: 20px !important; }
         }
       `}</style>
     </>
   )
 }
 
+/**
+ * GameFooter — hidden on mobile during gameplay for immersive experience.
+ * Only shown on desktop.
+ */
 export function GameFooter() {
   return (
     <footer className="game-footer" style={{
@@ -75,6 +81,12 @@ export function GameFooter() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .game-footer { display: none !important; }
+        }
+      `}</style>
     </footer>
   )
 }

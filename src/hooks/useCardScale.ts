@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react'
 
 /**
  * Returns a CSS transform scale factor for game cards.
- * On desktop (>480px), returns 1 (no scaling).
- * On mobile, scales down to fit within viewport - 32px padding.
+ *
+ * Mobile-first scaling:
+ * - On phones (<=480px): card fits within viewport minus 48px padding,
+ *   capped at 0.82 to feel comfortable (not overwhelming)
+ * - On tablets (<=768px): card fits within viewport minus 40px padding
+ * - On desktop (>768px): returns 1 (no scaling)
  *
  * @param cardWidth The card's natural pixel width
  */
@@ -12,8 +16,20 @@ export function useCardScale(cardWidth: number): number {
 
   useEffect(() => {
     const calc = () => {
-      const available = window.innerWidth - 32
-      setScale(available < cardWidth ? available / cardWidth : 1)
+      const vw = window.innerWidth
+      if (vw <= 480) {
+        // Phone: generous padding, cap scale to avoid overwhelming the screen
+        const available = vw - 48
+        const raw = available < cardWidth ? available / cardWidth : 1
+        setScale(Math.min(raw, 0.82))
+      } else if (vw <= 768) {
+        // Tablet: moderate padding
+        const available = vw - 40
+        setScale(available < cardWidth ? available / cardWidth : 1)
+      } else {
+        // Desktop: no scaling
+        setScale(1)
+      }
     }
     calc()
     window.addEventListener('resize', calc)
