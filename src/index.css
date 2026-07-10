@@ -598,7 +598,7 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
   body {
     -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
-    overscroll-behavior-y: contain; /* prevent pull-to-refresh */
+    overscroll-behavior-y: contain;
   }
 }
 
@@ -611,9 +611,66 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
   .spicy-option:hover { background: inherit !important; transform: none !important; box-shadow: none !important; }
   .mode-row:not(.mode-row-locked):hover { transform: none !important; box-shadow: none !important; }
 
-  button { min-height: 44px; }  /* Apple HIG / Material touch target */
+  button { min-height: 44px; }
   .game-btn:active { transform: scale(0.95) !important; transition-duration: 60ms !important; }
   .game-btn-primary:active { transform: scale(0.95) !important; filter: brightness(0.9) !important; transition-duration: 60ms !important; }
+
+  .browse-mobile-card:active { transform: scale(0.96) !important; transition-duration: 60ms !important; }
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE BROWSE GRID  (2-column SVG cards)
+   ═══════════════════════════════════════════════ */
+.browse-mobile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.browse-mobile-card {
+  background: #111113;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1.05;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.browse-mobile-card-img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE HOMEPAGE CARD GRID
+   ═══════════════════════════════════════════════ */
+.home-mobile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 16px;
+}
+.home-mobile-card {
+  background: #111113;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1.05;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.home-mobile-card img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+@media (hover: none) and (pointer: coarse) {
+  .home-mobile-card:active { transform: scale(0.96); transition-duration: 60ms; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -621,15 +678,67 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
    ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .game-nav-desktop { display: none !important; }
+
+  nav[style*="padding: 0px 60px"],
+  nav[style*="padding:0 60px"],
+  nav[style*="padding: 0 60px"] {
+    padding: 0 16px !important;
+    height: 56px !important;
+  }
+  nav[style*="padding: 0px 60px"] > div[style*="gap: 24px"],
+  nav[style*="padding:0 60px"] > div[style*="gap: 24px"],
+  nav[style*="padding: 0 60px"] > div[style*="gap: 24px"],
+  nav[style*="gap: 24px"] {
+    display: none !important;
+  }
+  nav span[style*="font-size: 28px"] {
+    font-size: 22px !important;
+  }
+
   .screen-enter { padding: 24px 20px !important; }
 
-  /* Setup containers (shared components) — fluid width */
   .setup-container { width: 100% !important; max-width: 500px; }
   .setup-buttons { width: 100% !important; max-width: 380px; }
-  .setup-title { font-size: 32px !important; }
+  .setup-title { font-size: 30px !important; }
 
-  /* Game footer */
-  .game-footer { padding: 24px 20px !important; }
+  div[style*="width: 560px"],
+  div[style*="width: 500px"] {
+    width: 100% !important;
+    max-width: 560px;
+  }
+
+  div[style*="width: 402px"],
+  div[style*="width: 380px"],
+  div[style*="width: 292px"],
+  div[style*="width: 215px"] {
+    width: 100% !important;
+  }
+
+  footer, .game-footer {
+    padding: 24px 16px !important;
+  }
+  footer span[style*="font-size: 32px"] {
+    font-size: 24px !important;
+  }
+
+  /* Mobile footer: stack vertically */
+  .mobile-footer-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+  .mobile-footer-bottom {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  /* Game card containers — fluid on mobile */
+  .game-card-container {
+    width: 100% !important;
+    max-width: 400px;
+    padding: 0 16px;
+  }
 }
 
 /* ═══════════════════════════════════════════════
@@ -638,24 +747,18 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
 @media (max-width: 480px) {
   .screen-enter { padding: 16px 16px !important; }
 
-  /* ─── Game cards: proportional scaling ───
-     Uses max-width + aspect-ratio so cards scale down
-     while keeping their exact proportions. The inner
-     content (fonts, spacing, images) scales with CSS
-     transform for pixel-perfect results. */
-  .game-card {
-    max-width: calc(100vw - 32px) !important;
-    /* Height auto-adjusts via the inline style,
-       but we ensure it doesn't overflow */
-    overflow: visible;
+  h2[style*="font-size: 36px"],
+  h2[style*="fontSize: 36"] {
+    font-size: 28px !important;
   }
 
-  /* Done screen */
   .done-heading { font-size: 32px !important; }
   .done-subtitle { font-size: 14px !important; }
 
-  /* Footer compact */
   footer, .game-footer { padding: 16px 16px !important; gap: 20px !important; }
+
+  .browse-mobile-grid { gap: 8px; }
+  .browse-mobile-card { border-radius: 10px; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -664,6 +767,8 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
 @media (max-width: 375px) {
   .screen-enter { padding: 12px 12px !important; }
   .setup-buttons { flex-direction: column; }
+  nav { height: 48px !important; }
+  .browse-mobile-grid { gap: 6px; }
 }
 
 /* ═══════════════════════════════════════════════

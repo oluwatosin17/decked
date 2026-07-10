@@ -485,6 +485,7 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
    ═══════════════════════════════════════════════════════ */
 function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion: string }) {
   const [flipped, setFlipped] = useState(false)
+  const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
 
   const handleTap = () => {
     if (flipped) return
@@ -495,10 +496,11 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', position: 'relative', padding: '40px' }}>
       {/* Hover wrapper provides lift + shadow; flip container provides perspective */}
+      <div style={wrapperStyle}>
       <div
         onClick={handleTap}
         className="intro-card-hover-wrap game-card"
-        style={{ width: '365px', height: '457px', flexShrink: 0, zIndex: 2, position: 'relative' }}
+        style={{ ...cardStyle, flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
         <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
         <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
@@ -535,6 +537,7 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
         </div>
         </div> {/* spicy-flip-container */}
       </div> {/* intro-card-hover-wrap */}
+      </div> {/* scaled wrapper */}
 
       <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: '16px', color: flipped ? 'transparent' : 'rgba(255,255,255,0.5)', margin: 0, position: 'relative', zIndex: 2, transition: 'color 0.3s' }}>
         Tap the card to flip it.
@@ -549,12 +552,14 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
 type FlipPhase = 'idle' | 'out' | 'in'
 
 function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipPhase }) {
+  const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
   const cls = flipPhase === 'out' ? 'game-card-flip-out'
             : flipPhase === 'in'  ? 'game-card-flip-in'
             : ''
   return (
+    <div style={wrapperStyle}>
     <div className={`${cls} game-card`} style={{
-      width: '365px', height: '457px', borderRadius: '12px', overflow: 'hidden',
+      ...cardStyle, borderRadius: '12px', overflow: 'hidden',
       position: 'relative', flexShrink: 0, zIndex: 2,
       boxShadow: '0 32px 80px rgba(171,18,41,0.35)',
     }}>
@@ -567,6 +572,7 @@ function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipP
           {question.toUpperCase()}
         </p>
       </div>
+    </div>
     </div>
   )
 }

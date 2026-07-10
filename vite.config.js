@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*.svg', 'assets/games/*.png', 'assets/games/*.svg'],
+      includeAssets: ['icons/*.svg', 'assets/games/*.png', 'assets/games/*.svg', 'favicon.svg'],
       manifest: {
         name: 'Decked — Party Card Game',
         short_name: 'Decked',

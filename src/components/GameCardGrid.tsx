@@ -7,16 +7,47 @@ const NEVER_CARD_BG      = '/icons/never-have-i-ever-card-bg.svg'
 const RECONNECT_CARD_BG  = '/icons/reconnect-card-bg.svg'
 const YOU_LAUGH_CARD_BG  = '/icons/you-laugh-card-bg.svg'
 
-export type Category = 'all' | 'icebreakers' | 'deep-talk' | 'drinking' | 'couples' | 'party-games'
+/* ── Mobile SVG card assets ── */
+const MOBILE_CARDS: Record<string, string> = {
+  'truth-or-dare': '/icons/truth-or-dare-mobile.svg',
+  'spicy-starters': '/icons/spicy-starters-mobile.svg',
+  'red-flag-green-flag': '/icons/red-flag-green-flag-mobile.svg',
+  'icebreaker': '/icons/icebreaker-mobile.svg',
+  'dinner-table': '/icons/dinner-conversation-mobile.svg',
+  'late-night-talks': '/icons/late-night-talks-mobile.svg',
+  'everyday-conversation': '/icons/everyday-conversations-mobile.svg',
+  'charades': '/icons/charades-mobile.svg',
+  'strangers': '/icons/we-are-not-really-strangers-mobile.svg',
+  'never-have-i-ever': '/icons/never-have-i-ever-mobile.svg',
+  'reconnect': '/icons/reconnect-mobile.svg',
+  'finger-down': '/icons/put-a-finger-down-mobile.svg',
+  'take-a-sip': '/icons/take-a-sip-mobile.svg',
+  'sip-or-spill': '/icons/sip-and-spill-mobile.svg',
+  'you-laugh': '/icons/you-laugh-you-are-out-mobile.svg',
+  'do-or-drink': '/icons/do-or-drink-mobile.svg',
+}
 
-/* ── 16 card render functions — exact designs from Pick Your Vibe ── */
-// Each returns { w, h, jsx } so the grid can know card dimensions
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= breakpoint : false
+  )
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    setIsMobile(mq.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [breakpoint])
+  return isMobile
+}
+
+export type Category = 'all' | 'icebreakers' | 'deep-talk' | 'drinking' | 'couples' | 'party-games'
 
 interface CardDef {
   id: string
   categories: Category[]
-  w: number   // natural width from the homepage layout
-  h: number   // natural height
+  w: number
+  h: number
   render: (onClick?: () => void) => React.ReactNode
   playable?: boolean
 }
@@ -302,11 +333,115 @@ interface BrowseGridProps {
   onPlayDoOrDrink?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink }: BrowseGridProps) {
+function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
+  const map: Record<string, (() => void) | undefined> = {
+    'truth-or-dare': handlers.onPlayTruthOrDare,
+    'spicy-starters': handlers.onPlaySpicyStarters,
+    'late-night-talks': handlers.onPlayLateNightTalks,
+    'dinner-table': handlers.onPlayDinnerTable,
+    'you-laugh': handlers.onPlayYouLaugh,
+    'never-have-i-ever': handlers.onPlayNeverHaveIEver,
+    'charades': handlers.onPlayCharades,
+    'reconnect': handlers.onPlayReconnect,
+    'everyday-conversation': handlers.onPlayEveryday,
+    'strangers': handlers.onPlayWNRS,
+    'finger-down': handlers.onPlayFingerDown,
+    'take-a-sip': handlers.onPlayTakeASip,
+    'sip-or-spill': handlers.onPlaySipOrSpill,
+    'do-or-drink': handlers.onPlayDoOrDrink,
+  }
+  return map[card.id]
+}
+
+interface MobileCardStyle {
+  label: string | string[]
+  font: string
+  color: string
+  fontSize?: string
+  sub?: string
+  subColor?: string
+  hasEmbeddedText?: boolean
+}
+
+const MOBILE_CARD_STYLES: Record<string, MobileCardStyle> = {
+  'truth-or-dare': { label: ['TRUTH', 'OR DARE'], font: "'Satoshi', sans-serif", color: '#000', fontSize: '20px', sub: 'FOR COUPLES', subColor: '#181b25' },
+  'spicy-starters': { label: ['spicy', 'starters'], font: "'Stick', sans-serif", color: '#fff', fontSize: '24px' },
+  'red-flag-green-flag': { label: ['Red flag', 'Green flag'], font: "'Spicy Rice', cursive", color: '#e7f0ff', fontSize: '18px' },
+  'icebreaker': { label: 'ICEBREAKER', font: "'Staatliches', sans-serif", color: '#000', fontSize: '22px' },
+  'dinner-table': { label: ['DINNER TABLE', 'CONVERSATION'], font: "'Staatliches', sans-serif", color: '#e8e6e3', fontSize: '16px' },
+  'late-night-talks': { label: ['Late', 'Night', 'Talks'], font: "'Slackey', cursive", color: '#ff440e', fontSize: '20px' },
+  'everyday-conversation': { label: ['everyday', 'conversation'], font: "'Spicy Rice', cursive", color: '#0f973d', fontSize: '20px', sub: 'Questions to build genuine connection', subColor: '#181b25' },
+  'charades': { label: 'Charades', font: "'Slackey', cursive", color: '#e8e6e3', fontSize: '26px' },
+  'strangers': { label: "WE'RE NOT REALLY STRANGERS", font: "'Satoshi', sans-serif", color: '#e8e6e3', fontSize: '11px' },
+  'never-have-i-ever': { label: ['NEVER', 'HAVE I', 'EVER'], font: "'Single Day', cursive", color: '#bb33ff', fontSize: '24px' },
+  'reconnect': { label: ["Let's", 'Reconnect'], font: "'Luckiest Guy', cursive", color: '#d22f49', fontSize: '20px' },
+  'finger-down': { label: ['PUT A', 'FINGER', 'DOWN'], font: "'Luckiest Guy', cursive", color: '#ed8251', fontSize: '18px' },
+  'take-a-sip': { label: ['TAKE A', 'SIP IF', '...'], font: "'Gasoek One', sans-serif", color: '#eb5e28', fontSize: '24px' },
+  'sip-or-spill': { label: ['Sip or', 'Spill'], font: "'Freckle Face', cursive", color: '#ffd7f7', fontSize: '28px' },
+  'you-laugh': { label: '', font: '', color: '', hasEmbeddedText: true },
+  'do-or-drink': { label: ['DO', 'OR', 'DRINK'], font: "'Fredericka the Great', serif", color: '#5228eb', fontSize: '24px' },
+}
+
+function MobileCard({ card, onClick, isExiting, staggerIndex }: { card: CardDef; onClick?: () => void; isExiting: boolean; staggerIndex: number }) {
+  const mobileSvg = MOBILE_CARDS[card.id]
+  const style = MOBILE_CARD_STYLES[card.id]
+
+  const renderLabel = () => {
+    if (!style || !style.label) return null
+    const lines = Array.isArray(style.label) ? style.label : [style.label]
+    return (
+      <div style={{
+        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: '12px',
+        pointerEvents: 'none', textAlign: 'center', gap: '2px',
+      }}>
+        {lines.map((line, i) => (
+          <span key={i} style={{
+            fontFamily: style.font, fontSize: style.fontSize || '20px',
+            color: style.color, lineHeight: 1.1, fontWeight: 500,
+          }}>{line}</span>
+        ))}
+        {style.sub && (
+          <span style={{
+            fontFamily: "'Inter Tight', sans-serif", fontSize: '8px',
+            color: style.subColor || style.color, marginTop: '6px', fontWeight: 300,
+          }}>{style.sub}</span>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className="browse-mobile-card"
+      onClick={onClick}
+      style={{
+        cursor: onClick ? 'pointer' : 'default',
+        position: 'relative',
+        animation: isExiting
+          ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
+          : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${staggerIndex * 30}ms both`,
+      }}
+    >
+      {mobileSvg ? (
+        <>
+          <img src={mobileSvg} alt="" className="browse-mobile-card-img" style={{ position: 'relative', zIndex: 1 }} />
+          {!style?.hasEmbeddedText && renderLabel()}
+        </>
+      ) : (
+        <div style={{ width: '100%', height: '100%' }}>{card.render(onClick)}</div>
+      )}
+    </div>
+  )
+}
+
+export function BrowseCardGrid(props: BrowseGridProps) {
+  const { filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks } = props
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
   const prevFilter = useRef<Category>('all')
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (prevFilter.current === filter) return
@@ -316,24 +451,44 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
       ? new Set(allCards.map(c => c.id))
       : new Set(allCards.filter(c => c.categories.includes(filter)).map(c => c.id))
 
-    // Mark cards that are leaving
     const leaving = new Set([...visibleIds].filter(id => !nextVisible.has(id)))
     setExitingIds(leaving)
 
-    // After exit animation, update visible set
     setTimeout(() => {
       setVisibleIds(nextVisible)
       setExitingIds(new Set())
     }, 300)
   }, [filter])
 
-  // Re-stagger entering cards
   const [staggerKey, setStaggerKey] = useState(0)
   useEffect(() => { setStaggerKey(k => k + 1) }, [filter])
 
   const filtered = allCards.filter(c => visibleIds.has(c.id))
 
-  // Split into rows of 4 — space-between per row preserves exact card sizes
+  if (isMobile) {
+    let cardIdx = 0
+    return (
+      <div className="browse-mobile-grid">
+        {filtered.map((card) => {
+          const i = cardIdx++
+          const isExiting = exitingIds.has(card.id)
+          const onClick = getCardOnClick(card, props)
+          const mobileSvg = MOBILE_CARDS[card.id]
+
+          return (
+            <MobileCard
+              key={`${card.id}-${staggerKey}`}
+              card={card}
+              onClick={onClick}
+              isExiting={isExiting}
+              staggerIndex={i}
+            />
+          )
+        })}
+      </div>
+    )
+  }
+
   const rows: typeof filtered[] = []
   for (let i = 0; i < filtered.length; i += 4) rows.push(filtered.slice(i, i + 4))
 
@@ -345,21 +500,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
           {row.map((card) => {
             const i = cardIdx++
             const isExiting = exitingIds.has(card.id)
-            const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
-                           : card.id === 'spicy-starters' ? onPlaySpicyStarters
-                           : card.id === 'late-night-talks' ? onPlayLateNightTalks
-                           : card.id === 'dinner-table' ? onPlayDinnerTable
-                           : card.id === 'you-laugh' ? onPlayYouLaugh
-                           : card.id === 'never-have-i-ever' ? onPlayNeverHaveIEver
-                           : card.id === 'charades' ? onPlayCharades
-                           : card.id === 'reconnect' ? onPlayReconnect
-                           : card.id === 'everyday-conversation' ? onPlayEveryday
-                           : card.id === 'strangers' ? onPlayWNRS
-                           : card.id === 'finger-down' ? onPlayFingerDown
-                           : card.id === 'take-a-sip' ? onPlayTakeASip
-                           : card.id === 'sip-or-spill' ? onPlaySipOrSpill
-                           : card.id === 'do-or-drink' ? onPlayDoOrDrink
-                           : undefined
+            const onClick = getCardOnClick(card, props)
 
             return (
               <div

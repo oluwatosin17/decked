@@ -1,16 +1,43 @@
+import { useState, useEffect } from 'react'
 import { HomeCardRows } from '../components/GameCardGrid'
-// React JSX handled by vite/react plugin — no explicit import needed
 
-/* ── Figma-hosted assets ─────────────────────────────────────────── */
-// Hero card images (permanently hosted on Cloudinary — see /decked folder)
 const HERO_RED_IMG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-red'
 const HERO_CREAM_IMG  = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-cream'
 const HERO_BLUE_IMG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-blue'
 const HERO_GREEN_IMG  = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-green'
-// Footer social icons
 const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
+
+const MOBILE_FEATURED_CARDS: {
+  id: string; svg: string; action: 'onPlayTruthOrDare' | 'onPlaySpicyStarters' | 'onPlayLateNightTalks' | 'onBrowse'
+  label?: string | string[]; font?: string; color?: string; fontSize?: string; sub?: string; subColor?: string
+  hasEmbeddedText?: boolean
+}[] = [
+  { id: 'truth-or-dare', svg: '/icons/truth-or-dare-mobile.svg', action: 'onPlayTruthOrDare',
+    label: ['TRUTH', 'OR DARE'], font: "'Satoshi', sans-serif", color: '#000', fontSize: '20px', sub: 'FOR COUPLES', subColor: '#181b25' },
+  { id: 'spicy-starters', svg: '/icons/spicy-starters-mobile.svg', action: 'onPlaySpicyStarters',
+    label: ['spicy', 'starters'], font: "'Stick', sans-serif", color: '#fff', fontSize: '24px' },
+  { id: 'late-night-talks', svg: '/icons/late-night-talks-mobile.svg', action: 'onPlayLateNightTalks',
+    label: ['Late', 'Night', 'Talks'], font: "'Slackey', cursive", color: '#ff440e', fontSize: '20px' },
+  { id: 'charades', svg: '/icons/charades-mobile.svg', action: 'onBrowse',
+    label: 'Charades', font: "'Slackey', cursive", color: '#e8e6e3', fontSize: '26px' },
+  { id: 'never-have-i-ever', svg: '/icons/never-have-i-ever-mobile.svg', action: 'onBrowse',
+    label: ['NEVER', 'HAVE I', 'EVER'], font: "'Single Day', cursive", color: '#bb33ff', fontSize: '24px' },
+  { id: 'you-laugh', svg: '/icons/you-laugh-you-are-out-mobile.svg', action: 'onBrowse', hasEmbeddedText: true },
+]
+
+function useIsMobile(bp = 768) {
+  const [m, setM] = useState(typeof window !== 'undefined' ? window.innerWidth <= bp : false)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp}px)`)
+    const h = (e: MediaQueryListEvent) => setM(e.matches)
+    setM(mq.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [bp])
+  return m
+}
 
 interface Props {
   onPlayTruthOrDare: () => void
@@ -19,26 +46,104 @@ interface Props {
   onBrowse: () => void
 }
 
-/* ── Main component ───────────────────────────────────────────────── */
 export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }: Props) {
+  const isMobile = useIsMobile()
+  const actions = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }
+
+  if (isMobile) {
+    return (
+      <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+        {/* Mobile nav */}
+        <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px', padding: '0 16px', position: 'relative', zIndex: 20 }}>
+          <span className="font-anton" style={{ color: '#fff', fontSize: '22px', letterSpacing: '0.56px', fontWeight: 400 }}>DECKED</span>
+        </nav>
+
+        {/* Mobile hero */}
+        <div className="screen-enter" style={{ padding: '24px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', textAlign: 'center' }}>
+          <h1 className="font-spicy" style={{ color: 'white', fontSize: '42px', lineHeight: 1, margin: 0 }}>
+            The party starts here
+          </h1>
+          <p className="font-satoshi" style={{ color: '#d9dbde', fontSize: '16px', lineHeight: '20px', margin: 0 }}>
+            Pick a deck, pass the phone, and let things get interesting.
+          </p>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="font-staatliches" onClick={onPlayTruthOrDare} style={{
+              background: '#dc2827', color: 'white', fontSize: '14px',
+              padding: '10px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+              boxShadow: '0 8px 12px rgba(220,40,39,0.25)',
+            }}>QUICK PLAY</button>
+            <button className="font-staatliches" onClick={onBrowse} style={{
+              background: 'transparent', color: 'white', fontSize: '14px',
+              padding: '10px 16px', borderRadius: '999px', border: '1px solid white', cursor: 'pointer',
+            }}>BROWSE GAMES</button>
+          </div>
+        </div>
+
+        {/* Mobile featured cards grid */}
+        <section style={{ padding: '32px 0 24px' }}>
+          <h2 className="font-spicy" style={{ color: 'white', fontSize: '32px', margin: '0 0 16px 16px' }}>Pick your vibe.</h2>
+          <div className="home-mobile-grid">
+            {MOBILE_FEATURED_CARDS.map((card, i) => {
+              const lines = Array.isArray(card.label) ? card.label : card.label ? [card.label] : []
+              return (
+                <div
+                  key={card.id}
+                  className="home-mobile-card"
+                  onClick={actions[card.action]}
+                  style={{ animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both`, position: 'relative' }}
+                >
+                  <img src={card.svg} alt="" style={{ position: 'relative', zIndex: 1 }} />
+                  {!card.hasEmbeddedText && lines.length > 0 && (
+                    <div style={{
+                      position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+                      alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: '12px',
+                      pointerEvents: 'none', textAlign: 'center', gap: '2px',
+                    }}>
+                      {lines.map((line, j) => (
+                        <span key={j} style={{
+                          fontFamily: card.font, fontSize: card.fontSize,
+                          color: card.color, lineHeight: 1.1, fontWeight: 500,
+                        }}>{line}</span>
+                      ))}
+                      {card.sub && (
+                        <span style={{
+                          fontFamily: "'Inter Tight', sans-serif", fontSize: '8px',
+                          color: card.subColor || card.color, marginTop: '6px', fontWeight: 300,
+                        }}>{card.sub}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+          <div style={{ padding: '16px 16px 0', textAlign: 'center' }}>
+            <button className="font-staatliches game-btn" onClick={onBrowse} style={{
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+              color: '#fff', fontSize: '14px', padding: '10px 24px', borderRadius: '999px', cursor: 'pointer',
+              width: '100%', letterSpacing: '0.04em',
+            }}>VIEW ALL GAMES</button>
+          </div>
+        </section>
+
+        {/* Mobile footer */}
+        <footer style={{ marginTop: 'auto', background: 'rgba(5,5,12,0.80)', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <p className="font-anton" style={{ color: '#fff', fontSize: '24px', margin: 0 }}>DECKED</p>
+            <p className="font-inter" style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.5, margin: 0 }}>
+              Pick a deck, pass the phone, and let the chaos begin.
+            </p>
+          </div>
+          <div style={{ height: '1px', background: '#212326' }} />
+          <p style={{ color: '#9ca3af', fontSize: '12px', margin: 0, fontFamily: 'Inter, sans-serif' }}>© 2026 DECKED. All rights reserved.</p>
+        </footer>
+      </div>
+    )
+  }
+
   return (
     <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
-      {/* ══════════════════════════════════════════════
-          HERO SECTION  (943px tall)
-      ══════════════════════════════════════════════ */}
-      <style>{`
-        @media (max-width: 768px) {
-          .home-hero { height: auto !important; min-height: 100vh; padding-bottom: 40px; }
-          .home-nav { padding: 0 16px !important; height: 56px !important; }
-          .home-nav-links { display: none !important; }
-          .home-hero-copy { position: relative !important; top: auto !important; left: auto !important; transform: none !important; width: 100% !important; padding: 40px 20px 0 !important; }
-          .home-hero-cards { display: none !important; }
-          .home-cards-section { padding: 32px 16px 48px !important; }
-          .home-cards-section > div { width: 100% !important; }
-          .home-footer { padding: 24px 16px !important; }
-        }
-      `}</style>
       <section className="home-hero relative w-full overflow-hidden" style={{ height: '943px' }}>
 
         {/* Nav */}

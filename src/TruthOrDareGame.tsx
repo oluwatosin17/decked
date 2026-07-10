@@ -345,6 +345,8 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
   const [cardState, setCardState] = useState<CardState>('picking')
   const [flipPhase, setFlipPhase] = useState<'idle' | 'out' | 'in'>('idle')
   const flippingRef = useRef(false)
+  const { wrapperStyle: splitWrapperStyle, cardStyle: splitCardStyle } = useScaledCard(454, 457)
+  const { wrapperStyle: revealWrapperStyle, cardStyle: revealCardStyle } = useScaledCard(454, 400)
 
   const currentPlayer = players.length > 0 ? players[cardIndex % players.length] : null
 
@@ -491,11 +493,12 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         )}
 
         {/* Split card */}
+        <div style={splitWrapperStyle}>
         <div
           className={`tod-split-card tod-card-enter game-card${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
           style={{
+            ...splitCardStyle,
             position: 'relative', zIndex: 2,
-            width: '454px', height: '457px',
             borderRadius: '20px',
             overflow: 'hidden',
             boxShadow: '0 32px 80px rgba(220,40,39,0.35)',
@@ -541,6 +544,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
             <img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px' }} />
             <img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px', transform: 'scaleY(-1)' }} />
           </div>
+        </div>
         </div>
 
         {/* SKIP THIS CARD */}
@@ -592,12 +596,14 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         </div>
       )}
 
+      <div style={revealWrapperStyle}>
       <div
         className={`tod-card-enter game-card${flipPhase === 'out' ? ' tod-flip-out' : flipPhase === 'in' ? ' tod-flip-in' : ''}`}
         style={{
+          ...revealCardStyle,
           position: 'relative', zIndex: 2,
           background: cardBg, borderRadius: '20px',
-          width: '454px', minHeight: '400px',
+          minHeight: '400px',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           padding: '52px 48px 44px', gap: '24px',
@@ -618,6 +624,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
             <img src={HEART_GAME} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} />
           </div>
         )}
+      </div>
       </div>
 
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>

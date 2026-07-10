@@ -49,7 +49,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
     <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
 
       {/* ── Sticky nav ── */}
-      <nav style={{
+      <nav className="browse-nav" style={{
         background: 'rgba(12,12,14,0.92)', backdropFilter: 'blur(8px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '64px', flexShrink: 0,
@@ -76,7 +76,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             ))}
           </div>
 
-          <button className="game-btn-primary" onClick={onPlayTruthOrDare} style={{
+          <button className="game-btn-primary browse-play-btn" onClick={onPlayTruthOrDare} style={{
             background: '#dc2827', border: 'none', borderRadius: '999px',
             padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '8px',
           }}>
@@ -90,29 +90,22 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
 
       <style>{`
         @media (max-width: 768px) {
+          .browse-nav { padding: 0 16px !important; height: 56px !important; }
+          .browse-play-btn { padding: 8px 14px !important; }
+          .browse-play-btn span { font-size: 14px !important; }
+        }
+      `}</style>
+
+      <style>{`
+        @media (max-width: 768px) {
           .browse-nav-links { display: none !important; }
-          .browse-main { padding: 24px 16px 40px !important; }
+          .browse-main { padding: 20px 16px 40px !important; }
           .browse-content { width: 100% !important; }
-          .browse-card-row {
-            flex-wrap: wrap !important;
-            gap: 12px !important;
-            justify-content: center !important;
-          }
-          .browse-card-wrap {
-            width: calc(50% - 6px) !important;
-            height: auto !important;
-            aspect-ratio: 1 / 1.2;
-          }
-          .browse-card-wrap .card-tile {
-            border-radius: 10px !important;
-          }
+          .browse-category-pills { gap: 8px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; flex-wrap: nowrap !important; }
+          .browse-category-pills::-webkit-scrollbar { display: none; }
         }
         @media (max-width: 480px) {
           .browse-main { padding: 16px 12px 32px !important; }
-          .browse-card-row { gap: 8px !important; }
-          .browse-card-wrap {
-            width: calc(50% - 4px) !important;
-          }
         }
       `}</style>
 
@@ -121,7 +114,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
         <div className="browse-content" style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
 
           {/* Category filter pills — matches Figma 764-33446 */}
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <div className="browse-category-pills" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
             {CATEGORIES.map(cat => {
               const isActive = active === cat.id
               return (
@@ -176,7 +169,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
 
       {/* ── Footer ── */}
       <footer style={{ background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <div className="mobile-footer-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px' }}>
             <p className="font-anton" style={{ color: '#fff', fontSize: '32px', margin: 0 }}>DECKED</p>
             <p className="font-inter" style={{ color: '#9ca3af', fontSize: '14px', lineHeight: 1.5, margin: 0 }}>
@@ -190,7 +183,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
           </div>
         </div>
         <div style={{ height: '1px', background: '#212326' }} />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: "'Inter', sans-serif", fontSize: '13px' }}>
+        <div className="mobile-footer-bottom" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: "'Inter', sans-serif", fontSize: '13px' }}>
           <p style={{ color: '#9ca3af', margin: 0 }}>© 2026 DECKED. All rights reserved.</p>
           <div style={{ display: 'flex', gap: '24px' }}>
             {['Privacy', 'Terms', 'Cookie'].map(l => (
