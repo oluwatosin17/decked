@@ -13,8 +13,8 @@ export default function DeckSize({ onBack, onNext, nextLabel = 'START THE GAME' 
   const valid = !isNaN(parsed) && parsed > 0 && parsed <= 200
 
   return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>
+    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: 'clamp(20px, 4vw, 40px)' }}>
+      <div style={{ width: '100%', maxWidth: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 'clamp(24px, 4vw, 40px)', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
           <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>DECK SIZE</h2>
           <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>How many cards do you want to play?</p>

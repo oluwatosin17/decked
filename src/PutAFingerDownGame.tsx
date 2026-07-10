@@ -240,7 +240,7 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   background: isSel ? '#1e1e22' : '#111113',
-                  border: '1px solid', borderColor: isSel ? '#ed825144' : 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', height: '56px', cursor: 'pointer',
                   transition: 'background 0.18s, border-color 0.18s, transform 0.15s',
                   animation: `screen-enter 0.4s var(--ease-out) ${0.07 + Math.floor(i / 2) * 0.06}s both`,
@@ -506,7 +506,7 @@ export default function PutAFingerDownGame({ onClose }: { onClose: () => void })
   const startGame = (custom: string[]) => {
     setCustomCards(custom)
     const generated = getPrompts(categories)
-    const allPrompts = [...custom, ...generated]
+    const allPrompts = shuffle([...custom, ...generated])
     const trimmed = totalCards > 0 ? allPrompts.slice(0, totalCards) : allPrompts
     setPrompts(trimmed)
     if (totalCards > trimmed.length) setTotalCards(trimmed.length)
@@ -517,7 +517,7 @@ export default function PutAFingerDownGame({ onClose }: { onClose: () => void })
 
   const handlePlayAgain = useCallback(() => {
     const generated = getPrompts(categories)
-    const allPrompts = [...customCards, ...generated]
+    const allPrompts = shuffle([...customCards, ...generated])
     const trimmed = totalCards > 0 ? allPrompts.slice(0, totalCards) : allPrompts
     setPrompts(trimmed)
     setCardIndex(0)

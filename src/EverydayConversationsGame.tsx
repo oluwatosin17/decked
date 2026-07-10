@@ -393,7 +393,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
   const startGame = (custom: string[]) => {
     setCustomCards(custom)
     const generated = getQuestions(theme)
-    const allQuestions = [...custom, ...generated]
+    const allQuestions = shuffle([...custom, ...generated])
     const trimmed = totalCards > 0 ? allQuestions.slice(0, totalCards) : allQuestions
     setQuestions(trimmed)
     if (totalCards > trimmed.length) setTotalCards(trimmed.length)
@@ -404,7 +404,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
 
   const handlePlayAgain = useCallback(() => {
     const generated = getQuestions(theme)
-    const allQuestions = [...customCards, ...generated]
+    const allQuestions = shuffle([...customCards, ...generated])
     const trimmed = totalCards > 0 ? allQuestions.slice(0, totalCards) : allQuestions
     setQuestions(trimmed)
     setCardIndex(0)

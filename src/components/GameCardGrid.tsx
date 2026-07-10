@@ -182,17 +182,17 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'take-a-sip', categories: ['drinking'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#ffecd1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'take-a-sip', categories: ['drinking'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ffecd1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <p className="font-gasoek" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 112.54px)', width: '208.8px', fontSize: '51.774px', color: '#eb5e28', textAlign: 'center', lineHeight: 1.1 }}>TAKE A SIP IF ...</p>
       </div>
     ),
   },
   {
-    id: 'sip-or-spill', categories: ['drinking', 'party-games'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#ffd5f4', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'sip-or-spill', categories: ['drinking', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ffd5f4', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: '263.486px', height: '333.538px', background: '#fb3757', borderRadius: '4.519px', overflow: 'hidden' }}>
           <p className="font-freckle" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 89.94px)', width: '242.842px', fontSize: '58.567px', color: '#ffd7f7', textAlign: 'center', lineHeight: 1.1 }}>Sip or Spill</p>
         </div>
@@ -208,9 +208,9 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'do-or-drink', categories: ['drinking'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', background: '#d1ffd5', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'do-or-drink', categories: ['drinking'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#d1ffd5', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 96.27px)', width: '208.8px', textAlign: 'center' }}>
           <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>DO</p>
           <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>OR</p>
@@ -297,9 +297,12 @@ interface BrowseGridProps {
   onPlayEveryday?: () => void
   onPlayWNRS?: () => void
   onPlayFingerDown?: () => void
+  onPlayTakeASip?: () => void
+  onPlaySipOrSpill?: () => void
+  onPlayDoOrDrink?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown }: BrowseGridProps) {
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink }: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
@@ -330,17 +333,26 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
 
   const filtered = allCards.filter(c => visibleIds.has(c.id))
 
-  // Split into rows of 4 — space-between per row preserves exact card sizes
-  const rows: typeof filtered[] = []
-  for (let i = 0; i < filtered.length; i += 4) rows.push(filtered.slice(i, i + 4))
-
-  let cardIdx = 0
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-      {rows.map((row, rowIdx) => (
-        <div key={rowIdx} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          {row.map((card) => {
-            const i = cardIdx++
+    <>
+      <style>{`
+        .browse-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          gap: 20px;
+        }
+        @media (min-width: 1200px) {
+          .browse-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 600px) {
+          .browse-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
+        @media (max-width: 380px) {
+          .browse-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
+      <div className="browse-grid">
+        {filtered.map((card, i) => {
             const isExiting = exitingIds.has(card.id)
             const onClick = card.id === 'truth-or-dare' ? onPlayTruthOrDare
                            : card.id === 'spicy-starters' ? onPlaySpicyStarters
@@ -353,6 +365,9 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                            : card.id === 'everyday-conversation' ? onPlayEveryday
                            : card.id === 'strangers' ? onPlayWNRS
                            : card.id === 'finger-down' ? onPlayFingerDown
+                           : card.id === 'take-a-sip' ? onPlayTakeASip
+                           : card.id === 'sip-or-spill' ? onPlaySipOrSpill
+                           : card.id === 'do-or-drink' ? onPlayDoOrDrink
                            : undefined
 
             return (
@@ -360,9 +375,8 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                 key={`${card.id}-${staggerKey}`}
                 className="browse-card-wrap"
                 style={{
-                  width: `${card.w}px`,
-                  height: `${card.h}px`,
-                  flexShrink: 0,
+                  aspectRatio: `${card.w} / ${card.h}`,
+                  width: '100%',
                   animation: isExiting
                     ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
                     : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 40}ms both`,
@@ -375,8 +389,7 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
               </div>
             )
           })}
-        </div>
-      ))}
-    </div>
+      </div>
+    </>
   )
 }

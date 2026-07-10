@@ -37,9 +37,12 @@ interface Props {
   onPlayEveryday?: () => void
   onPlayWNRS?: () => void
   onPlayFingerDown?: () => void
+  onPlayTakeASip?: () => void
+  onPlaySipOrSpill?: () => void
+  onPlayDoOrDrink?: () => void
 }
 
-export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown }: Props) {
+export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink }: Props) {
   const [active, setActive] = useState<Category>('all')
 
   return (
@@ -49,19 +52,19 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
       <nav style={{
         background: 'rgba(12,12,14,0.92)', backdropFilter: 'blur(8px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 60px', height: '64px', flexShrink: 0,
+        padding: '0 clamp(16px, 4vw, 60px)', height: '64px', flexShrink: 0,
         position: 'sticky', top: 0, zIndex: 50,
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
         <button onClick={onHome} className="font-anton game-btn" style={{
           background: 'none', border: 'none', color: '#fff',
-          fontSize: '28px', letterSpacing: '0.56px', cursor: 'pointer', padding: 0,
+          fontSize: 'clamp(22px, 3vw, 28px)', letterSpacing: '0.56px', cursor: 'pointer', padding: 0,
         }}>
           DECKED
         </button>
 
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+          <div className="browse-nav-links" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
             {['Browse Games', 'How to Play', 'About'].map(label => (
               <span key={label} className="font-anton" style={{
                 fontSize: '16px',
@@ -85,9 +88,15 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
         </div>
       </nav>
 
+      <style>{`
+        @media (max-width: 640px) {
+          .browse-nav-links { display: none !important; }
+        }
+      `}</style>
+
       {/* ── Main ── */}
-      <main className="screen-enter" style={{ flex: 1, padding: '48px 60px 80px' }}>
-        <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
+      <main className="screen-enter" style={{ flex: 1, padding: 'clamp(24px, 4vw, 48px) clamp(16px, 4vw, 60px) clamp(40px, 6vw, 80px)' }}>
+        <div style={{ width: '100%', maxWidth: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
 
           {/* Category filter pills — matches Figma 764-33446 */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -136,6 +145,9 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             onPlayEveryday={onPlayEveryday}
             onPlayWNRS={onPlayWNRS}
             onPlayFingerDown={onPlayFingerDown}
+            onPlayTakeASip={onPlayTakeASip}
+            onPlaySipOrSpill={onPlaySipOrSpill}
+            onPlayDoOrDrink={onPlayDoOrDrink}
           />
         </div>
       </main>

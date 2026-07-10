@@ -13,6 +13,9 @@ import LetsReconnectGame from './LetsReconnectGame'
 import EverydayConversationsGame from './EverydayConversationsGame'
 import WNRSGame from './WNRSGame'
 import PutAFingerDownGame from './PutAFingerDownGame'
+import TakeASipGame from './TakeASipGame'
+import SipOrSpillGame from './SipOrSpillGame'
+import DoOrDrinkGame from './DoOrDrinkGame'
 
 type Screen =
   | 'home' | 'browse'
@@ -23,6 +26,7 @@ type Screen =
   | 'charades'
   | 'truth-or-dare' | 'spicy-starters'
   | 'lets-reconnect' | 'everyday-conversations' | 'wnrs' | 'put-a-finger-down'
+  | 'take-a-sip' | 'sip-or-spill' | 'do-or-drink'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
@@ -103,6 +107,21 @@ export default function App() {
     return <PutAFingerDownGame onClose={() => setScreen('browse')} />
   }
 
+  /* ── Take a Sip ── */
+  if (screen === 'take-a-sip') {
+    return <TakeASipGame onClose={() => setScreen('browse')} />
+  }
+
+  /* ── Sip or Spill ── */
+  if (screen === 'sip-or-spill') {
+    return <SipOrSpillGame onClose={() => setScreen('browse')} />
+  }
+
+  /* ── Do or Drink ── */
+  if (screen === 'do-or-drink') {
+    return <DoOrDrinkGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
@@ -119,6 +138,9 @@ export default function App() {
         onPlayEveryday={() => setScreen('everyday-conversations')}
         onPlayWNRS={() => setScreen('wnrs')}
         onPlayFingerDown={() => setScreen('put-a-finger-down')}
+        onPlayTakeASip={() => setScreen('take-a-sip')}
+        onPlaySipOrSpill={() => setScreen('sip-or-spill')}
+        onPlayDoOrDrink={() => setScreen('do-or-drink')}
       />
     )
   }
