@@ -17,39 +17,164 @@ const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
 
-/* ─── Questions ─── */
-const QUESTIONS = [
-  "If you had to describe yourself using only three words, what would they be?",
-  "What's the best meal you've ever had and why was it special?",
-  "What's one thing you're proud of that you don't talk about enough?",
-  "If you could have dinner with anyone in history, who would it be?",
-  "What's a tradition from your childhood you wish you'd kept?",
-  "What does your ideal Sunday look like?",
-  "What's the most important lesson you've learned this year?",
-  "If you could live anywhere in the world, where would you choose?",
-  "What's a small thing that makes your day better?",
-  "What hobby or skill have you always wanted to learn but haven't yet?",
-  "What's the most adventurous thing you've ever eaten?",
-  "What's something that made you laugh recently?",
-  "What's a book, film, or show that changed the way you see the world?",
-  "Who is someone who has had a big influence on your life?",
-  "What's one thing on your bucket list?",
-  "If you could instantly become an expert in one thing, what would it be?",
-  "What's your earliest happy memory?",
-  "What does home mean to you?",
-  "What's something you're grateful for that you don't mention often?",
-  "If you could go back and give your younger self one piece of advice, what would it be?",
-  "What's the best advice you've ever received?",
-  "What's something you believe that most people disagree with?",
-  "What's a dream you've never told many people about?",
-  "What moment in your life are you most proud of?",
-  "If money were no object, how would you spend your time?",
-  "What's the kindest thing a stranger has done for you?",
-  "What makes a good friendship?",
-  "What's the funniest thing that's happened at a family gathering?",
-  "What's something you've changed your mind about as you've gotten older?",
-  "If this were your last meal, what would you want on the table?",
-]
+/* ─── Questions by mode ─── */
+const QUESTIONS_BY_MODE: Record<string, string[]> = {
+  'date-night': [
+    "What's your favourite memory from our first few dates?",
+    "What's something I do that always makes you smile?",
+    "If you could relive one moment together, which would it be?",
+    "What does your ideal date night look like?",
+    "What's something you've been meaning to tell me?",
+    "What's the most romantic thing you've ever experienced?",
+    "What made you fall for me?",
+    "What's a dream you'd love us to chase together?",
+    "What's one thing about me that still surprises you?",
+    "What's a trip you'd love us to take?",
+    "What's the best meal we've ever shared?",
+    "What does love feel like to you?",
+    "What makes you feel most connected to me?",
+    "What's something you appreciate about me that I might not know?",
+    "If we could do anything right now, no limits, what would it be?",
+  ],
+  'friends-night': [
+    "What's your go-to comfort food after a long day?",
+    "What's the funniest thing that's happened to you this week?",
+    "If you could have dinner with any person alive, who?",
+    "What's a weird food combination you secretly love?",
+    "What's the best meal you've ever had?",
+    "What's a hobby you'd love to try together?",
+    "What's the most adventurous thing you've ever eaten?",
+    "If we opened a restaurant together, what kind would it be?",
+    "What's a recipe you swear by?",
+    "What's the worst thing you've ever cooked?",
+    "What's a childhood snack you still crave?",
+    "If this were your last meal, what would be on the table?",
+    "What food reminds you of home?",
+    "What's the most interesting cuisine you've tried?",
+    "What's the best restaurant you've ever been to?",
+  ],
+  family: [
+    "What's a family recipe that means a lot to you?",
+    "What's your earliest happy memory around the dinner table?",
+    "What's a tradition you'd love to start or bring back?",
+    "What does home-cooked food mean to you?",
+    "What's the funniest thing that's happened at a family gathering?",
+    "If you could cook for anyone, living or dead, who?",
+    "What's a lesson you learned from family meals growing up?",
+    "What's a value you want to pass on through family dinners?",
+    "What's your most cherished family tradition?",
+    "What's a story about our family that always gets told at dinner?",
+    "What does home mean to you beyond the physical place?",
+    "Who's the best cook in our family and why?",
+    "What's a meal that always brings the family together?",
+    "What holiday meal do you look forward to most?",
+    "What would you want on the table for your birthday dinner?",
+  ],
+  team: [
+    "What's the best team meal or outing you've been part of?",
+    "If our team opened a restaurant, what would it serve?",
+    "What's a hidden talent you have outside of work?",
+    "What motivates you that most colleagues wouldn't guess?",
+    "What's the best career advice you've ever received?",
+    "If you could change one thing about workplace culture, what?",
+    "What's a professional accomplishment you're proud of?",
+    "How do you recharge after a tough work week?",
+    "What's something you wish your team knew about you?",
+    "If money was no object, what would you do for a living?",
+    "What's the most interesting project you've worked on?",
+    "What does good leadership look like to you?",
+    "What's a skill you want to develop?",
+    "When do you feel most creative?",
+    "What's a misconception people have about your role?",
+  ],
+  'holiday-gathering': [
+    "What's your favourite holiday tradition?",
+    "What's the best gift you've ever given or received?",
+    "What does the holiday season mean to you?",
+    "What's your favourite holiday memory?",
+    "If you could celebrate any holiday anywhere, where?",
+    "What makes a holiday gathering special to you?",
+    "What's the best holiday meal you've ever had?",
+    "What's a new tradition you'd love to start?",
+    "What's the funniest holiday moment you remember?",
+    "What are you most grateful for this year?",
+    "Who makes the holidays special for you?",
+    "What's a holiday song that always gets you in the mood?",
+    "What does home feel like during the holidays?",
+    "What's a holiday you'd love to experience in another culture?",
+    "What would your perfect holiday look like?",
+  ],
+  birthday: [
+    "What's the best birthday you've ever had?",
+    "What's a birthday wish you've never told anyone?",
+    "What's the most thoughtful birthday gift you've received?",
+    "If you could celebrate your birthday anywhere, where?",
+    "What's a birthday tradition you love?",
+    "What's a year of your life you'd love to revisit?",
+    "What's the best birthday surprise you've experienced?",
+    "What does another year of life mean to you?",
+    "What's a lesson this past year taught you?",
+    "If you could invite anyone to your birthday dinner, who?",
+    "What's a goal you have for the year ahead?",
+    "What are you most proud of from this past year?",
+    "What's something you want to do before your next birthday?",
+    "What makes you feel celebrated?",
+    "What advice would you give to your younger self?",
+  ],
+  everyday: [
+    "If you had to describe yourself using only three words, what would they be?",
+    "What's the best meal you've ever had and why was it special?",
+    "What's one thing you're proud of that you don't talk about enough?",
+    "What does your ideal Sunday look like?",
+    "What's the most important lesson you've learned this year?",
+    "What's a small thing that makes your day better?",
+    "What hobby have you always wanted to try?",
+    "What's something that made you laugh recently?",
+    "What's a book, film, or show that changed how you see the world?",
+    "What's one thing on your bucket list?",
+    "What's your earliest happy memory?",
+    "What are you grateful for that you don't mention often?",
+    "What makes a good conversation?",
+    "What's something you've changed your mind about?",
+    "If this were your last meal, what would you want?",
+  ],
+  'random-mix': [
+    "If you had to describe yourself using only three words, what would they be?",
+    "What's the best meal you've ever had and why was it special?",
+    "What's one thing you're proud of that you don't talk about enough?",
+    "If you could have dinner with anyone in history, who would it be?",
+    "What's a tradition from your childhood you wish you'd kept?",
+    "What does your ideal Sunday look like?",
+    "What's the most important lesson you've learned this year?",
+    "If you could live anywhere in the world, where would you choose?",
+    "What's a small thing that makes your day better?",
+    "What hobby or skill have you always wanted to learn but haven't yet?",
+    "What's the most adventurous thing you've ever eaten?",
+    "What's something that made you laugh recently?",
+    "What's a book, film, or show that changed the way you see the world?",
+    "Who is someone who has had a big influence on your life?",
+    "What's one thing on your bucket list?",
+    "If you could instantly become an expert in one thing, what would it be?",
+    "What's your earliest happy memory?",
+    "What does home mean to you?",
+    "What's something you're grateful for that you don't mention often?",
+    "If you could go back and give your younger self one piece of advice, what would it be?",
+    "What's the best advice you've ever received?",
+    "What's something you believe that most people disagree with?",
+    "What's a dream you've never told many people about?",
+    "What moment in your life are you most proud of?",
+    "If money were no object, how would you spend your time?",
+    "What's the kindest thing a stranger has done for you?",
+    "What makes a good friendship?",
+    "What's the funniest thing that's happened at a family gathering?",
+    "What's something you've changed your mind about as you've gotten older?",
+    "If this were your last meal, what would you want on the table?",
+  ],
+}
+
+function getQuestionsForMode(mode: string): string[] {
+  return QUESTIONS_BY_MODE[mode] ?? QUESTIONS_BY_MODE['random-mix']
+}
 
 /* ─── Shared Nav ─── */
 function GameNav({ onBack }: { onBack: () => void }) {
@@ -338,14 +463,14 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 /* ─── Root ─── */
 type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game'
 
-export default function DinnerTableGame({ onClose }: { onClose: () => void }) {
+export default function DinnerTableGame({ mode = 'random-mix', onClose }: { mode?: string; onClose: () => void }) {
   const [step,        setStep]        = useState<Step>('playerSetup')
   const [players,     setPlayers]     = useState<Player[]>([])
   const [totalCards,  setTotalCards]  = useState(0)
   const [cardIndex,   setCardIndex]   = useState(0)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [skipCount,   setSkipCount]   = useState(0)
-  const [questions,   setQuestions]   = useState(() => shuffle(QUESTIONS))
+  const [questions,   setQuestions]   = useState(() => shuffle(getQuestionsForMode(mode)))
 
   const currentPlayer  = players.length > 0 ? players[playerIndex % players.length] : null
   const currentQuestion = questions[cardIndex % questions.length]
@@ -368,8 +493,8 @@ export default function DinnerTableGame({ onClose }: { onClose: () => void }) {
 
   const handlePlayAgain = useCallback(() => {
     setCardIndex(0); setPlayerIndex(0); setSkipCount(0)
-    setQuestions(shuffle(QUESTIONS)); setStep('getReady')
-  }, [])
+    setQuestions(shuffle(getQuestionsForMode(mode))); setStep('getReady')
+  }, [mode])
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
@@ -387,7 +512,7 @@ export default function DinnerTableGame({ onClose }: { onClose: () => void }) {
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(shuffle(QUESTIONS)); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(shuffle(getQuestionsForMode(mode))); setStep('getReady') }}
         />
       )}
 

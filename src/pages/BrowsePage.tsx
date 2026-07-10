@@ -33,9 +33,13 @@ interface Props {
   onPlayYouLaugh?: () => void
   onPlayNeverHaveIEver?: () => void
   onPlayCharades?: () => void
+  onPlayReconnect?: () => void
+  onPlayEveryday?: () => void
+  onPlayWNRS?: () => void
+  onPlayFingerDown?: () => void
 }
 
-export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades }: Props) {
+export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown }: Props) {
   const [active, setActive] = useState<Category>('all')
 
   return (
@@ -128,6 +132,10 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             onPlayYouLaugh={onPlayYouLaugh}
             onPlayNeverHaveIEver={onPlayNeverHaveIEver}
             onPlayCharades={onPlayCharades}
+            onPlayReconnect={onPlayReconnect}
+            onPlayEveryday={onPlayEveryday}
+            onPlayWNRS={onPlayWNRS}
+            onPlayFingerDown={onPlayFingerDown}
           />
         </div>
       </main>

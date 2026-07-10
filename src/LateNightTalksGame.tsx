@@ -22,39 +22,164 @@ const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
 
-/* ─── Questions ─── */
-const QUESTIONS = [
-  "What makes you feel appreciated?",
-  "What's something you've never told anyone?",
-  "What's your biggest fear about the future?",
-  "What's a moment you'd relive if you could?",
-  "What does your ideal life look like in 5 years?",
-  "What's something you're still healing from?",
-  "When do you feel most like yourself?",
-  "What's the best advice you've ever received?",
-  "What's something you wish people understood about you?",
-  "What's a belief you used to hold that you've changed?",
-  "What makes you feel most alive?",
-  "What's a dream you haven't told many people about?",
-  "What's your love language and why?",
-  "What's the kindest thing someone has done for you?",
-  "What's something you're proud of that others might not notice?",
-  "Who has shaped who you are the most?",
-  "What's a question you wish someone would ask you?",
-  "What's the last thing that made you genuinely laugh?",
-  "What do you think about before you fall asleep?",
-  "What's one thing you'd change about yourself?",
-  "What does home feel like to you?",
-  "What's a habit you wish you could break?",
-  "What's something that always cheers you up?",
-  "When was the last time you stepped outside your comfort zone?",
-  "What's the most important lesson life has taught you?",
-  "What's something you're secretly good at?",
-  "What's a place that holds a special memory for you?",
-  "What does success mean to you?",
-  "What's the most spontaneous thing you've ever done?",
-  "What's your favourite thing about yourself?",
-]
+/* ─── Questions by mode ─── */
+const QUESTIONS_BY_MODE: Record<string, string[]> = {
+  couples: [
+    "What makes you feel most loved by your partner?",
+    "What's your favourite memory of us together?",
+    "What's something you've always wanted to tell me?",
+    "What does your ideal life with me look like in 5 years?",
+    "What's the most romantic thing you've ever experienced?",
+    "What's something I do that you find deeply attractive?",
+    "When did you first know you had feelings for me?",
+    "What's your love language and why?",
+    "What does home feel like to you?",
+    "What's a dream you haven't told me about?",
+    "What's a fear you carry about our relationship?",
+    "When do you feel most connected to me?",
+    "What's the best piece of advice you'd give about love?",
+    "What's something you're proud of about us?",
+    "What's one thing you'd change about how we communicate?",
+  ],
+  friends: [
+    "What makes you feel appreciated as a friend?",
+    "What's something you've never told anyone?",
+    "What's your biggest fear about the future?",
+    "What's a moment with me you'd relive if you could?",
+    "When do you feel most like yourself around friends?",
+    "What's the best advice you've ever received?",
+    "What's something you wish your friends understood about you?",
+    "What's a belief you used to hold that you've changed?",
+    "What makes you feel most alive?",
+    "Who has shaped who you are the most?",
+    "What's a question you wish someone would ask you?",
+    "What do you value most in a friendship?",
+    "What's something that always cheers you up?",
+    "What does loyalty mean to you?",
+    "What's the most important lesson friendship has taught you?",
+  ],
+  family: [
+    "What's a family memory that always makes you smile?",
+    "What's something you've never told your family?",
+    "What's a tradition you'd love to pass on?",
+    "What does family mean to you beyond blood?",
+    "What's a lesson your parents taught you that stuck?",
+    "What's something you wish your family talked about more?",
+    "When do you feel closest to your family?",
+    "What's the best advice a family member gave you?",
+    "What's something you appreciate about your upbringing?",
+    "What's a family story that gets told every gathering?",
+    "What would you change about how your family communicates?",
+    "What's a value your family holds that you're proud of?",
+    "What's your favourite family tradition?",
+    "What's a moment you were really proud of your family?",
+    "What does home feel like to you?",
+  ],
+  'deep-conversations': [
+    "What's the meaning of life to you?",
+    "What's a truth you've been avoiding?",
+    "What does it mean to truly know someone?",
+    "What's the hardest thing about being honest?",
+    "What's something you're still healing from?",
+    "When was the last time you felt truly free?",
+    "What do you think happens when we die?",
+    "What's the most important lesson life has taught you?",
+    "What would you do if fear didn't exist?",
+    "What's a question you're afraid to know the answer to?",
+    "What does forgiveness really mean to you?",
+    "What are you most grateful for?",
+    "What's something you've outgrown that was once important?",
+    "What would your younger self think of who you are now?",
+    "What do you want your life to stand for?",
+  ],
+  'first-date': [
+    "What's something that always makes you smile?",
+    "What are you most passionate about right now?",
+    "What's the most interesting place you've been?",
+    "What does your ideal weekend look like?",
+    "What's a fun fact about you that surprises people?",
+    "What quality do you value most in someone?",
+    "What's a movie or show you never get tired of?",
+    "If you could live anywhere, where would it be?",
+    "What's the most spontaneous thing you've done?",
+    "What's your comfort food?",
+    "What do you do when nobody's watching?",
+    "What's the best trip you've ever taken?",
+    "What's a skill you wish you had?",
+    "What makes you laugh the hardest?",
+    "What are you looking forward to most right now?",
+  ],
+  party: [
+    "What's the most embarrassing thing you've done at a party?",
+    "What's the wildest night you've ever had?",
+    "What's your go-to karaoke song?",
+    "What's the funniest thing that's happened to you recently?",
+    "If your life had a theme song, what would it be?",
+    "What's a secret talent nobody here knows about?",
+    "What's the most impulsive decision you've ever made?",
+    "What's a guilty pleasure you refuse to give up?",
+    "What's the best party you've ever been to?",
+    "If you could be famous for one thing, what?",
+    "What's the worst date you've ever been on?",
+    "What's the most random thing on your bucket list?",
+    "What's the latest you've ever stayed up and why?",
+    "What would your autobiography be called?",
+    "What's the craziest rumour about yourself you've heard?",
+  ],
+  nostalgia: [
+    "What's your earliest happy memory?",
+    "What song takes you straight back to a specific time?",
+    "What's a childhood toy or game you miss?",
+    "What smell instantly triggers a memory for you?",
+    "What was the best summer of your life?",
+    "What's a movie from your childhood that still holds up?",
+    "What were you known for in school?",
+    "What's a friendship from your past you think about?",
+    "What food from your childhood do you still crave?",
+    "What was the first song or album you loved?",
+    "What fashion trend did you fully commit to?",
+    "What was your favourite place to go as a kid?",
+    "What game defined your childhood?",
+    "What's a lesson from childhood that stuck with you?",
+    "What would your ten-year-old self think of you now?",
+  ],
+  random: [
+    "What makes you feel appreciated?",
+    "What's something you've never told anyone?",
+    "What's your biggest fear about the future?",
+    "What's a moment you'd relive if you could?",
+    "What does your ideal life look like in 5 years?",
+    "What's something you're still healing from?",
+    "When do you feel most like yourself?",
+    "What's the best advice you've ever received?",
+    "What's something you wish people understood about you?",
+    "What's a belief you used to hold that you've changed?",
+    "What makes you feel most alive?",
+    "What's a dream you haven't told many people about?",
+    "What's your love language and why?",
+    "What's the kindest thing someone has done for you?",
+    "What's something you're proud of that others might not notice?",
+    "Who has shaped who you are the most?",
+    "What's a question you wish someone would ask you?",
+    "What's the last thing that made you genuinely laugh?",
+    "What do you think about before you fall asleep?",
+    "What's one thing you'd change about yourself?",
+    "What does home feel like to you?",
+    "What's a habit you wish you could break?",
+    "What's something that always cheers you up?",
+    "When was the last time you stepped outside your comfort zone?",
+    "What's the most important lesson life has taught you?",
+    "What's something you're secretly good at?",
+    "What's a place that holds a special memory for you?",
+    "What does success mean to you?",
+    "What's the most spontaneous thing you've ever done?",
+    "What's your favourite thing about yourself?",
+  ],
+}
+
+function getQuestionsForMode(mode: string): string[] {
+  return QUESTIONS_BY_MODE[mode] ?? QUESTIONS_BY_MODE.random
+}
 
 /* ─── Shared Nav ─── */
 function GameNav({ onBack }: { onBack: () => void }) {
@@ -392,14 +517,14 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 /* ─── Root ─── */
 type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game'
 
-export default function LateNightTalksGame({ onClose }: { onClose: () => void }) {
+export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?: string; onClose: () => void }) {
   const [step,        setStep]        = useState<Step>('playerSetup')
   const [players,     setPlayers]     = useState<Player[]>([])
   const [totalCards,  setTotalCards]  = useState(0)
   const [cardIndex,   setCardIndex]   = useState(0)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [skipCount,   setSkipCount]   = useState(0)
-  const [questions,   setQuestions]   = useState(() => shuffle(QUESTIONS))
+  const [questions,   setQuestions]   = useState(() => shuffle(getQuestionsForMode(mode)))
 
   const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
 
@@ -428,9 +553,9 @@ export default function LateNightTalksGame({ onClose }: { onClose: () => void })
     setCardIndex(0)
     setPlayerIndex(0)
     setSkipCount(0)
-    setQuestions(shuffle(QUESTIONS))
+    setQuestions(shuffle(getQuestionsForMode(mode)))
     setStep('getReady')
-  }, [])
+  }, [mode])
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
@@ -448,7 +573,7 @@ export default function LateNightTalksGame({ onClose }: { onClose: () => void })
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(shuffle(QUESTIONS)); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(shuffle(getQuestionsForMode(mode))); setStep('getReady') }}
         />
       )}
 

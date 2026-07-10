@@ -99,10 +99,11 @@ export const GAME_CARDS = (
   },
   {
     id: 'everyday-conversation', categories: ['icebreakers', 'deep-talk'], w: 348, h: 277.948,
-    render: () => (
-      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+    playable: true,
+    render: (onClick) => (
+      <div onClick={onClick} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}>
         <div style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
-          <div className="card-tile" style={{ width: '277.948px', height: '348px', background: '#eae6e1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+          <div className="card-tile" style={{ width: '277.948px', height: '348px', background: '#eae6e1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
             <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, opacity: 0.55, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")", backgroundSize: '200px 200px', mixBlendMode: 'multiply' }} />
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4.52px', zIndex: 2 }}>
               <div style={{ width: '13px', height: '182px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -132,8 +133,9 @@ export const GAME_CARDS = (
   },
   {
     id: 'strangers', categories: ['deep-talk', 'icebreakers'], w: 348.041, h: 257.189,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <img src="/assets/games/strangers.png" alt="We're Not Really Strangers" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div style={{ position: 'absolute', left: 0, right: 0, top: '5.42px', display: 'flex', flexDirection: 'column', gap: '0.452px', pointerEvents: 'none' }}>
           <div style={{ height: '1.808px', background: '#e8e6e3', width: '100%' }} />
@@ -161,8 +163,9 @@ export const GAME_CARDS = (
   },
   {
     id: 'reconnect', categories: ['deep-talk', 'couples'], w: 277.981, h: 348.041,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <img src={RECONNECT_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         <p className="font-luckiest" style={{ position: 'absolute', left: '138.99px', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#d22f49', textAlign: 'center', lineHeight: 1.15 }}>Let's reconnect</p>
       </div>
@@ -170,8 +173,9 @@ export const GAME_CARDS = (
   },
   {
     id: 'finger-down', categories: ['party-games'], w: 277.981, h: 348.041,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <img src="/assets/games/finger-down.png" alt="Put a Finger Down" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <p className="font-luckiest" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#ed8251', textAlign: 'center', lineHeight: 'normal', margin: 0, pointerEvents: 'none' }}>PUT A FINGER DOWN</p>
       </div>
@@ -289,9 +293,13 @@ interface BrowseGridProps {
   onPlayYouLaugh?: () => void
   onPlayNeverHaveIEver?: () => void
   onPlayCharades?: () => void
+  onPlayReconnect?: () => void
+  onPlayEveryday?: () => void
+  onPlayWNRS?: () => void
+  onPlayFingerDown?: () => void
 }
 
-export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades }: BrowseGridProps) {
+export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown }: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
@@ -341,6 +349,10 @@ export function BrowseCardGrid({ filter, onPlayTruthOrDare, onPlaySpicyStarters,
                            : card.id === 'you-laugh' ? onPlayYouLaugh
                            : card.id === 'never-have-i-ever' ? onPlayNeverHaveIEver
                            : card.id === 'charades' ? onPlayCharades
+                           : card.id === 'reconnect' ? onPlayReconnect
+                           : card.id === 'everyday-conversation' ? onPlayEveryday
+                           : card.id === 'strangers' ? onPlayWNRS
+                           : card.id === 'finger-down' ? onPlayFingerDown
                            : undefined
 
             return (

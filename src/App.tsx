@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
 import TruthOrDareGame from './TruthOrDareGame'
@@ -9,6 +9,10 @@ import DinnerTableGame from './DinnerTableGame'
 import LaughYouAreOutGame from './LaughYouAreOutGame'
 import NeverHaveIEverGame from './NeverHaveIEverGame'
 import CharadesGame from './CharadesGame'
+import LetsReconnectGame from './LetsReconnectGame'
+import EverydayConversationsGame from './EverydayConversationsGame'
+import WNRSGame from './WNRSGame'
+import PutAFingerDownGame from './PutAFingerDownGame'
 
 type Screen =
   | 'home' | 'browse'
@@ -18,9 +22,12 @@ type Screen =
   | 'never-have-i-ever'
   | 'charades'
   | 'truth-or-dare' | 'spicy-starters'
+  | 'lets-reconnect' | 'everyday-conversations' | 'wnrs' | 'put-a-finger-down'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
+  const lntModeRef = useRef('couples')
+  const dtcModeRef = useRef('date-night')
 
   /* ── Select Game Mode: LNT ── */
   if (screen === 'lnt-select') {
@@ -28,13 +35,13 @@ export default function App() {
       <SelectGameMode
         modes={LNT_MODES}
         onBack={() => setScreen('browse')}
-        onSelect={() => setScreen('late-night-talks')}
+        onSelect={(mode) => { lntModeRef.current = mode; setScreen('late-night-talks') }}
       />
     )
   }
 
   if (screen === 'late-night-talks') {
-    return <LateNightTalksGame onClose={() => setScreen('browse')} />
+    return <LateNightTalksGame mode={lntModeRef.current} onClose={() => setScreen('browse')} />
   }
 
   /* ── Select Game Mode: DTC ── */
@@ -43,13 +50,13 @@ export default function App() {
       <SelectGameMode
         modes={DTC_MODES}
         onBack={() => setScreen('browse')}
-        onSelect={() => setScreen('dinner-table')}
+        onSelect={(mode) => { dtcModeRef.current = mode; setScreen('dinner-table') }}
       />
     )
   }
 
   if (screen === 'dinner-table') {
-    return <DinnerTableGame onClose={() => setScreen('browse')} />
+    return <DinnerTableGame mode={dtcModeRef.current} onClose={() => setScreen('browse')} />
   }
 
   /* ── You Laugh You're Out ── */
@@ -76,6 +83,26 @@ export default function App() {
     return <SpicyStartersGame onClose={() => setScreen('browse')} />
   }
 
+  /* ── Let's Reconnect ── */
+  if (screen === 'lets-reconnect') {
+    return <LetsReconnectGame onClose={() => setScreen('browse')} />
+  }
+
+  /* ── Everyday Conversations ── */
+  if (screen === 'everyday-conversations') {
+    return <EverydayConversationsGame onClose={() => setScreen('browse')} />
+  }
+
+  /* ── WNRS ── */
+  if (screen === 'wnrs') {
+    return <WNRSGame onClose={() => setScreen('browse')} />
+  }
+
+  /* ── Put a Finger Down ── */
+  if (screen === 'put-a-finger-down') {
+    return <PutAFingerDownGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
@@ -88,6 +115,10 @@ export default function App() {
         onPlayYouLaugh={() => setScreen('you-laugh')}
         onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
         onPlayCharades={() => setScreen('charades')}
+        onPlayReconnect={() => setScreen('lets-reconnect')}
+        onPlayEveryday={() => setScreen('everyday-conversations')}
+        onPlayWNRS={() => setScreen('wnrs')}
+        onPlayFingerDown={() => setScreen('put-a-finger-down')}
       />
     )
   }
