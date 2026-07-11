@@ -44,7 +44,6 @@ body {
   z-index: 1;
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  -webkit-transform: translateZ(0);
 }
 
 input::placeholder {
@@ -651,7 +650,6 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  -webkit-transform: translateZ(0);
 }
 /* Safari: overscroll-behavior needs -webkit prefix */
 @media (display-mode: standalone) {
