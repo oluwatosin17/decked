@@ -18,10 +18,10 @@ export function useCardScale(cardWidth: number): number {
     const calc = () => {
       const vw = window.innerWidth
       if (vw <= 480) {
-        // Phone: generous padding, cap scale to avoid overwhelming the screen
-        const available = vw - 48
+        // Phone: generous padding, cap scale for comfortable sizing
+        const available = vw - 56
         const raw = available < cardWidth ? available / cardWidth : 1
-        setScale(Math.min(raw, 0.82))
+        setScale(Math.min(raw, 0.75))
       } else if (vw <= 768) {
         // Tablet: moderate padding
         const available = vw - 40

@@ -752,28 +752,17 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
     max-width: 340px;
   }
 
-  /* ─── TYPOGRAPHY: scale down desktop sizes ─── */
-  /* Screen headings (36px-40px → 26px) */
+  /* ─── TYPOGRAPHY: scale down for tablet ─── */
   h2[style*="font-size: 36px"],
   h2[style*="fontSize: 36"],
   h2[style*="font-size: 40px"],
-  h2[style*="fontSize: 40"] {
-    font-size: 26px !important;
+  h2[style*="fontSize: 40"],
+  h2[style*="font-size: 48px"],
+  span[style*="font-size: 36px"],
+  span[style*="font-size: 40px"] {
+    font-size: 24px !important;
   }
-
-  /* "MATURE CONTENT" and similar large headings */
-  h2[style*="font-size: 36px"][style*="Anton"],
-  span[style*="font-size: 36px"] {
-    font-size: 26px !important;
-  }
-
-  /* Done screen heading (48px → 34px) */
-  .done-heading { font-size: 34px !important; }
-
-  /* Done screen stats numbers (40px → 30px) */
-  .done-stat-1, .done-stat-2, .done-stat-3 {
-    font-size: inherit;
-  }
+  .done-heading { font-size: 28px !important; }
 
   /* Setup container widths — compact gap like Figma mobile reference */
   .setup-container { width: 100% !important; max-width: 500px; gap: 20px !important; }
@@ -804,45 +793,86 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
 @media (max-width: 480px) {
   .screen-enter { padding: 16px 12px !important; }
 
-  /* ─── TYPOGRAPHY: phone-native sizes ─── */
-  /* Screen headings → 24px */
+  /* ═══════════════════════════════════════════════
+     COMPREHENSIVE TYPOGRAPHY AUDIT — 390px target
+     Every font size reduced for comfortable mobile.
+     ═══════════════════════════════════════════════ */
+
+  /* ALL screen headings (36-48px → 20px) */
   h2[style*="font-size: 36px"],
   h2[style*="fontSize: 36"],
   h2[style*="font-size: 40px"],
   h2[style*="fontSize: 40"],
-  span[style*="font-size: 36px"] {
-    font-size: 24px !important;
+  h2[style*="font-size: 48px"],
+  h2[style*="fontSize: 48"],
+  span[style*="font-size: 36px"],
+  span[style*="font-size: 40px"],
+  span[style*="font-size: 48px"] {
+    font-size: 20px !important;
   }
 
-  /* 18+ badge */
-  span[style*="font-size: 72px"] {
-    font-size: 56px !important;
+  /* 18+ badge (72px → 48px) */
+  span[style*="font-size: 72px"] { font-size: 48px !important; }
+
+  /* Done heading (48px → 24px) */
+  .done-heading { font-size: 24px !important; }
+  .done-subtitle { font-size: 12px !important; }
+
+  /* Stats numbers (40px → 22px) */
+  div[style*="font-size: 40px"],
+  span[style*="font-size: 40px"] {
+    font-size: 22px !important;
   }
 
-  /* Done heading (48px → 30px) */
-  .done-heading { font-size: 30px !important; }
-  .done-subtitle { font-size: 13px !important; }
+  /* Timer (64px → 40px) */
+  span[style*="font-size: 64px"] { font-size: 40px !important; }
 
-  /* Stats numbers in done screen (40px → 28px) */
-  div[style*="font-size: 40px"] {
-    font-size: 28px !important;
-  }
-
-  /* Timer text in charades/LYAO (64px / 36px → smaller) */
-  span[style*="font-size: 64px"] { font-size: 48px !important; }
-  span[style*="font-size: 36px"] { font-size: 28px !important; }
-
-  /* Card prompt text — slightly smaller for comfortable reading */
+  /* Card prompt text (26-32px → 16px for mobile reading) */
   p[style*="font-size: 28px"],
   span[style*="font-size: 28px"],
   p[style*="font-size: 29px"],
-  span[style*="font-size: 29px"] {
-    font-size: 22px !important;
-    line-height: 1.25 !important;
+  span[style*="font-size: 29px"],
+  p[style*="font-size: 26px"],
+  span[style*="font-size: 26px"],
+  p[style*="font-size: 32px"],
+  span[style*="font-size: 32px"] {
+    font-size: 16px !important;
+    line-height: 1.3 !important;
   }
 
-  /* Setup heading (36px → 22px) */
-  .setup-title { font-size: 22px !important; }
+  /* Card question text (21-22px → 14px) */
+  p[style*="font-size: 22px"],
+  span[style*="font-size: 22px"],
+  p[style*="font-size: 21px"],
+  span[style*="font-size: 21px"] {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Player name chips and inputs (18px → 15px) */
+  span[style*="font-size: 18px"],
+  input[style*="font-size: 18px"] {
+    font-size: 15px !important;
+  }
+
+  /* Button text (16px → 13px) */
+  button[style*="font-size: 16px"] {
+    font-size: 13px !important;
+  }
+
+  /* Body/subtitle text (16px → 13px) */
+  p[style*="font-size: 16px"] {
+    font-size: 13px !important;
+  }
+
+  /* Category option labels (17px → 14px) */
+  span[style*="font-size: 17px"],
+  p[style*="font-size: 17px"] {
+    font-size: 14px !important;
+  }
+
+  /* Setup heading */
+  .setup-title { font-size: 20px !important; }
 
   /* Setup container even tighter */
   .setup-container { gap: 16px !important; }
@@ -911,10 +941,10 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
   h2[style*="fontSize: 36"],
   h2[style*="font-size: 40px"],
   h2[style*="fontSize: 40"] {
-    font-size: 22px !important;
+    font-size: 18px !important;
   }
-  .done-heading { font-size: 26px !important; }
-  .setup-title { font-size: 20px !important; }
+  .done-heading { font-size: 22px !important; }
+  .setup-title { font-size: 18px !important; }
 
   /* Buttons: maintain side-by-side, reduce padding */
   button[style*="padding: 12px 24px"],
