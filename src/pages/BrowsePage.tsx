@@ -101,8 +101,9 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
           .browse-nav-links { display: none !important; }
           .browse-main { padding: 20px 16px 40px !important; }
           .browse-content { width: 100% !important; }
-          .browse-category-pills { gap: 8px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; flex-wrap: nowrap !important; }
+          .browse-category-pills { gap: 6px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; flex-wrap: nowrap !important; }
           .browse-category-pills::-webkit-scrollbar { display: none; }
+          .browse-category-pills button { font-size: 14px !important; padding: 5px 10px !important; border-radius: 8px !important; }
         }
         @media (max-width: 480px) {
           .browse-main { padding: 16px 12px 32px !important; }

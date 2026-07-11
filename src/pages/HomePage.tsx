@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { HomeCardRows } from '../components/GameCardGrid'
+import { useState, useEffect, useRef } from 'react'
+import { HomeCardRows, GAME_CARDS } from '../components/GameCardGrid'
 
 const HERO_RED_IMG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-red'
 const HERO_CREAM_IMG  = 'https://res.cloudinary.com/oluwatosin17/image/upload/f_auto,q_auto,w_480/decked/hero-cream'
@@ -9,23 +9,15 @@ const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
 
-const MOBILE_FEATURED_CARDS: {
-  id: string; svg: string; action: 'onPlayTruthOrDare' | 'onPlaySpicyStarters' | 'onPlayLateNightTalks' | 'onBrowse'
-  label?: string | string[]; font?: string; color?: string; fontSize?: string; sub?: string; subColor?: string
-  hasEmbeddedText?: boolean
-}[] = [
-  { id: 'truth-or-dare', svg: '/icons/truth-or-dare-mobile.svg', action: 'onPlayTruthOrDare',
-    label: ['TRUTH', 'OR DARE'], font: "'Satoshi', sans-serif", color: '#000', fontSize: '20px', sub: 'FOR COUPLES', subColor: '#181b25' },
-  { id: 'spicy-starters', svg: '/icons/spicy-starters-mobile.svg', action: 'onPlaySpicyStarters',
-    label: ['spicy', 'starters'], font: "'Stick', sans-serif", color: '#fff', fontSize: '24px' },
-  { id: 'late-night-talks', svg: '/icons/late-night-talks-mobile.svg', action: 'onPlayLateNightTalks',
-    label: ['Late', 'Night', 'Talks'], font: "'Slackey', cursive", color: '#ff440e', fontSize: '20px' },
-  { id: 'charades', svg: '/icons/charades-mobile.svg', action: 'onBrowse',
-    label: 'Charades', font: "'Slackey', cursive", color: '#e8e6e3', fontSize: '26px' },
-  { id: 'never-have-i-ever', svg: '/icons/never-have-i-ever-mobile.svg', action: 'onBrowse',
-    label: ['NEVER', 'HAVE I', 'EVER'], font: "'Single Day', cursive", color: '#bb33ff', fontSize: '24px' },
-  { id: 'you-laugh', svg: '/icons/you-laugh-you-are-out-mobile.svg', action: 'onBrowse', hasEmbeddedText: true },
-]
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh']
+const FEATURED_ACTIONS: Record<string, 'onPlayTruthOrDare' | 'onPlaySpicyStarters' | 'onPlayLateNightTalks' | 'onBrowse'> = {
+  'truth-or-dare': 'onPlayTruthOrDare',
+  'spicy-starters': 'onPlaySpicyStarters',
+  'late-night-talks': 'onPlayLateNightTalks',
+  'charades': 'onBrowse',
+  'never-have-i-ever': 'onBrowse',
+  'you-laugh': 'onBrowse',
+}
 
 function useIsMobile(bp = 768) {
   const [m, setM] = useState(typeof window !== 'undefined' ? window.innerWidth <= bp : false)
@@ -44,6 +36,54 @@ interface Props {
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
   onBrowse: () => void
+}
+
+function MobileFeaturedGrid({ actions }: { actions: Record<string, () => void> }) {
+  const gridRef = useRef<HTMLDivElement>(null)
+  const [colW, setColW] = useState(166)
+  const allCards = GAME_CARDS(() => {}, () => {}, () => {})
+  const featured = allCards.filter(c => FEATURED_IDS.includes(c.id))
+
+  useEffect(() => {
+    const measure = () => {
+      if (gridRef.current) {
+        setColW(Math.floor((gridRef.current.offsetWidth - 10) / 2))
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  return (
+    <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', padding: '0 16px', alignItems: 'start' }}>
+      {featured.map((card, i) => {
+        const scale = colW / card.w
+        const action = FEATURED_ACTIONS[card.id]
+        const onClick = action ? actions[action] : undefined
+        return (
+          <div key={card.id} style={{ animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both` }}>
+            <div
+              onClick={onClick}
+              style={{
+                width: `${colW}px`, height: `${card.h * scale}px`,
+                overflow: 'hidden', borderRadius: `${9 * scale}px`,
+                cursor: onClick ? 'pointer' : 'default',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+            >
+              <div style={{
+                width: `${card.w}px`, height: `${card.h}px`,
+                transform: `scale(${scale})`, transformOrigin: 'top left',
+              }}>
+                {card.render(onClick)}
+              </div>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }: Props) {
@@ -79,44 +119,10 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
           </div>
         </div>
 
-        {/* Mobile featured cards grid */}
+        {/* Mobile featured cards grid — uses exact desktop card designs, scaled down */}
         <section style={{ padding: '32px 0 24px' }}>
           <h2 className="font-spicy" style={{ color: 'white', fontSize: '32px', margin: '0 0 16px 16px' }}>Pick your vibe.</h2>
-          <div className="home-mobile-grid">
-            {MOBILE_FEATURED_CARDS.map((card, i) => {
-              const lines = Array.isArray(card.label) ? card.label : card.label ? [card.label] : []
-              return (
-                <div
-                  key={card.id}
-                  className="home-mobile-card"
-                  onClick={actions[card.action]}
-                  style={{ animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both`, position: 'relative' }}
-                >
-                  <img src={card.svg} alt="" style={{ position: 'relative', zIndex: 1 }} />
-                  {!card.hasEmbeddedText && lines.length > 0 && (
-                    <div style={{
-                      position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-                      alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: '12px',
-                      pointerEvents: 'none', textAlign: 'center', gap: '2px',
-                    }}>
-                      {lines.map((line, j) => (
-                        <span key={j} style={{
-                          fontFamily: card.font, fontSize: card.fontSize,
-                          color: card.color, lineHeight: 1.1, fontWeight: 500,
-                        }}>{line}</span>
-                      ))}
-                      {card.sub && (
-                        <span style={{
-                          fontFamily: "'Inter Tight', sans-serif", fontSize: '8px',
-                          color: card.subColor || card.color, marginTop: '6px', fontWeight: 300,
-                        }}>{card.sub}</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
+          <MobileFeaturedGrid actions={actions} />
           <div style={{ padding: '16px 16px 0', textAlign: 'center' }}>
             <button className="font-staatliches game-btn" onClick={onBrowse} style={{
               background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',

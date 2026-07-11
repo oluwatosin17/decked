@@ -353,84 +353,34 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
   return map[card.id]
 }
 
-interface MobileCardStyle {
-  label: string | string[]
-  font: string
-  color: string
-  fontSize?: string
-  sub?: string
-  subColor?: string
-  hasEmbeddedText?: boolean
-}
-
-const MOBILE_CARD_STYLES: Record<string, MobileCardStyle> = {
-  'truth-or-dare': { label: ['TRUTH', 'OR DARE'], font: "'Satoshi', sans-serif", color: '#000', fontSize: '20px', sub: 'FOR COUPLES', subColor: '#181b25' },
-  'spicy-starters': { label: ['spicy', 'starters'], font: "'Stick', sans-serif", color: '#fff', fontSize: '24px' },
-  'red-flag-green-flag': { label: ['Red flag', 'Green flag'], font: "'Spicy Rice', cursive", color: '#e7f0ff', fontSize: '18px' },
-  'icebreaker': { label: 'ICEBREAKER', font: "'Staatliches', sans-serif", color: '#000', fontSize: '22px' },
-  'dinner-table': { label: ['DINNER TABLE', 'CONVERSATION'], font: "'Staatliches', sans-serif", color: '#e8e6e3', fontSize: '16px' },
-  'late-night-talks': { label: ['Late', 'Night', 'Talks'], font: "'Slackey', cursive", color: '#ff440e', fontSize: '20px' },
-  'everyday-conversation': { label: ['everyday', 'conversation'], font: "'Spicy Rice', cursive", color: '#0f973d', fontSize: '20px', sub: 'Questions to build genuine connection', subColor: '#181b25' },
-  'charades': { label: 'Charades', font: "'Slackey', cursive", color: '#e8e6e3', fontSize: '26px' },
-  'strangers': { label: "WE'RE NOT REALLY STRANGERS", font: "'Satoshi', sans-serif", color: '#e8e6e3', fontSize: '11px' },
-  'never-have-i-ever': { label: ['NEVER', 'HAVE I', 'EVER'], font: "'Single Day', cursive", color: '#bb33ff', fontSize: '24px' },
-  'reconnect': { label: ["Let's", 'Reconnect'], font: "'Luckiest Guy', cursive", color: '#d22f49', fontSize: '20px' },
-  'finger-down': { label: ['PUT A', 'FINGER', 'DOWN'], font: "'Luckiest Guy', cursive", color: '#ed8251', fontSize: '18px' },
-  'take-a-sip': { label: ['TAKE A', 'SIP IF', '...'], font: "'Gasoek One', sans-serif", color: '#eb5e28', fontSize: '24px' },
-  'sip-or-spill': { label: ['Sip or', 'Spill'], font: "'Freckle Face', cursive", color: '#ffd7f7', fontSize: '28px' },
-  'you-laugh': { label: '', font: '', color: '', hasEmbeddedText: true },
-  'do-or-drink': { label: ['DO', 'OR', 'DRINK'], font: "'Fredericka the Great', serif", color: '#5228eb', fontSize: '24px' },
-}
-
-function MobileCard({ card, onClick, isExiting, staggerIndex }: { card: CardDef; onClick?: () => void; isExiting: boolean; staggerIndex: number }) {
-  const mobileSvg = MOBILE_CARDS[card.id]
-  const style = MOBILE_CARD_STYLES[card.id]
-
-  const renderLabel = () => {
-    if (!style || !style.label) return null
-    const lines = Array.isArray(style.label) ? style.label : [style.label]
-    return (
-      <div style={{
-        position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: '12px',
-        pointerEvents: 'none', textAlign: 'center', gap: '2px',
-      }}>
-        {lines.map((line, i) => (
-          <span key={i} style={{
-            fontFamily: style.font, fontSize: style.fontSize || '20px',
-            color: style.color, lineHeight: 1.1, fontWeight: 500,
-          }}>{line}</span>
-        ))}
-        {style.sub && (
-          <span style={{
-            fontFamily: "'Inter Tight', sans-serif", fontSize: '8px',
-            color: style.subColor || style.color, marginTop: '6px', fontWeight: 300,
-          }}>{style.sub}</span>
-        )}
-      </div>
-    )
-  }
-
+/**
+ * ScaledCard — renders the exact desktop card design at a proportional scale
+ * inside a container that reserves the correct visual space.
+ * This ensures mobile browse cards are pixel-perfect replicas of desktop.
+ */
+function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?: () => void; containerWidth: number }) {
+  const scale = containerWidth / card.w
   return (
     <div
-      className="browse-mobile-card"
-      onClick={onClick}
+      className="browse-mobile-card-scaled"
       style={{
-        cursor: onClick ? 'pointer' : 'default',
+        width: `${containerWidth}px`,
+        height: `${card.h * scale}px`,
+        overflow: 'hidden',
+        borderRadius: `${9 * scale}px`,
         position: 'relative',
-        animation: isExiting
-          ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
-          : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${staggerIndex * 30}ms both`,
+        cursor: onClick ? 'pointer' : 'default',
+        WebkitTapHighlightColor: 'transparent',
       }}
     >
-      {mobileSvg ? (
-        <>
-          <img src={mobileSvg} alt="" className="browse-mobile-card-img" style={{ position: 'relative', zIndex: 1 }} />
-          {!style?.hasEmbeddedText && renderLabel()}
-        </>
-      ) : (
-        <div style={{ width: '100%', height: '100%' }}>{card.render(onClick)}</div>
-      )}
+      <div style={{
+        width: `${card.w}px`,
+        height: `${card.h}px`,
+        transform: `scale(${scale})`,
+        transformOrigin: 'top left',
+      }}>
+        {card.render(onClick)}
+      </div>
     </div>
   )
 }
@@ -442,6 +392,22 @@ export function BrowseCardGrid(props: BrowseGridProps) {
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
   const prevFilter = useRef<Category>('all')
   const isMobile = useIsMobile()
+  const [gridWidth, setGridWidth] = useState(343) // default for 375px viewport
+  const gridRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isMobile) return
+    const measure = () => {
+      if (gridRef.current) {
+        const gap = 10
+        const colWidth = Math.floor((gridRef.current.offsetWidth - gap) / 2)
+        setGridWidth(colWidth)
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [isMobile])
 
   useEffect(() => {
     if (prevFilter.current === filter) return
@@ -468,21 +434,23 @@ export function BrowseCardGrid(props: BrowseGridProps) {
   if (isMobile) {
     let cardIdx = 0
     return (
-      <div className="browse-mobile-grid">
+      <div ref={gridRef} className="browse-mobile-grid">
         {filtered.map((card) => {
           const i = cardIdx++
           const isExiting = exitingIds.has(card.id)
           const onClick = getCardOnClick(card, props)
-          const mobileSvg = MOBILE_CARDS[card.id]
 
           return (
-            <MobileCard
+            <div
               key={`${card.id}-${staggerKey}`}
-              card={card}
-              onClick={onClick}
-              isExiting={isExiting}
-              staggerIndex={i}
-            />
+              style={{
+                animation: isExiting
+                  ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
+                  : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 30}ms both`,
+              }}
+            >
+              <ScaledCard card={card} onClick={onClick} containerWidth={gridWidth} />
+            </div>
           )
         })}
       </div>

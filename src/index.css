@@ -626,28 +626,21 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
 }
 
 /* ═══════════════════════════════════════════════
-   MOBILE BROWSE GRID  (2-column SVG cards)
+   MOBILE BROWSE GRID  (2-column scaled desktop cards)
+   Cards are exact proportional replicas of desktop.
    ═══════════════════════════════════════════════ */
 .browse-mobile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
+  align-items: start;
 }
-.browse-mobile-card {
-  background: #111113;
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 1 / 1.05;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.browse-mobile-card-scaled {
   transition: transform 0.15s var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
-.browse-mobile-card-img {
-  width: 85%;
-  height: 85%;
-  object-fit: contain;
+@media (hover: none) and (pointer: coarse) {
+  .browse-mobile-card-scaled:active { transform: scale(0.96) !important; transition-duration: 60ms !important; }
 }
 
 /* ═══════════════════════════════════════════════
