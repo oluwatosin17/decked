@@ -51,7 +51,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
   }
 
   return (
-    <div className="screen-enter" style={{
+    <div className="screen-enter screen-enter-setup" style={{
       flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
       position: 'relative', padding: '40px',
     }}>

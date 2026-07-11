@@ -531,7 +531,7 @@ export default function PutAFingerDownGame({ onClose }: { onClose: () => void })
   }, [categories, customCards, totalCards])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen">
       <GameNav onBack={onClose} />
 
       {step === 'categories' && <CategorySelect onNext={cats => { setCategories(cats); setStep('playerSetup') }} />}

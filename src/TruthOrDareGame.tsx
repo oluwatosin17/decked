@@ -113,7 +113,7 @@ function GameNav({ onBack }: { onBack: () => void }) {
   return (
     <nav style={{
       background: 'rgba(5,5,12,0.72)',
-      backdropFilter: 'blur(4px)',
+      backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
     }}>
@@ -150,7 +150,7 @@ function GameFooter() {
   return (
     <footer style={{
       background: 'rgba(5,5,12,0.72)',
-      backdropFilter: 'blur(4px)',
+      backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
       padding: '32px 60px',
       display: 'flex', flexDirection: 'column', gap: '40px',
       flexShrink: 0,
@@ -697,7 +697,7 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
   }, [])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'transparent', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen" style={{ background: 'transparent' }}>
       <GameNav onBack={onClose} />
 
       {step === 'ageGate' && (

@@ -50,7 +50,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
 
       {/* ── Sticky nav ── */}
       <nav className="browse-nav" style={{
-        background: 'rgba(12,12,14,0.92)', backdropFilter: 'blur(8px)',
+        background: 'rgba(12,12,14,0.92)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '64px', flexShrink: 0,
         position: 'sticky', top: 0, zIndex: 50,
@@ -171,7 +171,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
       </main>
 
       {/* ── Footer ── */}
-      <footer className="home-footer" style={{ background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0 }}>
+      <footer className="home-footer" style={{ background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0 }}>
         <div className="mobile-footer-top" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px' }}>
             <p className="font-anton" style={{ color: '#fff', fontSize: '32px', margin: 0 }}>DECKED</p>

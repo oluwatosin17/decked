@@ -642,7 +642,7 @@ export default function WNRSGame({ onClose }: { onClose: () => void }) {
   }, [relationship, journey, totalCards, customCards])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen">
       <GameNav onBack={onClose} />
 
       {step === 'relationship' && (

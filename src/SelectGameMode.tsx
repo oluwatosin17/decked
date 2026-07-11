@@ -50,10 +50,10 @@ export default function SelectGameMode({ modes, onBack, onSelect }: Props) {
   const [pressed,  setPressed]  = useState<string | null>(null)
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen">
       {/* Nav */}
       <nav style={{
-        background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)',
+        background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
       }}>
@@ -126,7 +126,7 @@ export default function SelectGameMode({ modes, onBack, onSelect }: Props) {
       </div>
 
       {/* Footer */}
-      <footer style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0, position: 'relative', zIndex: 2 }}>
+      <footer style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0, position: 'relative', zIndex: 2 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px' }}>
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '32px', color: '#fff' }}>DECKED</span>

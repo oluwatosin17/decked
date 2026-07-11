@@ -30,10 +30,11 @@ body {
 
 #galaxy-canvas {
   position: fixed !important;
-  inset: 0; width: 100% !important; height: 100% !important;
-  pointer-events: none; z-index: 0 !important;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100% !important; height: 100% !important;
+  pointer-events: none; z-index: -1 !important;
 }
-#root { position: relative; z-index: 1; }
+#root { position: relative; z-index: 0; isolation: isolate; }
 
 input::placeholder {
   color: rgba(255,255,255,0.35);
@@ -201,9 +202,11 @@ input::placeholder {
   transition: background 0.2s var(--ease-out), filter 0.2s;
 }
 
-/* Hovering one half dims the other */
-.tod-split-card:has(.tod-truth-half:hover) .tod-dare-half  { filter: brightness(0.82); }
-.tod-split-card:has(.tod-dare-half:hover)  .tod-truth-half { filter: brightness(0.88); }
+/* Hovering one half dims the other — :has() for modern browsers, JS fallback for Safari <15.4 */
+@supports selector(:has(*)) {
+  .tod-split-card:has(.tod-truth-half:hover) .tod-dare-half  { filter: brightness(0.82); }
+  .tod-split-card:has(.tod-dare-half:hover)  .tod-truth-half { filter: brightness(0.88); }
+}
 
 .tod-truth-half:hover { background: #f2c5ce !important; }
 .tod-dare-half:hover  { background: #c52020 !important; }
@@ -621,6 +624,29 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+/* Safari: -webkit-backdrop-filter required through Safari 17.x */
+.game-nav-bar, .browse-nav, .home-footer, .game-footer,
+nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
+  -webkit-backdrop-filter: blur(4px);
+}
+/* Safari iOS: 100vh doesn't account for the dynamic address bar.
+   Use -webkit-fill-available as a fallback for fixed full-screen game containers. */
+.game-fullscreen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+/* Safari: overscroll-behavior needs -webkit prefix */
+@media (display-mode: standalone) {
+  body {
+    -webkit-overscroll-behavior-y: contain;
+  }
+}
 
 /* ─── Touch devices: disable hover, improve active ─── */
 @media (hover: none) and (pointer: coarse) {
@@ -724,7 +750,7 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
     padding: 20px 16px !important;
   }
   /* Setup screens: top-aligned, app-like layout (not vertically centered) */
-  .screen-enter:has(.setup-container) {
+  .screen-enter-setup {
     align-items: flex-start !important;
     justify-content: flex-start !important;
     padding-top: 48px !important;

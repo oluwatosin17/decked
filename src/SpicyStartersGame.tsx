@@ -77,7 +77,7 @@ const HOT_QUESTIONS = [
 function GameNav({ onBack }: { onBack: () => void }) {
   return (
     <nav style={{
-      background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)',
+      background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
     }}>
@@ -101,7 +101,7 @@ function GameNav({ onBack }: { onBack: () => void }) {
 /* ─── Shared footer ─── */
 function GameFooter() {
   return (
-    <footer style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0 }}>
+    <footer style={{ background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px' }}>
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '32px', color: '#fff', lineHeight: 'normal' }}>DECKED</span>
@@ -746,7 +746,7 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
   }, [])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'transparent', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen" style={{ background: 'transparent' }}>
       <GameNav onBack={onClose} />
 
       {step === 'ageGate' && (

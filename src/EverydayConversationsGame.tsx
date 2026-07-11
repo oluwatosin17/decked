@@ -418,7 +418,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
   }, [theme, customCards, totalCards])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen">
       <GameNav onBack={onClose} />
 
       {step === 'theme' && <ThemeSelect onSelect={t => { setTheme(t); setStep('playerSetup') }} />}

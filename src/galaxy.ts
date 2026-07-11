@@ -11,14 +11,16 @@ export function initGalaxy(): () => void {
   canvas.id = 'galaxy-canvas'
   Object.assign(canvas.style, {
     position: 'fixed',
-    top: '0', left: '0',
+    top: '0', left: '0', right: '0', bottom: '0',
     width: '100vw', height: '100vh',
     pointerEvents: 'none',
-    zIndex: '0',
+    zIndex: '-1',
   })
   document.body.prepend(canvas)
 
-  const ctx = canvas.getContext('2d')!
+  const maybeCtx = canvas.getContext('2d')
+  if (!maybeCtx) return () => { canvas.remove() }
+  const ctx = maybeCtx
   let W = 0, H = 0
 
   function resize() {

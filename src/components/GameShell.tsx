@@ -6,7 +6,7 @@ export function GameNav({ onBack }: { onBack: () => void }) {
   return (
     <>
       <nav className="game-nav-bar" style={{
-        background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)',
+        background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
       }}>
@@ -58,7 +58,7 @@ export function GameNav({ onBack }: { onBack: () => void }) {
 export function GameFooter() {
   return (
     <footer className="game-footer" style={{
-      background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)',
+      background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
       padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>

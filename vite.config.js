@@ -4,6 +4,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    target: ['es2020', 'safari14'],
+  },
   plugins: [
     react(),
     VitePWA({

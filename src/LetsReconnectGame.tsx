@@ -618,7 +618,7 @@ export default function LetsReconnectGame({ onClose }: { onClose: () => void }) 
   }, [relationship, depth, customCards, totalCards])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+    <div className="game-fullscreen">
       <GameNav onBack={onClose} />
 
       {step === 'relationship' && (
