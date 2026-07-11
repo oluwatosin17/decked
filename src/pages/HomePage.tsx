@@ -206,7 +206,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button className="font-staatliches" style={{
+            <button className="font-staatliches" onClick={onPlayTruthOrDare} style={{
               background: '#dc2827', color: 'white', fontSize: '16px',
               padding: '12px 18px', borderRadius: '999px', border: 'none',
               cursor: 'pointer', whiteSpace: 'nowrap',
@@ -216,7 +216,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
               onMouseOut={e => (e.currentTarget.style.background = '#dc2827')}>
               QUICK PLAY
             </button>
-            <button className="font-staatliches" style={{
+            <button className="font-staatliches" onClick={onBrowse} style={{
               background: 'transparent', color: 'white', fontSize: '16px',
               padding: '12px 18px', borderRadius: '999px', border: '1px solid white',
               cursor: 'pointer', whiteSpace: 'nowrap',

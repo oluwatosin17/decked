@@ -960,8 +960,30 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
     padding: 10px !important;
   }
 
-  /* Input text */
+  /* Input text — 16px prevents iOS Safari zoom on focus */
   input[style*="font-size: 18px"] { font-size: 16px !important; }
+  input { font-size: 16px !important; } /* Prevent ALL input zoom on iOS */
+
+  /* ─── SELECT GAME MODE: fit labels on 375px ─── */
+  .mode-btn span { font-size: 14px !important; }
+  .mode-btn { min-height: 48px !important; padding: 10px !important; gap: 10px !important; }
+  .mode-btn div:first-child { width: 28px !important; height: 28px !important; }
+  .mode-btn img { width: 16px !important; height: 16px !important; }
+
+  /* ─── GAME CARDS: ensure cards don't dominate screen ─── */
+  .game-card {
+    max-width: calc(100vw - 48px) !important;
+    max-height: 60vh !important;
+  }
+
+  /* ─── KEYBOARD BEHAVIOR: prevent layout collapse ─── */
+  /* When keyboard opens, prevent fixed containers from breaking */
+  .screen-enter:has(input:focus),
+  .screen-enter-setup:has(input:focus) {
+    justify-content: flex-start !important;
+    padding-top: 20px !important;
+    overflow-y: auto !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════

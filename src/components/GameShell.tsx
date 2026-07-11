@@ -10,7 +10,7 @@ export function GameNav({ onBack }: { onBack: () => void }) {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
       }}>
-        <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '28px', color: '#fff', letterSpacing: '0.56px', fontWeight: 400 }}>DECKED</span>
+        <span onClick={onBack} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '28px', color: '#fff', letterSpacing: '0.56px', fontWeight: 400, cursor: 'pointer' }}>DECKED</span>
 
         {/* Desktop nav links */}
         <div className="game-nav-desktop" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
