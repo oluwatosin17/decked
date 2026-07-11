@@ -92,7 +92,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
 
   if (isMobile) {
     return (
-      <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
         {/* Mobile nav */}
         <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px', padding: '0 16px', position: 'relative', zIndex: 20 }}>
           <span className="font-anton" style={{ color: '#fff', fontSize: '22px', letterSpacing: '0.56px', fontWeight: 400 }}>DECKED</span>
@@ -163,7 +163,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
   }
 
   return (
-    <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
 
       <section className="home-hero relative w-full overflow-hidden" style={{ height: '943px' }}>
 

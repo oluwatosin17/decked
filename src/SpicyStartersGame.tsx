@@ -746,7 +746,7 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
   }, [])
 
   return (
-    <div className="game-fullscreen" style={{ background: 'transparent' }}>
+    <div className="game-fullscreen">
       <GameNav onBack={onClose} />
 
       {step === 'ageGate' && (

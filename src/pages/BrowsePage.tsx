@@ -46,7 +46,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
   const [active, setActive] = useState<Category>('all')
 
   return (
-    <div style={{ background: 'transparent', minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
 
       {/* ── Sticky nav ── */}
       <nav className="browse-nav" style={{
