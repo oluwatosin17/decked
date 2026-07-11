@@ -188,14 +188,13 @@ function getQuestionsForMode(mode: string): string[] {
 function LNTCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
   const { wrapperStyle, cardStyle } = useScaledCard(400, 387)
   return (
-    <div style={wrapperStyle}>
+    <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
       className="game-card"
       onClick={!flipped ? onFlip : undefined}
       style={{
         ...cardStyle,
         position: 'relative', cursor: flipped ? 'default' : 'pointer',
-        perspective: '1000px',
       }}
     >
       <div style={{

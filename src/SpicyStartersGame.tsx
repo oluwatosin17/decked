@@ -3,7 +3,6 @@ import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
 
 /* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
-const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SPICY_CARD_BG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
@@ -74,37 +73,6 @@ const HOT_QUESTIONS = [
   ...MEDIUM_QUESTIONS,
 ]
 
-
-/* ─── Hearts row (age gate card top/bottom band) ─── */
-function HeartsRow({ top }: { top: boolean }) {
-  return (
-    <div style={{
-      position: 'absolute', [top ? 'top' : 'bottom']: top ? 0 : '-1px',
-      left: 0, right: 0, height: '87px',
-      background: '#dc2827', overflow: 'hidden',
-    }}>
-      {/* Stripes */}
-      <div style={{ position: 'absolute', [top ? 'top' : 'bottom']: '62px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '1px' }}>
-        {top
-          ? <><div style={{ height: '7px', background: '#ecc1c9', width: '100%' }} /><div style={{ height: '4px', background: '#ecc1c9', width: '100%' }} /></>
-          : <><div style={{ height: '4px', background: '#ecc1c9', width: '100%' }} /><div style={{ height: '7px', background: '#ecc1c9', width: '100%' }} /></>
-        }
-      </div>
-      {/* Hearts */}
-      <div style={{
-        position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-        top: top ? '15px' : '40px',
-        display: 'flex', gap: '5px', alignItems: 'center', whiteSpace: 'nowrap',
-      }}>
-        {Array.from({ length: 11 }, (_, i) => (
-          <img key={i} src={HEART_FILLED} alt=""
-            style={{ width: '32px', height: '32px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
 
 /* ═══════════════════════════════════════════════════════
    SCREEN 1 — Age Gate

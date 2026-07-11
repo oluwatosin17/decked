@@ -98,39 +98,26 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
           <span className="font-anton" style={{ color: '#fff', fontSize: '22px', letterSpacing: '0.56px', fontWeight: 400 }}>DECKED</span>
         </nav>
 
-        {/* Mobile hero */}
-        <div className="screen-enter" style={{ padding: '24px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', textAlign: 'center' }}>
-          <h1 className="font-spicy" style={{ color: 'white', fontSize: '42px', lineHeight: 1, margin: 0 }}>
+        {/* Mobile hero — compact, balanced */}
+        <div className="screen-enter" style={{ padding: '16px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', textAlign: 'center' }}>
+          <h1 className="font-spicy" style={{ color: 'white', fontSize: '32px', lineHeight: 1.05, margin: 0 }}>
             The party starts here
           </h1>
-          <p className="font-satoshi" style={{ color: '#d9dbde', fontSize: '16px', lineHeight: '20px', margin: 0 }}>
+          <p className="font-satoshi" style={{ color: '#d9dbde', fontSize: '14px', lineHeight: '18px', margin: 0, maxWidth: '280px' }}>
             Pick a deck, pass the phone, and let things get interesting.
           </p>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
             <button className="font-staatliches" onClick={onPlayTruthOrDare} style={{
-              background: '#dc2827', color: 'white', fontSize: '14px',
-              padding: '10px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+              background: '#dc2827', color: 'white', fontSize: '13px',
+              padding: '9px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer',
               boxShadow: '0 8px 12px rgba(220,40,39,0.25)',
             }}>QUICK PLAY</button>
             <button className="font-staatliches" onClick={onBrowse} style={{
-              background: 'transparent', color: 'white', fontSize: '14px',
-              padding: '10px 16px', borderRadius: '999px', border: '1px solid white', cursor: 'pointer',
+              background: 'transparent', color: 'white', fontSize: '13px',
+              padding: '9px 16px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.5)', cursor: 'pointer',
             }}>BROWSE GAMES</button>
           </div>
         </div>
-
-        {/* Mobile featured cards grid — uses exact desktop card designs, scaled down */}
-        <section style={{ padding: '32px 0 24px' }}>
-          <h2 className="font-spicy" style={{ color: 'white', fontSize: '32px', margin: '0 0 16px 16px' }}>Pick your vibe.</h2>
-          <MobileFeaturedGrid actions={actions} />
-          <div style={{ padding: '16px 16px 0', textAlign: 'center' }}>
-            <button className="font-staatliches game-btn" onClick={onBrowse} style={{
-              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
-              color: '#fff', fontSize: '14px', padding: '10px 24px', borderRadius: '999px', cursor: 'pointer',
-              width: '100%', letterSpacing: '0.04em',
-            }}>VIEW ALL GAMES</button>
-          </div>
-        </section>
 
         {/* Mobile footer */}
         <footer className="home-footer" style={{

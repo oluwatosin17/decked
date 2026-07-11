@@ -3,13 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- PWA: Apple Touch Icons (iOS requires 180x180) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/pwa-192x192.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#05050a" />
+
+    <!-- PWA: iOS standalone mode -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Decked" />
     <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- PWA: Splash screens for iOS (prevents white flash on launch) -->
+    <meta name="apple-touch-startup-image" content="/pwa-512x512.png" />
+
     <meta name="description" content="Pick a deck, pass the phone, and let the chaos begin. 10+ party card games, no app, no login, no excuses." />
     <title>Decked — Party Card Game</title>
 

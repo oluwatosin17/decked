@@ -186,11 +186,11 @@ function DTCCard({ question, flipped, onFlip }: { question: string; flipped: boo
   const { wrapperStyle, cardStyle } = useScaledCard(CARD_W, CARD_H)
 
   return (
-    <div style={wrapperStyle}>
+    <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
       className="game-card"
       onClick={!flipped ? onFlip : undefined}
-      style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
+      style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
         width: '100%', height: '100%', position: 'relative',

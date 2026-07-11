@@ -870,7 +870,7 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   /* Timer (64px → 40px) */
   span[style*="font-size: 64px"] { font-size: 40px !important; }
 
-  /* Card prompt text (26-32px → 16px for mobile reading) */
+  /* Card prompt text (26-32px → 14px for mobile reading) */
   p[style*="font-size: 28px"],
   span[style*="font-size: 28px"],
   p[style*="font-size: 29px"],
@@ -879,7 +879,7 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   span[style*="font-size: 26px"],
   p[style*="font-size: 32px"],
   span[style*="font-size: 32px"] {
-    font-size: 16px !important;
+    font-size: 14px !important;
     line-height: 1.3 !important;
   }
 
@@ -986,7 +986,7 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 
   /* ─── GAME CARDS: width capped, height handled by useCardScale ─── */
   .game-card {
-    max-width: calc(100vw - 48px) !important;
+    max-width: calc(100vw - 32px) !important;
   }
 
   /* ─── GAME PLAY LAYOUT: card + buttons always fit on screen ─── */
