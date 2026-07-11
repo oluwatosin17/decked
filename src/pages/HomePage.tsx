@@ -41,7 +41,7 @@ interface Props {
 function MobileFeaturedGrid({ actions }: { actions: Record<string, () => void> }) {
   const gridRef = useRef<HTMLDivElement>(null)
   const [colW, setColW] = useState(166)
-  const allCards = GAME_CARDS(() => {}, () => {}, () => {})
+  const allCards = GAME_CARDS(actions.onPlayTruthOrDare, actions.onPlaySpicyStarters, actions.onPlayLateNightTalks)
   const featured = allCards.filter(c => FEATURED_IDS.includes(c.id))
 
   useEffect(() => {
@@ -133,15 +133,30 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
         </section>
 
         {/* Mobile footer */}
-        <footer className="home-footer" style={{ marginTop: 'auto', background: 'rgba(5,5,12,0.80)', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <p className="font-anton" style={{ color: '#fff', fontSize: '24px', margin: 0 }}>DECKED</p>
-            <p className="font-inter" style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.5, margin: 0 }}>
-              Pick a deck, pass the phone, and let the chaos begin.
-            </p>
+        <footer className="home-footer" style={{
+          marginTop: 'auto', background: 'rgba(5,5,12,0.92)', backdropFilter: 'blur(8px)',
+          padding: '20px 16px 24px', display: 'flex', flexDirection: 'column', gap: '14px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p className="font-anton" style={{ color: '#fff', fontSize: '18px', margin: 0, letterSpacing: '0.4px' }}>DECKED</p>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              {[SOCIAL_TIKTOK, SOCIAL_INSTAGRAM, SOCIAL_WHATSAPP].map((src, i) => (
+                <img key={i} src={src} alt="" style={{ width: '16px', height: '16px', borderRadius: '4px', objectFit: 'contain', opacity: 0.7 }} />
+              ))}
+            </div>
           </div>
-          <div style={{ height: '1px', background: '#212326' }} />
-          <p style={{ color: '#9ca3af', fontSize: '12px', margin: 0, fontFamily: 'Inter, sans-serif' }}>© 2026 DECKED. All rights reserved.</p>
+          <p className="font-inter" style={{ color: '#6b7280', fontSize: '12px', lineHeight: 1.4, margin: 0 }}>
+            Pick a deck, pass the phone, and let the chaos begin.
+          </p>
+          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <p style={{ color: '#4b5563', fontSize: '11px', margin: 0, fontFamily: 'Inter, sans-serif' }}>© 2026 DECKED</p>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              {['Privacy', 'Terms'].map(l => (
+                <span key={l} style={{ color: '#6b7280', fontSize: '11px', fontFamily: 'Inter, sans-serif' }}>{l}</span>
+              ))}
+            </div>
+          </div>
         </footer>
       </div>
     )

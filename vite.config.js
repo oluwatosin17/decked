@@ -41,6 +41,14 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        // Force immediate activation on all browsers including Safari
+        skipWaiting: true,
+        clientsClaim: true,
+        // Clean old caches on activate
+        cleanupOutdatedCaches: true,
+        // Navigation fallback for SPA
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/res\.cloudinary\.com\/.*/i,

@@ -90,9 +90,11 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
 
       <style>{`
         @media (max-width: 768px) {
-          .browse-nav { padding: 0 16px !important; height: 56px !important; }
-          .browse-play-btn { padding: 8px 14px !important; }
-          .browse-play-btn span { font-size: 14px !important; }
+          .browse-nav { padding: 0 16px !important; height: 52px !important; }
+          .browse-nav button:first-child { font-size: 20px !important; }
+          .browse-play-btn { padding: 6px 12px !important; gap: 4px !important; }
+          .browse-play-btn span { font-size: 12px !important; }
+          .browse-play-btn svg { width: 14px !important; height: 14px !important; }
         }
       `}</style>
 

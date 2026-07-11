@@ -111,7 +111,7 @@ input::placeholder {
    outermost flex-1 div so all entrances are smooth
    ═══════════════════════════════════════════════ */
 @keyframes screen-enter {
-  from { opacity: 0; transform: translateY(22px) scale(0.99); }
+  from { opacity: 0; transform: translateY(16px) scale(0.99); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 .screen-enter {
@@ -606,6 +606,22 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
   }
 }
 
+/* ─── Safari/WebKit fixes ─── */
+/* Safari doesn't support gap in some flex contexts — use margin fallback */
+@supports not (gap: 10px) {
+  .browse-mobile-grid > * { margin: 5px; }
+}
+/* Safari: prevent rubber-banding in game screens */
+.screen-enter { -webkit-overflow-scrolling: touch; }
+/* Safari: fix transform rendering */
+.browse-mobile-card-scaled,
+.card-tile { -webkit-transform: translateZ(0); }
+/* Safari: fix backface visibility on card flips */
+.spicy-flip-front, .spicy-flip-back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 /* ─── Touch devices: disable hover, improve active ─── */
 @media (hover: none) and (pointer: coarse) {
   .card-tile:hover,
@@ -704,7 +720,15 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
   }
 
   /* ─── SCREEN ENTER: comfortable mobile padding ─── */
-  .screen-enter { padding: 20px 16px !important; }
+  .screen-enter {
+    padding: 20px 16px !important;
+  }
+  /* Setup screens: top-aligned, app-like layout (not vertically centered) */
+  .screen-enter:has(.setup-container) {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding-top: 48px !important;
+  }
 
   /* ─── FLUID CONTAINERS: all fixed-width wrappers ─── */
   div[style*="width: 824px"],
@@ -751,8 +775,8 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
     font-size: inherit;
   }
 
-  /* Setup container widths */
-  .setup-container { width: 100% !important; max-width: 500px; }
+  /* Setup container widths — compact gap like Figma mobile reference */
+  .setup-container { width: 100% !important; max-width: 500px; gap: 20px !important; }
   .setup-buttons { width: 100% !important; max-width: 340px; }
 
   /* Game play content — no side padding bleed */
@@ -819,6 +843,10 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
 
   /* Setup heading (36px → 22px) */
   .setup-title { font-size: 22px !important; }
+
+  /* Setup container even tighter */
+  .setup-container { gap: 16px !important; }
+  .setup-buttons { max-width: 100% !important; }
 
   /* ─── BUTTONS: ensure proper sizing, no circles ─── */
   /* Fluid button rows */
