@@ -248,7 +248,7 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
                 }}
               >
                 <div style={{
-                  width: '32px', height: '32px', borderRadius: '16px',
+                  width: '32px', height: '32px', borderRadius: '50%',
                   background: isSel ? 'rgba(237,130,81,0.15)' : 'rgba(255,255,255,0.08)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>

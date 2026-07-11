@@ -244,7 +244,7 @@ function SetRoundLength({ onBack, onNext }: { onBack: () => void; onNext: (secs:
           onClick={() => inputRef.current?.focus()}
         >
           {/* Correct watch icon from Figma */}
-          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <WatchIcon style={{ width: '16px', height: '16px' }} />
           </div>
           <input
@@ -294,7 +294,7 @@ function LivesSetup({ onBack, onNext }: { onBack: () => void; onNext: (lives: nu
               >
                 {/* N life icons */}
                 {Array.from({ length: m.lives }, (_, i) => (
-                  <div key={i} style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div key={i} style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <img src={ICON_LIVE} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
                   </div>
                 ))}

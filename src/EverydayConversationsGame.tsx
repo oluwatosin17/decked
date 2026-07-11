@@ -267,7 +267,7 @@ function ThemeSelect({ onSelect }: { onSelect: (t: Theme) => void }) {
                 }}
               >
                 <div style={{
-                  width: '32px', height: '32px', borderRadius: '16px',
+                  width: '32px', height: '32px', borderRadius: '50%',
                   background: isHovered ? 'rgba(255,255,255,0.13)' : 'rgba(255,255,255,0.08)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0, transition: 'background 0.18s',

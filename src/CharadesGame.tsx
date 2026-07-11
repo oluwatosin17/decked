@@ -281,7 +281,7 @@ function CategorySelectScreen({ initialSelected, onBack, onNext }: { initialSele
           Select Category
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', width: '100%', maxHeight: '400px', overflowY: 'auto' }}>
+        <div className="charades-category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', width: '100%', maxHeight: '400px', overflowY: 'auto' }}>
           {CHARADES_CATEGORIES.map((cat, i) => {
             const isSel = selected.has(cat.id)
             return (
@@ -295,12 +295,12 @@ function CategorySelectScreen({ initialSelected, onBack, onNext }: { initialSele
                 }}
               >
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1, minWidth: 0 }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '16px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <img src={cat.icon} alt="" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                   </div>
                   <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1, minWidth: 0 }}>{cat.label}</span>
                 </div>
-                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {isSel && <span key="check" className="check-pop" style={{ display: 'flex' }}><CheckIcon /></span>}
                 </div>
               </div>
@@ -400,7 +400,7 @@ function CustomCardsScreen({ deckSize, initialCards, onBack, onNext }: { deckSiz
             <button
               onClick={e => { e.stopPropagation(); addCard() }}
               disabled={remaining <= 0}
-              style={{ background: hasInput ? RED : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: remaining > 0 ? 'pointer' : 'not-allowed', flexShrink: 0, color: '#fff', fontSize: hasInput ? '14px' : '20px', lineHeight: 1 }}
+              style={{ background: hasInput ? RED : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', maxWidth: '32px', maxHeight: '32px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: remaining > 0 ? 'pointer' : 'not-allowed', flexShrink: 0, color: '#fff', fontSize: hasInput ? '14px' : '20px', lineHeight: 1 }}
               aria-label="Add card"
             >{hasInput ? '✓' : '+'}</button>
             <input

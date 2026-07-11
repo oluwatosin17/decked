@@ -123,7 +123,7 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
                 style={{
                   background: hasInput ? '#dc2827' : 'rgba(255,255,255,0.1)',
                   border: 'none', borderRadius: '8px',
-                  width: '32px', height: '32px',
+                  width: '32px', height: '32px', maxWidth: '32px', maxHeight: '32px', padding: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer', flexShrink: 0, color: '#fff',
                   fontSize: hasInput ? '14px' : '20px', fontWeight: 400, lineHeight: 1,

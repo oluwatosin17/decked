@@ -148,9 +148,9 @@ input::placeholder {
    CARD FLOAT-UP  (age gates + revealed cards)
    ═══════════════════════════════════════════════ */
 @keyframes card-float-up {
-  0%   { opacity: 0; transform: translateY(40px) scale(0.96); }
+  0%   { opacity: 0; }
   60%  { opacity: 1; }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 1; }
 }
 .card-float-up { animation: card-float-up 0.5s var(--ease-out) 0.05s both; }
 
@@ -270,11 +270,11 @@ input::placeholder {
 .tod-flip-out { animation: tod-flip-out 0.2s  cubic-bezier(0.55, 0, 0.55, 1) both; }
 .tod-flip-in  { animation: tod-flip-in  0.38s var(--ease-out) both; }
 
-/* ToD card entrance */
+/* ToD card entrance — uses opacity only so inline transform (scale) is preserved */
 @keyframes tod-card-in {
-  0%   { opacity: 0; transform: translateY(30px) scale(0.96); }
+  0%   { opacity: 0; }
   60%  { opacity: 1; }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 1; }
 }
 .tod-card-enter { animation: tod-card-in 0.4s var(--ease-out) both; }
 
@@ -496,12 +496,11 @@ input::placeholder {
    NHIE MICRO-INTERACTIONS
    ═══════════════════════════════════════════════ */
 
-/* Card entrance — floats up with subtle rotation */
+/* Card entrance — opacity fade so inline transform (scale) is preserved */
 @keyframes nhie-card-enter {
-  0%   { opacity: 0; transform: translateY(40px) scale(0.9) rotate(-1.5deg); }
-  60%  { opacity: 1; transform: translateY(-6px) scale(1.02) rotate(0.5deg); }
-  80%  { transform: translateY(2px) scale(0.99) rotate(-0.2deg); }
-  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+  0%   { opacity: 0; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; }
 }
 .nhie-card-enter { animation: nhie-card-enter 0.48s var(--ease-spring) both; }
 
@@ -676,7 +675,7 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .mode-row:not(.mode-row-locked):hover { transform: none !important; box-shadow: none !important; }
 
   /* 44px minimum touch target (Apple HIG / Material) — exclude icon buttons */
-  button:not([aria-label="Add player"]):not([aria-label="Remove player"]):not(.icon-x-btn):not(.avatar-circle) {
+  button:not([aria-label="Add player"]):not([aria-label="Remove player"]):not([aria-label="Add card"]):not([aria-label="Remove card"]):not(.icon-x-btn):not(.avatar-circle) {
     min-height: 44px;
   }
 
@@ -769,11 +768,9 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .screen-enter {
     padding: 20px 16px !important;
   }
-  /* Setup screens: top-aligned, app-like layout (not vertically centered) */
+  /* Setup screens: centered by default, shift up only when keyboard is open */
   .screen-enter-setup {
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    padding-top: 48px !important;
+    overflow-y: auto !important;
   }
 
   /* ─── FLUID CONTAINERS: all fixed-width wrappers ─── */
@@ -987,19 +984,16 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
     flex-shrink: 0 !important;
   }
 
-  /* ─── GAME CARDS: ensure cards don't dominate screen ─── */
+  /* ─── GAME CARDS: width capped, height handled by useCardScale ─── */
   .game-card {
     max-width: calc(100vw - 48px) !important;
-    max-height: 55vh !important;
   }
 
   /* ─── GAME PLAY LAYOUT: card + buttons always fit on screen ─── */
-  /* Game play containers: scroll if needed, align top on small screens */
+  /* Game play containers: scroll if needed, keep centered */
   .game-fullscreen > .screen-enter,
   .game-fullscreen > div[style*="flex: 1"] {
     overflow-y: auto !important;
-    justify-content: flex-start !important;
-    padding-top: 20px !important;
   }
 
   /* Button rows below cards: ensure visibility */
@@ -1007,13 +1001,26 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
     flex-shrink: 0 !important;
   }
 
+  /* ─── CHARADES CATEGORY GRID: 2 columns on mobile ─── */
+  .charades-category-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .charades-category-grid span[style*="whiteSpace"] {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    font-size: 14px !important;
+  }
+
   /* ─── KEYBOARD BEHAVIOR: prevent layout collapse ─── */
-  /* When keyboard opens, prevent fixed containers from breaking */
-  .screen-enter:has(input:focus),
-  .screen-enter-setup:has(input:focus) {
-    justify-content: flex-start !important;
-    padding-top: 20px !important;
-    overflow-y: auto !important;
+  /* When keyboard opens, shift content up to keep input visible */
+  @supports selector(:has(*)) {
+    .screen-enter:has(input:focus),
+    .screen-enter-setup:has(input:focus) {
+      justify-content: flex-start !important;
+      padding-top: 20px !important;
+      overflow-y: auto !important;
+    }
   }
 }
 

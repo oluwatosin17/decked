@@ -405,7 +405,7 @@ function SelectionScreen<T extends string>({ title, options, onSelect }: {
                   animation: `screen-enter 0.4s var(--ease-out) ${0.07 + Math.floor(i / 2) * 0.06}s both`,
                 }}
               >
-                <div style={{ width: '32px', height: '32px', borderRadius: '16px', background: isH ? 'rgba(255,255,255,0.13)' : 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.18s' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: isH ? 'rgba(255,255,255,0.13)' : 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.18s' }}>
                   <img src={opt.icon} alt={opt.label} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
                 </div>
                 <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: isH ? '#fff' : 'rgba(255,255,255,0.55)', textAlign: 'left', lineHeight: 'normal', whiteSpace: 'nowrap', transition: 'color 0.18s' }}>{opt.label}</span>
