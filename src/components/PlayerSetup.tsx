@@ -81,9 +81,9 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px',
             }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
-                <div style={{
-                  width: '32px', height: '32px', borderRadius: '50%',
-                  background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff',
+                <div className="avatar-circle" style={{
+                  width: '32px', height: '32px',
+                  background: p.color, boxShadow: '0 0 0 2.5px #ffffff',
                 }} />
                 {editingIdx === i ? (
                   <input
@@ -124,8 +124,9 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
               onClick={e => { e.stopPropagation(); addPlayer() }}
               style={{
                 background: hasInput ? nextColor : 'rgba(255,255,255,0.1)',
-                border: 'none', borderRadius: '16px',
-                width: '32px', height: '32px',
+                border: 'none', borderRadius: '50%',
+                width: '32px', height: '32px', maxWidth: '32px', maxHeight: '32px',
+                padding: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', flexShrink: 0, color: '#fff',
                 fontSize: hasInput ? '14px' : '20px', fontWeight: 400, lineHeight: 1,

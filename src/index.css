@@ -51,6 +51,14 @@ input::placeholder {
   font-family: 'Anton SC', sans-serif;
 }
 
+/* ─── Avatar circles: always perfectly round ─── */
+.avatar-circle {
+  border-radius: 50% !important;
+  aspect-ratio: 1 !important;
+  flex-shrink: 0 !important;
+  overflow: hidden;
+}
+
 /* ─── Homepage tiles ─── */
 .card-tile {
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
@@ -667,8 +675,10 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .spicy-option:hover { background: inherit !important; transform: none !important; box-shadow: none !important; }
   .mode-row:not(.mode-row-locked):hover { transform: none !important; box-shadow: none !important; }
 
-  /* 44px minimum touch target (Apple HIG / Material) */
-  button { min-height: 44px; }
+  /* 44px minimum touch target (Apple HIG / Material) — exclude icon buttons */
+  button:not([aria-label="Add player"]):not([aria-label="Remove player"]):not(.icon-x-btn):not(.avatar-circle) {
+    min-height: 44px;
+  }
 
   /* Snappy press feedback */
   .game-btn:active { transform: scale(0.95) !important; transition-duration: 60ms !important; }
@@ -970,10 +980,31 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .mode-btn div:first-child { width: 28px !important; height: 28px !important; }
   .mode-btn img { width: 16px !important; height: 16px !important; }
 
+  /* ─── PLAYER AVATARS: enforce perfect circles on mobile ─── */
+  div[style*="borderRadius: 50%"][style*="flexShrink: 0"],
+  div[style*="border-radius: 50%"] {
+    aspect-ratio: 1 !important;
+    flex-shrink: 0 !important;
+  }
+
   /* ─── GAME CARDS: ensure cards don't dominate screen ─── */
   .game-card {
     max-width: calc(100vw - 48px) !important;
-    max-height: 60vh !important;
+    max-height: 55vh !important;
+  }
+
+  /* ─── GAME PLAY LAYOUT: card + buttons always fit on screen ─── */
+  /* Game play containers: scroll if needed, align top on small screens */
+  .game-fullscreen > .screen-enter,
+  .game-fullscreen > div[style*="flex: 1"] {
+    overflow-y: auto !important;
+    justify-content: flex-start !important;
+    padding-top: 20px !important;
+  }
+
+  /* Button rows below cards: ensure visibility */
+  .game-btn, .game-btn-primary {
+    flex-shrink: 0 !important;
   }
 
   /* ─── KEYBOARD BEHAVIOR: prevent layout collapse ─── */
