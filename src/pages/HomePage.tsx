@@ -119,6 +119,18 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
           </div>
         </div>
 
+        {/* Featured cards — no heading, just the grid */}
+        <section style={{ padding: '24px 0 20px' }}>
+          <MobileFeaturedGrid actions={actions} />
+          <div style={{ padding: '12px 16px 0', textAlign: 'center' }}>
+            <button className="font-staatliches game-btn" onClick={onBrowse} style={{
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+              color: '#fff', fontSize: '13px', padding: '9px 20px', borderRadius: '999px', cursor: 'pointer',
+              width: '100%', letterSpacing: '0.04em',
+            }}>VIEW ALL GAMES</button>
+          </div>
+        </section>
+
         {/* Mobile footer */}
         <footer className="home-footer" style={{
           marginTop: 'auto', background: 'rgba(5,5,12,0.92)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',

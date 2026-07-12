@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
+import QuickPlay from './QuickPlay'
 import TruthOrDareGame from './TruthOrDareGame'
 import SpicyStartersGame from './SpicyStartersGame'
 import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
@@ -18,7 +19,7 @@ import SipOrSpillGame from './SipOrSpillGame'
 import DoOrDrinkGame from './DoOrDrinkGame'
 
 type Screen =
-  | 'home' | 'browse'
+  | 'home' | 'browse' | 'quick-play'
   | 'lnt-select' | 'late-night-talks'
   | 'dtc-select' | 'dinner-table'
   | 'you-laugh'
@@ -32,6 +33,32 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
   const lntModeRef = useRef('couples')
   const dtcModeRef = useRef('date-night')
+
+  /* ── Quick Play: route game id to screen ── */
+  const playGame = useCallback((gameId: string) => {
+    const map: Record<string, Screen> = {
+      'truth-or-dare': 'truth-or-dare',
+      'spicy-starters': 'spicy-starters',
+      'late-night-talks': 'lnt-select',
+      'dinner-table': 'dtc-select',
+      'you-laugh': 'you-laugh',
+      'never-have-i-ever': 'never-have-i-ever',
+      'charades': 'charades',
+      'lets-reconnect': 'lets-reconnect',
+      'everyday-conversations': 'everyday-conversations',
+      'wnrs': 'wnrs',
+      'put-a-finger-down': 'put-a-finger-down',
+      'take-a-sip': 'take-a-sip',
+      'sip-or-spill': 'sip-or-spill',
+      'do-or-drink': 'do-or-drink',
+    }
+    setScreen(map[gameId] ?? 'browse')
+  }, [])
+
+  /* ── Quick Play ── */
+  if (screen === 'quick-play') {
+    return <QuickPlay onBack={() => setScreen('home')} onPlay={playGame} />
+  }
 
   /* ── Select Game Mode: LNT ── */
   if (screen === 'lnt-select') {
@@ -148,7 +175,7 @@ export default function App() {
   /* ── Home ── */
   return (
     <HomePage
-      onPlayTruthOrDare={() => setScreen('truth-or-dare')}
+      onPlayTruthOrDare={() => setScreen('quick-play')}
       onPlaySpicyStarters={() => setScreen('spicy-starters')}
       onPlayLateNightTalks={() => setScreen('lnt-select')}
       onBrowse={() => setScreen('browse')}
