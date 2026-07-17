@@ -167,7 +167,7 @@ function IcebreakerGetReady({ players, onReady }: { players: Player[]; onReady: 
               display: 'flex', alignItems: 'center', gap: '12px',
               animation: `screen-enter 0.4s var(--ease-out) ${0.2 + i * 0.15}s both`,
             }}>
-              <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color }} />
+              <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color, boxShadow: '0 0 0 2.5px rgba(255,255,255,0.3)' }} />
               <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff' }}>
                 {p.name.toUpperCase()}
               </span>
@@ -188,38 +188,60 @@ function IcebreakerGetReady({ players, onReady }: { players: Player[]; onReady: 
   )
 }
 
-/* ── Card Front: Tap to Reveal ── */
-function CardFront({ onTap }: { onTap: () => void }) {
+/* ── Flip Card: front=icebreaker, back=question ── */
+function FlipCard({ question, flipped, onTap }: {
+  question: { category: Category; text: string }
+  flipped: boolean
+  onTap: () => void
+}) {
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
+
   return (
     <div style={wrapperStyle}>
       <div
         onClick={onTap}
-        className="game-card intro-card-hover-wrap"
-        style={{
-          ...cardStyle, borderRadius: '16px', overflow: 'hidden',
-          position: 'relative', cursor: 'pointer', zIndex: 2,
-          boxShadow: '0 32px 80px rgba(91,200,245,0.3)',
-        }}
+        className="intro-card-hover-wrap game-card"
+        style={{ ...cardStyle, flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
-        <img src={ICEBREAKER_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div style={{
-          position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center', gap: '16px',
-        }}>
-          <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '42px', color: '#000', textAlign: 'center', margin: 0, textTransform: 'uppercase' }}>
-            ICEBREAKER
-          </p>
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(0,0,0,0.5)', margin: 0 }}>
-            Tap to Reveal
-          </p>
+        <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
+          <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
+            {/* FRONT: Icebreaker cover */}
+            <div className="spicy-flip-front" style={{ background: '#4AC7F5' }}>
+              <img src={ICEBREAKER_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+                <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '42px', color: '#000', textAlign: 'center', margin: 0 }}>
+                  ICEBREAKER
+                </p>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(0,0,0,0.5)', margin: 0 }}>
+                  Tap to Reveal
+                </p>
+              </div>
+            </div>
+
+            {/* BACK: Question card */}
+            <div className="spicy-flip-back" style={{
+              background: '#f0f8ff',
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              justifyContent: 'center', padding: '40px 32px', gap: '20px',
+            }}>
+              <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
+                {question.category}
+              </span>
+              <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
+                {question.text}
+              </p>
+              <div style={{ marginTop: 'auto' }}>
+                <IcebergIcon size={56} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-/* ── Revealed Card ── */
+/* ── Revealed Card (for next-card flip transitions) ── */
 function RevealedCard({ question, flipPhase }: { question: { category: Category; text: string }; flipPhase: string }) {
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
   const cls = flipPhase === 'out' ? 'game-card-flip-out' : flipPhase === 'in' ? 'game-card-flip-in' : ''
@@ -236,21 +258,12 @@ function RevealedCard({ question, flipPhase }: { question: { category: Category;
           justifyContent: 'center', padding: '40px 32px', gap: '20px',
         }}
       >
-        <span style={{
-          fontFamily: "'Staatliches', sans-serif", fontSize: '13px',
-          letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase',
-        }}>
+        <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
           {question.category}
         </span>
-
-        <p style={{
-          fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-          fontSize: '26px', color: '#1a1a2e', textAlign: 'center',
-          textTransform: 'uppercase', lineHeight: 1.25, margin: 0,
-        }}>
+        <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
           {question.text}
         </p>
-
         <div style={{ marginTop: 'auto' }}>
           <IcebergIcon size={56} />
         </div>
@@ -284,7 +297,7 @@ function RoundRobinTracker({ players, answeredSet, onMarkDone, onNext }: {
               cursor: done ? 'default' : 'pointer', width: '100%',
             }}
           >
-            <div className="avatar-circle" style={{ width: '28px', height: '28px', background: p.color }} />
+            <div className="avatar-circle" style={{ width: '28px', height: '28px', background: p.color, boxShadow: '0 0 0 2px rgba(255,255,255,0.25)' }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, textAlign: 'left' }}>
               {p.name.toUpperCase()}
             </span>
@@ -310,7 +323,18 @@ function RoundRobinTracker({ players, answeredSet, onMarkDone, onNext }: {
 }
 
 /* ── Game Play ── */
-type GamePhase = 'card-front' | 'revealed' | 'answer'
+type GamePhase = 'card-front' | 'revealed'
+
+function PlayerChip({ player, cardIndex }: { player: Player; cardIndex: number }) {
+  return (
+    <div key={`${player.name}-${cardIndex}`} className="player-chip-enter" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="avatar-circle" style={{ width: '28px', height: '28px', background: player.color, boxShadow: `0 0 0 2.5px rgba(255,255,255,0.3)` }} />
+      <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
+        {player.name.toUpperCase()}'S TURN
+      </span>
+    </div>
+  )
+}
 
 function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }: {
   players: Player[]
@@ -322,6 +346,7 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
   const [cardIndex, setCardIndex] = useState(0)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [phase, setPhase] = useState<GamePhase>('card-front')
+  const [flipped, setFlipped] = useState(false)
   const [flipPhase, setFlipPhase] = useState<'idle' | 'out' | 'in'>('idle')
   const [answeredSet, setAnsweredSet] = useState<Set<number>>(new Set())
   const [skipCount, setSkipCount] = useState(0)
@@ -330,27 +355,33 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
   const question = shuffledQs[cardIndex % shuffledQs.length]
   const isDone = totalCards > 0 && cardIndex >= totalCards
+  const isRoundRobin = mode === 'round-robin' && players.length > 0
+  const allAnswered = answeredSet.size >= players.length
 
-  const flipToNext = useCallback((cb: () => void) => {
+  const flipToNextCard = useCallback((skipped = false) => {
     if (flippingRef.current) return
+    if (skipped) setSkipCount(c => c + 1)
     flippingRef.current = true
     setFlipPhase('out')
     setTimeout(() => {
-      cb()
+      const nextCard = cardIndex + 1
+      const nextPlayer = players.length > 0 ? (playerIndex + 1) % players.length : 0
+      setCardIndex(nextCard)
+      setPlayerIndex(nextPlayer)
+      setAnsweredSet(new Set())
+      setFlipped(false)
+      setPhase('card-front')
       setFlipPhase('in')
       setTimeout(() => { setFlipPhase('idle'); flippingRef.current = false }, 300)
     }, 200)
-  }, [])
-
-  const advanceCard = useCallback((skipped = false) => {
-    if (skipped) setSkipCount(c => c + 1)
-    const nextCard = cardIndex + 1
-    const nextPlayer = players.length > 0 ? (playerIndex + 1) % players.length : 0
-    setCardIndex(nextCard)
-    setPlayerIndex(nextPlayer)
-    setAnsweredSet(new Set())
-    setPhase('card-front')
   }, [cardIndex, playerIndex, players.length])
+
+  const handleTapCard = useCallback(() => {
+    if (phase === 'card-front' && !flipped) {
+      setFlipped(true)
+      setTimeout(() => setPhase('revealed'), 800)
+    }
+  }, [phase, flipped])
 
   if (isDone) {
     return (
@@ -388,7 +419,7 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
           <button className="game-btn" onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             BROWSE GAMES
           </button>
-          <button className="game-btn-primary" onClick={() => { setCardIndex(0); setPlayerIndex(0); setSkipCount(0); setAnsweredSet(new Set()); setPhase('card-front') }} style={{ background: '#5BC8F5', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
+          <button className="game-btn-primary" onClick={() => { setCardIndex(0); setPlayerIndex(0); setSkipCount(0); setAnsweredSet(new Set()); setFlipped(false); setPhase('card-front') }} style={{ background: '#5BC8F5', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
             PLAY AGAIN
           </button>
         </div>
@@ -396,20 +427,12 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
     )
   }
 
+  /* card-front: show flip card (front or mid-flip) */
   if (phase === 'card-front') {
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px 40px 60px', position: 'relative' }}>
-        {currentPlayer && (
-          <div key={`${currentPlayer.name}-${cardIndex}`} className="player-chip-enter" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div className="avatar-circle" style={{ width: '28px', height: '28px', background: currentPlayer.color, border: '2px solid rgba(255,255,255,0.2)' }} />
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
-              {currentPlayer.name.toUpperCase()}'S TURN
-            </span>
-          </div>
-        )}
-
-        <CardFront onTap={() => setPhase('revealed')} />
-
+        {currentPlayer && <PlayerChip player={currentPlayer} cardIndex={cardIndex} />}
+        <FlipCard question={question} flipped={flipped} onTap={handleTapCard} />
         {totalCards > 0 && (
           <div className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
             CARD {cardIndex + 1} OF {totalCards}
@@ -419,71 +442,53 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
     )
   }
 
-  if (phase === 'revealed') {
-    return (
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px 40px 60px', position: 'relative' }}>
-        {currentPlayer && (
-          <div className="player-chip-enter" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div className="avatar-circle" style={{ width: '28px', height: '28px', background: currentPlayer.color, border: '2px solid rgba(255,255,255,0.2)' }} />
-            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
-              {currentPlayer.name.toUpperCase()}'S TURN
-            </span>
-          </div>
-        )}
+  /* revealed: show question card + buttons, and round robin tracker if applicable */
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '40px 20px 60px', position: 'relative', overflowY: 'auto' }}>
+      {currentPlayer && <PlayerChip player={currentPlayer} cardIndex={cardIndex} />}
 
-        <RevealedCard question={question} flipPhase={flipPhase} />
+      <RevealedCard question={question} flipPhase={flipPhase} />
 
+      {/* Round Robin: show player tracker below the card */}
+      {isRoundRobin && (
+        <RoundRobinTracker
+          players={players}
+          answeredSet={answeredSet}
+          onMarkDone={(idx) => setAnsweredSet(prev => new Set(prev).add(idx))}
+          onNext={() => flipToNextCard(false)}
+        />
+      )}
+
+      {/* Spotlight mode or fallback buttons */}
+      {!isRoundRobin && (
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '100%', maxWidth: '402px' }}>
           <button className="game-btn"
-            onClick={() => flipToNext(() => advanceCard(true))}
+            onClick={() => flipToNextCard(true)}
             style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}
           >
             SKIP
           </button>
           <button className="game-btn-primary"
-            onClick={() => {
-              if (mode === 'round-robin' && players.length > 0) {
-                setPhase('answer')
-              } else {
-                flipToNext(() => advanceCard(false))
-              }
-            }}
+            onClick={() => flipToNextCard(false)}
             style={{ flex: 1, background: '#5BC8F5', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}
           >
             NEXT
           </button>
         </div>
+      )}
 
-        {totalCards > 0 && (
-          <div key={cardIndex} className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
-            CARD {cardIndex + 1} OF {totalCards}
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  /* answer phase — round robin tracker */
-  return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px 40px 60px', position: 'relative' }}>
-      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-        <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.12em', margin: '0 0 8px' }}>
-          EVERYONE ANSWERS
-        </p>
-        <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '20px', color: '#5BC8F5', textAlign: 'center', margin: 0 }}>
-          {question.text.toUpperCase()}
-        </p>
-      </div>
-
-      <RoundRobinTracker
-        players={players}
-        answeredSet={answeredSet}
-        onMarkDone={(idx) => setAnsweredSet(prev => new Set(prev).add(idx))}
-        onNext={() => flipToNext(() => advanceCard(false))}
-      />
+      {/* Round Robin: show skip button when not all answered */}
+      {isRoundRobin && !allAnswered && (
+        <button className="game-btn"
+          onClick={() => flipToNextCard(true)}
+          style={{ position: 'relative', zIndex: 2, border: '1px solid rgba(255,255,255,0.2)', background: 'none', borderRadius: '999px', padding: '10px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}
+        >
+          SKIP THIS CARD
+        </button>
+      )}
 
       {totalCards > 0 && (
-        <div className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
+        <div key={cardIndex} className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
           CARD {cardIndex + 1} OF {totalCards}
         </div>
       )}

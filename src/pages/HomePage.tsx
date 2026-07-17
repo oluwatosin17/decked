@@ -10,13 +10,13 @@ const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
 
 const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh']
-const FEATURED_ACTIONS: Record<string, 'onPlayTruthOrDare' | 'onPlaySpicyStarters' | 'onPlayLateNightTalks' | 'onBrowse'> = {
+const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
   'late-night-talks': 'onPlayLateNightTalks',
-  'charades': 'onBrowse',
-  'never-have-i-ever': 'onBrowse',
-  'you-laugh': 'onBrowse',
+  'charades': 'onPlayCharades',
+  'never-have-i-ever': 'onPlayNeverHaveIEver',
+  'you-laugh': 'onPlayYouLaugh',
 }
 
 function useIsMobile(bp = 768) {
@@ -36,6 +36,9 @@ interface Props {
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
+  onPlayCharades?: () => void
+  onPlayNeverHaveIEver?: () => void
+  onPlayYouLaugh?: () => void
   onBrowse: () => void
 }
 
@@ -87,9 +90,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, () => void> }
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onBrowse }: Props) {
   const isMobile = useIsMobile()
-  const actions = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onBrowse }
 
   if (isMobile) {
     return (

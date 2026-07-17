@@ -162,6 +162,7 @@ export default function App() {
     return (
       <BrowsePage
         onHome={() => setScreen('home')}
+        onQuickPlay={() => setScreen('quick-play')}
         onPlayTruthOrDare={() => setScreen('truth-or-dare')}
         onPlaySpicyStarters={() => setScreen('spicy-starters')}
         onPlayLateNightTalks={() => setScreen('lnt-select')}
@@ -188,6 +189,9 @@ export default function App() {
       onPlayTruthOrDare={() => setScreen('truth-or-dare')}
       onPlaySpicyStarters={() => setScreen('spicy-starters')}
       onPlayLateNightTalks={() => setScreen('lnt-select')}
+      onPlayCharades={() => setScreen('charades')}
+      onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
+      onPlayYouLaugh={() => setScreen('you-laugh')}
       onBrowse={() => setScreen('browse')}
     />
   )

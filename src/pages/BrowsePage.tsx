@@ -41,9 +41,10 @@ interface Props {
   onPlaySipOrSpill?: () => void
   onPlayDoOrDrink?: () => void
   onPlayIcebreaker?: () => void
+  onQuickPlay?: () => void
 }
 
-export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker }: Props) {
+export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onQuickPlay }: Props) {
   const [active, setActive] = useState<Category>('all')
 
   return (
@@ -77,7 +78,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             ))}
           </div>
 
-          <button className="game-btn-primary browse-play-btn" onClick={onPlayTruthOrDare} style={{
+          <button className="game-btn-primary browse-play-btn" onClick={onQuickPlay ?? onPlayTruthOrDare} style={{
             background: '#dc2827', border: 'none', borderRadius: '999px',
             padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '8px',
           }}>

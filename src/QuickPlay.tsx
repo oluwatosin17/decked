@@ -60,8 +60,8 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
     setTimeout(() => {
       setRefreshKey(k => k + 1)
       setShufflePhase('in')
-      setTimeout(() => setShufflePhase('idle'), 400)
-    }, 250)
+      setTimeout(() => setShufflePhase('idle'), 500)
+    }, 320)
   }, [shufflePhase])
 
   return (
@@ -90,10 +90,12 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '440px' }}>
           {currentSuggestions.map((game, i) => {
+            const fanDirs = ['-50px', '60px', '-35px']
+            const fanRots = ['-8deg', '10deg', '-5deg']
             const shuffleAnim = shufflePhase === 'out'
-              ? `qp-shuffle-out 0.25s cubic-bezier(0.4,0,1,1) ${i * 40}ms both`
+              ? `qp-shuffle-out 0.3s cubic-bezier(0.55,0,1,0.45) ${i * 50}ms both`
               : shufflePhase === 'in'
-              ? `qp-shuffle-in 0.35s cubic-bezier(0.22,1,0.36,1) ${i * 60}ms both`
+              ? `qp-shuffle-in 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms both`
               : `screen-enter 0.4s var(--ease-out) ${0.05 + i * 0.08}s both`
 
             return (
@@ -107,7 +109,9 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
                   borderRadius: '16px', padding: '14px 18px', cursor: 'pointer',
                   textAlign: 'left', width: '100%',
                   animation: shuffleAnim,
-                }}
+                  '--qp-fan': fanDirs[i] || '40px',
+                  '--qp-rot': fanRots[i] || '6deg',
+                } as React.CSSProperties}
               >
                 <div style={{
                   width: '56px', height: '56px', borderRadius: '12px',
