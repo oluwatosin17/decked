@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { GameNav, GameFooter } from './components/GameShell'
 
 interface GameSuggestion {
@@ -23,6 +23,7 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'take-a-sip', label: 'Take a Sip', description: 'Sip if the statement applies to you', thumbnail: '/icons/qp-take-a-sip.svg' },
   { id: 'sip-or-spill', label: 'Sip or Spill', description: 'Answer honestly or take a drink', thumbnail: '/icons/qp-sip-or-spill.svg' },
   { id: 'do-or-drink', label: 'Do or Drink', description: 'Complete the dare or take a drink', thumbnail: '/icons/qp-do-or-drink.svg' },
+  { id: 'icebreaker', label: 'Icebreaker', description: 'Fun questions to break the ice', thumbnail: '/icons/qp-icebreaker.svg' },
 ]
 
 function pickRandom3(): GameSuggestion[] {
@@ -50,7 +51,18 @@ interface Props {
 export default function QuickPlay({ onBack, onPlay }: Props) {
   const [suggestions] = useState(() => pickRandom3())
   const [refreshKey, setRefreshKey] = useState(0)
+  const [shufflePhase, setShufflePhase] = useState<'idle' | 'out' | 'in'>('idle')
   const currentSuggestions = useMemo(() => refreshKey === 0 ? suggestions : pickRandom3(), [refreshKey])
+
+  const handleShuffle = useCallback(() => {
+    if (shufflePhase !== 'idle') return
+    setShufflePhase('out')
+    setTimeout(() => {
+      setRefreshKey(k => k + 1)
+      setShufflePhase('in')
+      setTimeout(() => setShufflePhase('idle'), 400)
+    }, 250)
+  }, [shufflePhase])
 
   return (
     <div className="game-fullscreen">
@@ -77,50 +89,58 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '440px' }}>
-          {currentSuggestions.map((game, i) => (
-            <button
-              key={`${game.id}-${refreshKey}`}
-              onClick={() => onPlay(game.id)}
-              className="game-btn"
-              style={{
-                display: 'flex', alignItems: 'center', gap: '16px',
-                background: '#111113', border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: '16px', padding: '14px 18px', cursor: 'pointer',
-                textAlign: 'left', width: '100%',
-                animation: `screen-enter 0.4s var(--ease-out) ${0.05 + i * 0.08}s both`,
-              }}
-            >
-              <div style={{
-                width: '56px', height: '56px', borderRadius: '12px',
-                overflow: 'hidden', flexShrink: 0,
-                background: '#1a1a1e',
-              }}>
-                <img
-                  src={game.thumbnail}
-                  alt={game.label}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{
-                  fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-                  fontSize: '17px', color: '#fff', margin: 0, letterSpacing: '0.02em',
+          {currentSuggestions.map((game, i) => {
+            const shuffleAnim = shufflePhase === 'out'
+              ? `qp-shuffle-out 0.25s cubic-bezier(0.4,0,1,1) ${i * 40}ms both`
+              : shufflePhase === 'in'
+              ? `qp-shuffle-in 0.35s cubic-bezier(0.22,1,0.36,1) ${i * 60}ms both`
+              : `screen-enter 0.4s var(--ease-out) ${0.05 + i * 0.08}s both`
+
+            return (
+              <button
+                key={`${game.id}-${refreshKey}`}
+                onClick={() => onPlay(game.id)}
+                className="game-btn"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '16px',
+                  background: '#111113', border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: '16px', padding: '14px 18px', cursor: 'pointer',
+                  textAlign: 'left', width: '100%',
+                  animation: shuffleAnim,
+                }}
+              >
+                <div style={{
+                  width: '56px', height: '56px', borderRadius: '12px',
+                  overflow: 'hidden', flexShrink: 0,
+                  background: '#1a1a1e',
                 }}>
-                  {game.label}
-                </p>
-                <p style={{
-                  fontFamily: "'Inter', sans-serif", fontSize: '12px',
-                  color: 'rgba(255,255,255,0.4)', margin: '3px 0 0', lineHeight: 1.3,
-                }}>
-                  {game.description}
-                </p>
-              </div>
-            </button>
-          ))}
+                  <img
+                    src={game.thumbnail}
+                    alt={game.label}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{
+                    fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+                    fontSize: '17px', color: '#fff', margin: 0, letterSpacing: '0.02em',
+                  }}>
+                    {game.label}
+                  </p>
+                  <p style={{
+                    fontFamily: "'Inter', sans-serif", fontSize: '12px',
+                    color: 'rgba(255,255,255,0.4)', margin: '3px 0 0', lineHeight: 1.3,
+                  }}>
+                    {game.description}
+                  </p>
+                </div>
+              </button>
+            )
+          })}
         </div>
 
         <button
-          onClick={() => setRefreshKey(k => k + 1)}
+          onClick={handleShuffle}
           className="game-btn"
           style={{
             background: 'none', border: '1px solid rgba(255,255,255,0.15)',
@@ -129,6 +149,8 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
             color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
             letterSpacing: '0.06em',
             display: 'flex', alignItems: 'center', gap: '8px',
+            transition: 'transform 0.2s',
+            transform: shufflePhase === 'out' ? 'rotate(180deg) scale(0.9)' : 'none',
           }}
         >
           <ShuffleIcon />

@@ -633,9 +633,9 @@ html, body, #root { max-width: 100vw; overflow-x: hidden; }
 }
 /* Safari: prevent rubber-banding in game screens */
 .screen-enter { -webkit-overflow-scrolling: touch; }
-/* Safari: fix transform rendering */
+/* Safari: fix transform rendering — force GPU compositing */
 .browse-mobile-card-scaled,
-.card-tile { -webkit-transform: translateZ(0); }
+.card-tile { -webkit-transform: translateZ(0); transform: translateZ(0); }
 /* Safari: fix backface visibility on card flips */
 .spicy-flip-front, .spicy-flip-back {
   -webkit-backface-visibility: hidden;
@@ -663,6 +663,18 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   body {
     -webkit-overscroll-behavior-y: contain;
   }
+}
+/* Safari: force font rendering for custom web fonts */
+.font-spicy, .font-anton, .font-staatliches, .font-slackey,
+.font-satoshi, .font-inter, .font-inter-tight {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+/* Safari mobile: ensure card grids display correctly */
+.home-mobile-grid,
+.browse-mobile-grid {
+  -webkit-transform: translateZ(0);
 }
 
 /* ─── Touch devices: disable hover, improve active ─── */
@@ -808,8 +820,11 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .done-heading { font-size: 28px !important; }
 
   /* Setup container widths — compact gap like Figma mobile reference */
-  .setup-container { width: 100% !important; max-width: 500px; gap: 20px !important; }
+  .setup-container { width: 100% !important; max-width: 500px; gap: 24px !important; padding: 0 4px !important; }
   .setup-buttons { width: 100% !important; max-width: 340px; }
+
+  /* Fluid game play — cards and content scale with viewport */
+  .game-fullscreen { padding-bottom: env(safe-area-inset-bottom, 0); }
 
   /* Game play content — no side padding bleed */
   .screen-enter > div[style*="flex: 1"],
@@ -1048,6 +1063,19 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
     padding: 10px 14px !important;
     font-size: 14px !important;
   }
+}
+
+/* ═══════════════════════════════════════════════
+   QUICK PLAY SHUFFLE — deck/dice shuffle feel
+   ═══════════════════════════════════════════════ */
+@keyframes qp-shuffle-out {
+  0%   { opacity: 1; transform: translateX(0) rotateZ(0deg) scale(1); }
+  100% { opacity: 0; transform: translateX(60px) rotateZ(8deg) scale(0.85); }
+}
+@keyframes qp-shuffle-in {
+  0%   { opacity: 0; transform: translateX(-60px) rotateZ(-8deg) scale(0.85); }
+  50%  { opacity: 1; transform: translateX(4px) rotateZ(1deg) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) rotateZ(0deg) scale(1); }
 }
 
 /* ═══════════════════════════════════════════════

@@ -284,7 +284,7 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
           {players.map((p, i) => (
             <div key={i} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #ffffff' }} />
+                <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color, boxShadow: '0 0 0 2.5px #ffffff' }} />
                 {editingIdx === i ? (
                   <input ref={editRef} value={editValue} onChange={e => setEditValue(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditingIdx(null) }}

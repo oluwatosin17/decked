@@ -17,6 +17,7 @@ import PutAFingerDownGame from './PutAFingerDownGame'
 import TakeASipGame from './TakeASipGame'
 import SipOrSpillGame from './SipOrSpillGame'
 import DoOrDrinkGame from './DoOrDrinkGame'
+import IcebreakerGame from './IcebreakerGame'
 
 type Screen =
   | 'home' | 'browse' | 'quick-play'
@@ -28,6 +29,7 @@ type Screen =
   | 'truth-or-dare' | 'spicy-starters'
   | 'lets-reconnect' | 'everyday-conversations' | 'wnrs' | 'put-a-finger-down'
   | 'take-a-sip' | 'sip-or-spill' | 'do-or-drink'
+  | 'icebreaker'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
@@ -51,6 +53,7 @@ export default function App() {
       'take-a-sip': 'take-a-sip',
       'sip-or-spill': 'sip-or-spill',
       'do-or-drink': 'do-or-drink',
+      'icebreaker': 'icebreaker',
     }
     setScreen(map[gameId] ?? 'browse')
   }, [])
@@ -149,6 +152,11 @@ export default function App() {
     return <DoOrDrinkGame onClose={() => setScreen('browse')} />
   }
 
+  /* ── Icebreaker ── */
+  if (screen === 'icebreaker') {
+    return <IcebreakerGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
@@ -168,6 +176,7 @@ export default function App() {
         onPlayTakeASip={() => setScreen('take-a-sip')}
         onPlaySipOrSpill={() => setScreen('sip-or-spill')}
         onPlayDoOrDrink={() => setScreen('do-or-drink')}
+        onPlayIcebreaker={() => setScreen('icebreaker')}
       />
     )
   }
@@ -175,7 +184,8 @@ export default function App() {
   /* ── Home ── */
   return (
     <HomePage
-      onPlayTruthOrDare={() => setScreen('quick-play')}
+      onQuickPlay={() => setScreen('quick-play')}
+      onPlayTruthOrDare={() => setScreen('truth-or-dare')}
       onPlaySpicyStarters={() => setScreen('spicy-starters')}
       onPlayLateNightTalks={() => setScreen('lnt-select')}
       onBrowse={() => setScreen('browse')}

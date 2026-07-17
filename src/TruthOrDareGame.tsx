@@ -600,12 +600,9 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           {prompt}
         </p>
 
-        {currentPlayer && (
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '8px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: currentPlayer.color, border: `2px solid ${cardText}`, opacity: 0.9 }} />
-            <img src={HEART_GAME} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} />
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
+          <img src={HEART_GAME} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} />
+        </div>
       </div>
       </div>
 

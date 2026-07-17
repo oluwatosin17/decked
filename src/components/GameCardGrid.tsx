@@ -95,9 +95,9 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'icebreaker', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'icebreaker', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <img src="/assets/games/icebreaker.png" alt="Icebreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <p className="font-staatliches" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 56.04px)', fontSize: '39.088px', color: '#000', textAlign: 'center', whiteSpace: 'nowrap', margin: 0, pointerEvents: 'none' }}>ICEBREAKER</p>
       </div>
@@ -331,6 +331,7 @@ interface BrowseGridProps {
   onPlayTakeASip?: () => void
   onPlaySipOrSpill?: () => void
   onPlayDoOrDrink?: () => void
+  onPlayIcebreaker?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -349,6 +350,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'take-a-sip': handlers.onPlayTakeASip,
     'sip-or-spill': handlers.onPlaySipOrSpill,
     'do-or-drink': handlers.onPlayDoOrDrink,
+    'icebreaker': handlers.onPlayIcebreaker,
   }
   return map[card.id]
 }

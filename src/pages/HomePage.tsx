@@ -32,6 +32,7 @@ function useIsMobile(bp = 768) {
 }
 
 interface Props {
+  onQuickPlay?: () => void
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
@@ -86,7 +87,7 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, () => void> }
   )
 }
 
-export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }: Props) {
   const isMobile = useIsMobile()
   const actions = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onBrowse }
 
@@ -107,7 +108,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
             Pick a deck, pass the phone, and let things get interesting.
           </p>
           <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-            <button className="font-staatliches" onClick={onPlayTruthOrDare} style={{
+            <button className="font-staatliches" onClick={onQuickPlay ?? onBrowse} style={{
               background: '#dc2827', color: 'white', fontSize: '13px',
               padding: '9px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer',
               boxShadow: '0 8px 12px rgba(220,40,39,0.25)',
@@ -205,7 +206,7 @@ export default function HomePage({ onPlayTruthOrDare, onPlaySpicyStarters, onPla
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button className="font-staatliches" onClick={onPlayTruthOrDare} style={{
+            <button className="font-staatliches" onClick={onQuickPlay ?? onBrowse} style={{
               background: '#dc2827', color: 'white', fontSize: '16px',
               padding: '12px 18px', borderRadius: '999px', border: 'none',
               cursor: 'pointer', whiteSpace: 'nowrap',
