@@ -24,6 +24,7 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'sip-or-spill', label: 'Sip or Spill', description: 'Answer honestly or take a drink', thumbnail: '/icons/qp-sip-or-spill.svg' },
   { id: 'do-or-drink', label: 'Do or Drink', description: 'Complete the dare or take a drink', thumbnail: '/icons/qp-do-or-drink.svg' },
   { id: 'icebreaker', label: 'Icebreaker', description: 'Fun questions to break the ice', thumbnail: '/icons/qp-icebreaker.svg' },
+  { id: 'red-flag-green-flag', label: 'Red Flag Green Flag', description: 'Vote on relationship deal-breakers', thumbnail: '/icons/rfgf-front.svg' },
 ]
 
 function pickRandom3(): GameSuggestion[] {

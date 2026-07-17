@@ -173,7 +173,9 @@ function HowSpicy({ onSelect }: { onSelect: (level: SpiceLevel) => void }) {
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center' }}>
+
+        <img src="/icons/how-spicy.svg" alt="" style={{ width: '120px', height: 'auto' }} />
 
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
           how spicy do you like it

@@ -18,6 +18,7 @@ import TakeASipGame from './TakeASipGame'
 import SipOrSpillGame from './SipOrSpillGame'
 import DoOrDrinkGame from './DoOrDrinkGame'
 import IcebreakerGame from './IcebreakerGame'
+import RedFlagGreenFlagGame from './RedFlagGreenFlagGame'
 
 type Screen =
   | 'home' | 'browse' | 'quick-play'
@@ -29,7 +30,7 @@ type Screen =
   | 'truth-or-dare' | 'spicy-starters'
   | 'lets-reconnect' | 'everyday-conversations' | 'wnrs' | 'put-a-finger-down'
   | 'take-a-sip' | 'sip-or-spill' | 'do-or-drink'
-  | 'icebreaker'
+  | 'icebreaker' | 'red-flag-green-flag'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
@@ -54,6 +55,7 @@ export default function App() {
       'sip-or-spill': 'sip-or-spill',
       'do-or-drink': 'do-or-drink',
       'icebreaker': 'icebreaker',
+      'red-flag-green-flag': 'red-flag-green-flag',
     }
     setScreen(map[gameId] ?? 'browse')
   }, [])
@@ -157,6 +159,11 @@ export default function App() {
     return <IcebreakerGame onClose={() => setScreen('browse')} />
   }
 
+  /* ── Red Flag Green Flag ── */
+  if (screen === 'red-flag-green-flag') {
+    return <RedFlagGreenFlagGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
@@ -178,6 +185,7 @@ export default function App() {
         onPlaySipOrSpill={() => setScreen('sip-or-spill')}
         onPlayDoOrDrink={() => setScreen('do-or-drink')}
         onPlayIcebreaker={() => setScreen('icebreaker')}
+        onPlayRedFlagGreenFlag={() => setScreen('red-flag-green-flag')}
       />
     )
   }

@@ -81,9 +81,9 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'red-flag-green-flag', categories: ['couples'], w: 267.692, h: 348,
-    render: () => (
-      <div className="card-tile" style={{ width: '100%', height: '100%', borderRadius: '8.705px', overflow: 'hidden', position: 'relative', cursor: 'default' }}>
+    id: 'red-flag-green-flag', categories: ['couples'], w: 267.692, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '8.705px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <img src="/assets/games/redflag-greenflag.png" alt="Red Flag / Green Flag" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <div style={{ position: 'absolute', left: '120.96px', top: '113.51px', transform: 'translate(-50%,-50%) rotate(-9.27deg)', width: '130.582px', height: '59.743px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
           <p className="font-spicy" style={{ fontSize: '22.909px', color: '#e7f0ff', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>Red<br />flag</p>
@@ -332,6 +332,7 @@ interface BrowseGridProps {
   onPlaySipOrSpill?: () => void
   onPlayDoOrDrink?: () => void
   onPlayIcebreaker?: () => void
+  onPlayRedFlagGreenFlag?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -351,6 +352,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'sip-or-spill': handlers.onPlaySipOrSpill,
     'do-or-drink': handlers.onPlayDoOrDrink,
     'icebreaker': handlers.onPlayIcebreaker,
+    'red-flag-green-flag': handlers.onPlayRedFlagGreenFlag,
   }
   return map[card.id]
 }

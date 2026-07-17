@@ -15,6 +15,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 const ICEBREAKER_BG = '/assets/games/icebreaker.png'
 const ICEBREAKER_INNER = '/icons/icebreaker-inner.svg'
+const ICEBREAKER_REVEAL_BG = '/icons/icebreaker-reveal-bg.svg'
 
 const CATEGORIES = ['DEEP', 'FUN', 'REFLECTIVE', 'SOCIAL', 'CREATIVE'] as const
 type Category = typeof CATEGORIES[number]
@@ -319,18 +320,23 @@ function RevealedCard({ question, flipPhase }: { question: { category: Category;
           ...cardStyle, borderRadius: '16px', overflow: 'hidden',
           position: 'relative', zIndex: 2, background: '#f0f8ff',
           boxShadow: '0 32px 80px rgba(91,200,245,0.25)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          justifyContent: 'center', padding: '40px 32px', gap: '20px',
         }}
       >
-        <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
-          {question.category}
-        </span>
-        <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
-          {question.text}
-        </p>
-        <div style={{ marginTop: 'auto' }}>
-          <IcebergIcon size={56} />
+        <img src={ICEBREAKER_REVEAL_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          justifyContent: 'center', padding: '40px 32px', gap: '20px',
+        }}>
+          <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
+            {question.category}
+          </span>
+          <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
+            {question.text}
+          </p>
+          <div style={{ marginTop: 'auto' }}>
+            <IcebergIcon size={56} />
+          </div>
         </div>
       </div>
     </div>
