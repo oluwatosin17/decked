@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { GameNav, GameFooter } from './components/GameShell'
 
 interface GameSuggestion {
@@ -49,15 +49,15 @@ interface Props {
 }
 
 export default function QuickPlay({ onBack, onPlay }: Props) {
-  const [suggestions] = useState(() => pickRandom3())
+  const [currentSuggestions, setCurrentSuggestions] = useState(() => pickRandom3())
   const [refreshKey, setRefreshKey] = useState(0)
   const [shufflePhase, setShufflePhase] = useState<'idle' | 'out' | 'in'>('idle')
-  const currentSuggestions = useMemo(() => refreshKey === 0 ? suggestions : pickRandom3(), [refreshKey])
 
   const handleShuffle = useCallback(() => {
     if (shufflePhase !== 'idle') return
     setShufflePhase('out')
     setTimeout(() => {
+      setCurrentSuggestions(pickRandom3())
       setRefreshKey(k => k + 1)
       setShufflePhase('in')
       setTimeout(() => setShufflePhase('idle'), 500)

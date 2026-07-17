@@ -2,9 +2,11 @@ import { useState, useRef, useCallback, useEffect, type CSSProperties } from 're
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
 
-/* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
+/* ─── Asset URLs ─── */
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SPICY_CARD_BG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
+const SPICY_FRONT_SVG  = '/icons/spicy-front.svg'
+const SPICY_BACK_SVG   = '/icons/spicy-back.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
@@ -448,29 +450,15 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
         <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
         <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
 
-          {/* ── FRONT: spicy starters cover ── */}
+          {/* ── FRONT: spicy starters cover (SVG) ── */}
           <div className="spicy-flip-front">
-            <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-            <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
-              <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-            <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#b70012', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <p style={{ fontFamily: "'Stick', sans-serif", fontSize: '45px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 138px)', width: '280px' }}>
-                spicy{'\n'}starters
-              </p>
-              <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '14px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% + 135px)', width: '148px' }}>
-                CONVERSATION CARDS TO SHARE
-              </p>
-            </div>
+            <img src={SPICY_FRONT_SVG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
 
-          {/* ── BACK: first question card ── */}
+          {/* ── BACK: first question card (SVG bg + text overlay) ── */}
           <div className="spicy-flip-back">
-            <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-            <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
-              <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-            <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#df91b5', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img src={SPICY_BACK_SVG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 32px' }}>
               <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '29.7px', color: '#ab1229', textAlign: 'center', lineHeight: 'normal', margin: 0, padding: '0 16px' }}>
                 {firstQuestion.toUpperCase()}
               </p>
@@ -506,11 +494,8 @@ function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipP
       position: 'relative', flexShrink: 0, zIndex: 2,
       boxShadow: '0 32px 80px rgba(171,18,41,0.35)',
     }}>
-      <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-      <div style={{ position: 'absolute', left: '-92px', top: 0, width: '457px', height: '457px', overflow: 'hidden' }}>
-        <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-      </div>
-      <div style={{ position: 'absolute', top: '30px', right: '30px', bottom: '28px', left: '24px', background: '#df91b5', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <img src={SPICY_BACK_SVG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 32px' }}>
         <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '29.7px', color: '#ab1229', textAlign: 'center', lineHeight: 'normal', margin: 0, padding: '0 16px' }}>
           {question.toUpperCase()}
         </p>

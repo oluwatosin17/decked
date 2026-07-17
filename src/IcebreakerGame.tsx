@@ -14,6 +14,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const ICEBREAKER_BG = '/assets/games/icebreaker.png'
+const ICEBREAKER_INNER = '/icons/icebreaker-inner.svg'
 
 const CATEGORIES = ['DEEP', 'FUN', 'REFLECTIVE', 'SOCIAL', 'CREATIVE'] as const
 type Category = typeof CATEGORIES[number]
@@ -200,7 +201,7 @@ function FlipCard({ question, flipped, onTap }: {
     <div style={wrapperStyle}>
       <div
         onClick={onTap}
-        className="intro-card-hover-wrap game-card"
+        className="icebreaker-card-wrap game-card"
         style={{ ...cardStyle, flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
         <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
@@ -218,20 +219,23 @@ function FlipCard({ question, flipped, onTap }: {
               </div>
             </div>
 
-            {/* BACK: Question card */}
-            <div className="spicy-flip-back" style={{
-              background: '#f0f8ff',
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              justifyContent: 'center', padding: '40px 32px', gap: '20px',
-            }}>
-              <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
-                {question.category}
-              </span>
-              <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
-                {question.text}
-              </p>
-              <div style={{ marginTop: 'auto' }}>
-                <IcebergIcon size={56} />
+            {/* BACK: Question card with inner SVG */}
+            <div className="spicy-flip-back" style={{ background: '#f0f8ff' }}>
+              <img src={ICEBREAKER_INNER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{
+                position: 'absolute', inset: 0,
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                justifyContent: 'center', padding: '40px 32px', gap: '20px',
+              }}>
+                <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
+                  {question.category}
+                </span>
+                <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
+                  {question.text}
+                </p>
+                <div style={{ marginTop: 'auto' }}>
+                  <IcebergIcon size={56} />
+                </div>
               </div>
             </div>
           </div>
@@ -279,8 +283,6 @@ function RoundRobinTracker({ players, answeredSet, onMarkDone, onNext }: {
   onMarkDone: (idx: number) => void
   onNext: () => void
 }) {
-  const allDone = answeredSet.size >= players.length
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '340px', position: 'relative', zIndex: 2 }}>
       {players.map((p, i) => {
@@ -297,7 +299,7 @@ function RoundRobinTracker({ players, answeredSet, onMarkDone, onNext }: {
               cursor: done ? 'default' : 'pointer', width: '100%',
             }}
           >
-            <div className="avatar-circle" style={{ width: '28px', height: '28px', background: p.color, boxShadow: '0 0 0 2px rgba(255,255,255,0.25)' }} />
+            <div className="avatar-circle" style={{ width: '28px', height: '28px', background: p.color, boxShadow: '0 0 0 2px #fff' }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, textAlign: 'left' }}>
               {p.name.toUpperCase()}
             </span>
@@ -305,19 +307,17 @@ function RoundRobinTracker({ players, answeredSet, onMarkDone, onNext }: {
           </button>
         )
       })}
-      {allDone && (
-        <button
-          className="game-btn-primary"
-          onClick={onNext}
-          style={{
-            background: '#5BC8F5', border: 'none', borderRadius: '999px',
-            padding: '12px 18px', fontFamily: "'Staatliches', sans-serif",
-            fontSize: '16px', color: '#fff', textAlign: 'center', marginTop: '8px',
-          }}
-        >
-          NEXT
-        </button>
-      )}
+      <button
+        className="game-btn-primary"
+        onClick={onNext}
+        style={{
+          background: '#5BC8F5', border: 'none', borderRadius: '999px',
+          padding: '12px 18px', fontFamily: "'Staatliches', sans-serif",
+          fontSize: '16px', color: '#fff', textAlign: 'center', marginTop: '8px',
+        }}
+      >
+        NEXT
+      </button>
     </div>
   )
 }
@@ -328,7 +328,7 @@ type GamePhase = 'card-front' | 'revealed'
 function PlayerChip({ player, cardIndex }: { player: Player; cardIndex: number }) {
   return (
     <div key={`${player.name}-${cardIndex}`} className="player-chip-enter" style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}>
-      <div className="avatar-circle" style={{ width: '28px', height: '28px', background: player.color, boxShadow: `0 0 0 2.5px rgba(255,255,255,0.3)` }} />
+      <div className="avatar-circle" style={{ width: '28px', height: '28px', background: player.color, boxShadow: '0 0 0 2.5px #fff' }} />
       <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
         {player.name.toUpperCase()}'S TURN
       </span>
@@ -356,7 +356,6 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
   const question = shuffledQs[cardIndex % shuffledQs.length]
   const isDone = totalCards > 0 && cardIndex >= totalCards
   const isRoundRobin = mode === 'round-robin' && players.length > 0
-  const allAnswered = answeredSet.size >= players.length
 
   const flipToNextCard = useCallback((skipped = false) => {
     if (flippingRef.current) return
@@ -477,8 +476,8 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
         </div>
       )}
 
-      {/* Round Robin: show skip button when not all answered */}
-      {isRoundRobin && !allAnswered && (
+      {/* Round Robin: skip button */}
+      {isRoundRobin && (
         <button className="game-btn"
           onClick={() => flipToNextCard(true)}
           style={{ position: 'relative', zIndex: 2, border: '1px solid rgba(255,255,255,0.2)', background: 'none', borderRadius: '999px', padding: '10px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.05em' }}
