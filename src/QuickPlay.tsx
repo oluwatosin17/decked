@@ -9,20 +9,20 @@ interface GameSuggestion {
 }
 
 const ALL_GAMES: GameSuggestion[] = [
-  { id: 'truth-or-dare', label: 'Truth or Dare', description: 'Spicy truths & bold dares for couples', thumbnail: '/icons/truth-or-dare-mobile.svg' },
-  { id: 'spicy-starters', label: 'Spicy Starters', description: 'Deep conversation cards to share', thumbnail: '/icons/spicy-starters-mobile.svg' },
-  { id: 'late-night-talks', label: 'Late Night Talks', description: 'Questions that spark real conversations', thumbnail: '/icons/late-night-talks-mobile.svg' },
-  { id: 'dinner-table', label: 'Dinner Table', description: 'Meaningful dinner conversation starters', thumbnail: '/icons/dinner-conversation-mobile.svg' },
-  { id: 'you-laugh', label: "You Laugh You're Out", description: 'Try not to laugh — last one standing wins', thumbnail: '/icons/you-laugh-you-are-out-mobile.svg' },
-  { id: 'never-have-i-ever', label: 'Never Have I Ever', description: 'Find out who has done what', thumbnail: '/icons/never-have-i-ever-mobile.svg' },
-  { id: 'charades', label: 'Charades', description: 'Act it out — no words allowed', thumbnail: '/icons/charades-mobile.svg' },
-  { id: 'lets-reconnect', label: "Let's Reconnect", description: 'Rebuild bonds with heartfelt questions', thumbnail: '/icons/reconnect-mobile.svg' },
-  { id: 'everyday-conversations', label: 'Everyday Conversations', description: 'Questions to build genuine connection', thumbnail: '/icons/everyday-conversations-mobile.svg' },
-  { id: 'wnrs', label: "We're Not Really Strangers", description: 'Get to know each other for real', thumbnail: '/icons/we-are-not-really-strangers-mobile.svg' },
-  { id: 'put-a-finger-down', label: 'Put a Finger Down', description: 'Who has the most fingers down?', thumbnail: '/icons/put-a-finger-down-mobile.svg' },
-  { id: 'take-a-sip', label: 'Take a Sip', description: 'Sip if the statement applies to you', thumbnail: '/icons/take-a-sip-mobile.svg' },
-  { id: 'sip-or-spill', label: 'Sip or Spill', description: 'Answer honestly or take a drink', thumbnail: '/icons/sip-and-spill-mobile.svg' },
-  { id: 'do-or-drink', label: 'Do or Drink', description: 'Complete the dare or take a drink', thumbnail: '/icons/do-or-drink-mobile.svg' },
+  { id: 'truth-or-dare', label: 'Truth or Dare', description: 'Spicy truths & bold dares for couples', thumbnail: '/icons/qp-truth-or-dare.svg' },
+  { id: 'spicy-starters', label: 'Spicy Starters', description: 'Deep conversation cards to share', thumbnail: '/icons/qp-spicy-starters.svg' },
+  { id: 'late-night-talks', label: 'Late Night Talks', description: 'Questions that spark real conversations', thumbnail: '/icons/qp-late-night-talks.svg' },
+  { id: 'dinner-table', label: 'Dinner Table', description: 'Meaningful dinner conversation starters', thumbnail: '/icons/qp-dinner-table.svg' },
+  { id: 'you-laugh', label: "You Laugh You're Out", description: 'Try not to laugh — last one standing wins', thumbnail: '/icons/qp-you-laugh.svg' },
+  { id: 'never-have-i-ever', label: 'Never Have I Ever', description: 'Find out who has done what', thumbnail: '/icons/qp-never-have-i-ever.svg' },
+  { id: 'charades', label: 'Charades', description: 'Act it out — no words allowed', thumbnail: '/icons/qp-charades.svg' },
+  { id: 'lets-reconnect', label: "Let's Reconnect", description: 'Rebuild bonds with heartfelt questions', thumbnail: '/icons/qp-lets-reconnect.svg' },
+  { id: 'everyday-conversations', label: 'Everyday Conversations', description: 'Questions to build genuine connection', thumbnail: '/icons/qp-everyday-conversations.svg' },
+  { id: 'wnrs', label: "We're Not Really Strangers", description: 'Get to know each other for real', thumbnail: '/icons/qp-wnrs.svg' },
+  { id: 'put-a-finger-down', label: 'Put a Finger Down', description: 'Who has the most fingers down?', thumbnail: '/icons/qp-put-a-finger-down.svg' },
+  { id: 'take-a-sip', label: 'Take a Sip', description: 'Sip if the statement applies to you', thumbnail: '/icons/qp-take-a-sip.svg' },
+  { id: 'sip-or-spill', label: 'Sip or Spill', description: 'Answer honestly or take a drink', thumbnail: '/icons/qp-sip-or-spill.svg' },
+  { id: 'do-or-drink', label: 'Do or Drink', description: 'Complete the dare or take a drink', thumbnail: '/icons/qp-do-or-drink.svg' },
 ]
 
 function pickRandom3(): GameSuggestion[] {

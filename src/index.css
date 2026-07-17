@@ -70,14 +70,14 @@ input::placeholder {
 .hero-card:hover { transform: rotate(0deg) scale(1.04) !important; }
 .cards-section { background: none; }
 
-/* ─── Browse page card animations ─── */
+/* ─── Browse page card animations — opacity only to preserve child transforms in Safari ─── */
 @keyframes browse-card-enter {
-  from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 @keyframes browse-card-exit {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to   { opacity: 0; transform: translateY(-12px) scale(0.95); }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 /* Wrapper enables play badge + enhanced hover; card keeps natural size */
@@ -130,8 +130,8 @@ input::placeholder {
    outermost flex-1 div so all entrances are smooth
    ═══════════════════════════════════════════════ */
 @keyframes screen-enter {
-  from { opacity: 0; transform: translateY(16px) scale(0.99); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .screen-enter {
   animation: screen-enter var(--dur-enter) var(--ease-out) both;
