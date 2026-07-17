@@ -189,6 +189,55 @@ function IcebreakerGetReady({ players, onReady }: { players: Player[]; onReady: 
   )
 }
 
+/* ── Ice crack SVG overlay ── */
+function IceCracks() {
+  return (
+    <svg className="icebreaker-cracks" viewBox="0 0 365 457" fill="none" style={{ width: '100%', height: '100%' }}>
+      <path d="M182 0 L175 80 L140 130 L120 200 L90 280 L70 360 L50 457" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none" />
+      <path d="M182 0 L190 60 L220 110 L250 180 L280 260 L310 350 L340 457" stroke="rgba(255,255,255,0.5)" strokeWidth="1" fill="none" />
+      <path d="M175 80 L130 95 L80 100" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" fill="none" />
+      <path d="M190 60 L240 55 L290 70" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" fill="none" />
+      <path d="M140 130 L100 160 L60 150" stroke="rgba(255,255,255,0.35)" strokeWidth="0.7" fill="none" />
+      <path d="M220 110 L270 130 L320 120" stroke="rgba(255,255,255,0.35)" strokeWidth="0.7" fill="none" />
+      <path d="M120 200 L80 220 L40 210" stroke="rgba(255,255,255,0.3)" strokeWidth="0.7" fill="none" />
+      <path d="M250 180 L300 200 L340 190" stroke="rgba(255,255,255,0.3)" strokeWidth="0.7" fill="none" />
+    </svg>
+  )
+}
+
+/* ── Ice shard generator ── */
+function spawnIceShards(container: HTMLElement) {
+  const rect = container.getBoundingClientRect()
+  const count = 10 + Math.floor(Math.random() * 6)
+  for (let i = 0; i < count; i++) {
+    const shard = document.createElement('div')
+    shard.className = 'ice-shard'
+    const size = 4 + Math.random() * 12
+    const startX = Math.random() * rect.width
+    const startY = Math.random() * rect.height * 0.6
+    const dx = (Math.random() - 0.5) * 120
+    const dy = 80 + Math.random() * 160
+    const rot = (Math.random() - 0.5) * 360
+    const dur = 0.5 + Math.random() * 0.4
+    const colors = ['rgba(200,235,255,0.9)', 'rgba(255,255,255,0.85)', 'rgba(160,220,250,0.8)', 'rgba(220,245,255,0.9)']
+    Object.assign(shard.style, {
+      left: `${startX}px`,
+      top: `${startY}px`,
+      width: `${size}px`,
+      height: `${size * (0.6 + Math.random() * 0.8)}px`,
+      background: colors[Math.floor(Math.random() * colors.length)],
+      borderRadius: `${Math.random() > 0.5 ? '1px' : '0'}`,
+      clipPath: Math.random() > 0.3 ? `polygon(${Math.random()*30}% 0%, 100% ${Math.random()*40}%, ${60+Math.random()*40}% 100%, 0% ${60+Math.random()*40}%)` : 'none',
+      '--shard-x': `${dx}px`,
+      '--shard-y': `${dy}px`,
+      '--shard-r': `${rot}deg`,
+      '--shard-dur': `${dur}s`,
+    } as unknown as CSSStyleDeclaration)
+    container.appendChild(shard)
+    setTimeout(() => shard.remove(), dur * 1000 + 50)
+  }
+}
+
 /* ── Flip Card: front=icebreaker, back=question ── */
 function FlipCard({ question, flipped, onTap }: {
   question: { category: Category; text: string }
@@ -196,11 +245,20 @@ function FlipCard({ question, flipped, onTap }: {
   onTap: () => void
 }) {
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  const handleClick = useCallback(() => {
+    if (!flipped && wrapRef.current) {
+      spawnIceShards(wrapRef.current)
+    }
+    onTap()
+  }, [flipped, onTap])
 
   return (
     <div style={wrapperStyle}>
       <div
-        onClick={onTap}
+        ref={wrapRef}
+        onClick={handleClick}
         className="icebreaker-card-wrap game-card"
         style={{ ...cardStyle, flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
@@ -217,6 +275,9 @@ function FlipCard({ question, flipped, onTap }: {
                   Tap to Reveal
                 </p>
               </div>
+              {/* Frost + crack overlays */}
+              <div className="icebreaker-frost" />
+              <IceCracks />
             </div>
 
             {/* BACK: Question card with inner SVG */}

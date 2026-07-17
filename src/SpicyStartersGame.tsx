@@ -6,6 +6,7 @@ import { GameNav, GameFooter } from './components/GameShell'
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SPICY_CARD_BG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SPICY_FRONT_SVG  = '/icons/spicy-front.svg'
+const SPICY_FRONT_COVER = '/icons/spicy-front-cover.svg'
 const SPICY_BACK_SVG   = '/icons/spicy-back.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
@@ -116,42 +117,13 @@ function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => v
         position: 'relative', flexShrink: 0, zIndex: 2,
         boxShadow: '0 32px 80px rgba(183,0,18,0.4)',
       }}>
-        <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-        <div style={{ position: 'absolute', left: '-33px', top: 0, width: '457px', height: '504px', overflow: 'hidden' }}>
-          <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
+        <img src={SPICY_FRONT_COVER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         <div style={{
-          position: 'absolute', top: '30px', right: '24px', bottom: '28px', left: '24px',
-          background: '#b70012', overflow: 'hidden',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px',
+          position: 'absolute', inset: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
           padding: '28px 40px',
         }}>
-          <div style={{ width: '107px', height: '106px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ transform: 'rotate(-6deg)' }}>
-              <div style={{
-                background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
-                width: '97px', height: '96px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px',
-              }}>
-                <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff', letterSpacing: '1.44px', lineHeight: '72px', display: 'block', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                  18+
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
-            <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap' }}>
-              MATURE CONTENT
-            </h2>
-            <div style={{ textAlign: 'center', color: '#fff', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
-              <p style={{ margin: 0 }}>Spicy Starters includes</p>
-              <p style={{ margin: 0 }}>mature content for ages 18+</p>
-              <p style={{ margin: '8px 0 0' }}>Continue?</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px', marginTop: '4px' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px' }}>
             <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
               No, go back
             </button>

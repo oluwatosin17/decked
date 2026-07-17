@@ -174,7 +174,7 @@ input::placeholder {
 }
 
 /* ═══════════════════════════════════════════════
-   ICEBREAKER CARD — frosted hover effect
+   ICEBREAKER CARD — frosted hover + ice crack
    ═══════════════════════════════════════════════ */
 .icebreaker-card-wrap {
   border-radius: 16px;
@@ -183,35 +183,61 @@ input::placeholder {
   cursor: pointer;
   will-change: transform;
   position: relative;
-  overflow: hidden;
 }
-.icebreaker-card-wrap::after {
-  content: '';
+/* Frost overlay — builds on hover */
+.icebreaker-frost {
   position: absolute;
   inset: 0;
   border-radius: 16px;
   opacity: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(255,255,255,0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 50% at 80% 70%, rgba(200,230,255,0.2) 0%, transparent 50%);
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
-  transition: opacity 0.5s ease;
+    radial-gradient(ellipse 80% 60% at 30% 25%, rgba(255,255,255,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 75% 70%, rgba(200,235,255,0.25) 0%, transparent 45%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(220,240,255,0.08) 0%, transparent 70%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  transition: opacity 0.6s ease;
   pointer-events: none;
   z-index: 10;
 }
 .icebreaker-card-wrap:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   box-shadow:
-    0 40px 90px rgba(74,199,245,0.35),
-    0 0 40px rgba(200,230,255,0.15),
-    inset 0 0 0 1px rgba(255,255,255,0.15);
+    0 36px 80px rgba(74,199,245,0.35),
+    0 0 30px rgba(200,235,255,0.12);
 }
-.icebreaker-card-wrap:hover::after {
+.icebreaker-card-wrap:hover .icebreaker-frost {
   opacity: 1;
 }
+/* Ice crack lines — appear on hover */
+.icebreaker-cracks {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  z-index: 11;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s;
+}
+.icebreaker-card-wrap:hover .icebreaker-cracks {
+  opacity: 0.6;
+}
+
+/* Ice shard falling animation */
+@keyframes ice-shard-fall {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--shard-x), var(--shard-y)) rotate(var(--shard-r)) scale(0.3); }
+}
+.ice-shard {
+  position: absolute;
+  pointer-events: none;
+  z-index: 20;
+  animation: ice-shard-fall var(--shard-dur, 0.7s) cubic-bezier(0.25, 0, 0.7, 1) forwards;
+}
+
 .icebreaker-card-wrap:active {
-  transform: translateY(-3px) scale(0.98);
+  transform: translateY(-2px) scale(0.98);
   transition-duration: 0.1s;
 }
 
