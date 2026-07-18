@@ -45,7 +45,7 @@ interface Props {
 function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) | undefined> }) {
   const gridRef = useRef<HTMLDivElement>(null)
   const [colW, setColW] = useState(166)
-  const allCards = GAME_CARDS(actions.onPlayTruthOrDare, actions.onPlaySpicyStarters, actions.onPlayLateNightTalks)
+  const allCards = GAME_CARDS(actions.onPlayTruthOrDare!, actions.onPlaySpicyStarters!, actions.onPlayLateNightTalks)
   const featured = allCards.filter(c => FEATURED_IDS.includes(c.id))
 
   useEffect(() => {

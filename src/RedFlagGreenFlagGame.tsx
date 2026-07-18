@@ -16,6 +16,10 @@ function shuffle<T>(arr: T[]): T[] {
 const RFGF_FRONT = '/icons/rfgf-front.svg'
 const RFGF_BACK  = '/icons/rfgf-back.svg'
 
+const VOTE_RED_ICON = '/icons/vote-red-flag.svg'
+const VOTE_GREEN_ICON = '/icons/vote-green-flag.svg'
+const VOTE_DEPENDS_ICON = '/icons/vote-depends.svg'
+
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
 /* ─── Scenario prompts ─── */
@@ -74,6 +78,19 @@ const SCENARIOS: string[] = [
 
 type VoteType = 'red' | 'depends' | 'green'
 type Vote = { playerIndex: number; vote: VoteType }
+type CardVoteRecord = { scenario: string; votes: Vote[] }
+
+function getVoteIcon(vote: VoteType): string {
+  if (vote === 'red') return VOTE_RED_ICON
+  if (vote === 'green') return VOTE_GREEN_ICON
+  return VOTE_DEPENDS_ICON
+}
+
+function getVoteColor(vote: VoteType): string {
+  if (vote === 'red') return '#dc2827'
+  if (vote === 'green') return '#27ae60'
+  return '#626262'
+}
 
 /* ─── Screen: Get Ready ─── */
 function GetReady({ player, onReady }: { player: Player; onReady: () => void }) {
@@ -106,81 +123,77 @@ function GetReady({ player, onReady }: { player: Player; onReady: () => void }) 
   )
 }
 
-/* ─── Vote Buttons ─── */
+/* ─── Vote Buttons (horizontal row with SVG icons) ─── */
 function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '365px', position: 'relative', zIndex: 2 }}>
-      <button
-        className="game-btn"
-        onClick={() => onVote('red')}
-        style={{
-          width: '100%', background: '#dc2827', border: 'none', borderRadius: '12px',
-          padding: '16px', fontFamily: "'Anton SC', sans-serif", fontSize: '18px',
-          color: '#fff', cursor: 'pointer', textAlign: 'center',
-          boxShadow: '0 4px 16px rgba(220,40,39,0.3)',
-        }}
-      >
-        🚩 RED FLAG
-      </button>
-      <button
-        className="game-btn"
-        onClick={() => onVote('depends')}
-        style={{
-          width: '100%', background: '#626262', border: 'none', borderRadius: '12px',
-          padding: '16px', fontFamily: "'Anton SC', sans-serif", fontSize: '18px',
-          color: '#fff', cursor: 'pointer', textAlign: 'center',
-          boxShadow: '0 4px 16px rgba(98,98,98,0.3)',
-        }}
-      >
-        🤷 DEPENDS
-      </button>
-      <button
-        className="game-btn"
-        onClick={() => onVote('green')}
-        style={{
-          width: '100%', background: '#27ae60', border: 'none', borderRadius: '12px',
-          padding: '16px', fontFamily: "'Anton SC', sans-serif", fontSize: '18px',
-          color: '#fff', cursor: 'pointer', textAlign: 'center',
-          boxShadow: '0 4px 16px rgba(39,174,96,0.3)',
-        }}
-      >
-        🟢 GREEN FLAG
-      </button>
-    </div>
-  )
-}
+  const [selectedVote, setSelectedVote] = useState<VoteType | null>(null)
 
-/* ─── Vote Results Bar ─── */
-function ResultBar({ label, count, total, color, emoji, delay }: {
-  label: string; count: number; total: number; color: string; emoji: string; delay: number
-}) {
-  const [width, setWidth] = useState(0)
-  const pct = total > 0 ? Math.round((count / total) * 100) : 0
+  const handleVote = (v: VoteType) => {
+    if (selectedVote) return
+    setSelectedVote(v)
+    setTimeout(() => {
+      onVote(v)
+      setSelectedVote(null)
+    }, 500)
+  }
 
-  useEffect(() => {
-    const id = setTimeout(() => setWidth(pct), delay)
-    return () => clearTimeout(id)
-  }, [pct, delay])
+  const btnBase: React.CSSProperties = {
+    flex: 1,
+    background: '#18181b',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '12px',
+    padding: '14px 8px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '6px',
+    cursor: 'pointer',
+    transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+  }
+
+  const labelStyle: React.CSSProperties = {
+    fontFamily: "'Staatliches', sans-serif",
+    fontSize: '13px',
+    color: '#fff',
+    letterSpacing: '0.04em',
+    whiteSpace: 'nowrap',
+  }
+
+  const getSelectedStyle = (v: VoteType): React.CSSProperties => {
+    if (selectedVote !== v) return {}
+    const color = getVoteColor(v)
+    return {
+      transform: 'scale(1.1)',
+      boxShadow: `0 0 24px ${color}66`,
+      borderColor: color,
+    }
+  }
 
   return (
-    <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-        <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>
-          {emoji} {label}
-        </span>
-        <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
-          {count} vote{count !== 1 ? 's' : ''} ({pct}%)
-        </span>
-      </div>
-      <div style={{ width: '100%', height: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', overflow: 'hidden' }}>
-        <div style={{
-          width: `${width}%`,
-          height: '100%',
-          background: color,
-          borderRadius: '6px',
-          transition: 'width 0.6s ease-out',
-        }} />
-      </div>
+    <div style={{ display: 'flex', gap: '8px', width: '100%', maxWidth: '365px', position: 'relative', zIndex: 2 }}>
+      <button
+        className="game-btn"
+        onClick={() => handleVote('red')}
+        style={{ ...btnBase, ...getSelectedStyle('red') }}
+      >
+        <img src={VOTE_RED_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+        <span style={labelStyle}>RED FLAG</span>
+      </button>
+      <button
+        className="game-btn"
+        onClick={() => handleVote('depends')}
+        style={{ ...btnBase, ...getSelectedStyle('depends') }}
+      >
+        <img src={VOTE_DEPENDS_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+        <span style={labelStyle}>DEPENDS</span>
+      </button>
+      <button
+        className="game-btn"
+        onClick={() => handleVote('green')}
+        style={{ ...btnBase, ...getSelectedStyle('green') }}
+      >
+        <img src={VOTE_GREEN_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+        <span style={labelStyle}>GREEN FLAG</span>
+      </button>
     </div>
   )
 }
@@ -194,37 +207,74 @@ function VoteResults({ votes, players, onNext }: {
   const redCount = votes.filter(v => v.vote === 'red').length
   const dependsCount = votes.filter(v => v.vote === 'depends').length
   const greenCount = votes.filter(v => v.vote === 'green').length
-  const total = votes.length
+
+  const summaryCardStyle: React.CSSProperties = {
+    flex: 1,
+    background: '#18181b',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '12px',
+    padding: '12px 8px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '4px',
+  }
+
+  const summaryLabelStyle: React.CSSProperties = {
+    fontFamily: "'Staatliches', sans-serif",
+    fontSize: '11px',
+    color: 'rgba(255,255,255,0.5)',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+  }
+
+  const summaryCountStyle: React.CSSProperties = {
+    fontFamily: "'Anton SC', sans-serif",
+    fontWeight: 400,
+    fontSize: '14px',
+    color: '#fff',
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '365px', position: 'relative', zIndex: 2, alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '365px', position: 'relative', zIndex: 2, alignItems: 'center' }}>
       <h3 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '24px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>
         RESULTS
       </h3>
 
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        <ResultBar label="RED FLAG" count={redCount} total={total} color="#dc2827" emoji="🚩" delay={100} />
-        <ResultBar label="DEPENDS" count={dependsCount} total={total} color="#626262" emoji="🤷" delay={250} />
-        <ResultBar label="GREEN FLAG" count={greenCount} total={total} color="#27ae60" emoji="🟢" delay={400} />
+      {/* Summary row */}
+      <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+        <div style={summaryCardStyle}>
+          <img src={VOTE_RED_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+          <span style={summaryLabelStyle}>RED FLAG</span>
+          <span style={summaryCountStyle}>{redCount} VOTE{redCount !== 1 ? 'S' : ''}</span>
+        </div>
+        <div style={summaryCardStyle}>
+          <img src={VOTE_DEPENDS_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+          <span style={summaryLabelStyle}>DEPENDS</span>
+          <span style={summaryCountStyle}>{dependsCount} VOTE{dependsCount !== 1 ? 'S' : ''}</span>
+        </div>
+        <div style={summaryCardStyle}>
+          <img src={VOTE_GREEN_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+          <span style={summaryLabelStyle}>GREEN FLAG</span>
+          <span style={summaryCountStyle}>{greenCount} VOTE{greenCount !== 1 ? 'S' : ''}</span>
+        </div>
       </div>
 
-      {/* Individual votes */}
-      <div style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '4px' }}>
+      {/* Player vote breakdown */}
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {votes.map((v, i) => {
           const player = players[v.playerIndex]
-          const voteColor = v.vote === 'red' ? '#dc2827' : v.vote === 'green' ? '#27ae60' : '#626262'
-          const voteEmoji = v.vote === 'red' ? '🚩' : v.vote === 'green' ? '🟢' : '🤷'
           return (
             <div key={i} style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '6px 10px',
-              border: `1px solid ${voteColor}33`,
+              display: 'flex', alignItems: 'center', gap: '12px',
+              background: '#18181b', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '12px', padding: '12px',
             }}>
-              <div className="avatar-circle" style={{ width: '20px', height: '20px', background: player.color, boxShadow: '0 0 0 2.5px #fff' }} />
-              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '12px', color: '#fff' }}>
+              <div className="avatar-circle" style={{ width: '28px', height: '28px', borderRadius: '50%', background: player.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
+              <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '15px', color: '#fff', textTransform: 'uppercase', flex: 1 }}>
                 {player.name}
               </span>
-              <span style={{ fontSize: '14px' }}>{voteEmoji}</span>
+              <img src={getVoteIcon(v.vote)} alt={v.vote} style={{ width: '20px', height: '20px' }} />
             </div>
           )
         })}
@@ -237,11 +287,296 @@ function VoteResults({ votes, players, onNext }: {
           background: '#dc2827', border: 'none', borderRadius: '999px',
           padding: '12px 32px', fontFamily: "'Staatliches', sans-serif",
           fontSize: '16px', color: '#fff', textAlign: 'center',
-          letterSpacing: '0.05em', marginTop: '8px',
+          letterSpacing: '0.05em', marginTop: '8px', cursor: 'pointer',
+          width: '100%', maxWidth: '200px',
         }}
       >
         NEXT
       </button>
+    </div>
+  )
+}
+
+/* ─── Session Summary / Game Complete Screen ─── */
+function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose, onPlayAgain }: {
+  players: Player[]
+  totalCards: number
+  skipCount: number
+  allCardVotes: CardVoteRecord[]
+  onClose: () => void
+  onPlayAgain: () => void
+}) {
+  const totalVotesCast = allCardVotes.reduce((sum, r) => sum + r.votes.length, 0)
+  const cardsPlayed = allCardVotes.length
+
+  /* ─── Compute highlights ─── */
+  function computeHighlights() {
+    if (allCardVotes.length === 0) return null
+
+    let mostControversial: CardVoteRecord | null = null
+    let mostControversialScore = -1
+    let mostGreen: CardVoteRecord | null = null
+    let mostGreenPct = -1
+    let mostRed: CardVoteRecord | null = null
+    let mostRedPct = -1
+    let closestVote: CardVoteRecord | null = null
+    let closestMargin = Infinity
+
+    for (const record of allCardVotes) {
+      const red = record.votes.filter(v => v.vote === 'red').length
+      const green = record.votes.filter(v => v.vote === 'green').length
+      const depends = record.votes.filter(v => v.vote === 'depends').length
+      const total = record.votes.length
+      if (total === 0) continue
+
+      const greenPct = green / total
+      const redPct = red / total
+
+      // Controversy: how evenly split between red and green
+      const controversyScore = Math.min(red, green) / Math.max(1, Math.max(red, green))
+      if (controversyScore > mostControversialScore || (controversyScore === mostControversialScore && red + green > 0)) {
+        mostControversialScore = controversyScore
+        mostControversial = record
+      }
+
+      if (greenPct > mostGreenPct) {
+        mostGreenPct = greenPct
+        mostGreen = record
+      }
+
+      if (redPct > mostRedPct) {
+        mostRedPct = redPct
+        mostRed = record
+      }
+
+      // Closest: smallest margin between top two vote types
+      const sorted = [red, green, depends].sort((a, b) => b - a)
+      const margin = sorted[0] - sorted[1]
+      if (margin < closestMargin) {
+        closestMargin = margin
+        closestVote = record
+      }
+    }
+
+    return { mostControversial, mostGreen, mostGreenPct, mostRed, mostRedPct, closestVote, closestMargin }
+  }
+
+  function computeStats() {
+    let unanimousCount = 0
+    let splitCount = 0
+    let totalDepends = 0
+    let majorityAgreeCount = 0
+
+    for (const record of allCardVotes) {
+      const red = record.votes.filter(v => v.vote === 'red').length
+      const green = record.votes.filter(v => v.vote === 'green').length
+      const depends = record.votes.filter(v => v.vote === 'depends').length
+      const total = record.votes.length
+      totalDepends += depends
+
+      const maxVotes = Math.max(red, green, depends)
+      if (maxVotes === total) unanimousCount++
+
+      const sorted = [red, green, depends].sort((a, b) => b - a)
+      const margin = sorted[0] - sorted[1]
+      if (margin <= 1 && total > 1) splitCount++
+
+      if (maxVotes > total / 2) majorityAgreeCount++
+    }
+
+    const avgAgreement = allCardVotes.length > 0 ? Math.round((majorityAgreeCount / allCardVotes.length) * 100) : 0
+
+    return { unanimousCount, splitCount, totalDepends, avgAgreement }
+  }
+
+  function voteBreakdownText(record: CardVoteRecord): string {
+    const red = record.votes.filter(v => v.vote === 'red').length
+    const green = record.votes.filter(v => v.vote === 'green').length
+    const depends = record.votes.filter(v => v.vote === 'depends').length
+    const parts: string[] = []
+    if (red > 0) parts.push(`${red} Red`)
+    if (green > 0) parts.push(`${green} Green`)
+    if (depends > 0) parts.push(`${depends} Depends`)
+    return parts.join(' / ')
+  }
+
+  const highlights = computeHighlights()
+  const stats = computeStats()
+
+  const sectionHeadingStyle: React.CSSProperties = {
+    fontFamily: "'Staatliches', sans-serif",
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.4)',
+    letterSpacing: '0.12em',
+    textTransform: 'uppercase',
+    margin: 0,
+  }
+
+  const highlightCardStyle: React.CSSProperties = {
+    background: '#18181b',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '12px',
+    padding: '14px 16px',
+    width: '100%',
+  }
+
+  const highlightLabelStyle: React.CSSProperties = {
+    fontFamily: "'Staatliches', sans-serif",
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.4)',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    margin: 0,
+  }
+
+  const highlightScenarioStyle: React.CSSProperties = {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: '14px',
+    color: '#fff',
+    margin: '6px 0 4px',
+    lineHeight: 1.4,
+    fontStyle: 'italic',
+  }
+
+  const highlightBreakdownStyle: React.CSSProperties = {
+    fontFamily: "'Satoshi', sans-serif",
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.45)',
+    margin: 0,
+  }
+
+  const statRowStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 0',
+    borderBottom: '1px solid rgba(255,255,255,0.06)',
+  }
+
+  const statLabelStyle: React.CSSProperties = {
+    fontFamily: "'Satoshi', sans-serif",
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.6)',
+  }
+
+  const statValueStyle: React.CSSProperties = {
+    fontFamily: "'Anton SC', sans-serif",
+    fontWeight: 400,
+    fontSize: '18px',
+    color: '#fff',
+  }
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', padding: '40px 20px 60px', overflowY: 'auto', position: 'relative' }}>
+      {/* Header */}
+      <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
+        <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+          SESSION COMPLETE
+        </h2>
+        <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+          You've completed this round of Red Flag / Green Flag.
+        </p>
+      </div>
+
+      {/* Session Summary cards */}
+      <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', width: '100%', maxWidth: '365px' }}>
+        {[
+          { count: cardsPlayed, label: 'CARDS PLAYED' },
+          { count: players.length, label: 'PLAYERS' },
+          { count: totalVotesCast, label: 'VOTES CAST' },
+        ].map((stat, i) => (
+          <div key={i} className={`done-stat-${i + 1}`} style={{
+            flex: 1, background: '#18181b', border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '12px', padding: '16px 8px', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', gap: '4px',
+          }}>
+            <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '32px', color: '#fff', lineHeight: 1 }}>{stat.count}</span>
+            <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textAlign: 'center' }}>{stat.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Highlights */}
+      {highlights && allCardVotes.length > 0 && (
+        <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '365px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <p style={sectionHeadingStyle}>HIGHLIGHTS</p>
+
+          {highlights.mostControversial && (
+            <div style={highlightCardStyle}>
+              <p style={highlightLabelStyle}>Most Controversial Card</p>
+              <p style={highlightScenarioStyle}>"{highlights.mostControversial.scenario}"</p>
+              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostControversial)}</p>
+            </div>
+          )}
+
+          {highlights.mostGreen && (
+            <div style={highlightCardStyle}>
+              <p style={highlightLabelStyle}>Most Agreed Green Flag</p>
+              <p style={highlightScenarioStyle}>"{highlights.mostGreen.scenario}"</p>
+              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostGreen)} ({Math.round((highlights.mostGreenPct ?? 0) * 100)}% green)</p>
+            </div>
+          )}
+
+          {highlights.mostRed && (
+            <div style={highlightCardStyle}>
+              <p style={highlightLabelStyle}>Most Agreed Red Flag</p>
+              <p style={highlightScenarioStyle}>"{highlights.mostRed.scenario}"</p>
+              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostRed)} ({Math.round((highlights.mostRedPct ?? 0) * 100)}% red)</p>
+            </div>
+          )}
+
+          {highlights.closestVote && (
+            <div style={highlightCardStyle}>
+              <p style={highlightLabelStyle}>Closest Vote</p>
+              <p style={highlightScenarioStyle}>"{highlights.closestVote.scenario}"</p>
+              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.closestVote)} (margin: {highlights.closestMargin})</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Overall Stats */}
+      {allCardVotes.length > 0 && (
+        <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '365px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <p style={{ ...sectionHeadingStyle, marginBottom: '8px' }}>OVERALL STATS</p>
+          <div style={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '4px 16px' }}>
+            <div style={statRowStyle}>
+              <span style={statLabelStyle}>Average Group Agreement</span>
+              <span style={statValueStyle}>{stats.avgAgreement}%</span>
+            </div>
+            <div style={statRowStyle}>
+              <span style={statLabelStyle}>Unanimous Decisions</span>
+              <span style={statValueStyle}>{stats.unanimousCount}</span>
+            </div>
+            <div style={statRowStyle}>
+              <span style={statLabelStyle}>Split Decisions</span>
+              <span style={statValueStyle}>{stats.splitCount}</span>
+            </div>
+            <div style={{ ...statRowStyle, borderBottom: 'none' }}>
+              <span style={statLabelStyle}>"Depends" Votes</span>
+              <span style={statValueStyle}>{stats.totalDepends}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Action buttons */}
+      <div className="done-btns" style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '100%', maxWidth: '365px' }}>
+        <button className="game-btn" onClick={onClose} style={{
+          flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px',
+          padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
+          color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', cursor: 'pointer',
+        }}>
+          BROWSE GAMES
+        </button>
+        <button className="game-btn-primary" onClick={onPlayAgain} style={{
+          flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px',
+          padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
+          color: '#fff', letterSpacing: '0.05em', cursor: 'pointer',
+        }}>
+          PLAY AGAIN
+        </button>
+      </div>
     </div>
   )
 }
@@ -262,6 +597,7 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
   const [skipCount, setSkipCount] = useState(0)
   const [votes, setVotes] = useState<Vote[]>([])
   const [votingPlayerIndex, setVotingPlayerIndex] = useState(0)
+  const [allCardVotes, setAllCardVotes] = useState<CardVoteRecord[]>([])
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
 
   const currentPlayer = players[playerIndex % players.length]
@@ -285,14 +621,23 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
     const newVotes = [...votes, { playerIndex: votingPlayerIndex, vote }]
     setVotes(newVotes)
     if (votingPlayerIndex + 1 >= players.length) {
-      setPhase('results')
+      setTimeout(() => {
+        setPhase('results')
+      }, 500)
     } else {
-      setVotingPlayerIndex(votingPlayerIndex + 1)
+      setTimeout(() => {
+        setVotingPlayerIndex(votingPlayerIndex + 1)
+      }, 500)
     }
   }, [votes, votingPlayerIndex, players.length])
 
   const handleNext = useCallback((skipped = false) => {
-    if (skipped) setSkipCount(c => c + 1)
+    if (skipped) {
+      setSkipCount(c => c + 1)
+    } else {
+      // Record votes for this card
+      setAllCardVotes(prev => [...prev, { scenario, votes }])
+    }
     const nextCard = cardIndex + 1
     const nextPlayer = (playerIndex + 1) % players.length
     setCardIndex(nextCard)
@@ -301,57 +646,30 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
     setPhase('card-front')
     setVotes([])
     setVotingPlayerIndex(0)
-  }, [cardIndex, playerIndex, players.length])
+  }, [cardIndex, playerIndex, players.length, scenario, votes])
+
+  const handlePlayAgain = useCallback(() => {
+    setCardIndex(0)
+    setPlayerIndex(0)
+    setSkipCount(0)
+    setFlipped(false)
+    setPhase('card-front')
+    setVotes([])
+    setVotingPlayerIndex(0)
+    setAllCardVotes([])
+  }, [])
 
   /* Game Complete */
   if (isDone) {
     return (
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px', padding: '40px' }}>
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', textAlign: 'center' }}>
-          <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
-            You're Decked
-          </h2>
-          <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-            You played all {totalCards} Red Flag Green Flag cards
-          </p>
-        </div>
-
-        {/* Stats card */}
-        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
-          {[
-            { count: totalCards, label: 'CARDS', cls: 'done-stat-1' },
-            { count: skipCount, label: 'SKIPPED', cls: 'done-stat-2' },
-          ].map((stat, i) => (
-            <div key={i} className={stat.cls} style={{ display: 'flex', alignItems: 'center' }}>
-              {i > 0 && <div style={{ width: '1px', height: '32px', background: 'rgba(255,255,255,0.1)', margin: '0 28px' }} />}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '40px', color: '#fff', lineHeight: 1 }}>{stat.count}</span>
-                <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{stat.label}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Mini card */}
-        <div className="done-card" style={{
-          position: 'relative', zIndex: 2,
-          width: '120px', height: '150px',
-          borderRadius: '12px', overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4)', flexShrink: 0,
-        }}>
-          <img src={RFGF_FRONT} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-
-        {/* Buttons */}
-        <div className="done-btns" style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button className="game-btn" onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
-            BROWSE GAMES
-          </button>
-          <button className="game-btn-primary" onClick={() => { setCardIndex(0); setPlayerIndex(0); setSkipCount(0); setFlipped(false); setPhase('card-front'); setVotes([]); setVotingPlayerIndex(0) }} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
-            PLAY AGAIN
-          </button>
-        </div>
-      </div>
+      <SessionComplete
+        players={players}
+        totalCards={totalCards}
+        skipCount={skipCount}
+        allCardVotes={allCardVotes}
+        onClose={onClose}
+        onPlayAgain={handlePlayAgain}
+      />
     )
   }
 
@@ -460,13 +778,13 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '100%', maxWidth: '365px' }}>
           <button className="game-btn"
             onClick={() => handleNext(true)}
-            style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}
+            style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em', cursor: 'pointer' }}
           >
             SKIP
           </button>
           <button className="game-btn-primary"
             onClick={handleStartVoting}
-            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}
+            style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em', cursor: 'pointer' }}
           >
             VOTE
           </button>
@@ -497,16 +815,19 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
           </p>
         </div>
 
-        {/* Current voter */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-          <div className="avatar-circle" style={{ width: '48px', height: '48px', background: votingPlayer.color, boxShadow: '0 0 0 2.5px #fff' }} />
-          <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '18px', color: '#fff', textTransform: 'uppercase' }}>
-            {votingPlayer.name}'S VOTE
-          </span>
-          <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
-            {votingPlayerIndex + 1} of {players.length}
-          </span>
-        </div>
+        {/* Voter heading */}
+        <h3 style={{
+          fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+          fontSize: '28px', color: '#fff', margin: 0, textTransform: 'uppercase',
+          textAlign: 'center', position: 'relative', zIndex: 2,
+        }}>
+          {votingPlayer.name}'S VOTE
+        </h3>
+
+        {/* Progress indicator */}
+        <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', position: 'relative', zIndex: 2 }}>
+          {votingPlayerIndex + 1} of {players.length}
+        </span>
 
         <VoteButtons onVote={handleVote} />
       </div>
