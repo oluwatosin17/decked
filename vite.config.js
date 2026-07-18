@@ -83,6 +83,23 @@ export default defineConfig({
                 maxEntries: 30,
                 maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
               },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/api\.fontshare\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'fontshare-fonts',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
             },
           },
         ],

@@ -5,15 +5,7 @@ import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { shuffle, getShuffledDeck } from './utils/deckShuffle'
 
 /* ---- Cloudinary assets ---- */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -213,11 +205,11 @@ function getPrompts(categories: Category[]): string[] {
     const allCats = Object.keys(PROMPTS).filter(k => k !== 'random') as Category[]
     const pool: string[] = []
     for (const c of allCats) pool.push(...PROMPTS[c])
-    return shuffle([...new Set(pool)])
+    return getShuffledDeck([...new Set(pool)], 'take-a-sip')
   }
   const pool: string[] = []
   for (const c of categories) pool.push(...PROMPTS[c])
-  return shuffle([...new Set(pool)])
+  return getShuffledDeck([...new Set(pool)], 'take-a-sip')
 }
 
 /* ---- Category Selection (multi-select) ---- */

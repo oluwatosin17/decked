@@ -3,17 +3,9 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
+import { getShuffledDeck } from './utils/deckShuffle'
 
 type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
 
 /* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
 const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
@@ -642,8 +634,8 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
   const [truthCount,     setTruthCount]     = useState(0)
   const [dareCount,      setDareCount]      = useState(0)
   const [skipCount,      setSkipCount]      = useState(0)
-  const [shuffledTruths, setShuffledTruths] = useState(() => shuffle(TRUTHS))
-  const [shuffledDares,  setShuffledDares]  = useState(() => shuffle(DARES))
+  const [shuffledTruths, setShuffledTruths] = useState(() => getShuffledDeck(TRUTHS, 'truth-or-dare-truths'))
+  const [shuffledDares,  setShuffledDares]  = useState(() => getShuffledDeck(DARES, 'truth-or-dare-dares'))
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
 
@@ -670,8 +662,8 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
     setTruthCount(0)
     setDareCount(0)
     setSkipCount(0)
-    setShuffledTruths(shuffle(TRUTHS))
-    setShuffledDares(shuffle(DARES))
+    setShuffledTruths(getShuffledDeck(TRUTHS, 'truth-or-dare-truths'))
+    setShuffledDares(getShuffledDeck(DARES, 'truth-or-dare-dares'))
     setStep('getReady')
   }, [])
 
@@ -695,7 +687,7 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setShuffledTruths(shuffle(TRUTHS)); setShuffledDares(shuffle(DARES)); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setShuffledTruths(getShuffledDeck(TRUTHS, 'truth-or-dare-truths')); setShuffledDares(getShuffledDeck(DARES, 'truth-or-dare-dares')); setStep('getReady') }}
         />
       )}
 

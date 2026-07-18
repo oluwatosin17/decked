@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect, type CSSProperties } from 'react'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
+import { shuffle, getShuffledDeck } from './utils/deckShuffle'
 
 /* ─── Asset URLs ─── */
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
@@ -24,15 +25,6 @@ function ChiliGlyph({ style }: { style?: CSSProperties }) {
 
 type Player = { name: string; color: string }
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
 
 /* ─── Questions by spice level ─── */
 const MILD_QUESTIONS = [
@@ -642,7 +634,7 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
   const [totalCards, setTotalCards] = useState(0)
   const [cardIndex, setCardIndex] = useState(0)
   const [playerIndex, setPlayerIndex] = useState(0)
-  const [questions, setQuestions] = useState<string[]>(() => shuffle(MEDIUM_QUESTIONS))
+  const [questions, setQuestions] = useState<string[]>(() => getShuffledDeck(MEDIUM_QUESTIONS, 'spicy-starters'))
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
 
@@ -651,7 +643,7 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
   const handleSelectSpice = (level: SpiceLevel) => {
     setSpiceLevel(level)
     const bank = level === 'mild' ? MILD_QUESTIONS : level === 'hot' ? HOT_QUESTIONS : MEDIUM_QUESTIONS
-    setQuestions(shuffle(bank))
+    setQuestions(getShuffledDeck(bank, 'spicy-starters'))
     setStep('playerSetup')
   }
 

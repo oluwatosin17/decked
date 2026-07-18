@@ -4,15 +4,7 @@ import { useScaledCard } from './hooks/useCardScale'
 import SelectGameMode, { NHIE_MODES } from './SelectGameMode'
 import { haptic } from './haptics'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { getShuffledDeck, shuffle } from './utils/deckShuffle'
 
 /* ─── Prompts ─── */
 const ALL_PROMPTS = [
@@ -533,7 +525,7 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
   const [lastPoints, setLastPoints] = useState<Record<string, number>>({})
 
   const startGame = (deckSize: number) => {
-    setPrompts(shuffle(ALL_PROMPTS).slice(0, Math.min(deckSize, ALL_PROMPTS.length)))
+    setPrompts(getShuffledDeck(ALL_PROMPTS, 'never-have-i-ever', Math.min(deckSize, ALL_PROMPTS.length)))
     setCardIdx(0)
     const init: Record<string, number> = {}
     players.forEach(p => { init[p.name] = 0 })

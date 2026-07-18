@@ -1,17 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import SharedDeckSize from './components/DeckSize'
+import SharedCustomCards from './components/CustomCards'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { shuffle, getShuffledDeck } from './utils/deckShuffle'
 
 const RFGF_FRONT = '/icons/rfgf-front.svg'
 const RFGF_BACK  = '/icons/rfgf-back.svg'
@@ -864,18 +857,30 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
 }
 
 /* ─── Root Component ─── */
-type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game'
+type Step = 'playerSetup' | 'deckSize' | 'customCards' | 'getReady' | 'game'
 
 export default function RedFlagGreenFlagGame({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState<Step>('playerSetup')
   const [players, setPlayers] = useState<Player[]>([])
   const [totalCards, setTotalCards] = useState(0)
   const [playerIndex, setPlayerIndex] = useState(0)
-  const [shuffledScenarios, setShuffledScenarios] = useState(() => shuffle(SCENARIOS))
+  const [shuffledScenarios, setShuffledScenarios] = useState(() => getShuffledDeck(SCENARIOS, 'red-flag-green-flag'))
+  const [customCards, setCustomCards] = useState<string[]>([])
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
 
   const goToGame = useCallback(() => setStep('game'), [])
+
+  const startGame = (custom: string[]) => {
+    setCustomCards(custom)
+    const generated = getShuffledDeck(SCENARIOS, 'red-flag-green-flag')
+    const allScenarios = shuffle([...custom, ...generated])
+    const trimmed = totalCards > 0 ? allScenarios.slice(0, totalCards) : allScenarios
+    setShuffledScenarios(trimmed)
+    if (totalCards > trimmed.length) setTotalCards(trimmed.length)
+    setPlayerIndex(0)
+    setStep('getReady')
+  }
 
   return (
     <div className="game-fullscreen">
@@ -896,10 +901,16 @@ export default function RedFlagGreenFlagGame({ onClose }: { onClose: () => void 
           onBack={() => setStep('playerSetup')}
           onNext={(n) => {
             setTotalCards(n)
-            setPlayerIndex(0)
-            setShuffledScenarios(shuffle(SCENARIOS))
-            setStep('getReady')
+            setStep('customCards')
           }}
+        />
+      )}
+
+      {step === 'customCards' && (
+        <SharedCustomCards
+          maxCards={totalCards}
+          onBack={() => setStep('deckSize')}
+          onNext={startGame}
         />
       )}
 

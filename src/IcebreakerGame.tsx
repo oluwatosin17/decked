@@ -3,15 +3,7 @@ import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import SharedDeckSize from './components/DeckSize'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { getShuffledDeck } from './utils/deckShuffle'
 
 const ICEBREAKER_BG = '/assets/games/icebreaker.png'
 const ICEBREAKER_INNER = '/icons/icebreaker-inner.svg'
@@ -562,7 +554,7 @@ export default function IcebreakerGame({ onClose }: { onClose: () => void }) {
   const [mode, setMode] = useState<PlayMode>('spotlight')
   const [players, setPlayers] = useState<Player[]>([])
   const [totalCards, setTotalCards] = useState(0)
-  const [shuffledQs, setShuffledQs] = useState(() => shuffle(QUESTIONS))
+  const [shuffledQs, setShuffledQs] = useState(() => getShuffledDeck(QUESTIONS, 'icebreaker'))
 
   const goToGame = useCallback(() => setStep('game'), [])
 
@@ -587,7 +579,7 @@ export default function IcebreakerGame({ onClose }: { onClose: () => void }) {
       {step === 'deckSize' && (
         <SharedDeckSize
           onBack={() => setStep('playerSetup')}
-          onNext={(n) => { setTotalCards(n); setShuffledQs(shuffle(QUESTIONS)); setStep('getReady') }}
+          onNext={(n) => { setTotalCards(n); setShuffledQs(getShuffledDeck(QUESTIONS, 'icebreaker')); setStep('getReady') }}
         />
       )}
 

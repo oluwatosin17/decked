@@ -2,15 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { getShuffledDeck } from './utils/deckShuffle'
 
 /* ─── Assets (permanently hosted on Cloudinary — see decked/game-assets folder) ─── */
 const LNT_OUTER  = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-outer.svg'
@@ -469,7 +461,7 @@ export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?
   const [cardIndex,   setCardIndex]   = useState(0)
   const [playerIndex, setPlayerIndex] = useState(0)
   const [skipCount,   setSkipCount]   = useState(0)
-  const [questions,   setQuestions]   = useState(() => shuffle(getQuestionsForMode(mode)))
+  const [questions,   setQuestions]   = useState(() => getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks'))
 
   const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
 
@@ -498,7 +490,7 @@ export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?
     setCardIndex(0)
     setPlayerIndex(0)
     setSkipCount(0)
-    setQuestions(shuffle(getQuestionsForMode(mode)))
+    setQuestions(getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks'))
     setStep('getReady')
   }, [mode])
 
@@ -518,7 +510,7 @@ export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(shuffle(getQuestionsForMode(mode))); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks')); setStep('getReady') }}
         />
       )}
 

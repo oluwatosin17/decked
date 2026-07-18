@@ -5,15 +5,7 @@ import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { shuffle, getShuffledDeck } from './utils/deckShuffle'
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -234,9 +226,9 @@ function getQuestions(relationship: Relationship, stage: Stage): string[] {
     const allRels = Object.keys(QUESTIONS).filter(k => k !== 'random') as Relationship[]
     const pool: string[] = []
     for (const r of allRels) pool.push(...QUESTIONS[r][stage])
-    return shuffle([...new Set(pool)])
+    return getShuffledDeck([...new Set(pool)], 'wnrs')
   }
-  return shuffle([...QUESTIONS[relationship][stage]])
+  return getShuffledDeck([...QUESTIONS[relationship][stage]], 'wnrs')
 }
 
 function buildDeck(relationship: Relationship, journey: Journey, deckSize: number, customCards: string[]): { questions: string[]; stageBreaks: { stage: Stage; start: number; end: number }[] } {
