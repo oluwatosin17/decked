@@ -111,24 +111,55 @@ const HOT_QUESTIONS = [
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      {/* Outer card with checkerboard border — floats up into view */}
+      {/* Outer card with checkerboard border — matches Figma 769-35803 */}
       <div className="card-float-up" style={{
-        width: '392px', height: '504px', borderRadius: '12px', overflow: 'hidden',
+        width: '454px', height: '504px', borderRadius: '12px', overflow: 'hidden',
         position: 'relative', flexShrink: 0, zIndex: 2,
         boxShadow: '0 32px 80px rgba(183,0,18,0.4)',
       }}>
-        <img src={SPICY_FRONT_COVER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        {/* Pink checkerboard border background */}
+        <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
+        <div style={{ position: 'absolute', left: '-33px', top: 0, width: '520px', height: '504px', overflow: 'hidden' }}>
+          <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+
+        {/* Red inner area */}
         <div style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
-          padding: '28px 40px',
+          position: 'absolute', top: '24px', right: '24px', bottom: '24px', left: '24px',
+          background: '#b70012', overflow: 'hidden',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px',
+          padding: '32px 40px',
         }}>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px' }}>
-            <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
-              No, go back
+          {/* 18+ badge */}
+          <div style={{ transform: 'rotate(-6deg)', marginBottom: '4px' }}>
+            <div style={{
+              background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
+              width: '97px', height: '96px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '52px', color: '#fff', letterSpacing: '1px', lineHeight: 1, display: 'block', textAlign: 'center' }}>
+                18+
+              </span>
+            </div>
+          </div>
+
+          {/* Heading + text */}
+          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap' }}>
+            MATURE CONTENT
+          </h2>
+          <div style={{ textAlign: 'center', color: '#fff', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
+            <p style={{ margin: 0 }}>Truth or Dare includes</p>
+            <p style={{ margin: 0 }}>mature content for ages 18+</p>
+            <p style={{ margin: '10px 0 0' }}>Continue?</p>
+          </div>
+
+          {/* Buttons */}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '260px', marginTop: '8px' }}>
+            <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
+              NO, GO BACK
             </button>
             <button className="game-btn-primary" onClick={() => setTimeout(onConfirm, 100)} style={{ flex: 1, background: '#fff', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#b70012', textAlign: 'center' }}>
-              YES, I'm 18+
+              YES, I'M 18+
             </button>
           </div>
         </div>
@@ -144,16 +175,7 @@ type SpiceLevel = 'mild' | 'medium' | 'hot'
 
 function ChiliIcon() {
   return (
-    <div style={{
-      background: 'rgba(255,255,255,0.1)', borderRadius: '16px',
-      width: '32px', height: '32px', flexShrink: 0,
-      display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
-    }}>
-      <div style={{ width: '32px', height: '32px', overflow: 'hidden', position: 'relative' }}>
-        {/* inset-[15.37%_28.22%] = top/bottom: 15.37% = 4.9px, left/right: 28.22% = 9px */}
-        <ChiliGlyph style={{ position: 'absolute', top: '15.37%', left: '28.22%', right: '28.22%', bottom: '15.37%', width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
-      </div>
-    </div>
+    <img src="/icons/how-spicy.svg" alt="" style={{ width: '32px', height: '32px', flexShrink: 0 }} />
   )
 }
 
@@ -175,10 +197,8 @@ function HowSpicy({ onSelect }: { onSelect: (level: SpiceLevel) => void }) {
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '32px', alignItems: 'center' }}>
 
-        <img src="/icons/how-spicy.svg" alt="" style={{ width: '120px', height: 'auto' }} />
-
-        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
-          how spicy do you like it
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', textTransform: 'uppercase' }}>
+          HOW SPICY DO YOU LIKE IT
         </h2>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
