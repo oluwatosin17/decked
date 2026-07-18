@@ -2,15 +2,7 @@ import { useState, useEffect, useCallback, useRef, type CSSProperties } from 're
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter } from './components/GameShell'
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
+import { getShuffledDeck } from './utils/deckShuffle'
 
 /* ─── Assets (permanently hosted on Cloudinary) ─── */
 // Card banners
@@ -635,7 +627,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
   const [maxLives,      setMaxLives]      = useState(3)
   const [livesMap,      setLivesMap]      = useState<Record<string, number>>({})
   const [roundNum,      setRoundNum]      = useState(0)
-  const [challenges,    setChallenges]    = useState(() => shuffle(CHALLENGES))
+  const [challenges,    setChallenges]    = useState(() => getShuffledDeck(CHALLENGES, 'laugh-you-are-out'))
   const [challengeIdx,  setChallengeIdx]  = useState(0)
   const [winner,        setWinner]        = useState<Player | null>(null)
 
@@ -646,7 +638,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
     p.forEach(pl => { map[pl.name] = lives })
     setLivesMap(map)
     setRoundNum(0)
-    setChallenges(shuffle(CHALLENGES))
+    setChallenges(getShuffledDeck(CHALLENGES, 'laugh-you-are-out'))
     setChallengeIdx(0)
     setStep('gameplay')
   }, [])
@@ -679,7 +671,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
     players.forEach(pl => { map[pl.name] = maxLives })
     setLivesMap(map)
     setRoundNum(0)
-    setChallenges(shuffle(CHALLENGES))
+    setChallenges(getShuffledDeck(CHALLENGES, 'laugh-you-are-out'))
     setChallengeIdx(0)
     setWinner(null)
     setStep('gameplay')

@@ -1,3 +1,5 @@
+import { getShuffledDeck } from './utils/deckShuffle'
+
 export interface CharadesCategory {
   id: string
   label: string
@@ -184,12 +186,9 @@ export function buildCharadesDeck(
     }
   }
 
-  // shuffle pool
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]]
-  }
+  // shuffle pool with recently-played exclusion
+  const shuffledPool = getShuffledDeck(pool, 'charades', remaining)
 
-  deck.push(...pool.slice(0, remaining))
+  deck.push(...shuffledPool)
   return deck
 }
