@@ -169,7 +169,7 @@ function IcebreakerGetReady({ players, onReady }: { players: Player[]; onReady: 
               display: 'flex', alignItems: 'center', gap: '12px',
               animation: `screen-enter 0.4s var(--ease-out) ${0.2 + i * 0.15}s both`,
             }}>
-              <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color, boxShadow: '0 0 0 2.5px rgba(255,255,255,0.3)' }} />
+              <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color, boxShadow: '0 0 0 2.5px #fff' }} />
               <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff' }}>
                 {p.name.toUpperCase()}
               </span>
@@ -281,13 +281,13 @@ function FlipCard({ question, flipped, onTap }: {
               <IceCracks />
             </div>
 
-            {/* BACK: Question card with inner SVG */}
-            <div className="spicy-flip-back" style={{ background: '#f0f8ff' }}>
-              <img src={ICEBREAKER_INNER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            {/* BACK: Full card from Figma (icebreaker-inner.svg) with text overlay */}
+            <div className="spicy-flip-back" style={{ background: '#F5FCFE' }}>
+              <img src={ICEBREAKER_INNER} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
               <div style={{
                 position: 'absolute', inset: 0,
                 display: 'flex', flexDirection: 'column', alignItems: 'center',
-                justifyContent: 'center', padding: '40px 32px', gap: '20px',
+                justifyContent: 'center', padding: '48px 36px 80px', gap: '16px',
               }}>
                 <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
                   {question.category}
@@ -295,9 +295,6 @@ function FlipCard({ question, flipped, onTap }: {
                 <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
                   {question.text}
                 </p>
-                <div style={{ marginTop: 'auto' }}>
-                  <IcebergIcon size={56} />
-                </div>
               </div>
             </div>
           </div>
@@ -318,25 +315,20 @@ function RevealedCard({ question, flipPhase }: { question: { category: Category;
         className={`${cls} game-card`}
         style={{
           ...cardStyle, borderRadius: '16px', overflow: 'hidden',
-          position: 'relative', zIndex: 2, background: '#f0f8ff',
+          position: 'relative', zIndex: 2, background: '#F5FCFE',
           boxShadow: '0 32px 80px rgba(91,200,245,0.25)',
-        }}
-      >
-        <img src={ICEBREAKER_REVEAL_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div style={{
-          position: 'absolute', inset: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center',
           justifyContent: 'center', padding: '40px 32px', gap: '20px',
-        }}>
-          <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
-            {question.category}
-          </span>
-          <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
-            {question.text}
-          </p>
-          <div style={{ marginTop: 'auto' }}>
-            <IcebergIcon size={56} />
-          </div>
+        }}
+      >
+        <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: '#5BC8F5', textTransform: 'uppercase' }}>
+          {question.category}
+        </span>
+        <p style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '26px', color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.25, margin: 0 }}>
+          {question.text}
+        </p>
+        <div style={{ marginTop: 'auto' }}>
+          <img src={ICEBREAKER_REVEAL_BG} alt="" style={{ width: '72px', height: '72px', objectFit: 'contain' }} />
         </div>
       </div>
     </div>

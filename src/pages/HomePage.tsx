@@ -42,7 +42,7 @@ interface Props {
   onBrowse: () => void
 }
 
-function MobileFeaturedGrid({ actions }: { actions: Record<string, () => void> }) {
+function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) | undefined> }) {
   const gridRef = useRef<HTMLDivElement>(null)
   const [colW, setColW] = useState(166)
   const allCards = GAME_CARDS(actions.onPlayTruthOrDare, actions.onPlaySpicyStarters, actions.onPlayLateNightTalks)
