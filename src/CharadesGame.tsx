@@ -3,7 +3,14 @@ import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import { CHARADES_CATEGORIES, buildCharadesDeck } from './charadesData'
 import { haptic } from './haptics'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import clockSticker from './assets/clock_12677969.svg'
+import GroupRegular from '@mingcute/react/core-regular/group'
+import DownSmallRegular from '@mingcute/react/core-regular/down-small'
+import CloseRegular from '@mingcute/react/core-regular/close'
+import ArrowRightRegular from '@mingcute/react/core-regular/arrow-right'
+import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 
 const RED = '#ed3844'
 const STORAGE_KEY = 'charades-game-state-v3'
@@ -12,16 +19,16 @@ const MIN_TEAM_MODE_PLAYERS = 4
 const MIN_PLAYERS_PER_TEAM = 2
 
 interface GameTeam { id: string; name: string; color: string; players: Player[] }
-type PlayMode = 'ffa' | 'teams'
 
 type Step =
-  | 'playerSetup' | 'teamMode' | 'teamBuilder' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
+  | 'playerSetup' | 'teamBuilder' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
   | 'getReady' | 'game' | 'didTheyGetIt' | 'pointsGained' | 'done'
+const STEPS: readonly Step[] = ['playerSetup', 'teamBuilder', 'categorySelect', 'deckSize', 'customCards', 'roundLength', 'getReady', 'game', 'didTheyGetIt', 'pointsGained', 'done']
 
 interface Snapshot {
-  step: Step
+  step: Step | 'teamMode'
   players: Player[]
-  mode: PlayMode
+  mode?: 'ffa' | 'teams'
   teams: GameTeam[]
   selectedCategories: string[]
   deckSize: number
@@ -55,11 +62,6 @@ function clearSnapshot() {
 
 const newTeamId = () => crypto.randomUUID()
 
-function buildFreeForAllTeams(players: Player[]): GameTeam[] {
-  return players.map(p => ({ id: newTeamId(), name: p.name, color: p.color, players: [p] }))
-}
-
-
 const TROPHY_ICON = '/icons/trophy.svg'
 
 /* ─── Button style helpers (exact Figma cta spec: 44px, 12px/18px padding, 999px radius) ─── */
@@ -91,51 +93,7 @@ const CheckIcon = () => (
   </svg>
 )
 
-/* ─── 0a. How would you like to play? ─── */
-function TeamModeScreen({ playerCount, onBack, onSelect }: { playerCount: number; onBack: () => void; onSelect: (mode: PlayMode) => void }) {
-  const teamsLocked = playerCount < MIN_TEAM_MODE_PLAYERS
-  const options: { mode: PlayMode; title: string; desc: string }[] = [
-    { mode: 'ffa',   title: 'FREE-FOR-ALL',  desc: 'Each player competes individually' },
-    { mode: 'teams', title: 'TEAMS',         desc: 'Group players into custom teams' },
-  ]
-  return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-      <div style={{ width: '500px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
-          How would you like to play?
-        </h2>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-          {options.map((opt, i) => {
-            const locked = opt.mode === 'teams' && teamsLocked
-            return (
-              <div key={opt.mode} className={`stagger-item mode-row${locked ? ' mode-row-locked' : ''}`} onClick={() => { if (locked) { haptic('light'); return }; haptic('medium'); onSelect(opt.mode) }}
-                style={{
-                  background: '#111113', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px',
-                  padding: '18px 20px', cursor: locked ? 'not-allowed' : 'pointer', boxSizing: 'border-box',
-                  display: 'flex', flexDirection: 'column', gap: '4px', opacity: locked ? 0.45 : 1,
-                  transition: 'opacity 0.2s', animationDelay: `${0.04 + i * 0.05}s`,
-                }}
-              >
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '20px', color: '#fff', letterSpacing: '0.04em' }}>{opt.title}</span>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{opt.desc}</span>
-                {locked && (
-                  <span className="mode-locked-hint" style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '12px', color: RED, letterSpacing: '0.05em', marginTop: '2px' }}>
-                    NEED AT LEAST {MIN_TEAM_MODE_PLAYERS} PLAYERS
-                  </span>
-                )}
-              </div>
-            )
-          })}
-        </div>
-
-        <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
-      </div>
-    </div>
-  )
-}
-
-/* ─── 0b. Team Builder ─── */
+/* ─── 0a. Team Builder ─── */
 function TeamBuilderScreen({
   players, initialTeams, onBack, onNext,
 }: {
@@ -145,11 +103,27 @@ function TeamBuilderScreen({
   onNext: (teams: GameTeam[]) => void
 }) {
   const [teams, setTeams] = useState<GameTeam[]>(initialTeams)
+  const [phase, setPhase] = useState<'create' | 'assign'>('create')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
+  const [assigningPlayer, setAssigningPlayer] = useState<Player | null>(null)
 
   const unassigned = players.filter(p => !teams.some(t => t.players.includes(p)))
-  const canNext = teams.length >= 2 && unassigned.length === 0 && teams.every(t => t.players.length >= MIN_PLAYERS_PER_TEAM)
+  const canContinue = teams.length >= 2
+  const canFinish = unassigned.length === 0 && teams.every(t => t.players.length >= MIN_PLAYERS_PER_TEAM)
+
+  useEffect(() => {
+    if (!assigningPlayer) return
+    document.body.classList.add('charades-sheet-open')
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setAssigningPlayer(null)
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.body.classList.remove('charades-sheet-open')
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [assigningPlayer])
 
   const addTeam = () => {
     haptic('light')
@@ -168,94 +142,99 @@ function TeamBuilderScreen({
     setEditValue('')
   }
   const assignPlayer = (player: Player, teamId: string) => {
-    haptic('light')
-    setTeams(prev => prev.map(t => t.id === teamId ? { ...t, players: [...t.players, player] } : t))
+    haptic('medium')
+    setTeams(prev => prev.map(t => ({
+      ...t,
+      players: t.id === teamId
+        ? [...t.players.filter(p => p.name !== player.name), player]
+        : t.players.filter(p => p.name !== player.name),
+    })))
+    setAssigningPlayer(null)
   }
-  const unassignPlayer = (player: Player) => {
-    haptic('light')
-    setTeams(prev => prev.map(t => ({ ...t, players: t.players.filter(p => p !== player) })))
-  }
+
+  const teamForPlayer = (player: Player) => teams.find(t => t.players.some(p => p.name === player.name))
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
       <div style={{ width: '560px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0 }}>
-            Build Your Teams
+            {phase === 'create' ? 'Create your teams' : 'Assign players'}
           </h2>
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-            Create teams, name them, and assign every player
+            {phase === 'create' ? 'Create and name at least two teams' : 'Choose a team for every player'}
           </p>
         </div>
 
         <div style={{ width: '100%', maxHeight: '360px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {teams.map(t => (
-            <div key={t.id} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: t.color, flexShrink: 0 }} />
-                {editingId === t.id ? (
-                  <input
-                    autoFocus value={editValue}
-                    onChange={e => setEditValue(e.target.value)}
-                    onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setEditingId(null) }}
-                    onBlur={commitRename}
-                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', flex: 1 }}
-                  />
-                ) : (
-                  <span onClick={() => startRename(t)} style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff', flex: 1, cursor: 'text' }}>{t.name}</span>
-                )}
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>({t.players.length})</span>
-                <button onClick={() => removeTeam(t.id)} className="icon-x-btn" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', padding: '0 2px' }} aria-label="Delete team">×</button>
-              </div>
-
-              {t.players.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {t.players.map(p => (
-                    <div key={p.name} className="chip-pop" style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '999px', padding: '4px 6px 4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{p.name}</span>
-                      <button onClick={() => unassignPlayer(p)} className="icon-x-btn" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '14px', padding: '0 2px' }} aria-label="Remove from team">×</button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {t.players.length > 0 && t.players.length < MIN_PLAYERS_PER_TEAM && (
-                <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '12px', color: RED, letterSpacing: '0.04em' }}>
-                  ADD {MIN_PLAYERS_PER_TEAM - t.players.length} MORE PLAYER{MIN_PLAYERS_PER_TEAM - t.players.length > 1 ? 'S' : ''}
-                </span>
-              )}
-            </div>
-          ))}
-
-          <button onClick={addTeam} className="add-team-btn" style={{ background: 'none', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '12px', padding: '12px', color: 'rgba(255,255,255,0.6)', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', letterSpacing: '0.05em', cursor: 'pointer' }}>
-            + ADD TEAM
-          </button>
-
-          {unassigned.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.06em' }}>UNASSIGNED</span>
-              {unassigned.map(p => (
-                <div key={p.name} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(237,56,68,0.4)', borderRadius: '12px', height: '52px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', boxSizing: 'border-box' }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: p.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
-                  <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', flex: 1, minWidth: 0 }}>{p.name}</span>
-                  <select
-                    defaultValue=""
-                    onChange={e => { if (e.target.value) assignPlayer(p, e.target.value) }}
-                    style={{ background: '#1a1a1d', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', padding: '6px 8px' }}
-                  >
-                    <option value="" disabled>Choose team…</option>
-                    {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                  </select>
+          {phase === 'create' ? (
+            <>
+              {teams.map(t => (
+                <div key={t.id} className="stagger-item charades-team-row">
+                  <div className="avatar-circle" style={{ width: '24px', height: '24px', background: t.color }} />
+                  {editingId === t.id ? (
+                    <input autoFocus value={editValue} onChange={e => setEditValue(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') setEditingId(null) }}
+                      onBlur={commitRename} />
+                  ) : (
+                    <button className="charades-team-name" onClick={() => startRename(t)}>{t.name}</button>
+                  )}
+                  <button onClick={() => removeTeam(t.id)} className="icon-x-btn charades-team-delete" aria-label={`Delete ${t.name}`}>×</button>
                 </div>
               ))}
-            </div>
+              <button onClick={addTeam} className="add-team-btn charades-add-team">+ Add team</button>
+            </>
+          ) : (
+            players.map(p => {
+              const assignedTeam = teamForPlayer(p)
+              return (
+                <div key={p.name} className={`stagger-item charades-player-row${assignedTeam ? ' is-assigned' : ''}`}>
+                  <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color, boxShadow: '0 0 0 2px #fff' }} />
+                  <span className="charades-player-name">{p.name}</span>
+                  <button className="charades-team-picker" onClick={() => { haptic('light'); setAssigningPlayer(p) }}>
+                    {assignedTeam ? <i style={{ background: assignedTeam.color }} /> : <GroupRegular size={18} aria-hidden="true" />}
+                    <span>{assignedTeam?.name ?? 'Select team'}</span>
+                    <DownSmallRegular className="charades-team-picker-chevron" size={17} aria-hidden="true" />
+                  </button>
+                </div>
+              )
+            })
           )}
         </div>
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-          <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (canNext) { haptic('medium'); onNext(teams) } }} className="cta-btn" style={ctaPrimary(142, !canNext)}>NEXT</button>
+          <button onClick={() => { haptic('light'); phase === 'assign' ? setPhase('create') : onBack() }} className="cta-btn" style={ctaOutline(142)}>Go back</button>
+          <button disabled={phase === 'create' ? !canContinue : !canFinish} onClick={() => {
+            if (phase === 'create' && canContinue) { haptic('medium'); setPhase('assign') }
+            if (phase === 'assign' && canFinish) { haptic('medium'); onNext(teams) }
+          }} className="cta-btn" style={ctaPrimary(142, phase === 'create' ? !canContinue : !canFinish)}>
+            {phase === 'create' ? 'Assign players' : 'Next'}
+          </button>
         </div>
       </div>
+
+      {assigningPlayer && (
+        <div className="charades-drawer-backdrop" role="presentation" onClick={() => setAssigningPlayer(null)}>
+          <div className="charades-team-drawer" role="dialog" aria-modal="true" aria-labelledby="charades-drawer-title" onClick={event => event.stopPropagation()}>
+            <div className="charades-drawer-heading">
+              <h3 id="charades-drawer-title">Select a team for {assigningPlayer.name}</h3>
+              <button onClick={() => setAssigningPlayer(null)} aria-label="Close team picker"><CloseRegular size={19} aria-hidden="true" /></button>
+            </div>
+            <div className="charades-drawer-options">
+              {teams.map(t => {
+                const selected = teamForPlayer(assigningPlayer)?.id === t.id
+                return (
+                  <button key={t.id} className={selected ? 'selected' : ''} onClick={() => assignPlayer(assigningPlayer, t.id)}>
+                    <i style={{ background: t.color }} />
+                    <span>{t.name}</span>
+                    <b><ArrowRightRegular size={12} aria-hidden="true" /></b>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -288,7 +267,7 @@ function CategorySelectScreen({ initialSelected, onBack, onNext }: { initialSele
               <div key={cat.id} className="nhie-row-enter nhie-row" onClick={() => toggle(cat.id)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  background: '#111113', border: '1px solid rgba(255,255,255,0.05)',
+                  background: '#070708', border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', height: '56px', minWidth: 0, width: '100%',
                   cursor: 'pointer', boxSizing: 'border-box',
                   animationDelay: `${0.03 + i * 0.02}s`,
@@ -333,7 +312,7 @@ function DeckSizeScreen({ initialValue, onBack, onNext }: { initialValue: number
         </div>
 
         <div
-          style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
+          style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
           onClick={() => inputRef.current?.focus()}
         >
           <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -387,17 +366,19 @@ function CustomCardsScreen({ deckSize, initialCards, onBack, onNext }: { deckSiz
 
         <div style={{ width: '100%', maxHeight: '220px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {cards.map((c, i) => (
-            <div key={i} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', boxSizing: 'border-box' }}>
+            <div key={i} className="stagger-item setup-card-row" style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px', boxSizing: 'border-box' }}>
               <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c}</span>
               <button onClick={() => removeCard(i)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '18px', padding: '0 4px' }} aria-label="Remove card">×</button>
             </div>
           ))}
 
           <div
-            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: remaining > 0 ? 'text' : 'not-allowed', opacity: remaining > 0 ? 1 : 0.5, boxSizing: 'border-box' }}
+            className="setup-card-row"
+            style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: remaining > 0 ? 'text' : 'not-allowed', opacity: remaining > 0 ? 1 : 0.5, boxSizing: 'border-box' }}
             onClick={() => remaining > 0 && inputRef.current?.focus()}
           >
             <button
+              className="circle-control"
               onClick={e => { e.stopPropagation(); addCard() }}
               disabled={remaining <= 0}
               style={{ background: hasInput ? RED : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', maxWidth: '32px', maxHeight: '32px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: remaining > 0 ? 'pointer' : 'not-allowed', flexShrink: 0, color: '#fff', fontSize: hasInput ? '14px' : '20px', lineHeight: 1 }}
@@ -443,11 +424,11 @@ function RoundLengthScreen({ initialValue, onBack, onNext }: { initialValue: num
         </div>
 
         <div
-          style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
+          style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
           onClick={() => inputRef.current?.focus()}
         >
           <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: '#fff', fontSize: '16px', fontWeight: 300, lineHeight: 1 }}>⏱</span>
+            <img src={clockSticker} alt="" aria-hidden="true" style={{ width: '32px', height: '32px', objectFit: 'contain', display: 'block' }} />
           </div>
           <input
             ref={inputRef} type="number" min={5} max={300}
@@ -473,7 +454,7 @@ function ScoreHeader({ scores, teams, currentTeamId }: { scores: Record<string, 
       {teams.map(t => (
         <div key={t.id} style={{
           display: 'flex', alignItems: 'center', gap: '8px',
-          background: t.id === currentTeamId ? 'rgba(237,56,68,0.15)' : '#111113',
+          background: t.id === currentTeamId ? 'rgba(237,56,68,0.15)' : '#070708',
           border: t.id === currentTeamId ? '1px solid rgba(237,56,68,0.5)' : '1px solid rgba(255,255,255,0.1)',
           borderRadius: '999px', padding: '8px 16px', transition: 'background 0.2s, border-color 0.2s',
         }}>
@@ -486,11 +467,12 @@ function ScoreHeader({ scores, teams, currentTeamId }: { scores: Record<string, 
 }
 
 /* ─── Get Ready (per turn) ─── */
-function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: GameTeam; actor: Player | null; turnNumber: number; onDone: () => void }) {
+function GetReadyScreen({ team, actor, turnNumber, canContinue = true, onDone }: { team: GameTeam; actor: Player | null; turnNumber: number; canContinue?: boolean; onDone: () => void }) {
   useEffect(() => {
+    if (!canContinue) return
     const t = setTimeout(onDone, 1500)
     return () => clearTimeout(t)
-  }, [onDone])
+  }, [canContinue, onDone])
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '40px', position: 'relative', zIndex: 2 }}>
@@ -504,7 +486,7 @@ function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: GameTeam; a
 
       {actor && (
         <div key={`${team.id}-${actor.name}`} className="nhie-chip-enter" style={{
-          background: '#111113', borderRadius: '999px', padding: '10px 20px 10px 12px',
+          background: '#070708', borderRadius: '999px', padding: '10px 20px 10px 12px',
           display: 'flex', alignItems: 'center', gap: '10px',
         }}>
           <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: actor.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
@@ -518,14 +500,16 @@ function GetReadyScreen({ team, actor, turnNumber, onDone }: { team: GameTeam; a
 }
 
 /* ─── Charades card (flip) ─── */
-function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
-  const W = 320, H = 480
+export function CharadesCard({ flipped, prompt, onFlip, compact = false }: { flipped: boolean; prompt: string; onFlip: () => void; compact?: boolean }) {
+  const W = compact ? 220 : 320
+  const H = compact ? 330 : 480
   const { wrapperStyle, cardStyle } = useScaledCard(W, H)
   return (
     <div style={wrapperStyle}>
     <div
       className="game-card"
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer', flexShrink: 0 }}
     >
       <div className={!flipped ? 'lyao-float' : ''} style={{ width: '100%', height: '100%' }}>
@@ -551,7 +535,7 @@ function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: s
               width: '100%', height: '100%', background: RED, borderRadius: '10px',
               display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', boxSizing: 'border-box',
             }}>
-              <p className="font-slackey" style={{ fontSize: '32px', color: '#e8e6e3', lineHeight: 1.3, margin: 0, textAlign: 'center' }}>
+              <p className="font-slackey" style={{ fontSize: compact ? '24px' : '32px', color: '#e8e6e3', lineHeight: 1.3, margin: 0, textAlign: 'center' }}>
                 {prompt}
               </p>
             </div>
@@ -563,43 +547,43 @@ function CharadesCard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: s
   )
 }
 
-/* ─── Circular countdown ring — the timer is the centerpiece once running ─── */
-function TimerRing({ timeLeft, roundLength }: { timeLeft: number; roundLength: number }) {
-  const size = 168
-  const stroke = 8
-  const radius = (size - stroke) / 2
-  const circumference = 2 * Math.PI * radius
+/* ─── Compact countdown control with pause/resume and cancel actions ─── */
+export function TimerControl({
+  timeLeft, roundLength, paused, onTogglePause, onCancel,
+}: {
+  timeLeft: number
+  roundLength: number
+  paused: boolean
+  onTogglePause: () => void
+  onCancel: () => void
+}) {
   const ratio = roundLength > 0 ? Math.max(0, timeLeft / roundLength) : 0
-  const offset = circumference * (1 - ratio)
+  const minutes = Math.floor(timeLeft / 60)
+  const seconds = String(timeLeft % 60).padStart(2, '0')
   const urgent = timeLeft <= 5
 
   return (
-    <div className="timer-ring-breathe" style={{ position: 'relative', width: `${size}px`, height: `${size}px` }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={stroke} />
-        <circle
-          cx={size / 2} cy={size / 2} r={radius} fill="none"
-          stroke={RED} strokeWidth={stroke} strokeLinecap="round"
-          strokeDasharray={circumference} strokeDashoffset={offset}
-          style={{ transition: 'stroke-dashoffset 1s linear', filter: urgent ? 'drop-shadow(0 0 10px rgba(237,56,68,0.8))' : 'drop-shadow(0 0 6px rgba(237,56,68,0.4))' }}
-        />
+    <div className={`charades-timer-control${urgent ? ' is-urgent' : ''}`}>
+      <svg className="charades-timer-track" viewBox="0 0 400 176" preserveAspectRatio="none" aria-hidden="true">
+        <rect x="6" y="6" width="388" height="164" rx="44" pathLength="100" />
+        <rect className="charades-timer-progress" x="6" y="6" width="388" height="164" rx="44" pathLength="100"
+          style={{ strokeDashoffset: 100 - ratio * 100 }} />
       </svg>
-      <p className={urgent ? 'timer-pulse' : ''} style={{
-        position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '64px', margin: 0,
-        color: urgent ? RED : '#fff', letterSpacing: '0.02em',
-      }}>
-        {timeLeft}
-      </p>
+      <div className="charades-timer-content">
+        <button className="charades-timer-pause" onClick={onTogglePause}>{paused ? 'Resume' : 'Pause'}</button>
+        <p className={urgent ? 'timer-pulse' : ''}>{minutes}:{seconds}</p>
+        <button className="charades-timer-cancel" onClick={onCancel}>Cancel</button>
+      </div>
     </div>
   )
 }
 
 /* ─── 5. Game (prompt + timer) ─── */
 function GameScreen({
-  prompt, idx, total, roundLength, scores, teams, currentTeamId, onTimeUp,
+  prompt, actor, idx, total, roundLength, scores, teams, currentTeamId, onTimeUp,
 }: {
   prompt: string
+  actor: Player | null
   idx: number
   total: number
   roundLength: number
@@ -608,27 +592,62 @@ function GameScreen({
   currentTeamId: string
   onTimeUp: () => void
 }) {
-  const [flipped, setFlipped] = useState(false)
-  const [timerStarted, setTimerStarted] = useState(false)
+  const multiplayer = useMultiplayerSession()
+  const canControl = !multiplayer || actor?.userId === multiplayer.currentUserId || multiplayer.hostUserId === multiplayer.currentUserId
+  const visiblePrompt = multiplayer ? (multiplayer.privatePrompt ?? '') : prompt
+  const [flipped, setFlipped] = usePersistentGameState('charades', 'roundRevealed', false)
+  const [timerStatus, setTimerStatus] = usePersistentGameState<'ready' | 'running' | 'paused'>('charades', 'timerStatus', 'ready')
+  const [timerEndsAt, setTimerEndsAt] = usePersistentGameState('charades', 'timerEndsAt', 0)
+  const [pausedRemaining, setPausedRemaining] = usePersistentGameState('charades', 'pausedRemaining', roundLength)
   const [timeLeft, setTimeLeft] = useState(roundLength)
   const timeUpRef = useRef(onTimeUp)
   timeUpRef.current = onTimeUp
 
-  useEffect(() => { setFlipped(false); setTimerStarted(false); setTimeLeft(roundLength) }, [idx, roundLength])
+  useEffect(() => {
+    if (!canControl) return
+    setFlipped(false)
+    setTimerStatus('ready')
+    setTimerEndsAt(0)
+    setPausedRemaining(roundLength)
+  }, [canControl, idx, roundLength, setFlipped, setPausedRemaining, setTimerEndsAt, setTimerStatus])
 
   useEffect(() => {
-    if (!flipped || !timerStarted) return
-    if (timeLeft <= 0) { haptic('medium'); timeUpRef.current(); return }
-    const t = setTimeout(() => setTimeLeft(s => s - 1), 1000)
-    return () => clearTimeout(t)
-  }, [flipped, timerStarted, timeLeft])
+    if (timerStatus === 'ready') { setTimeLeft(roundLength); return }
+    if (timerStatus === 'paused') { setTimeLeft(pausedRemaining); return }
+    const update = () => {
+      const remaining = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000))
+      setTimeLeft(remaining)
+      if (remaining === 0 && canControl) { haptic('medium'); timeUpRef.current() }
+    }
+    update()
+    const timer = window.setInterval(update, 250)
+    return () => window.clearInterval(timer)
+  }, [canControl, pausedRemaining, roundLength, timerEndsAt, timerStatus])
 
-  const handleFlip = () => { haptic('medium'); setFlipped(true) }
-  const handleStartTimer = () => { haptic('medium'); setTimerStarted(true) }
-  const handleStop = () => { haptic('light'); onTimeUp() }
+  const handleFlip = () => { if (!canControl) return; haptic('medium'); setFlipped(true) }
+  const handleStartTimer = () => {
+    if (!canControl) return
+    haptic('medium')
+    setTimerEndsAt(Date.now() + roundLength * 1000)
+    setTimerStatus('running')
+  }
+  const handleTogglePause = () => {
+    if (!canControl) return
+    haptic('light')
+    if (timerStatus === 'running') {
+      const remaining = Math.max(0, Math.ceil((timerEndsAt - Date.now()) / 1000))
+      setPausedRemaining(remaining)
+      setTimerStatus('paused')
+    } else {
+      setTimerEndsAt(Date.now() + pausedRemaining * 1000)
+      setTimerStatus('running')
+    }
+  }
+  const handleStop = () => { if (!canControl) return; haptic('light'); onTimeUp() }
+  const timerStarted = timerStatus !== 'ready'
 
   return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '24px 40px', position: 'relative', zIndex: 2 }}>
+    <div className={`screen-enter${timerStarted ? ' charades-active-round' : ''}`} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: timerStarted ? '14px' : '20px', padding: '24px 40px', position: 'relative', zIndex: 2 }}>
       <ScoreHeader scores={scores} teams={teams} currentTeamId={currentTeamId} />
 
       <p className="counter-in" key={`counter-${idx}`} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', margin: 0 }}>
@@ -636,12 +655,12 @@ function GameScreen({
       </p>
 
       <div className={!flipped ? 'nhie-card-enter' : ''} key={`card-${idx}`}>
-        <CharadesCard flipped={flipped} prompt={prompt} onFlip={handleFlip} />
+        <CharadesCard flipped={flipped && Boolean(visiblePrompt)} prompt={visiblePrompt} onFlip={handleFlip} compact={timerStarted} />
       </div>
 
       {!flipped ? (
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
-          Tap the card to flip it. Act only — no talking, no spelling!
+          {canControl ? 'Tap the card to flip. Act only, no talking, no spelling!' : `${actor?.name ?? 'The actor'} is viewing the word.`}
         </p>
       ) : !timerStarted ? (
         <div className="screen-enter-fast" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
@@ -651,9 +670,8 @@ function GameScreen({
           <button onClick={handleStartTimer} className="cta-btn" style={ctaPrimary(160)}>START TIMER</button>
         </div>
       ) : (
-        <div className="screen-enter-fast" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-          <TimerRing timeLeft={timeLeft} roundLength={roundLength} />
-          <button onClick={handleStop} className="cta-btn" style={ctaOutline(160)}>STOP TIMER</button>
+        <div className="screen-enter-fast" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', width: '100%' }}>
+          <TimerControl timeLeft={timeLeft} roundLength={roundLength} paused={timerStatus === 'paused'} onTogglePause={handleTogglePause} onCancel={handleStop} />
         </div>
       )}
     </div>
@@ -662,59 +680,24 @@ function GameScreen({
 
 /* ─── 6. Did They Get It ─── */
 function DidTheyGetItScreen({
-  mode, teams, currentTeamId, onResult,
+  currentTeamId, revealedPrompt, canControl, onResult,
 }: {
-  mode: PlayMode
-  teams: GameTeam[]
   currentTeamId: string
+  revealedPrompt?: string | null
+  canControl: boolean
   onResult: (winnerTeamId: string | null) => void
 }) {
-  if (mode === 'teams') {
-    return (
-      <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-        <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
-            Did They Get It?
-          </h2>
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-            <button onClick={() => { haptic('light'); onResult(null) }} className="cta-btn" style={ctaOutline(160)}>NO</button>
-            <button onClick={() => { haptic('success'); onResult(currentTeamId) }} className="cta-btn" style={ctaPrimary(160)}>YES</button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Free-for-all: everyone but the actor is guessing — host taps whoever shouted the right answer first.
-  const guessers = teams.filter(t => t.id !== currentTeamId)
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-      <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
-        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '32px', color: '#fff', margin: 0 }}>
-            Who Guessed It First?
-          </h2>
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-            Tap whoever shouted the right answer first
-          </p>
+      <div style={{ width: '500px', display: 'flex', flexDirection: 'column', gap: '28px', alignItems: 'center', zIndex: 2, position: 'relative' }}>
+        <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>
+          Did They Get It?
+        </h2>
+        {revealedPrompt ? <div style={{ width: 'min(320px, 80vw)' }}><CharadesCard flipped prompt={revealedPrompt} onFlip={() => {}} compact /></div> : null}
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <button disabled={!canControl} onClick={() => { haptic('light'); onResult(null) }} className="cta-btn" style={ctaOutline(160)}>NO</button>
+          <button disabled={!canControl} onClick={() => { haptic('success'); onResult(currentTeamId) }} className="cta-btn" style={ctaPrimary(160, !canControl)}>YES</button>
         </div>
-
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {guessers.map((t, i) => (
-            <div key={t.id} className="stagger-item guesser-row" onClick={() => { haptic('success'); onResult(t.id) }}
-              style={{
-                background: '#111113', border: '1px dashed rgba(255,255,255,0.12)', borderRadius: '12px',
-                height: '56px', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
-                boxSizing: 'border-box', cursor: 'pointer', animationDelay: `${0.03 + i * 0.04}s`,
-              }}
-            >
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: t.color, flexShrink: 0, boxShadow: '0 0 0 2px #fff' }} />
-              <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '17px', color: '#fff', flex: 1, minWidth: 0 }}>{t.name}</span>
-            </div>
-          ))}
-        </div>
-
-        <button onClick={() => { haptic('light'); onResult(null) }} className="cta-btn" style={ctaOutline(197)}>NO ONE GOT IT</button>
       </div>
     </div>
   )
@@ -737,7 +720,7 @@ function PointsGainedScreen({ scores, lastWinnerId, teams, onNext }: { scores: R
             return (
               <div key={t.id} className="nhie-row-enter" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+                background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
                 borderRadius: '12px', padding: '10px 14px', height: '56px', boxSizing: 'border-box',
               }}>
                 <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '17px', color: '#fff' }}>{t.name.toUpperCase()}</span>
@@ -807,7 +790,7 @@ function Confetti() {
 function ScorePill({ team, score, delay }: { team: GameTeam; score: number; delay: number }) {
   const animated = useCountUp(score)
   return (
-    <div className="stagger-item" style={{ background: '#111113', borderRadius: '999px', padding: '8px 18px', display: 'flex', gap: '8px', alignItems: 'center', animationDelay: `${delay}s` }}>
+    <div className="stagger-item" style={{ background: '#070708', borderRadius: '999px', padding: '8px 18px', display: 'flex', gap: '8px', alignItems: 'center', animationDelay: `${delay}s` }}>
       <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)' }}>{team.name.toUpperCase()}</span>
       <span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '14px', color: '#fff' }}>{animated}</span>
     </div>
@@ -857,7 +840,7 @@ function DoneScreen({
         </p>
       </div>
 
-      <div className="nhie-chip-enter" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '999px', padding: '10px 22px', display: 'inline-flex', alignItems: 'center', gap: '10px', maxWidth: '90%' }}>
+      <div className="nhie-chip-enter" style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '999px', padding: '10px 22px', display: 'inline-flex', alignItems: 'center', gap: '10px', maxWidth: '90%' }}>
         <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: '#fff', letterSpacing: '0.04em', textAlign: 'center' }}>
           {isTie ? winners.map(w => w.name.toUpperCase()).join(' & ') : winners[0].name.toUpperCase()}
         </span>
@@ -875,7 +858,7 @@ function DoneScreen({
       <div className="done-btns" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button onClick={() => { haptic('light'); onNewGame() }} className="cta-btn" style={ctaOutline(160)}>NEW GAME</button>
-          <button onClick={() => { haptic('medium'); onPlayAgain() }} className="cta-btn" style={ctaPrimary(160)}>PLAY AGAIN</button>
+          <button onClick={() => { haptic('medium'); onPlayAgain() }} className="cta-btn" style={ctaPrimary(160)}><PlayAgainLabel /></button>
         </div>
         <button onClick={() => { haptic('light'); onHome() }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontFamily: "'Inter', sans-serif", fontSize: '14px', cursor: 'pointer', textDecoration: 'underline' }}>
           Return Home
@@ -887,28 +870,32 @@ function DoneScreen({
 
 /* ─── Root ─── */
 export default function CharadesGame({ onClose }: { onClose: () => void }) {
+  const multiplayer = useMultiplayerSession()
   const restored = useRef(loadSnapshot())
+  const restoredWasFreeForAll = restored.current?.mode === 'ffa'
+  const restoredStep = restored.current?.step === 'teamMode' || restoredWasFreeForAll
+    ? 'teamBuilder'
+    : restored.current?.step ?? 'playerSetup'
 
-  const [step, setStep] = useState<Step>(restored.current?.step ?? 'playerSetup')
-  const [players, setPlayers] = useState<Player[]>(restored.current?.players ?? [])
-  const [mode, setMode] = useState<PlayMode>(restored.current?.mode ?? 'ffa')
-  const [teams, setTeams] = useState<GameTeam[]>(restored.current?.teams ?? [])
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(restored.current?.selectedCategories ?? [])
-  const [deckSize, setDeckSize] = useState(restored.current?.deckSize ?? 20)
-  const [customCards, setCustomCards] = useState<string[]>(restored.current?.customCards ?? [])
-  const [roundLength, setRoundLength] = useState(restored.current?.roundLength ?? 60)
-  const [deck, setDeck] = useState<string[]>(restored.current?.deck ?? [])
-  const [cardIdx, setCardIdx] = useState(restored.current?.cardIdx ?? 0)
-  const [currentTeamIdx, setCurrentTeamIdx] = useState(restored.current?.currentTeamIdx ?? 0)
-  const [actorIdxByTeam, setActorIdxByTeam] = useState<Record<string, number>>(restored.current?.actorIdxByTeam ?? {})
-  const [scores, setScores] = useState<Record<string, number>>(restored.current?.scores ?? {})
-  const [lastWinnerId, setLastWinnerId] = useState<string | null>(restored.current?.lastWinnerId ?? null)
+  const [step, setStep] = useGameStep<Step>('charades', restoredStep, STEPS)
+  const [players, setPlayers] = usePersistentGameState<Player[]>('charades', 'players', restored.current?.players ?? [])
+  const [teams, setTeams] = usePersistentGameState<GameTeam[]>('charades', 'teams', restoredWasFreeForAll ? [] : restored.current?.teams ?? [])
+  const [selectedCategories, setSelectedCategories] = usePersistentGameState<string[]>('charades', 'selectedCategories', restored.current?.selectedCategories ?? [])
+  const [deckSize, setDeckSize] = usePersistentGameState('charades', 'deckSize', restored.current?.deckSize ?? 20)
+  const [customCards, setCustomCards] = usePersistentGameState<string[]>('charades', 'customCards', restored.current?.customCards ?? [])
+  const [roundLength, setRoundLength] = usePersistentGameState('charades', 'roundLength', restored.current?.roundLength ?? 60)
+  const [deck, setDeck] = usePersistentGameState<string[]>('charades', 'deck', restored.current?.deck ?? [])
+  const [cardIdx, setCardIdx] = usePersistentGameState('charades', 'cardIdx', restored.current?.cardIdx ?? 0)
+  const [currentTeamIdx, setCurrentTeamIdx] = usePersistentGameState('charades', 'currentTeamIdx', restored.current?.currentTeamIdx ?? 0)
+  const [actorIdxByTeam, setActorIdxByTeam] = usePersistentGameState<Record<string, number>>('charades', 'actorIdxByTeam', restored.current?.actorIdxByTeam ?? {})
+  const [scores, setScores] = usePersistentGameState<Record<string, number>>('charades', 'scores', restored.current?.scores ?? {})
+  const [lastWinnerId, setLastWinnerId] = usePersistentGameState<string | null>('charades', 'lastWinnerId', restored.current?.lastWinnerId ?? null)
 
   // Persist state on every change (skipped once game is back at the start screen)
   useEffect(() => {
     if (step === 'playerSetup') { clearSnapshot(); return }
-    saveSnapshot({ step, players, mode, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastWinnerId })
-  }, [step, players, mode, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastWinnerId])
+    saveSnapshot({ step, players, mode: 'teams', teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastWinnerId })
+  }, [step, players, teams, selectedCategories, deckSize, customCards, roundLength, deck, cardIdx, currentTeamIdx, actorIdxByTeam, scores, lastWinnerId])
 
   const startGame = () => {
     const builtDeck = buildCharadesDeck(customCards, selectedCategories, deckSize)
@@ -953,7 +940,6 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
   const handleNewGame = () => {
     clearSnapshot()
     setPlayers([])
-    setMode('ffa')
     setTeams([])
     setSelectedCategories([])
     setDeckSize(20)
@@ -973,30 +959,19 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
   const currentActor = currentTeam && currentTeam.players.length > 0
     ? currentTeam.players[(actorIdxByTeam[currentTeam.id] ?? 0) % currentTeam.players.length]
     : null
+  const canControlRound = !multiplayer || currentActor?.userId === multiplayer.currentUserId || multiplayer.hostUserId === multiplayer.currentUserId
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={handleHome} />
+      <GameNav onBack={onClose} gameId="charades" />
 
       {step === 'playerSetup' && (
         <SharedPlayerSetup
           initialPlayers={players}
           skipLabel="GO BACK"
-          minPlayers={2}
+          minPlayers={MIN_TEAM_MODE_PLAYERS}
           onSkip={onClose}
-          onNext={p => { setPlayers(p); setStep('teamMode') }}
-        />
-      )}
-
-      {step === 'teamMode' && (
-        <TeamModeScreen
-          playerCount={players.length}
-          onBack={() => setStep('playerSetup')}
-          onSelect={selected => {
-            setMode(selected)
-            if (selected === 'ffa') { setTeams(buildFreeForAllTeams(players)); setStep('categorySelect') }
-            else setStep('teamBuilder')
-          }}
+          onNext={p => { setPlayers(p); setStep('teamBuilder') }}
         />
       )}
 
@@ -1004,7 +979,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
         <TeamBuilderScreen
           players={players}
           initialTeams={teams}
-          onBack={() => setStep('teamMode')}
+          onBack={() => setStep('playerSetup')}
           onNext={t => { setTeams(t); setStep('categorySelect') }}
         />
       )}
@@ -1012,7 +987,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
       {step === 'categorySelect' && (
         <CategorySelectScreen
           initialSelected={selectedCategories}
-          onBack={() => setStep('teamMode')}
+          onBack={() => setStep('teamBuilder')}
           onNext={ids => { setSelectedCategories(ids); setStep('deckSize') }}
         />
       )}
@@ -1047,6 +1022,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
           team={currentTeam}
           actor={currentActor}
           turnNumber={cardIdx + 1}
+          canContinue={canControlRound}
           onDone={() => setStep('game')}
         />
       )}
@@ -1055,6 +1031,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
         <GameScreen
           key={cardIdx}
           prompt={deck[cardIdx]}
+          actor={currentActor}
           idx={cardIdx}
           total={deck.length}
           roundLength={roundLength}
@@ -1066,7 +1043,7 @@ export default function CharadesGame({ onClose }: { onClose: () => void }) {
       )}
 
       {step === 'didTheyGetIt' && currentTeam && (
-        <DidTheyGetItScreen mode={mode} teams={teams} currentTeamId={currentTeam.id} onResult={handleRoundResult} />
+        <DidTheyGetItScreen currentTeamId={currentTeam.id} revealedPrompt={multiplayer?.privatePrompt ?? deck[cardIdx]} canControl={canControlRound} onResult={handleRoundResult} />
       )}
 
       {step === 'pointsGained' && (

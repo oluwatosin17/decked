@@ -4,8 +4,10 @@ import { useScaledCard } from './hooks/useCardScale'
 import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
-import { GameNav, GameFooter } from './components/GameShell'
-import { shuffle, getShuffledDeck } from './utils/deckShuffle'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
+import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -158,23 +160,31 @@ const QUESTIONS: Record<Theme, string[]> = {
   random: [],
 }
 
+export const EVERYDAY_DECKS = Object.fromEntries(
+  Object.entries(QUESTIONS)
+    .filter(([theme]) => theme !== 'random')
+    .map(([theme, questions]) => [theme, withMinimumContent(questions, CONVERSATION_SUPPLEMENT)]),
+) as Record<string, string[]>
+export const EVERYDAY_MULTIPLAYER_DECK = Array.from(new Set(Object.values(EVERYDAY_DECKS).flat()))
+
 function getQuestions(theme: Theme): string[] {
   if (theme === 'random') {
     const allThemes = Object.keys(QUESTIONS).filter(k => k !== 'random') as Theme[]
     const pool: string[] = []
     for (const t of allThemes) pool.push(...QUESTIONS[t])
-    return getShuffledDeck([...new Set(pool)], 'everyday-conversations')
+    return getShuffledDeck(withMinimumContent(pool, CONVERSATION_SUPPLEMENT), 'everyday-conversations')
   }
-  return getShuffledDeck([...QUESTIONS[theme]], 'everyday-conversations')
+  return getShuffledDeck(EVERYDAY_DECKS[theme], 'everyday-conversations')
 }
 
 /* ─── Everyday Conversation Card ─── */
-function ECCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
+export function ECCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
   const { wrapperStyle, cardStyle } = useScaledCard(320, 400)
   return (
     <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       className="game-card" style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
@@ -249,7 +259,7 @@ function ThemeSelect({ onSelect }: { onSelect: (t: Theme) => void }) {
                 onClick={() => setTimeout(() => onSelect(opt.id as Theme), 80)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  background: isHovered ? '#1e1e22' : '#111113',
+                  background: isHovered ? '#1e1e22' : '#070708',
                   border: '1px solid', borderColor: isHovered ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', height: '56px', cursor: 'pointer',
                   transform: isPressed ? 'scale(0.97)' : isHovered ? 'translateY(-2px)' : 'translateY(0)',
@@ -301,7 +311,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
             You played all {totalCards} everyday conversation cards
           </p>
         </div>
-        <div style={{ background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
+        <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
           {[
             { count: totalCards, label: 'CARDS' },
             { count: skipCount, label: 'SKIPPED' },
@@ -321,7 +331,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>
-          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>PLAY AGAIN</button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -355,20 +365,21 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 
 /* ─── Root ─── */
 type Step = 'theme' | 'playerSetup' | 'deckSize' | 'customCards' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['theme', 'playerSetup', 'deckSize', 'customCards', 'getReady', 'game']
 
 export default function EverydayConversationsGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('theme')
-  const [theme, setTheme] = useState<Theme>('everyday')
-  const [players, setPlayers] = useState<Player[]>([])
-  const [totalCards, setTotalCards] = useState(0)
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [skipCount, setSkipCount] = useState(0)
-  const [questions, setQuestions] = useState<string[]>([])
-  const [customCards, setCustomCards] = useState<string[]>([])
+  const [step, setStep] = useGameStep<Step>('everyday-conversations', 'theme', STEPS)
+  const [theme, setTheme] = usePersistentGameState<Theme>('everyday-conversations', 'theme', 'everyday')
+  const [players, setPlayers] = usePersistentGameState<Player[]>('everyday-conversations', 'players', [])
+  const [totalCards, setTotalCards] = usePersistentGameState('everyday-conversations', 'totalCards', 0)
+  const [cardIndex, setCardIndex] = usePersistentGameState('everyday-conversations', 'cardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('everyday-conversations', 'playerIndex', 0)
+  const [skipCount, setSkipCount] = usePersistentGameState('everyday-conversations', 'skipCount', 0)
+  const [questions, setQuestions] = usePersistentGameState<string[]>('everyday-conversations', 'questions', [])
+  const [customCards, setCustomCards] = usePersistentGameState<string[]>('everyday-conversations', 'customCards', [])
 
   const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
-  const currentQuestion = questions[cardIndex % questions.length]
+  const currentQuestion = questions[cardIndex]
 
   const handleNext = useCallback(() => {
     const nextCard = cardIndex + 1
@@ -389,7 +400,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
   const startGame = (custom: string[]) => {
     setCustomCards(custom)
     const generated = getQuestions(theme)
-    const allQuestions = shuffle([...custom, ...generated])
+    const allQuestions = createSessionDeck(generated, { customCards: custom })
     const trimmed = totalCards > 0 ? allQuestions.slice(0, totalCards) : allQuestions
     setQuestions(trimmed)
     if (totalCards > trimmed.length) setTotalCards(trimmed.length)
@@ -400,7 +411,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
 
   const handlePlayAgain = useCallback(() => {
     const generated = getQuestions(theme)
-    const allQuestions = shuffle([...customCards, ...generated])
+    const allQuestions = createSessionDeck(generated, { customCards })
     const trimmed = totalCards > 0 ? allQuestions.slice(0, totalCards) : allQuestions
     setQuestions(trimmed)
     setCardIndex(0)
@@ -411,7 +422,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="everyday-conversations" />
 
       {step === 'theme' && <ThemeSelect onSelect={t => { setTheme(t); setStep('playerSetup') }} />}
 

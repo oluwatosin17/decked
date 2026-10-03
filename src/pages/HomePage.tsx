@@ -20,14 +20,15 @@ const FEATURED_ACTIONS: Record<string, string> = {
 }
 
 function useIsMobile(bp = 768) {
-  const [m, setM] = useState(typeof window !== 'undefined' ? window.innerWidth <= bp : false)
+  const query = `(max-width: ${bp}px), (max-height: 500px) and (orientation: landscape)`
+  const [m, setM] = useState(typeof window !== 'undefined' ? window.matchMedia(query).matches : false)
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${bp}px)`)
+    const mq = window.matchMedia(query)
     const h = (e: MediaQueryListEvent) => setM(e.matches)
     setM(mq.matches)
     mq.addEventListener('change', h)
     return () => mq.removeEventListener('change', h)
-  }, [bp])
+  }, [query])
   return m
 }
 
@@ -40,6 +41,7 @@ interface Props {
   onPlayNeverHaveIEver?: () => void
   onPlayYouLaugh?: () => void
   onBrowse: () => void
+  onPlayTogether: () => void
 }
 
 function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) | undefined> }) {
@@ -51,38 +53,47 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   useEffect(() => {
     const measure = () => {
       if (gridRef.current) {
-        setColW(Math.floor((gridRef.current.offsetWidth - 10) / 2))
+        const styles = window.getComputedStyle(gridRef.current)
+        const innerWidth = gridRef.current.clientWidth
+          - parseFloat(styles.paddingLeft)
+          - parseFloat(styles.paddingRight)
+        setColW(Math.floor((innerWidth - 10) / 2))
       }
     }
     measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+    const observer = new ResizeObserver(measure)
+    if (gridRef.current) observer.observe(gridRef.current)
+    return () => observer.disconnect()
   }, [])
 
   return (
-    <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', padding: '0 16px', alignItems: 'start' }}>
+    <div ref={gridRef} className="home-featured-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px', padding: '0 16px', alignItems: 'start' }}>
       {featured.map((card, i) => {
         const scale = colW / card.w
         const action = FEATURED_ACTIONS[card.id]
         const onClick = action ? actions[action] : undefined
+        const label = card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
         return (
-          <div key={card.id} style={{ animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both` }}>
-            <div
+          <div key={card.id} style={{ minWidth: 0, maxWidth: '100%', overflow: 'hidden', animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both` }}>
+            <button
+              type="button"
               onClick={onClick}
+              aria-label={`Play ${label}`}
               style={{
                 width: `${colW}px`, height: `${card.h * scale}px`,
                 overflow: 'hidden', borderRadius: `${9 * scale}px`,
                 cursor: onClick ? 'pointer' : 'default',
                 WebkitTapHighlightColor: 'transparent',
+                padding: 0, border: 0, background: 'transparent', textAlign: 'initial',
               }}
             >
               <div style={{
                 width: `${card.w}px`, height: `${card.h}px`,
                 transform: `scale(${scale})`, transformOrigin: 'top left',
               }}>
-                {card.render(onClick)}
+                {card.render()}
               </div>
-            </div>
+            </button>
           </div>
         )
       })}
@@ -90,7 +101,7 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onBrowse }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onBrowse, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
   const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onBrowse }
 
@@ -110,10 +121,14 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
           <p className="font-satoshi" style={{ color: '#d9dbde', fontSize: '14px', lineHeight: '18px', margin: 0, maxWidth: '280px' }}>
             Pick a deck, pass the phone, and let things get interesting.
           </p>
-          <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-            <button className="font-staatliches" onClick={onQuickPlay ?? onBrowse} style={{
-              background: '#dc2827', color: 'white', fontSize: '13px',
-              padding: '9px 16px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+          <div style={{ display: 'flex', gap: '10px', marginTop: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button className="font-staatliches" onClick={onPlayTogether} style={{
+              background: '#fff', color: '#bd0025', fontSize: '12px',
+              padding: '7px 13px', borderRadius: '999px', border: 'none', cursor: 'pointer',
+            }}>PLAY TOGETHER</button>
+            <button className="font-staatliches mobile-quick-play" onClick={onQuickPlay ?? onBrowse} style={{
+              background: '#dc2827', color: 'white', fontSize: '12px',
+              padding: '7px 13px', borderRadius: '999px', border: 'none', cursor: 'pointer',
               boxShadow: '0 8px 12px rgba(220,40,39,0.25)',
             }}>QUICK PLAY</button>
             <button className="font-staatliches" onClick={onBrowse} style={{
@@ -209,6 +224,10 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button className="font-staatliches" onClick={onPlayTogether} style={{
+              background: '#fff', color: '#bd0025', fontSize: '16px',
+              padding: '12px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
+            }}>PLAY TOGETHER</button>
             <button className="font-staatliches" onClick={onQuickPlay ?? onBrowse} style={{
               background: '#dc2827', color: 'white', fontSize: '16px',
               padding: '12px 18px', borderRadius: '999px', border: 'none',

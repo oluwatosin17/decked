@@ -1,4 +1,5 @@
 import { getShuffledDeck } from './utils/deckShuffle'
+import { expandCharadesCategory } from './content/promptExpansion.js'
 
 export interface CharadesCategory {
   id: string
@@ -29,7 +30,7 @@ export const CHARADES_CATEGORIES: CharadesCategory[] = [
 ]
 
 /* ─── Prompt banks — short (1-4 words), family-friendly, actable ─── */
-export const CHARADES_PROMPTS: Record<string, string[]> = {
+const BASE_CHARADES_PROMPTS: Record<string, string[]> = {
   movies: [
     'Titanic', 'Jaws', 'Frozen', 'Inception', 'Avatar', 'Jurassic Park', 'The Lion King',
     'Star Wars', 'Home Alone', 'Shrek', 'Finding Nemo', 'The Matrix', 'Toy Story',
@@ -152,6 +153,10 @@ export const CHARADES_PROMPTS: Record<string, string[]> = {
   ],
 }
 
+export const CHARADES_PROMPTS: Record<string, string[]> = Object.fromEntries(
+  Object.entries(BASE_CHARADES_PROMPTS).map(([category, prompts]) => [category, expandCharadesCategory(prompts, 300)]),
+)
+
 /**
  * Build a shuffled deck for the given selection.
  * Custom cards always take priority; the remainder is filled from the
@@ -186,7 +191,21 @@ export function buildCharadesDeck(
     }
   }
 
-  // shuffle pool with recently-played exclusion
+  // A narrow category can contain fewer items than the requested session.
+  // Keep the selected categories first, then fill from the wider Charades
+  // library so a session never recycles a prompt or ends with blank cards.
+  if (pool.length < remaining) {
+    for (const prompts of Object.values(CHARADES_PROMPTS)) {
+      for (const prompt of prompts) {
+        const key = prompt.toLowerCase()
+        if (!used.has(key)) {
+          used.add(key)
+          pool.push(prompt)
+        }
+      }
+    }
+  }
+
   const shuffledPool = getShuffledDeck(pool, 'charades', remaining)
 
   deck.push(...shuffledPool)

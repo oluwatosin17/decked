@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
+    "audit:prompts": "node scripts/audit-prompts.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mingcute/react": "^3.0.2",
+    "@supabase/supabase-js": "^2.117.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

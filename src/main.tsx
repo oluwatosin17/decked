@@ -4,13 +4,16 @@ import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App'
 import { initGalaxy } from './galaxy'
+import { SoundProvider } from './audio/SoundProvider'
 
 // Register service worker immediately for PWA installability
 registerSW({ immediate: true })
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <SoundProvider>
+      <App />
+    </SoundProvider>
   </StrictMode>,
 )
 

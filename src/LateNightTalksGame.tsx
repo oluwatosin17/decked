@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 
 /* ─── Assets (permanently hosted on Cloudinary — see decked/game-assets folder) ─── */
 const LNT_OUTER  = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-outer.svg'
@@ -171,19 +173,25 @@ const QUESTIONS_BY_MODE: Record<string, string[]> = {
   ],
 }
 
+export const LATE_NIGHT_DECKS = Object.fromEntries(
+  Object.entries(QUESTIONS_BY_MODE).map(([mode, questions]) => [mode, withMinimumContent(questions, CONVERSATION_SUPPLEMENT)]),
+) as Record<string, string[]>
+export const LATE_NIGHT_MULTIPLAYER_DECK = Array.from(new Set(Object.values(LATE_NIGHT_DECKS).flat()))
+
 function getQuestionsForMode(mode: string): string[] {
-  return QUESTIONS_BY_MODE[mode] ?? QUESTIONS_BY_MODE.random
+  return LATE_NIGHT_DECKS[mode] ?? LATE_NIGHT_DECKS.random
 }
 
 
 /* ─── LNT Card (the scalloped orange card) ─── */
-function LNTCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
+export function LNTCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
   const { wrapperStyle, cardStyle } = useScaledCard(400, 387)
   return (
     <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
       className="game-card"
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       style={{
         ...cardStyle,
         position: 'relative', cursor: flipped ? 'default' : 'pointer',
@@ -288,8 +296,8 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
           <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>DECK SIZE</h2>
           <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>How many cards do you want to play?</p>
-          <div
-            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
+          <div className="setup-card-row"
+            style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
             onClick={() => inputRef.current?.focus()}
           >
             <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -335,7 +343,7 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
           Get Ready...
         </h2>
         {player && (
-          <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+          <div className="stagger-item" style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>
               {player.name.toUpperCase()}
@@ -381,7 +389,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
         </div>
 
         {/* Stats */}
-        <div style={{ background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
+        <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
           {[
             { count: totalCards, label: 'CARDS' },
             { count: skipCount,  label: 'SKIPPED' },
@@ -403,9 +411,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
             BROWSE GAMES
           </button>
-          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
-            PLAY AGAIN
-          </button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -453,19 +459,20 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 
 /* ─── Root ─── */
 type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['playerSetup', 'deckSize', 'getReady', 'game']
 
 export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?: string; onClose: () => void }) {
-  const [step,        setStep]        = useState<Step>('playerSetup')
-  const [players,     setPlayers]     = useState<Player[]>([])
-  const [totalCards,  setTotalCards]  = useState(0)
-  const [cardIndex,   setCardIndex]   = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [skipCount,   setSkipCount]   = useState(0)
-  const [questions,   setQuestions]   = useState(() => getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks'))
+  const [step,        setStep]        = useGameStep<Step>('late-night-talks', 'playerSetup', STEPS)
+  const [players,     setPlayers]     = usePersistentGameState<Player[]>('late-night-talks', 'players', [])
+  const [totalCards,  setTotalCards]  = usePersistentGameState('late-night-talks', 'totalCards', 0)
+  const [cardIndex,   setCardIndex]   = usePersistentGameState('late-night-talks', 'cardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('late-night-talks', 'playerIndex', 0)
+  const [skipCount,   setSkipCount]   = usePersistentGameState('late-night-talks', 'skipCount', 0)
+  const [questions,   setQuestions]   = usePersistentGameState<string[]>('late-night-talks', 'questions', () => getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks'))
 
   const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
 
-  const currentQuestion = questions[cardIndex % questions.length]
+  const currentQuestion = questions[cardIndex]
 
   const handleNext = useCallback(() => {
     const nextCard   = cardIndex + 1
@@ -496,7 +503,7 @@ export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="late-night-talks" />
 
       {step === 'playerSetup' && (
         <SharedPlayerSetup
@@ -510,7 +517,7 @@ export default function LateNightTalksGame({ mode = 'random', onClose }: { mode?
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks')); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(getShuffledDeck(getQuestionsForMode(mode), 'late-night-talks', n)); setStep('getReady') }}
         />
       )}
 

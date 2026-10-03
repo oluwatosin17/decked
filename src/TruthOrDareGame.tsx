@@ -2,8 +2,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
+import { CONVERSATION_SUPPLEMENT, DARE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 
 type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
 
@@ -126,37 +129,23 @@ const DARES = [
   "Put an ice cube in your underwear for one minute.", "Perform a sexy belly dance for your partner.", "Blindfold your partner and guide them around your body using only touch.", "Undress your partner using only your teeth.", "Clean the house naked.", "Go about your normal day but with no underwear on.", "Give your partner a massage, blindfolded.", "Remove your partner’s underwear using only your feet.", "Use each other as a human plate — whipped cream, chocolate sauce, whatever takes your fancy!", "Share a fantasy that your loved one’s never heard before.", "Handcuff your partner and treat them to their favorite turn-ons.", "Read an erotic bedtime story out loud.", "Set up a nude photo shoot and capture your favorite poses.", "Go skinny dipping in your local river or lake.", "Sext your partner during work.", "Touch yourselves while your partner watches.", "Give your partner a lap dance.", "Pick one part of your body and have your partner focus all their attention there.", "Choose a place you’ve never had sex and take your partner there.", "Draw a picture with whipped cream on your partner’s body.", "...Then lick it off.", "Try a new pick-up line on your partner.", "Re-enact an X-rated version of your first kiss.", "Choose your fantasy orgy guests from your partner’s contact list.", "Play the rest of the game naked.", "Feed your partner using only your mouth.", "Give your significant other a full-body massage.", "Kiss your partner passionately, like the climax of a movie.", "Perform a sexy pole dance with a broom or a mop.", "Use body paint to turn each other into a work of art.", "Twerk to the sexiest song you can think of.", "Confess your kinky guilty pleasure and try it together.", "Let your partner dress you up, then direct you in a striptease.", "Challenge your loved one to a sexy pillow fight.", "Spell out what you want to do to your partner using only emojis.", "Pretend you work at a phone sex line and have your partner call in.", "Blindfold yourself and guess which part of your partner’s body you’re touching.", "Play with melted wax (but be careful!)", "Hide chocolate or candy in your clothes and have your significant other find it.", "Send a sexy selfie when they least expect it.", "Balance an ice cube on your belly button for as long as you can bear it.", "Show your partner the last X-rated clip you watched.", "...And describe why it turned you on.", "Put on your significant other’s underwear and strut your stuff on the catwalk.", "Shave your partner’s body hair.", "Pretend to give oral sex to the nearest object you see.", "Leave a steamy voicemail for an ex or another friend.", "Lick peanut butter, whipped cream, or chocolate sauce off someone else’s finger.", "Fake an orgasm for one minute.", "Play spin the bottle and kiss the person the bottle chooses.", "Act out your favorite sex position with the person to your left.", "Pretend to give oral sex to a bottle for 30 seconds.", "If there’s a pool or a hot tub, go skinny-dipping.", "Hold hands with the person you know least in the group for one minute.", "Send a sexy selfie to someone in your contact list.", "Take a body shot. Balance the glass in your cleavage, on your torso — get creative!", "At the beach or a pool party? Draw a steamy image in sunscreen on a friend.", "Swap underwear with the person to your right.", "Reply to a social media post or story with a sexy emoji.", "Perform a pole dance on a nearby streetlight, or anything else that works!", "Transfer an ice cube from your mouth to someone else’s.", "Give a lap dance to a friend of your choice.", "Remove an item of clothing (or take a shot!)", "Snap a photo of a mystery part of your body and have the others guess.", "Wherever you are, twerk for 30 seconds.", "Hand over your dating apps to the group for two minutes.", "Perform a striptease for 30 seconds (if in private!)", "Roleplay a fantasy of your choice with another member of the group.", "Give a foot massage to the person on your right for one minute", "Send me a selfie making a funny or silly face.", "Text me a flirtatious message using only emojis.", "Send me a voice message singing a romantic song or reciting a cheesy pickup line.", "Text me a picture of something that reminds you of our relationship.", "Send me a screenshot of the last text conversation you had with a friend, with a funny caption added by you.", "Text me a funny joke or a meme that you think will make me laugh.", "Send me a message describing your favorite memory of us and why it’s special to you.", "Text me a list of three things you love about me and why they make you smile.", "Send me a short video of you doing a silly dance.", "Text me a creative and romantic goodnight message that will make me smile before going to bed.", "Do your best impression of someone trying way too hard on a first date.", "Read your last text out loud like you’re auditioning for a soap opera.", "Scroll your camera roll and show the least flattering photo of yourself.", "Say “I’m fine” in five dramatically different tones.", "Pretend you’re explaining what a situationship is to your grandma.", "Let the group choose a word you have to casually work into your next answer.", "Act out the moment you realized a date was going terribly—no words.", "Say your dating red flag like it’s a personal confession.", "Read the last thing you screenshotted and explain why.", "Do your best impression of yourself when you’re pretending not to care.", "Narrate your love life like it’s a nature documentary.", "Let someone scroll your emojis and pick three you must use in a sentence.", "Pretend you’re rejecting someone—but make it aggressively polite.", "Say your most-used dating phrase and immediately roast yourself for it.", "Act like you just ran into someone you ghosted.", "Reenact your worst date in 10 seconds or less.", "Lean in and say one word you’d only use when flirting.", "Send a 😏 emoji to the person you’re playing with.", "Say one flirty sentence you’d feel confident texting someone.", "Give someone a compliment that’s not about their appearance.", "Say someone’s name in your flirtiest tone.", "Show a pic of the last outfit you wore that made you feel hot.", "Read a song lyric you think is secretly sexy.", "Strike a pose you’d do if someone said, “Okay, work it.”", "Text someone a single “hey” and nothing else.", "Change one small thing about your appearance like you’re getting ready to be noticed.", "Give your best “I know I look good” smile.", "Pick a celebrity and say why they’re attractive—in one sentence.", "Let someone else rewrite your dating app bio (and you have to keep it as-is for the rest of the game).", "Say one thing that instantly boosts your confidence.", "Choose a word you think sounds sexy and say it out loud.", "Describe your vibe like you’re the mysterious love interest in a rom-com.", "Give someone a playful nickname.", "Say “your turn” in your flirtiest voice.", "Pick one item you’re wearing and explain why it makes you feel good.", "Kiss me somewhere unexpected.", "Whisper three things you want me to do later.", "Write me a flirty note and hide it in my pocket.", "Recreate our steamiest kiss right now.", "Dance for me — your style, your rules.", "Blindfold me and kiss me.", "Whisper something naughty while looking me in the eye.", "Give me a massage for three minutes.", "Let me choose where you kiss me next.", "Share a secret fantasy aloud.", "Record a silly love rap and perform it.", "Post a photo of us with a funny caption.", "Do an impression of me until I guess who you are.", "Send me a flirty text — while I’m sitting next to you.", "Draw a portrait of me in 1 minute.", "Re-create our first date with whatever’s in the fridge.", "Serenade me with your worst singing voice.", "Make up a 30-second poem about our love.", "Pretend you’re proposing to me — in the silliest way possible.", "Call me by a pet name you invent on the spot.", "Let me redo your hairstyle.", "Tell me three truths and one lie — I have to guess the lie.", "Act out your favourite rom-com scene with me.", "Draw a heart on my hand with lipstick.", "Swap clothes with me for 10 minutes.", "Speak only in rhymes for the next five minutes.", "Hug me without letting go for one full minute.", "Pretend to be me ordering coffee.", "Share a TikTok dance attempt with me.", "Do a “serious” runway walk in the living room.", "Try to lick your elbow", "Peel a banana with your toes", "Say everything in a whisper for the next 10 minutes", "Smell another player's armpit", "Put as many snacks into your mouth at once as you can", "Put your clothing on backwards for the rest of the evening", "Put on as many layers as possible in 60 seconds", "Smile as widely as you can and hold it for two minutes", "Do your best impression of a celebrity", "Sit with your back to the room for the rest of the evening", "Sit on the floor for the rest of the evening", "Eat a raw egg", "Sit in the corner of the room without speaking to anyone for the next 10 minutes", "Let someone order something random on your Amazon account (£10 or under)", "Text your best friend that you can’t stop thinking about me.", "Go like the photo on my Instagram where I look my ~most alluring.~", "Tell me the last outfit I wore that you loved.", "List your favorite things about me.", "I dare you to write a haiku about me and read it out loud.", "Show me your last Google (or Instagram) search.", "I dare you to send me the last screenshot you took on your phone.", "DM your celebrity crush and ask them to marry you.", "I dare you to text your group chat a random selfie with no explanation.", "I dare you to FaceTime me and tell me how you feel about me.", "Change my contact name in your phone to something flirty for 24 hours.", "Text me the emoji that best describes how you feel about me—no explanation.", "Screenshot your lock screen and send it to me.", "Tell me what kind of date you think I’d be surprisingly good at planning.", "Send me a photo of something in your space that feels very you.", "Text me one thing you’d want to know about me but haven’t asked yet.", "Send me a voice memo saying my name.", "Tell me what vibe you think I bring into a room.", "Pick a random emoji and explain how it applies to us.", "Text me the first thought you had when you saw my last photo.", "Tell me one small thing I do that you find endearing.", "Send me the last meme you laughed at (no context).", "Tell me what kind of first impression you think you give off.", "Text me a hypothetical: “If we were hanging out right now, we’d be ___.”", "Send me a selfie only if you’re smiling.", "Tell me what kind of compliment you secretly love receiving.", "Describe our dynamic as if it were a TV trope.", "Text me something you’d say if you weren’t worried about sounding obvious.", "Send me a photo of what you’re drinking right now.", "Tell me what kind of energy you hope people feel when they’re with you.", "Text me a question you’ve been debating asking me.", "Pick one word you associate with me and sit with it for a second. Then tell me why.", "Tell me what kind of date feels the most *you.*", "Screenshot your emoji recents and explain the vibe.", "Tell me one habit you have that people find unexpectedly charming.", "Text me something that would absolutely make me smile if I read it out of the blue.", "Tell me what you think makes flirting fun instead of stressful.", "Send me a GIF that matches how this conversation feels right now.", "Tell me one thing you’re looking forward to this week.", "Take a spoonful of something spicy and try not to react.", "Demonstrate your best twerk moves.", "Kiss your partner in a way you’ve never tried before.", "Recreate the moment of your first kiss.", "Dance to a romantic song chosen by your partner.", "Let your partner draw a temporary tattoo on you.", "Act out a scene from your favorite romantic movie.", "Share a steamy secret you’ve been holding back.", "Attempt to balance an ice cube on your body for 30 seconds.", "Give your partner a back massage using only your elbows.", "Kiss your partner’s stomach.", "Dirty talk in a different language.", "Have a make-out session in the car.", "Kiss your partner’s body without using your hands.", "Perform a strip dance for your partner.",
 ]
 
+export const TRUTH_DECK = withMinimumContent(TRUTHS, CONVERSATION_SUPPLEMENT, 150)
+export const DARE_DECK = withMinimumContent(DARES, DARE_SUPPLEMENT, 150)
+
 /* ─── Hearts band (age-gate card) ─── */
 function HeartsRow({ top }: { top: boolean }) {
   return (
-    <div style={{
-      position: 'absolute',
-      [top ? 'top' : 'bottom']: '0',
-      left: 0, right: 0,
-      height: '87px',
-      background: '#dc2827',
-      overflow: 'hidden',
-    }}>
-      <div style={{
-        position: 'absolute',
-        [top ? 'bottom' : 'top']: '14px',
-        left: 0, right: 0,
-        display: 'flex', flexDirection: 'column', gap: '1px',
-      }}>
+    <div className={`tod-age-band tod-age-band-${top ? 'top' : 'bottom'}`}>
+      <div className="tod-age-stripes">
         {top
-          ? <><div style={{ height: '7px', background: '#ecc1c9' }} /><div style={{ height: '4px', background: '#ecc1c9' }} /></>
-          : <><div style={{ height: '4px', background: '#ecc1c9' }} /><div style={{ height: '7px', background: '#ecc1c9' }} /></>
+          ? <><i className="tod-age-stripe-wide" /><i className="tod-age-stripe-narrow" /></>
+          : <><i className="tod-age-stripe-narrow" /><i className="tod-age-stripe-wide" /></>
         }
       </div>
-      <div style={{
-        position: 'absolute',
-        [top ? 'top' : 'bottom']: '15px',
-        left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', gap: '5px', alignItems: 'center',
-      }}>
+      <div className="tod-age-hearts">
         {Array.from({ length: 11 }, (_, i) => (
           <img key={i} src={HEART_FILLED} alt=""
-            style={{ width: '32px', height: '32px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }}
+            style={{ transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }}
           />
         ))}
       </div>
@@ -167,41 +156,20 @@ function HeartsRow({ top }: { top: boolean }) {
 /* ─── Screen 1: Age Gate ─── */
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
   return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div className="card-float-up" style={{
-        background: '#fff', borderRadius: '20px',
-        width: '454px', position: 'relative', overflow: 'hidden', zIndex: 2,
-      }}>
+    <div className="screen-enter tod-age-screen">
+      <div className="card-float-up tod-age-card">
         <HeartsRow top={true} />
-        <div style={{ padding: '107px 90px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-          <div style={{ transform: 'rotate(-6deg)', marginBottom: '4px' }}>
-            <div style={{
-              background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
-              width: '97px', height: '96px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px',
-            }}>
-              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '72px', color: '#fff', letterSpacing: '1.44px', lineHeight: '72px', display: 'block', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                18+
-              </span>
-            </div>
+        <div className="tod-age-content">
+          <div className="tod-age-badge-wrap">
+            <div className="tod-age-badge">18+</div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
-            <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#000', margin: 0, textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap' }}>
-              MATURE CONTENT
-            </h2>
-            <div style={{ textAlign: 'center', color: '#5d3f3c', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
-              <p style={{ margin: 0 }}>Truth or Dare includes</p>
-              <p style={{ margin: 0 }}>mature content for ages 18+</p>
-              <p style={{ margin: '8px 0 0' }}>Continue?</p>
-            </div>
+          <div className="tod-age-copy">
+            <h2>MATURE CONTENT</h2>
+            <p>Truth or Dare includes<br />mature content for ages 18+<br /><br />Continue?</p>
           </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '215px', marginTop: '4px' }}>
-            <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #000', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#131416', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
-              No, go back
-            </button>
-            <button className="game-btn-primary" onClick={() => setTimeout(onConfirm, 100)} style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
-              YES, I'm 18+
-            </button>
+          <div className="tod-age-actions">
+            <button onClick={() => setTimeout(onBack, 100)}>NO, GO BACK</button>
+            <button onClick={() => setTimeout(onConfirm, 100)}>YES, I'M 18+</button>
           </div>
         </div>
         <HeartsRow top={false} />
@@ -232,8 +200,8 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
             How many cards do you want to play?
           </p>
 
-          <div
-            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text', width: '100%', marginTop: '16px', boxSizing: 'border-box' }}
+          <div className="setup-card-row"
+            style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text', width: '100%', marginTop: '16px', boxSizing: 'border-box' }}
             onClick={() => inputRef.current?.focus()}
           >
             <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -285,7 +253,7 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
         </h2>
 
         {player && (
-          <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+          <div className="stagger-item" style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
               {player.name.toUpperCase()}
@@ -306,8 +274,9 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
 /* ─── Screen 5: Game Play ─── */
 type CardState = 'picking' | 'truth' | 'dare'
 
-function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipCount, shuffledTruths, shuffledDares, onAdvance, onPlayAgain, onBrowseGames }: {
+function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dareCount, skipCount, shuffledTruths, shuffledDares, cardState, canControl, onPick, onAdvance, onPlayAgain, onBrowseGames }: {
   players: Player[]
+  playerIndex: number
   cardIndex: number
   totalCards: number
   truthCount: number
@@ -315,35 +284,42 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
   skipCount: number
   shuffledTruths: string[]
   shuffledDares: string[]
+  cardState: CardState
+  canControl: boolean
+  onPick: (choice: 'truth' | 'dare') => void
   onAdvance: (type: 'truth' | 'dare' | 'skip') => void
   onPlayAgain: () => void
   onBrowseGames: () => void
 }) {
-  const [cardState, setCardState] = useState<CardState>('picking')
   const [flipPhase, setFlipPhase] = useState<'idle' | 'out' | 'in'>('idle')
   const flippingRef = useRef(false)
   const { wrapperStyle: splitWrapperStyle, cardStyle: splitCardStyle } = useScaledCard(454, 457)
   const { wrapperStyle: revealWrapperStyle, cardStyle: revealCardStyle } = useScaledCard(454, 400)
 
-  const currentPlayer = players.length > 0 ? players[cardIndex % players.length] : null
+  const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
 
-  const truthPrompt = shuffledTruths[cardIndex % shuffledTruths.length]
-  const darePrompt  = shuffledDares[cardIndex % shuffledDares.length]
+  const truthPrompt = shuffledTruths[cardIndex]
+  const darePrompt  = shuffledDares[cardIndex]
+
+  // Every turn starts at the choice card, even if this component remains
+  // mounted while persisted navigation state catches up.
+  useEffect(() => {
+    setFlipPhase('idle')
+    flippingRef.current = false
+  }, [cardIndex, playerIndex])
 
   const pickChoice = useCallback((choice: 'truth' | 'dare') => {
-    if (flippingRef.current || cardState !== 'picking') return
+    if (!canControl || flippingRef.current || cardState !== 'picking') return
     flippingRef.current = true
     setFlipPhase('out')
     setTimeout(() => {
-      setCardState(choice)
+      onPick(choice)
       setFlipPhase('in')
       setTimeout(() => { setFlipPhase('idle'); flippingRef.current = false }, 300)
     }, 160)
-  }, [cardState])
+  }, [canControl, cardState, onPick])
 
-  // advance: flip current card OUT then immediately call cb().
-  // GamePlay will unmount (step → getReady), so no flip-in needed —
-  // next card starts fresh with cardState='picking' on remount.
+  // Reset before advancing so the next player never inherits this choice.
   const advance = (cb: () => void) => {
     if (flippingRef.current) return
     flippingRef.current = true
@@ -351,7 +327,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
     setTimeout(() => {
       flippingRef.current = false
       setFlipPhase('idle')
-      cb() // → handleAdvance → step='getReady'
+      cb()
     }, 220)
   }
 
@@ -370,7 +346,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         </div>
 
         {/* Stats card */}
-        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: '0' }}>
+        <div style={{ position: 'relative', zIndex: 2, background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: '0' }}>
           {[
             { count: truthCount, label: 'TRUTHS',  cls: 'done-stat-1' },
             { count: dareCount,  label: 'DARES',   cls: 'done-stat-2' },
@@ -403,7 +379,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
               <div style={{ height: '1.7px', background: '#ecc1c9', width: '100%' }} />
             </div>
             {/* Hearts row centered */}
-            <div style={{ position: 'absolute', top: '6.5px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2.2px', alignItems: 'center', whiteSpace: 'nowrap' }}>
+            <div className="tod-card-hearts-row" style={{ top: '6.5px' }}>
               {Array.from({ length: 11 }, (_, i) => (
                 <img key={i} src={HEART_FILLED} alt="" style={{ width: '14px', height: '14px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }} />
               ))}
@@ -434,7 +410,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
               <div style={{ height: '3px', background: '#ecc1c9', width: '100%' }} />
             </div>
             {/* Hearts row centered */}
-            <div style={{ position: 'absolute', top: '17.5px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '2.2px', alignItems: 'center', whiteSpace: 'nowrap' }}>
+            <div className="tod-card-hearts-row" style={{ top: '17.5px' }}>
               {Array.from({ length: 11 }, (_, i) => (
                 <img key={i} src={HEART_FILLED} alt="" style={{ width: '14px', height: '14px', flexShrink: 0, transform: i % 2 === 1 ? 'scaleY(-1)' : 'none' }} />
               ))}
@@ -447,9 +423,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             BROWSE GAMES
           </button>
-          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
-            PLAY AGAIN
-          </button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -485,6 +459,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           <div
             className="tod-truth-half"
             onClick={() => pickChoice('truth')}
+            aria-disabled={!canControl}
             style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: '228.5px',
               background: '#e9b1ba',
@@ -500,6 +475,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           <div
             className="tod-dare-half"
             onClick={() => pickChoice('dare')}
+            aria-disabled={!canControl}
             style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, height: '228.5px',
               background: '#dd2a25',
@@ -528,6 +504,7 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
           <button
             className="game-btn"
+            disabled={!canControl}
             onClick={() => advance(() => onAdvance('skip'))}
             style={{
               border: '1px solid #fff', background: 'none', borderRadius: '999px',
@@ -567,9 +544,6 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '16px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>
             {currentPlayer.name.toUpperCase()}'S TURN
           </span>
-          <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: isTruth ? '#f7b8bc' : '#dc2827', background: isTruth ? 'rgba(247,184,188,0.12)' : 'rgba(220,40,39,0.12)', border: `1px solid ${isTruth ? 'rgba(247,184,188,0.3)' : 'rgba(220,40,39,0.3)'}`, borderRadius: '999px', padding: '3px 12px', letterSpacing: '0.1em' }}>
-            {isTruth ? 'TRUTH' : 'DARE'}
-          </span>
         </div>
       )}
 
@@ -603,12 +577,14 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
 
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px', alignItems: 'center', width: '402px' }}>
         <button className="game-btn"
+          disabled={!canControl}
           onClick={() => advance(() => onAdvance('skip'))}
           style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}
         >
           SKIP
         </button>
         <button className="game-btn-primary"
+          disabled={!canControl}
           onClick={() => advance(() => onAdvance(isTruth ? 'truth' : 'dare'))}
           style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}
         >
@@ -627,22 +603,28 @@ function GamePlay({ players, cardIndex, totalCards, truthCount, dareCount, skipC
 
 /* ─── Root Game Component ─── */
 type Step = 'ageGate' | 'playerSetup' | 'deckSize' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['ageGate', 'playerSetup', 'deckSize', 'getReady', 'game']
 
 export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
-  const [step,           setStep]           = useState<Step>('ageGate')
-  const [players,        setPlayers]        = useState<Player[]>([])
-  const [totalCards,     setTotalCards]     = useState(0)
-  const [cardIndex,      setCardIndex]      = useState(0)
-  const [playerIndex,    setPlayerIndex]    = useState(0)
-  const [truthCount,     setTruthCount]     = useState(0)
-  const [dareCount,      setDareCount]      = useState(0)
-  const [skipCount,      setSkipCount]      = useState(0)
-  const [shuffledTruths, setShuffledTruths] = useState(() => getShuffledDeck(TRUTHS, 'truth-or-dare-truths'))
-  const [shuffledDares,  setShuffledDares]  = useState(() => getShuffledDeck(DARES, 'truth-or-dare-dares'))
+  const [step,           setStep]           = useGameStep<Step>('truth-or-dare', 'ageGate', STEPS)
+  const [players,        setPlayers]        = usePersistentGameState<Player[]>('truth-or-dare', 'players', [])
+  const [totalCards,     setTotalCards]     = usePersistentGameState('truth-or-dare', 'totalCards', 0)
+  const [cardIndex,      setCardIndex]      = usePersistentGameState('truth-or-dare', 'cardIndex', 0)
+  const [playerIndex,    setPlayerIndex]    = usePersistentGameState('truth-or-dare', 'playerIndex', 0)
+  const [truthCount,     setTruthCount]     = usePersistentGameState('truth-or-dare', 'truthCount', 0)
+  const [dareCount,      setDareCount]      = usePersistentGameState('truth-or-dare', 'dareCount', 0)
+  const [skipCount,      setSkipCount]      = usePersistentGameState('truth-or-dare', 'skipCount', 0)
+  const [shuffledTruths, setShuffledTruths] = usePersistentGameState('truth-or-dare', 'truths', () => getShuffledDeck(TRUTH_DECK, 'truth-or-dare-truths'))
+  const [shuffledDares,  setShuffledDares]  = usePersistentGameState('truth-or-dare', 'dares', () => getShuffledDeck(DARE_DECK, 'truth-or-dare-dares'))
+  const [cardState,      setCardState]      = usePersistentGameState<CardState>('truth-or-dare', 'choice', 'picking')
+  const multiplayer = useMultiplayerSession()
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
+  const canControl = !multiplayer || currentPlayer?.userId === multiplayer.currentUserId || multiplayer.hostUserId === multiplayer.currentUserId
 
   const handleAdvance = useCallback((type: 'truth' | 'dare' | 'skip') => {
+    if (!canControl) return
+    setCardState('picking')
     if (type === 'truth')     setTruthCount(c => c + 1)
     else if (type === 'dare') setDareCount(c => c + 1)
     else                      setSkipCount(c => c + 1)
@@ -655,9 +637,9 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
     } else {
       setStep('getReady')
     }
-  }, [cardIndex, playerIndex, players.length, totalCards])
+  }, [canControl, cardIndex, playerIndex, players.length, setCardIndex, setCardState, setDareCount, setPlayerIndex, setSkipCount, setStep, setTruthCount, totalCards])
 
-  const goToGame = useCallback(() => setStep('game'), [])
+  const goToGame = useCallback(() => setStep('game'), [setStep])
 
   const handlePlayAgain = useCallback(() => {
     setCardIndex(0)
@@ -665,14 +647,15 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
     setTruthCount(0)
     setDareCount(0)
     setSkipCount(0)
-    setShuffledTruths(getShuffledDeck(TRUTHS, 'truth-or-dare-truths'))
-    setShuffledDares(getShuffledDeck(DARES, 'truth-or-dare-dares'))
-    setStep('getReady')
-  }, [])
+    setCardState('picking')
+    setShuffledTruths(getShuffledDeck(TRUTH_DECK, 'truth-or-dare-truths'))
+    setShuffledDares(getShuffledDeck(DARE_DECK, 'truth-or-dare-dares'))
+    setStep('playerSetup')
+  }, [setCardIndex, setCardState, setDareCount, setPlayerIndex, setShuffledDares, setShuffledTruths, setSkipCount, setStep, setTruthCount])
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="truth-or-dare" />
 
       {step === 'ageGate' && (
         <AgeGate onBack={onClose} onConfirm={() => setStep('playerSetup')} />
@@ -690,7 +673,7 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setShuffledTruths(getShuffledDeck(TRUTHS, 'truth-or-dare-truths')); setShuffledDares(getShuffledDeck(DARES, 'truth-or-dare-dares')); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setShuffledTruths(getShuffledDeck(TRUTH_DECK, 'truth-or-dare-truths', n)); setShuffledDares(getShuffledDeck(DARE_DECK, 'truth-or-dare-dares', n)); setStep('getReady') }}
         />
       )}
 
@@ -703,7 +686,9 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
 
       {step === 'game' && (
         <GamePlay
+          key={`${cardIndex}-${playerIndex}`}
           players={players}
+          playerIndex={playerIndex}
           cardIndex={cardIndex}
           totalCards={totalCards}
           truthCount={truthCount}
@@ -711,6 +696,9 @@ export default function TruthOrDareGame({ onClose }: { onClose: () => void }) {
           skipCount={skipCount}
           shuffledTruths={shuffledTruths}
           shuffledDares={shuffledDares}
+          cardState={cardState}
+          canControl={canControl}
+          onPick={setCardState}
           onAdvance={handleAdvance}
           onPlayAgain={handlePlayAgain}
           onBrowseGames={onClose}

@@ -2,7 +2,34 @@ const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
 
-export function GameNav({ onBack }: { onBack: () => void }) {
+export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: string }) {
+  const [showExitChoice, setShowExitChoice] = useState(false)
+
+  useEffect(() => {
+    if (!showExitChoice) return
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowExitChoice(false)
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [showExitChoice])
+
+  const resetGame = () => {
+    if (!gameId) {
+      onBack()
+      return
+    }
+    const prefix = `decked:game-session:v1:${gameId}:`
+    try {
+      Object.keys(window.localStorage)
+        .filter(key => key.startsWith(prefix))
+        .forEach(key => window.localStorage.removeItem(key))
+      if (gameId === 'charades') window.localStorage.removeItem('charades-game-state-v3')
+    } catch { /* Storage may be unavailable. */ }
+    setShowExitChoice(false)
+    onBack()
+  }
+
   return (
     <>
       <nav className="game-nav-bar" style={{
@@ -10,7 +37,12 @@ export function GameNav({ onBack }: { onBack: () => void }) {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 60px', height: '80px', flexShrink: 0, position: 'relative', zIndex: 10,
       }}>
-        <span onClick={onBack} style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '28px', color: '#fff', letterSpacing: '0.56px', fontWeight: 400, cursor: 'pointer' }}>DECKED</span>
+        <button
+          type="button"
+          onClick={() => gameId ? setShowExitChoice(true) : onBack()}
+          aria-label="Open game options"
+          style={{ background: 'none', border: 0, padding: 0, fontFamily: "'Anton SC', sans-serif", fontSize: '28px', color: '#fff', letterSpacing: '0.56px', fontWeight: 400, cursor: 'pointer' }}
+        >DECKED</button>
 
         {/* Desktop nav links */}
         <div className="game-nav-desktop" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
@@ -30,8 +62,9 @@ export function GameNav({ onBack }: { onBack: () => void }) {
           aria-label="Back to games"
           style={{
             display: 'none', background: 'rgba(255,255,255,0.08)', border: 'none',
-            color: '#fff', fontFamily: "'Anton SC', sans-serif", fontSize: '14px',
-            cursor: 'pointer', padding: '8px 16px', letterSpacing: '0.04em',
+            color: '#fff', fontFamily: "'Anton SC', sans-serif", fontSize: '12px',
+            cursor: 'pointer', padding: '4px 10px', letterSpacing: '0.04em',
+            height: '30px', lineHeight: 1,
             borderRadius: '999px',
           }}
         >
@@ -39,12 +72,52 @@ export function GameNav({ onBack }: { onBack: () => void }) {
         </button>
       </nav>
 
+      {showExitChoice && (
+        <div
+          role="presentation"
+          onClick={() => setShowExitChoice(false)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.72)', backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="game-exit-title"
+            onClick={event => event.stopPropagation()}
+            style={{ width: 'min(100%, 390px)', boxSizing: 'border-box', background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '20px', padding: '28px 24px 24px', boxShadow: '0 24px 80px rgba(0,0,0,0.55)', textAlign: 'center' }}
+          >
+            <h2 id="game-exit-title" style={{ margin: 0, color: '#fff', fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '28px', textTransform: 'uppercase' }}>Leave this game?</h2>
+            <p style={{ margin: '10px 0 24px', color: 'rgba(255,255,255,0.58)', fontFamily: "'Satoshi', sans-serif", fontSize: '15px', lineHeight: 1.45 }}>Continue where you stopped, or reset this game and return to the beginning.</p>
+            <div className="game-exit-actions" style={{ display: 'flex', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => setShowExitChoice(false)}
+                style={{ flex: 1, minHeight: '44px', border: '1px solid #fff', borderRadius: '999px', background: 'transparent', color: '#fff', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', cursor: 'pointer' }}
+              >CONTINUE GAME</button>
+              <button
+                type="button"
+                onClick={resetGame}
+                style={{ flex: 1, minHeight: '44px', border: 0, borderRadius: '999px', background: '#dc2827', color: '#fff', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', cursor: 'pointer' }}
+              >RESET GAME</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         @media (max-width: 768px) {
           .game-nav-desktop { display: none !important; }
-          .game-nav-mobile-btn { display: block !important; }
+          .game-nav-mobile-btn {
+            display: block !important;
+            width: auto !important;
+            min-width: 0 !important;
+            min-height: 30px !important;
+            height: 30px !important;
+            padding: 4px 10px !important;
+            font-size: 12px !important;
+          }
           .game-nav-bar { padding: 0 16px !important; height: 52px !important; }
-          .game-nav-bar span { font-size: 20px !important; }
+          .game-nav-bar > button:first-child { font-size: 20px !important; }
+          .game-exit-actions { flex-direction: column; }
         }
       `}</style>
     </>
@@ -89,4 +162,16 @@ export function GameFooter() {
       `}</style>
     </footer>
   )
+}
+import { useEffect, useState } from 'react'
+import { useMultiplayerSession } from '../multiplayer/SessionStateContext'
+
+export function PlayAgainLabel() {
+  const multiplayer = useMultiplayerSession()
+  if (!multiplayer) return <>PLAY AGAIN</>
+  if (multiplayer.currentUserId !== multiplayer.hostUserId) {
+    return <>{multiplayer.requestedRematch ? 'REMATCH REQUESTED' : 'REQUEST REMATCH'}</>
+  }
+  const count = multiplayer.rematchRequestCount ?? 0
+  return <>{count > 0 ? `PLAY AGAIN · ${count} REQUEST${count === 1 ? '' : 'S'}` : 'PLAY AGAIN'}</>
 }

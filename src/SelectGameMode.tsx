@@ -75,7 +75,7 @@ export default function SelectGameMode({ modes, onBack, onSelect }: Props) {
                 className="mode-btn"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  background: isHovered ? '#1e1e22' : '#111113',
+                  background: isHovered ? '#1e1e22' : '#070708',
                   border: '1px solid', borderColor: isHovered ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', minHeight: '56px', cursor: 'pointer',
                   transform: isPressed ? 'scale(0.97)' : isHovered ? 'translateY(-2px)' : 'translateY(0)',

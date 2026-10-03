@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 
 /* ─── Assets (permanently hosted on Cloudinary) ─── */
 const DTC_BOW = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/dtc-bow.svg'
@@ -166,13 +168,18 @@ const QUESTIONS_BY_MODE: Record<string, string[]> = {
   ],
 }
 
+export const DINNER_TABLE_DECKS = Object.fromEntries(
+  Object.entries(QUESTIONS_BY_MODE).map(([mode, questions]) => [mode, withMinimumContent(questions, CONVERSATION_SUPPLEMENT)]),
+) as Record<string, string[]>
+export const DINNER_TABLE_MULTIPLAYER_DECK = Array.from(new Set(Object.values(DINNER_TABLE_DECKS).flat()))
+
 function getQuestionsForMode(mode: string): string[] {
-  return QUESTIONS_BY_MODE[mode] ?? QUESTIONS_BY_MODE['random-mix']
+  return DINNER_TABLE_DECKS[mode] ?? DINNER_TABLE_DECKS['random-mix']
 }
 
 
 /* ─── DTC Card ─── */
-function DTCCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
+export function DTCCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
   const CARD_W = 320
   const CARD_H = 400
   const { wrapperStyle, cardStyle } = useScaledCard(CARD_W, CARD_H)
@@ -182,6 +189,7 @@ function DTCCard({ question, flipped, onFlip }: { question: string; flipped: boo
     <div
       className="game-card"
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
@@ -278,8 +286,8 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
           <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>DECK SIZE</h2>
           <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>How many cards do you want to play?</p>
-          <div
-            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
+          <div className="setup-card-row"
+            style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
             onClick={() => inputRef.current?.focus()}
           >
             <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -321,7 +329,7 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0 }}>Get Ready...</h2>
         {player && (
-          <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+          <div className="stagger-item" style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', whiteSpace: 'nowrap' }}>{player.name.toUpperCase()}</span>
           </div>
@@ -353,7 +361,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
           </p>
         </div>
 
-        <div style={{ background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
+        <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
           {[
             { count: totalCards, label: 'CARDS' },
             { count: skipCount, label: 'SKIPPED' },
@@ -373,7 +381,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>
-          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>PLAY AGAIN</button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -411,18 +419,19 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 
 /* ─── Root ─── */
 type Step = 'playerSetup' | 'deckSize' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['playerSetup', 'deckSize', 'getReady', 'game']
 
 export default function DinnerTableGame({ mode = 'random-mix', onClose }: { mode?: string; onClose: () => void }) {
-  const [step,        setStep]        = useState<Step>('playerSetup')
-  const [players,     setPlayers]     = useState<Player[]>([])
-  const [totalCards,  setTotalCards]  = useState(0)
-  const [cardIndex,   setCardIndex]   = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [skipCount,   setSkipCount]   = useState(0)
-  const [questions,   setQuestions]   = useState(() => getShuffledDeck(getQuestionsForMode(mode), 'dinner-table'))
+  const [step,        setStep]        = useGameStep<Step>('dinner-table', 'playerSetup', STEPS)
+  const [players,     setPlayers]     = usePersistentGameState<Player[]>('dinner-table', 'players', [])
+  const [totalCards,  setTotalCards]  = usePersistentGameState('dinner-table', 'totalCards', 0)
+  const [cardIndex,   setCardIndex]   = usePersistentGameState('dinner-table', 'cardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('dinner-table', 'playerIndex', 0)
+  const [skipCount,   setSkipCount]   = usePersistentGameState('dinner-table', 'skipCount', 0)
+  const [questions,   setQuestions]   = usePersistentGameState<string[]>('dinner-table', 'questions', () => getShuffledDeck(getQuestionsForMode(mode), 'dinner-table'))
 
   const currentPlayer  = players.length > 0 ? players[playerIndex % players.length] : null
-  const currentQuestion = questions[cardIndex % questions.length]
+  const currentQuestion = questions[cardIndex]
 
   const handleNext = useCallback(() => {
     const nextCard   = cardIndex + 1
@@ -447,7 +456,7 @@ export default function DinnerTableGame({ mode = 'random-mix', onClose }: { mode
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="dinner-table" />
 
       {step === 'playerSetup' && (
         <SharedPlayerSetup
@@ -461,7 +470,7 @@ export default function DinnerTableGame({ mode = 'random-mix', onClose }: { mode
       {step === 'deckSize' && (
         <DeckSize
           onBack={() => setStep('playerSetup')}
-          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(getShuffledDeck(getQuestionsForMode(mode), 'dinner-table')); setStep('getReady') }}
+          onStart={n => { setTotalCards(n); setCardIndex(0); setPlayerIndex(0); setQuestions(getShuffledDeck(getQuestionsForMode(mode), 'dinner-table', n)); setStep('getReady') }}
         />
       )}
 

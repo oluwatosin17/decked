@@ -95,9 +95,14 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
         @media (max-width: 768px) {
           .browse-nav { padding: 0 16px !important; height: 52px !important; }
           .browse-nav button:first-child { font-size: 20px !important; }
-          .browse-play-btn { padding: 6px 12px !important; gap: 4px !important; }
-          .browse-play-btn span { font-size: 12px !important; }
-          .browse-play-btn svg { width: 14px !important; height: 14px !important; }
+          .browse-play-btn {
+            min-width: 0 !important;
+            min-height: 34px !important;
+            padding: 4px 9px !important;
+            gap: 3px !important;
+          }
+          .browse-play-btn span { font-size: 11px !important; }
+          .browse-play-btn svg { width: 12px !important; height: 12px !important; }
         }
       `}</style>
 

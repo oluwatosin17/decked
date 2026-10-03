@@ -4,8 +4,10 @@ import { useScaledCard } from './hooks/useCardScale'
 import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
-import { GameNav, GameFooter } from './components/GameShell'
-import { shuffle, getShuffledDeck } from './utils/deckShuffle'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
+import { EXPERIENCE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ---- Cloudinary assets ---- */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -200,16 +202,26 @@ const PROMPTS: Record<Category, string[]> = {
   random: [],
 }
 
+export const TAKE_A_SIP_DECKS = Object.fromEntries(
+  Object.entries(PROMPTS)
+    .filter(([category]) => category !== 'random')
+    .map(([category, prompts]) => [category, withMinimumContent(
+      prompts,
+      EXPERIENCE_SUPPLEMENT.map(experience => `Take a sip if you have ever ${experience}.`),
+    )]),
+) as Record<string, string[]>
+
 function getPrompts(categories: Category[]): string[] {
+  const supplemental = EXPERIENCE_SUPPLEMENT.map(experience => `Take a sip if you have ever ${experience}.`)
   if (categories.includes('random') || categories.length === 0) {
     const allCats = Object.keys(PROMPTS).filter(k => k !== 'random') as Category[]
     const pool: string[] = []
     for (const c of allCats) pool.push(...PROMPTS[c])
-    return getShuffledDeck([...new Set(pool)], 'take-a-sip')
+    return getShuffledDeck(withMinimumContent(pool, supplemental), 'take-a-sip')
   }
   const pool: string[] = []
-  for (const c of categories) pool.push(...PROMPTS[c])
-  return getShuffledDeck([...new Set(pool)], 'take-a-sip')
+  for (const c of categories) pool.push(...(TAKE_A_SIP_DECKS[c] ?? []))
+  return getShuffledDeck(withMinimumContent(pool, supplemental), 'take-a-sip')
 }
 
 /* ---- Category Selection (multi-select) ---- */
@@ -249,7 +261,7 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
                 onClick={() => toggle(opt.id)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  background: isSel ? '#1e1e22' : '#111113',
+                  background: isSel ? '#1e1e22' : '#070708',
                   border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', height: '56px', cursor: 'pointer',
                   transition: 'background 0.18s, transform 0.15s',
@@ -303,6 +315,7 @@ function TakeASipCard({ prompt, flipped, onFlip }: { prompt: string; flipped: bo
     <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       className="game-card" style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
@@ -379,7 +392,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, prompt, onSkip, o
             You played all {totalCards} prompts
           </p>
         </div>
-        <div style={{ background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
+        <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
           {[
             { count: totalCards, label: 'PROMPTS' },
             { count: skipCount, label: 'SKIPPED' },
@@ -400,7 +413,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, prompt, onSkip, o
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>
-          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>PLAY AGAIN</button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -434,17 +447,18 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, prompt, onSkip, o
 
 /* ---- Root ---- */
 type Step = 'categories' | 'playerSetup' | 'deckSize' | 'customCards' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['categories', 'playerSetup', 'deckSize', 'customCards', 'getReady', 'game']
 
 export default function TakeASipGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('categories')
-  const [categories, setCategories] = useState<Category[]>([])
-  const [players, setPlayers] = useState<Player[]>([])
-  const [totalCards, setTotalCards] = useState(0)
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [skipCount, setSkipCount] = useState(0)
-  const [prompts, setPrompts] = useState<string[]>([])
-  const [customCards, setCustomCards] = useState<string[]>([])
+  const [step, setStep] = useGameStep<Step>('take-a-sip', 'categories', STEPS)
+  const [categories, setCategories] = usePersistentGameState<Category[]>('take-a-sip', 'categories', [])
+  const [players, setPlayers] = usePersistentGameState<Player[]>('take-a-sip', 'players', [])
+  const [totalCards, setTotalCards] = usePersistentGameState('take-a-sip', 'totalCards', 0)
+  const [cardIndex, setCardIndex] = usePersistentGameState('take-a-sip', 'cardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('take-a-sip', 'playerIndex', 0)
+  const [skipCount, setSkipCount] = usePersistentGameState('take-a-sip', 'skipCount', 0)
+  const [prompts, setPrompts] = usePersistentGameState<string[]>('take-a-sip', 'prompts', [])
+  const [customCards, setCustomCards] = usePersistentGameState<string[]>('take-a-sip', 'customCards', [])
 
   const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
   const currentPrompt = prompts[cardIndex] ?? ''
@@ -468,7 +482,7 @@ export default function TakeASipGame({ onClose }: { onClose: () => void }) {
   const startGame = (custom: string[]) => {
     setCustomCards(custom)
     const generated = getPrompts(categories)
-    const allPrompts = shuffle([...custom, ...generated])
+    const allPrompts = createSessionDeck(generated, { customCards: custom })
     const trimmed = totalCards > 0 ? allPrompts.slice(0, totalCards) : allPrompts
     setPrompts(trimmed)
     if (totalCards > trimmed.length) setTotalCards(trimmed.length)
@@ -479,7 +493,7 @@ export default function TakeASipGame({ onClose }: { onClose: () => void }) {
 
   const handlePlayAgain = useCallback(() => {
     const generated = getPrompts(categories)
-    const allPrompts = shuffle([...customCards, ...generated])
+    const allPrompts = createSessionDeck(generated, { customCards })
     const trimmed = totalCards > 0 ? allPrompts.slice(0, totalCards) : allPrompts
     setPrompts(trimmed)
     setCardIndex(0)
@@ -490,7 +504,7 @@ export default function TakeASipGame({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="take-a-sip" />
 
       {step === 'categories' && <CategorySelect onNext={cats => { setCategories(cats); setStep('playerSetup') }} />}
 

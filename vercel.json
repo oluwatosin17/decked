@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    { "source": "/games", "destination": "/index.html" },
+    { "source": "/games/:path*", "destination": "/index.html" },
+    { "source": "/quick-play", "destination": "/index.html" },
+    { "source": "/play-together", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/sw.js",

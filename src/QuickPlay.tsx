@@ -106,7 +106,7 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
                 className="game-btn"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '16px',
-                  background: '#111113', border: '1px solid rgba(255,255,255,0.06)',
+                  background: '#070708', border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '16px', padding: '14px 18px', cursor: 'pointer',
                   textAlign: 'left', width: '100%',
                   animation: shuffleAnim,

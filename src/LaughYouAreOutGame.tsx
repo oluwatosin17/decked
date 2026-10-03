@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
+import { DARE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ─── Assets (permanently hosted on Cloudinary) ─── */
 // Card banners
@@ -71,6 +73,8 @@ const CHALLENGES = [
   "Act like a scientist explaining why you just sneezed.",
 ]
 
+export const LAUGH_YOU_ARE_OUT_DECK = withMinimumContent(CHALLENGES, DARE_SUPPLEMENT)
+
 
 /* ─── LYAO Card (flip-capable) ─── */
 function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: boolean; onFlip: () => void }) {
@@ -83,6 +87,7 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
     <div style={wrapperStyle}>
     <div
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       className={`game-card${!flipped ? ' lyao-card-wrap' : ''}`}
       style={{ ...cardStyle, perspective: '1000px', cursor: flipped ? 'default' : 'pointer' }}
     >
@@ -231,8 +236,8 @@ function SetRoundLength({ onBack, onNext }: { onBack: () => void; onNext: (secs:
     <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
       <div style={{ width: '500px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>SET ROUND LENGTH</h2>
-        <div
-          style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
+        <div className="setup-card-row"
+          style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
           onClick={() => inputRef.current?.focus()}
         >
           {/* Correct watch icon from Figma */}
@@ -277,7 +282,7 @@ function LivesSetup({ onBack, onNext }: { onBack: () => void; onNext: (lives: nu
                 onClick={() => setSelected(m.id)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  background: isSelected ? '#1a1a1d' : '#111113',
+                  background: isSelected ? '#1a1a1d' : '#070708',
                   border: `1px solid ${isSelected ? 'rgba(255,255,255,0.15)' : 'transparent'}`,
                   borderRadius: '12px', padding: '12px',
                   height: '56px', cursor: 'pointer', width: '100%',
@@ -429,8 +434,8 @@ function WhoLaughedScreen({
                 onClick={() => !isOut && toggle(p.name)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  background: '#111113',
-                  border: '1px dashed rgba(255,255,255,0.12)',
+                  background: '#070708',
+                  border: '1px dashed rgba(255,255,255,0.1)',
                   borderRadius: '12px', padding: '10px 14px', height: '56px',
                   cursor: isOut ? 'default' : 'pointer',
                   opacity: isOut ? 0.4 : 1,
@@ -508,7 +513,7 @@ function LivesRemainingScreen({
             return (
               <div key={p.name} className="stagger-item lyao-row" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+                background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
                 borderRadius: '12px', padding: '12px', height: '56px',
                 opacity: isOut ? 0.4 : 1, boxSizing: 'border-box',
                 animationDelay: `${0.05 + rowIdx * 0.06}s`,
@@ -582,7 +587,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
       {/* Winner chip OR "No winner" chip */}
       {isTie ? (
         <div className="stagger-item" style={{
-          background: '#111113', border: '1px solid rgba(255,255,255,0.15)',
+          background: '#070708', border: '1px solid rgba(255,255,255,0.15)',
           borderRadius: '999px', padding: '10px 20px',
           display: 'inline-flex', alignItems: 'center',
         }}>
@@ -590,7 +595,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
         </div>
       ) : winner && (
         <div className="stagger-item" style={{
-          background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+          background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
           borderRadius: '12px', padding: '12px 20px', height: '54px',
           display: 'flex', alignItems: 'center', gap: '10px',
         }}>
@@ -609,9 +614,7 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
           BROWSE GAMES
         </button>
         <button className="game-btn-primary" onClick={onPlayAgain}
-          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', letterSpacing: '0.05em', color: '#fff', textAlign: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}>
-          PLAY AGAIN
-        </button>
+          style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '13px 24px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', letterSpacing: '0.05em', color: '#fff', textAlign: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(220,40,39,0.3)' }}><PlayAgainLabel /></button>
       </div>
     </div>
   )
@@ -619,17 +622,18 @@ function GameOverScreen({ winner, roundsPlayed, onPlayAgain, onBrowseGames }: { 
 
 /* ─── Root ─── */
 type Step = 'playerSetup' | 'roundLength' | 'livesSetup' | 'gameplay' | 'whoLaughed' | 'livesRemaining' | 'winner'
+const STEPS: readonly Step[] = ['playerSetup', 'roundLength', 'livesSetup', 'gameplay', 'whoLaughed', 'livesRemaining', 'winner']
 
 export default function LaughYouAreOutGame({ onClose }: { onClose: () => void }) {
-  const [step,          setStep]          = useState<Step>('playerSetup')
-  const [players,       setPlayers]       = useState<Player[]>([])
-  const [roundSeconds,  setRoundSeconds]  = useState(30)
-  const [maxLives,      setMaxLives]      = useState(3)
-  const [livesMap,      setLivesMap]      = useState<Record<string, number>>({})
-  const [roundNum,      setRoundNum]      = useState(0)
-  const [challenges,    setChallenges]    = useState(() => getShuffledDeck(CHALLENGES, 'laugh-you-are-out'))
-  const [challengeIdx,  setChallengeIdx]  = useState(0)
-  const [winner,        setWinner]        = useState<Player | null>(null)
+  const [step,          setStep]          = useGameStep<Step>('you-laugh', 'playerSetup', STEPS)
+  const [players,       setPlayers]       = usePersistentGameState<Player[]>('you-laugh', 'players', [])
+  const [roundSeconds,  setRoundSeconds]  = usePersistentGameState('you-laugh', 'roundSeconds', 30)
+  const [maxLives,      setMaxLives]      = usePersistentGameState('you-laugh', 'maxLives', 3)
+  const [livesMap,      setLivesMap]      = usePersistentGameState<Record<string, number>>('you-laugh', 'livesMap', {})
+  const [roundNum,      setRoundNum]      = usePersistentGameState('you-laugh', 'roundNum', 0)
+  const [challenges,    setChallenges]    = usePersistentGameState<string[]>('you-laugh', 'challenges', () => getShuffledDeck(LAUGH_YOU_ARE_OUT_DECK, 'laugh-you-are-out'))
+  const [challengeIdx,  setChallengeIdx]  = usePersistentGameState('you-laugh', 'challengeIdx', 0)
+  const [winner,        setWinner]        = usePersistentGameState<Player | null>('you-laugh', 'winner', null)
 
   const currentChallenge = challenges[challengeIdx % challenges.length]
 
@@ -638,7 +642,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
     p.forEach(pl => { map[pl.name] = lives })
     setLivesMap(map)
     setRoundNum(0)
-    setChallenges(getShuffledDeck(CHALLENGES, 'laugh-you-are-out'))
+    setChallenges(getShuffledDeck(LAUGH_YOU_ARE_OUT_DECK, 'laugh-you-are-out'))
     setChallengeIdx(0)
     setStep('gameplay')
   }, [])
@@ -671,7 +675,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
     players.forEach(pl => { map[pl.name] = maxLives })
     setLivesMap(map)
     setRoundNum(0)
-    setChallenges(getShuffledDeck(CHALLENGES, 'laugh-you-are-out'))
+    setChallenges(getShuffledDeck(LAUGH_YOU_ARE_OUT_DECK, 'laugh-you-are-out'))
     setChallengeIdx(0)
     setWinner(null)
     setStep('gameplay')
@@ -679,7 +683,7 @@ export default function LaughYouAreOutGame({ onClose }: { onClose: () => void })
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="you-laugh" />
 
       {step === 'playerSetup' && (
         <SharedPlayerSetup

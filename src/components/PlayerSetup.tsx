@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 
-export type Player = { name: string; color: string }
+export type Player = { name: string; color: string; userId?: string }
 
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
@@ -75,8 +75,8 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {players.map((p, i) => (
-            <div key={i} className="stagger-item" style={{
-              background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+            <div key={i} className="stagger-item setup-card-row" style={{
+              background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
               borderRadius: '12px', height: '56px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px',
             }}>
@@ -113,14 +113,16 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
 
           {/* Add player input row */}
           <div
+            className="setup-card-row"
             style={{
-              background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+              background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
               borderRadius: '12px', height: '56px',
               display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text',
             }}
             onClick={() => inputRef.current?.focus()}
           >
             <button
+              className="circle-control"
               onClick={e => { e.stopPropagation(); addPlayer() }}
               style={{
                 background: hasInput ? nextColor : 'rgba(255,255,255,0.1)',
@@ -141,6 +143,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') addPlayer() }}
               placeholder="Add a player..."
+              aria-label="Player name"
               style={{
                 background: 'none', border: 'none', outline: 'none',
                 fontFamily: "'Anton SC', sans-serif", fontWeight: 400,

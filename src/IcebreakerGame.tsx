@@ -2,15 +2,18 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import SharedDeckSize from './components/DeckSize'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
+import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 const ICEBREAKER_BG = '/assets/games/icebreaker.png'
 const ICEBREAKER_INNER = '/icons/icebreaker-inner.svg'
 const ICEBREAKER_REVEAL_BG = '/icons/icebreaker-reveal-bg.svg'
 
 const CATEGORIES = ['DEEP', 'FUN', 'REFLECTIVE', 'SOCIAL', 'CREATIVE'] as const
-type Category = typeof CATEGORIES[number]
+export type IcebreakerCategory = typeof CATEGORIES[number]
+type Category = IcebreakerCategory
 
 const QUESTIONS: { category: Category; text: string }[] = [
   { category: 'DEEP', text: "What quality do you value most in a friendship?" },
@@ -65,6 +68,18 @@ const QUESTIONS: { category: Category; text: string }[] = [
   { category: 'CREATIVE', text: "If you could redesign one thing about the city you live in, what would it be?" },
 ]
 
+export const ICEBREAKER_DECKS = Object.fromEntries(CATEGORIES.map(category => [
+  category,
+  withMinimumContent(
+    QUESTIONS.filter(question => question.category === category).map(question => question.text),
+    CONVERSATION_SUPPLEMENT,
+  ),
+])) as Record<Category, string[]>
+
+export const ICEBREAKER_DECK = CATEGORIES.flatMap(category =>
+  ICEBREAKER_DECKS[category].map(text => ({ category, text })),
+)
+
 type PlayMode = 'spotlight' | 'round-robin'
 
 /* ── Iceberg SVG icon ── */
@@ -111,7 +126,7 @@ function ChoosePlayMode({ onSelect }: { onSelect: (mode: PlayMode) => void }) {
               onClick={() => handleSelect(mode)}
               className={`spicy-option stagger-item${selected === mode ? ' selected' : ''}`}
               style={{
-                background: selected === mode ? '#1e1e22' : '#111113',
+                background: selected === mode ? '#1e1e22' : '#070708',
                 border: '1px solid transparent', borderRadius: '12px',
                 display: 'flex', alignItems: 'center', gap: '14px',
                 padding: '16px', cursor: 'pointer', width: '100%', textAlign: 'left',
@@ -232,7 +247,7 @@ function spawnIceShards(container: HTMLElement) {
 }
 
 /* ── Flip Card: front=icebreaker, back=question ── */
-function FlipCard({ question, flipped, onTap }: {
+export function IcebreakerCard({ question, flipped, onTap }: {
   question: { category: Category; text: string }
   flipped: boolean
   onTap: () => void
@@ -344,7 +359,7 @@ function RoundRobinTracker({ players, answeredSet, onMarkDone, onNext }: {
             onClick={() => !done && onMarkDone(i)}
             className="nhie-row"
             style={{
-              background: done ? 'rgba(91,200,245,0.1)' : '#111113',
+              background: done ? 'rgba(91,200,245,0.1)' : '#070708',
               border: `1px solid ${done ? 'rgba(91,200,245,0.3)' : 'rgba(255,255,255,0.06)'}`,
               borderRadius: '12px', padding: '12px', display: 'flex', alignItems: 'center', gap: '12px',
               cursor: done ? 'default' : 'pointer', width: '100%',
@@ -394,17 +409,17 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
   questions: { category: Category; text: string }[]
   onClose: () => void
 }) {
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [phase, setPhase] = useState<GamePhase>('card-front')
-  const [flipped, setFlipped] = useState(false)
+  const [cardIndex, setCardIndex] = usePersistentGameState('icebreaker', 'gameCardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('icebreaker', 'gamePlayerIndex', 0)
+  const [phase, setPhase] = usePersistentGameState<GamePhase>('icebreaker', 'gamePhase', 'card-front')
+  const [flipped, setFlipped] = usePersistentGameState('icebreaker', 'flipped', false)
   const [flipPhase, setFlipPhase] = useState<'idle' | 'out' | 'in'>('idle')
   const [answeredSet, setAnsweredSet] = useState<Set<number>>(new Set())
-  const [skipCount, setSkipCount] = useState(0)
+  const [skipCount, setSkipCount] = usePersistentGameState('icebreaker', 'skipCount', 0)
   const flippingRef = useRef(false)
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
-  const question = shuffledQs[cardIndex % shuffledQs.length]
+  const question = shuffledQs[cardIndex]
   const isDone = totalCards > 0 && cardIndex >= totalCards
   const isRoundRobin = mode === 'round-robin' && players.length > 0
 
@@ -445,7 +460,7 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
           </p>
         </div>
 
-        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
+        <div style={{ position: 'relative', zIndex: 2, background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
           {[
             { count: totalCards, label: 'CARDS', cls: 'done-stat-1' },
             { count: skipCount, label: 'SKIPPED', cls: 'done-stat-2' },
@@ -469,9 +484,7 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
           <button className="game-btn" onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             BROWSE GAMES
           </button>
-          <button className="game-btn-primary" onClick={() => { setCardIndex(0); setPlayerIndex(0); setSkipCount(0); setAnsweredSet(new Set()); setFlipped(false); setPhase('card-front') }} style={{ background: '#5BC8F5', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
-            PLAY AGAIN
-          </button>
+          <button className="game-btn-primary" onClick={() => { setCardIndex(0); setPlayerIndex(0); setSkipCount(0); setAnsweredSet(new Set()); setFlipped(false); setPhase('card-front') }} style={{ background: '#5BC8F5', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -482,7 +495,7 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
     return (
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '24px', padding: '40px 40px 60px', position: 'relative' }}>
         {currentPlayer && <PlayerChip player={currentPlayer} cardIndex={cardIndex} />}
-        <FlipCard question={question} flipped={flipped} onTap={handleTapCard} />
+        <IcebreakerCard question={question} flipped={flipped} onTap={handleTapCard} />
         {totalCards > 0 && (
           <div className="counter-in" style={{ position: 'relative', zIndex: 2, fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>
             CARD {cardIndex + 1} OF {totalCards}
@@ -548,19 +561,20 @@ function GamePlay({ players, mode, totalCards, questions: shuffledQs, onClose }:
 
 /* ── Root Component ── */
 type Step = 'playMode' | 'playerSetup' | 'deckSize' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['playMode', 'playerSetup', 'deckSize', 'getReady', 'game']
 
 export default function IcebreakerGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('playMode')
-  const [mode, setMode] = useState<PlayMode>('spotlight')
-  const [players, setPlayers] = useState<Player[]>([])
-  const [totalCards, setTotalCards] = useState(0)
-  const [shuffledQs, setShuffledQs] = useState(() => getShuffledDeck(QUESTIONS, 'icebreaker'))
+  const [step, setStep] = useGameStep<Step>('icebreaker', 'playMode', STEPS)
+  const [mode, setMode] = usePersistentGameState<PlayMode>('icebreaker', 'mode', 'spotlight')
+  const [players, setPlayers] = usePersistentGameState<Player[]>('icebreaker', 'players', [])
+  const [totalCards, setTotalCards] = usePersistentGameState('icebreaker', 'totalCards', 0)
+  const [shuffledQs, setShuffledQs] = usePersistentGameState<(typeof ICEBREAKER_DECK)[number][]>('icebreaker', 'questions', () => getShuffledDeck(ICEBREAKER_DECK, 'icebreaker'))
 
   const goToGame = useCallback(() => setStep('game'), [])
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="icebreaker" />
 
       {step === 'playMode' && (
         <ChoosePlayMode onSelect={(m) => { setMode(m); setStep('playerSetup') }} />
@@ -579,7 +593,7 @@ export default function IcebreakerGame({ onClose }: { onClose: () => void }) {
       {step === 'deckSize' && (
         <SharedDeckSize
           onBack={() => setStep('playerSetup')}
-          onNext={(n) => { setTotalCards(n); setShuffledQs(getShuffledDeck(QUESTIONS, 'icebreaker')); setStep('getReady') }}
+          onNext={(n) => { setTotalCards(n); setShuffledQs(getShuffledDeck(ICEBREAKER_DECK, 'icebreaker', n)); setStep('getReady') }}
         />
       )}
 

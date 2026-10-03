@@ -3,8 +3,10 @@ import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import SelectGameMode, { NHIE_MODES } from './SelectGameMode'
 import { haptic } from './haptics'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck, shuffle } from './utils/deckShuffle'
+import { EXPERIENCE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ─── Prompts ─── */
 const ALL_PROMPTS = [
@@ -40,11 +42,19 @@ const ALL_PROMPTS = [
   "Watched a video on someone else's phone without saying anything.",
 ]
 
+export const NEVER_HAVE_I_EVER_DECK = withMinimumContent(
+  ALL_PROMPTS,
+  EXPERIENCE_SUPPLEMENT.map(experience => `Never have I ever ${experience}.`),
+)
+
 const PURPLE = '#bf5af2'
+const playerScoreKey = (player: Player, index: number) => `${index}:${player.name}`
+const playerScore = (scores: Record<string, number>, player: Player, index: number) =>
+  scores[playerScoreKey(player, index)] ?? scores[player.name] ?? 0
 
 
 /* ─── NHIE Card ─── */
-function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
+export function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: string; onFlip: () => void }) {
   const W = 320, H = 480
   const { wrapperStyle, cardStyle } = useScaledCard(W, H)
 
@@ -53,6 +63,7 @@ function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt: strin
     <div
       className="game-card"
       onClick={!flipped ? () => { haptic('medium'); onFlip() } : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       style={{
         ...cardStyle, perspective: '1000px',
         cursor: flipped ? 'default' : 'pointer', flexShrink: 0,
@@ -164,7 +175,7 @@ function DeckSizeScreen({ onBack, onNext }: { onBack: () => void; onNext: (n: nu
         </div>
 
         <div
-          style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
+          style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', width: '100%', boxSizing: 'border-box', cursor: 'text' }}
           onClick={() => inputRef.current?.focus()}
         >
           <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -224,7 +235,7 @@ function GetReadyScreen({ players, onDone }: { players: Player[]; onDone: () => 
       {current && (
         /* key forces remount/re-animate on each new player — only one ever visible */
         <div key={playerIdx} className="screen-enter-fast" style={{
-          background: '#111113', borderRadius: '999px',
+          background: '#070708', borderRadius: '999px',
           padding: '10px 20px 10px 12px',
           display: 'flex', alignItems: 'center', gap: '10px',
         }}>
@@ -298,19 +309,19 @@ function GameScreen({
 }
 
 /* ─── 4. I've Done It ─── */
-function IveDoneItScreen({
+export function IveDoneItScreen({
   players, onNext,
 }: {
   players: Player[]
-  onNext: (didIt: string[]) => void
+  onNext: (selectedPlayerIndexes: number[]) => void
 }) {
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [selected, setSelected] = useState<Set<number>>(new Set())
 
-  const toggle = (name: string) => {
+  const toggle = (index: number) => {
     haptic('light')
     setSelected(prev => {
       const next = new Set(prev)
-      next.has(name) ? next.delete(name) : next.add(name)
+      next.has(index) ? next.delete(index) : next.add(index)
       return next
     })
   }
@@ -324,12 +335,12 @@ function IveDoneItScreen({
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {players.map((p, i) => {
-            const isSel = selected.has(p.name)
+            const isSel = selected.has(i)
             return (
-              <div key={p.name} className="nhie-row-enter nhie-row" onClick={() => toggle(p.name)}
+              <div key={`${i}:${p.name}`} className="nhie-row-enter nhie-row" onClick={() => toggle(i)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+                  background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
                   borderRadius: '12px', padding: '10px 14px', height: '56px',
                   cursor: 'pointer', boxSizing: 'border-box',
                   animationDelay: `${0.05 + i * 0.06}s`,
@@ -384,12 +395,13 @@ function PointsGainedScreen({
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {players.map((p, i) => {
-            const gained = newPoints[p.name] ?? 0
-            const total  = pointsMap[p.name] ?? 0
+            const key = playerScoreKey(p, i)
+            const gained = newPoints[key] ?? newPoints[p.name] ?? 0
+            const total  = playerScore(pointsMap, p, i)
             return (
-              <div key={p.name} className="nhie-row-enter" style={{
+              <div key={key} className="nhie-row-enter" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                background: '#111113', border: '1px dashed rgba(255,255,255,0.12)',
+                background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
                 borderRadius: '12px', padding: '10px 14px', height: '56px',
                 boxSizing: 'border-box', animationDelay: `${0.06 + i * 0.07}s`,
               }}>
@@ -448,9 +460,7 @@ function EndButtons({ onBrowse, onPlayAgain }: { onBrowse: () => void; onPlayAga
         BROWSE GAMES
       </button>
       <button className="game-btn-primary" onClick={() => { haptic('light'); onPlayAgain() }}
-        style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', height: '44px', boxSizing: 'border-box', boxShadow: '0 10px 12px rgba(220,40,39,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}>
-        PLAY AGAIN
-      </button>
+        style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', height: '44px', boxSizing: 'border-box', boxShadow: '0 10px 12px rgba(220,40,39,0.25)', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', cursor: 'pointer' }}><PlayAgainLabel /></button>
     </div>
   )
 }
@@ -463,11 +473,12 @@ function DoneScreen({ players, pointsMap, roundsPlayed, onPlayAgain, onBrowse }:
   onPlayAgain: () => void
   onBrowse: () => void
 }) {
-  const sorted = [...players].sort((a, b) => (pointsMap[b.name] ?? 0) - (pointsMap[a.name] ?? 0))
-  const topScore = pointsMap[sorted[0]?.name] ?? 0
-  const topPlayers = sorted.filter(p => (pointsMap[p.name] ?? 0) === topScore)
+  const sorted = players.map((player, index) => ({ player, index }))
+    .sort((a, b) => playerScore(pointsMap, b.player, b.index) - playerScore(pointsMap, a.player, a.index))
+  const topScore = sorted[0] ? playerScore(pointsMap, sorted[0].player, sorted[0].index) : 0
+  const topPlayers = sorted.filter(entry => playerScore(pointsMap, entry.player, entry.index) === topScore)
   const isTie = topPlayers.length > 1
-  const winner = isTie ? null : sorted[0]
+  const winner = isTie ? null : sorted[0]?.player
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '40px', zIndex: 2, position: 'relative' }}>
@@ -488,7 +499,7 @@ function DoneScreen({ players, pointsMap, roundsPlayed, onPlayAgain, onBrowse }:
       {/* Winner chip OR No Winner chip */}
       {isTie ? (
         <div className="nhie-chip-enter" style={{
-          background: '#111113', border: '1px dashed rgba(255,255,255,0.2)',
+          background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
           borderRadius: '999px', padding: '10px 22px',
           display: 'inline-flex', alignItems: 'center',
         }}>
@@ -496,7 +507,7 @@ function DoneScreen({ players, pointsMap, roundsPlayed, onPlayAgain, onBrowse }:
         </div>
       ) : winner ? (
         <div className="nhie-chip-enter" style={{
-          background: '#111113', border: '1px dashed rgba(255,255,255,0.2)',
+          background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
           borderRadius: '999px', padding: '10px 22px',
           display: 'inline-flex', alignItems: 'center', gap: '10px',
         }}>
@@ -515,31 +526,33 @@ function DoneScreen({ players, pointsMap, roundsPlayed, onPlayAgain, onBrowse }:
 
 /* ─── Root ─── */
 type Step = 'playerSetup' | 'modeSelect' | 'deckSize' | 'getReady' | 'game' | 'iveDoneIt' | 'pointsGained' | 'done'
+const STEPS: readonly Step[] = ['playerSetup', 'modeSelect', 'deckSize', 'getReady', 'game', 'iveDoneIt', 'pointsGained', 'done']
 
 export default function NeverHaveIEverGame({ onClose }: { onClose: () => void }) {
-  const [step,       setStep]       = useState<Step>('playerSetup')
-  const [players,    setPlayers]    = useState<Player[]>([])
-  const [prompts,    setPrompts]    = useState<string[]>([])
-  const [cardIdx,    setCardIdx]    = useState(0)
-  const [pointsMap,  setPointsMap]  = useState<Record<string, number>>({})
-  const [lastPoints, setLastPoints] = useState<Record<string, number>>({})
+  const [step,       setStep]       = useGameStep<Step>('never-have-i-ever', 'playerSetup', STEPS)
+  const [players,    setPlayers]    = usePersistentGameState<Player[]>('never-have-i-ever', 'players', [])
+  const [prompts,    setPrompts]    = usePersistentGameState<string[]>('never-have-i-ever', 'prompts', [])
+  const [cardIdx,    setCardIdx]    = usePersistentGameState('never-have-i-ever', 'cardIdx', 0)
+  const [pointsMap,  setPointsMap]  = usePersistentGameState<Record<string, number>>('never-have-i-ever', 'pointsMap', {})
+  const [lastPoints, setLastPoints] = usePersistentGameState<Record<string, number>>('never-have-i-ever', 'lastPoints', {})
 
   const startGame = (deckSize: number) => {
-    setPrompts(getShuffledDeck(ALL_PROMPTS, 'never-have-i-ever', Math.min(deckSize, ALL_PROMPTS.length)))
+    setPrompts(getShuffledDeck(NEVER_HAVE_I_EVER_DECK, 'never-have-i-ever', deckSize))
     setCardIdx(0)
     const init: Record<string, number> = {}
-    players.forEach(p => { init[p.name] = 0 })
+    players.forEach((p, index) => { init[playerScoreKey(p, index)] = 0 })
     setPointsMap(init)
     setStep('getReady')
   }
 
-  const handleIveDoneIt = useCallback((didIt: string[]) => {
+  const handleIveDoneIt = useCallback((selectedPlayerIndexes: number[]) => {
     const gained: Record<string, number> = {}
-    const next = { ...pointsMap }
-    players.forEach(p => {
-      const g = didIt.includes(p.name) ? 1 : 0
-      gained[p.name] = g
-      next[p.name] = (next[p.name] ?? 0) + g
+    const next: Record<string, number> = {}
+    players.forEach((p, index) => {
+      const key = playerScoreKey(p, index)
+      const g = selectedPlayerIndexes.includes(index) ? 1 : 0
+      gained[key] = g
+      next[key] = playerScore(pointsMap, p, index) + g
     })
     setLastPoints(gained)
     setPointsMap(next)
@@ -557,10 +570,10 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
   }, [cardIdx, prompts.length])
 
   const handlePlayAgain = () => {
-    setPrompts(shuffle(ALL_PROMPTS).slice(0, prompts.length))
+    setPrompts(shuffle(NEVER_HAVE_I_EVER_DECK).slice(0, prompts.length))
     setCardIdx(0)
     const init: Record<string, number> = {}
-    players.forEach(p => { init[p.name] = 0 })
+    players.forEach((p, index) => { init[playerScoreKey(p, index)] = 0 })
     setPointsMap(init)
     setStep('getReady')
   }
@@ -578,7 +591,7 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="never-have-i-ever" />
 
       {step === 'playerSetup' && (
         <SharedPlayerSetup

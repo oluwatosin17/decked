@@ -3,10 +3,13 @@ import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
-import { shuffle, getShuffledDeck } from './utils/deckShuffle'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
+import { FLAG_SCENARIO_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 const RFGF_FRONT = '/icons/rfgf-front.svg'
+const RFGF_GAME_FRONT = '/icons/rfgf-game-front.svg'
 const RFGF_BACK  = '/icons/rfgf-back.svg'
 
 const VOTE_RED_ICON = '/icons/vote-red-flag.svg'
@@ -69,7 +72,9 @@ const SCENARIOS: string[] = [
   "They bring you food when you're stressed without you asking",
 ]
 
-type VoteType = 'red' | 'depends' | 'green'
+export const SCENARIO_DECK = withMinimumContent(SCENARIOS, FLAG_SCENARIO_SUPPLEMENT)
+
+export type VoteType = 'red' | 'depends' | 'green'
 type Vote = { playerIndex: number; vote: VoteType }
 type CardVoteRecord = { scenario: string; votes: Vote[] }
 
@@ -99,7 +104,7 @@ function GetReady({ player, onReady }: { player: Player; onReady: () => void }) 
           Get ready...
         </h2>
 
-        <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+        <div className="stagger-item" style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
           <div className="avatar-circle" style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
           <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
             {player.name.toUpperCase()}
@@ -117,7 +122,7 @@ function GetReady({ player, onReady }: { player: Player; onReady: () => void }) 
 }
 
 /* ─── Vote Buttons (horizontal row with SVG icons) ─── */
-function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
+export function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
   const [selectedVote, setSelectedVote] = useState<VoteType | null>(null)
 
   const handleVote = (v: VoteType) => {
@@ -131,7 +136,7 @@ function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
 
   const btnBase: React.CSSProperties = {
     flex: 1,
-    background: '#18181b',
+    background: '#070708',
     border: '1px solid rgba(255,255,255,0.1)',
     borderRadius: '12px',
     padding: '14px 8px',
@@ -191,6 +196,11 @@ function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
   )
 }
 
+export function RedFlagGreenFlagCard({ scenario, flipped, onFlip }: { scenario: string; flipped: boolean; onFlip: () => void }) {
+  const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
+  return <div style={wrapperStyle}><div onClick={!flipped ? onFlip : undefined} className="game-card" style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer', position: 'relative' }}><div className="spicy-flip-container" style={{ width: 365, height: 457 }}><div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: 365, height: 457 }}><div className="spicy-flip-front" style={{ background: '#000' }}><img src={RFGF_GAME_FRONT} alt="Red flag, green flag" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} /><p style={{ position: 'absolute', left: 0, right: 0, bottom: 40, fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'rgba(255,255,255,.5)', textAlign: 'center' }}>Tap to Reveal</p></div><div className="spicy-flip-back" style={{ background: '#fff' }}><img src={RFGF_BACK} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} /><div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', padding: '48px 32px' }}><p style={{ fontFamily: "'Anton SC', sans-serif", fontSize: 24, color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.3 }}>{scenario}</p></div></div></div></div></div></div>
+}
+
 /* ─── Vote Results Screen ─── */
 function VoteResults({ votes, players, onNext }: {
   votes: Vote[]
@@ -203,7 +213,7 @@ function VoteResults({ votes, players, onNext }: {
 
   const summaryCardStyle: React.CSSProperties = {
     flex: 1,
-    background: '#18181b',
+    background: '#070708',
     border: '1px solid rgba(255,255,255,0.1)',
     borderRadius: '12px',
     padding: '12px 8px',
@@ -260,7 +270,7 @@ function VoteResults({ votes, players, onNext }: {
           return (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: '12px',
-              background: '#18181b', border: '1px solid rgba(255,255,255,0.1)',
+              background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)',
               borderRadius: '12px', padding: '12px',
             }}>
               <div className="avatar-circle" style={{ width: '28px', height: '28px', borderRadius: '50%', background: player.color, flexShrink: 0, boxShadow: '0 0 0 2.5px #fff' }} />
@@ -406,7 +416,7 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
   }
 
   const highlightCardStyle: React.CSSProperties = {
-    background: '#18181b',
+    background: '#070708',
     border: '1px solid rgba(255,255,255,0.1)',
     borderRadius: '12px',
     padding: '14px 16px',
@@ -479,7 +489,7 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
           { count: totalVotesCast, label: 'VOTES CAST' },
         ].map((stat, i) => (
           <div key={i} className={`done-stat-${i + 1}`} style={{
-            flex: 1, background: '#18181b', border: '1px solid rgba(255,255,255,0.1)',
+            flex: 1, background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)',
             borderRadius: '12px', padding: '16px 8px', display: 'flex', flexDirection: 'column',
             alignItems: 'center', gap: '4px',
           }}>
@@ -532,7 +542,7 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
       {allCardVotes.length > 0 && (
         <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '365px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <p style={{ ...sectionHeadingStyle, marginBottom: '8px' }}>OVERALL STATS</p>
-          <div style={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '4px 16px' }}>
+          <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', padding: '4px 16px' }}>
             <div style={statRowStyle}>
               <span style={statLabelStyle}>Average Group Agreement</span>
               <span style={statValueStyle}>{stats.avgAgreement}%</span>
@@ -566,9 +576,7 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
           flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px',
           padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px',
           color: '#fff', letterSpacing: '0.05em', cursor: 'pointer',
-        }}>
-          PLAY AGAIN
-        </button>
+        }}><PlayAgainLabel /></button>
       </div>
     </div>
   )
@@ -583,18 +591,20 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
   scenarios: string[]
   onClose: () => void
 }) {
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [phase, setPhase] = useState<GamePhase>('card-front')
-  const [flipped, setFlipped] = useState(false)
-  const [skipCount, setSkipCount] = useState(0)
-  const [votes, setVotes] = useState<Vote[]>([])
-  const [votingPlayerIndex, setVotingPlayerIndex] = useState(0)
-  const [allCardVotes, setAllCardVotes] = useState<CardVoteRecord[]>([])
-  const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
+  const [cardIndex, setCardIndex] = usePersistentGameState('red-flag-green-flag', 'gameCardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('red-flag-green-flag', 'gamePlayerIndex', 0)
+  const [phase, setPhase] = usePersistentGameState<GamePhase>('red-flag-green-flag', 'gamePhase', 'card-front')
+  const [flipped, setFlipped] = usePersistentGameState('red-flag-green-flag', 'flipped', false)
+  const [skipCount, setSkipCount] = usePersistentGameState('red-flag-green-flag', 'skipCount', 0)
+  const [votes, setVotes] = usePersistentGameState<Vote[]>('red-flag-green-flag', 'votes', [])
+  const [votingPlayerIndex, setVotingPlayerIndex] = usePersistentGameState('red-flag-green-flag', 'votingPlayerIndex', 0)
+  const [allCardVotes, setAllCardVotes] = usePersistentGameState<CardVoteRecord[]>('red-flag-green-flag', 'allCardVotes', [])
+  const cardWidth = 326
+  const cardHeight = 424
+  const { wrapperStyle, cardStyle } = useScaledCard(cardWidth, cardHeight)
 
   const currentPlayer = players[playerIndex % players.length]
-  const scenario = scenarios[cardIndex % scenarios.length]
+  const scenario = scenarios[cardIndex]
   const isDone = totalCards > 0 && cardIndex >= totalCards
 
   const handleTapCard = useCallback(() => {
@@ -679,17 +689,17 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
         </div>
 
         {/* Flip card */}
-        <div style={wrapperStyle}>
+        <div style={{ ...wrapperStyle, width: cardWidth, height: cardHeight }}>
           <div
             onClick={handleTapCard}
             className="game-card"
-            style={{ ...cardStyle, flexShrink: 0, zIndex: 2, position: 'relative', cursor: 'pointer' }}
+            style={{ ...cardStyle, width: cardWidth, height: cardHeight, flexShrink: 0, zIndex: 2, position: 'relative', cursor: 'pointer' }}
           >
-            <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
-              <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
+            <div className="spicy-flip-container" style={{ width: cardWidth, height: cardHeight }}>
+              <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: cardWidth, height: cardHeight }}>
                 {/* FRONT */}
                 <div className="spicy-flip-front" style={{ background: '#000' }}>
-                  <img src={RFGF_FRONT} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={RFGF_GAME_FRONT} alt="Red flag, green flag" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: '40px' }}>
                     <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
                       Tap to Reveal
@@ -858,14 +868,15 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
 
 /* ─── Root Component ─── */
 type Step = 'playerSetup' | 'deckSize' | 'customCards' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['playerSetup', 'deckSize', 'customCards', 'getReady', 'game']
 
 export default function RedFlagGreenFlagGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('playerSetup')
-  const [players, setPlayers] = useState<Player[]>([])
-  const [totalCards, setTotalCards] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [shuffledScenarios, setShuffledScenarios] = useState(() => getShuffledDeck(SCENARIOS, 'red-flag-green-flag'))
-  const [customCards, setCustomCards] = useState<string[]>([])
+  const [step, setStep] = useGameStep<Step>('red-flag-green-flag', 'playerSetup', STEPS)
+  const [players, setPlayers] = usePersistentGameState<Player[]>('red-flag-green-flag', 'players', [])
+  const [totalCards, setTotalCards] = usePersistentGameState('red-flag-green-flag', 'totalCards', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('red-flag-green-flag', 'playerIndex', 0)
+  const [shuffledScenarios, setShuffledScenarios] = usePersistentGameState<string[]>('red-flag-green-flag', 'scenarios', () => getShuffledDeck(SCENARIO_DECK, 'red-flag-green-flag'))
+  const [customCards, setCustomCards] = usePersistentGameState<string[]>('red-flag-green-flag', 'customCards', [])
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
 
@@ -873,8 +884,8 @@ export default function RedFlagGreenFlagGame({ onClose }: { onClose: () => void 
 
   const startGame = (custom: string[]) => {
     setCustomCards(custom)
-    const generated = getShuffledDeck(SCENARIOS, 'red-flag-green-flag')
-    const allScenarios = shuffle([...custom, ...generated])
+    const generated = getShuffledDeck(SCENARIO_DECK, 'red-flag-green-flag')
+    const allScenarios = createSessionDeck(generated, { customCards: custom })
     const trimmed = totalCards > 0 ? allScenarios.slice(0, totalCards) : allScenarios
     setShuffledScenarios(trimmed)
     if (totalCards > trimmed.length) setTotalCards(trimmed.length)
@@ -884,7 +895,7 @@ export default function RedFlagGreenFlagGame({ onClose }: { onClose: () => void 
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="red-flag-green-flag" />
 
       {step === 'playerSetup' && (
         <SharedPlayerSetup

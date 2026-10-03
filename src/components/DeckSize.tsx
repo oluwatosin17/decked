@@ -18,8 +18,8 @@ export default function DeckSize({ onBack, onNext, nextLabel = 'START THE GAME' 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '100%' }}>
           <h2 className="setup-title" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center' }}>DECK SIZE</h2>
           <p style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>How many cards do you want to play?</p>
-          <div
-            style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
+          <div className="setup-card-row"
+            style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', width: '100%', marginTop: '16px', boxSizing: 'border-box', cursor: 'text' }}
             onClick={() => inputRef.current?.focus()}
           >
             <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '16px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -28,6 +28,8 @@ export default function DeckSize({ onBack, onNext, nextLabel = 'START THE GAME' 
             <input
               ref={inputRef}
               type="number" min={1} max={200}
+              inputMode="numeric"
+              aria-label="Number of cards"
               value={value}
               onChange={e => setValue(e.target.value)}
               placeholder="Enter number"

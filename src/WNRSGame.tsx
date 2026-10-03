@@ -4,8 +4,10 @@ import { useScaledCard } from './hooks/useCardScale'
 import SharedDeckSize from './components/DeckSize'
 import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
-import { GameNav, GameFooter } from './components/GameShell'
-import { shuffle, getShuffledDeck } from './utils/deckShuffle'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
+import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -221,14 +223,23 @@ const QUESTIONS: Record<Relationship, Record<Stage, string[]>> = {
   },
 }
 
+export const STRANGERS_DECKS = Object.fromEntries(
+  Object.entries(QUESTIONS)
+    .filter(([relationship]) => relationship !== 'random')
+    .flatMap(([relationship, stages]) => Object.entries(stages).map(([stage, questions]) => [
+      `${relationship}/${stage}`,
+      withMinimumContent(questions, CONVERSATION_SUPPLEMENT),
+    ])),
+) as Record<string, string[]>
+
 function getQuestions(relationship: Relationship, stage: Stage): string[] {
   if (relationship === 'random') {
     const allRels = Object.keys(QUESTIONS).filter(k => k !== 'random') as Relationship[]
     const pool: string[] = []
     for (const r of allRels) pool.push(...QUESTIONS[r][stage])
-    return getShuffledDeck([...new Set(pool)], 'wnrs')
+    return getShuffledDeck(withMinimumContent(pool, CONVERSATION_SUPPLEMENT), 'wnrs')
   }
-  return getShuffledDeck([...QUESTIONS[relationship][stage]], 'wnrs')
+  return getShuffledDeck(STRANGERS_DECKS[`${relationship}/${stage}`], 'wnrs')
 }
 
 function buildDeck(relationship: Relationship, journey: Journey, deckSize: number, customCards: string[]): { questions: string[]; stageBreaks: { stage: Stage; start: number; end: number }[] } {
@@ -249,7 +260,7 @@ function buildDeck(relationship: Relationship, journey: Journey, deckSize: numbe
     const stage = stages[si]
     const stageAI = getQuestions(relationship, stage).slice(0, perStage)
     const stageCustom = customCards.slice(si * customPerStage, (si + 1) * customPerStage)
-    const stageAll = shuffle([...stageCustom, ...stageAI])
+    const stageAll = createSessionDeck(stageAI, { customCards: stageCustom })
     const start = currentIdx
     allQuestions.push(...stageAll)
     currentIdx += stageAll.length
@@ -279,6 +290,7 @@ function WNRSCard({ question, stage, flipped, onFlip }: { question: string; stag
     <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
       onClick={!flipped ? onFlip : undefined}
+      data-sound={!flipped ? 'card.flip' : undefined}
       className="game-card" style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer' }}
     >
       <div style={{
@@ -388,7 +400,7 @@ function SelectionScreen<T extends string>({ title, options, onSelect }: {
                 onClick={() => setTimeout(() => onSelect(opt.id), 80)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
-                  background: isH ? '#1e1e22' : '#111113',
+                  background: isH ? '#1e1e22' : '#070708',
                   border: '1px solid', borderColor: isH ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '12px', height: '56px', cursor: 'pointer',
                   transform: isP ? 'scale(0.97)' : isH ? 'translateY(-2px)' : 'translateY(0)',
@@ -442,7 +454,7 @@ function JourneySelect({ onSelect }: { onSelect: (j: Journey) => void }) {
                 onClick={() => setTimeout(() => onSelect(j.id), 80)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '14px',
-                  background: isH ? '#1e1e22' : '#111113',
+                  background: isH ? '#1e1e22' : '#070708',
                   border: isFull ? `1px solid ${WNRS_GREEN}44` : '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '12px', padding: '14px 16px', cursor: 'pointer',
                   transform: isP ? 'scale(0.97)' : isH ? 'translateY(-2px)' : 'translateY(0)',
@@ -492,7 +504,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, stage, 
           </p>
         </div>
 
-        <div style={{ background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
+        <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
           {[
             { count: totalCards, label: 'CARDS' },
             { count: skipCount, label: 'SKIPPED' },
@@ -522,7 +534,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, stage, 
 
         <div className="done-btns" style={{ display: 'flex', gap: '8px' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>
-          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>PLAY AGAIN</button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -575,19 +587,20 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, stage, 
 
 /* ─── Root ─── */
 type Step = 'relationship' | 'playerSetup' | 'journey' | 'deckSize' | 'customCards' | 'getReady' | 'game'
+const STEPS: readonly Step[] = ['relationship', 'playerSetup', 'journey', 'deckSize', 'customCards', 'getReady', 'game']
 
 export default function WNRSGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('relationship')
-  const [relationship, setRelationship] = useState<Relationship>('friends')
-  const [journey, setJourney] = useState<Journey>('full')
-  const [players, setPlayers] = useState<Player[]>([])
-  const [totalCards, setTotalCards] = useState(0)
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [skipCount, setSkipCount] = useState(0)
-  const [questions, setQuestions] = useState<string[]>([])
-  const [stageBreaks, setStageBreaks] = useState<{ stage: Stage; start: number; end: number }[]>([])
-  const [customCards, setCustomCards] = useState<string[]>([])
+  const [step, setStep] = useGameStep<Step>('wnrs', 'relationship', STEPS)
+  const [relationship, setRelationship] = usePersistentGameState<Relationship>('wnrs', 'relationship', 'friends')
+  const [journey, setJourney] = usePersistentGameState<Journey>('wnrs', 'journey', 'full')
+  const [players, setPlayers] = usePersistentGameState<Player[]>('wnrs', 'players', [])
+  const [totalCards, setTotalCards] = usePersistentGameState('wnrs', 'totalCards', 0)
+  const [cardIndex, setCardIndex] = usePersistentGameState('wnrs', 'cardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('wnrs', 'playerIndex', 0)
+  const [skipCount, setSkipCount] = usePersistentGameState('wnrs', 'skipCount', 0)
+  const [questions, setQuestions] = usePersistentGameState<string[]>('wnrs', 'questions', [])
+  const [stageBreaks, setStageBreaks] = usePersistentGameState<{ stage: Stage; start: number; end: number }[]>('wnrs', 'stageBreaks', [])
+  const [customCards, setCustomCards] = usePersistentGameState<string[]>('wnrs', 'customCards', [])
 
   const currentPlayer = players.length > 0 ? players[playerIndex % players.length] : null
   const currentQuestion = questions[cardIndex] ?? ''
@@ -635,7 +648,7 @@ export default function WNRSGame({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="wnrs" />
 
       {step === 'relationship' && (
         <SelectionScreen title="Who Are You With?" options={RELATIONSHIP_OPTIONS} onSelect={id => { setRelationship(id); setStep('playerSetup') }} />

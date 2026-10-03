@@ -17,9 +17,17 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
   const hasInput = input.trim().length > 0
   const canAdd = cards.length < maxCards
 
+  const isDuplicate = (text: string, ignoredIndex = -1) => {
+    const normalized = text.trim().replace(/\s+/g, ' ').toLocaleLowerCase()
+    return cards.some((card, index) => (
+      index !== ignoredIndex
+      && card.trim().replace(/\s+/g, ' ').toLocaleLowerCase() === normalized
+    ))
+  }
+
   const addCard = () => {
     const text = input.trim()
-    if (!text || !canAdd) return
+    if (!text || !canAdd || isDuplicate(text)) return
     setCards(prev => [...prev, text])
     setInput('')
     inputRef.current?.focus()
@@ -35,7 +43,7 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
 
   const commitEdit = () => {
     const text = editValue.trim()
-    if (text && editingIdx !== null)
+    if (text && editingIdx !== null && !isDuplicate(text, editingIdx))
       setCards(prev => prev.map((c, i) => i === editingIdx ? text : c))
     setEditingIdx(null)
     setEditValue('')
@@ -61,7 +69,7 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
             Add your own questions (optional). Max {maxCards} cards.
           </p>
           {cards.length > 0 && (
-            <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.3)', margin: 0, letterSpacing: '0.08em' }}>
+            <p aria-live="polite" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.3)', margin: 0, letterSpacing: '0.08em' }}>
               {cards.length} / {maxCards} CARDS
             </p>
           )}
@@ -69,8 +77,8 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '280px', overflowY: 'auto' }}>
           {cards.map((c, i) => (
-            <div key={i} className="stagger-item" style={{
-              background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+            <div key={i} className="stagger-item setup-card-row" style={{
+              background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
               borderRadius: '12px', minHeight: '56px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px',
             }}>
@@ -90,12 +98,12 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
                     onChange={e => setEditValue(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') commitEdit(); if (e.key === 'Escape') setEditingIdx(null) }}
                     onBlur={commitEdit}
-                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#fff', flex: 1 }}
+                    style={{ background: 'none', border: 'none', outline: 'none', fontFamily: "'Satoshi', sans-serif", fontSize: '15px', color: '#fff', flex: 1 }}
                   />
                 ) : (
                   <span
                     onClick={() => startEdit(i)}
-                    style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.8)', cursor: 'text', flex: 1, lineHeight: 1.4 }}
+                    style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.8)', cursor: 'text', flex: 1, lineHeight: 1.4 }}
                   >
                     {c}
                   </span>
@@ -111,8 +119,9 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
 
           {canAdd && (
             <div
+              className="setup-card-row"
               style={{
-                background: '#111113', border: '1px dashed rgba(255,255,255,0.1)',
+                background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
                 borderRadius: '12px', minHeight: '56px',
                 display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text',
               }}
@@ -137,9 +146,10 @@ export default function CustomCards({ maxCards, onBack, onNext }: Props) {
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') addCard() }}
                 placeholder="Type a question..."
+                aria-label="Custom card question"
                 style={{
                   background: 'none', border: 'none', outline: 'none',
-                  fontFamily: "'Inter', sans-serif",
+                  fontFamily: "'Satoshi', sans-serif",
                   fontSize: '15px', color: '#fff', flex: 1,
                 }}
               />

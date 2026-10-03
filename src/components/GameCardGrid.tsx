@@ -28,16 +28,17 @@ const MOBILE_CARDS: Record<string, string> = {
 }
 
 function useIsMobile(breakpoint = 768) {
+  const query = `(max-width: ${breakpoint}px), (max-height: 500px) and (orientation: landscape)`
   const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth <= breakpoint : false
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false
   )
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const mq = window.matchMedia(query)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     setIsMobile(mq.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
-  }, [breakpoint])
+  }, [query])
   return isMobile
 }
 
@@ -358,8 +359,12 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
  */
 function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?: () => void; containerWidth: number }) {
   const scale = containerWidth / card.w
+  const label = card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
   return (
-    <div
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`Play ${label}`}
       className="browse-mobile-card-scaled"
       style={{
         width: `${containerWidth}px`,
@@ -369,6 +374,10 @@ function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?
         position: 'relative',
         cursor: onClick ? 'pointer' : 'default',
         WebkitTapHighlightColor: 'transparent',
+        padding: 0,
+        border: 0,
+        background: 'transparent',
+        textAlign: 'initial',
       }}
     >
       <div style={{
@@ -377,7 +386,31 @@ function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?
         transform: `scale(${scale})`,
         transformOrigin: 'top left',
       }}>
-        {card.render(onClick)}
+        {card.render()}
+      </div>
+    </button>
+  )
+}
+
+/** Reuses the exact Browse Games artwork as a compact, non-interactive preview. */
+export function GameCardPreview({ gameId }: { gameId: string }) {
+  const card = GAME_CARDS(() => {}, () => {}, () => {}).find(item => item.id === gameId)
+  if (!card) return null
+
+  const maxWidth = 170
+  const maxHeight = 132
+  const scale = Math.min(maxWidth / card.w, maxHeight / card.h)
+  const width = card.w * scale
+  const height = card.h * scale
+
+  return (
+    <div
+      className="multiplayer-game-preview"
+      aria-hidden="true"
+      style={{ width, height, position: 'relative', overflow: 'hidden', borderRadius: `${9 * scale}px`, alignSelf: 'center', flexShrink: 0 }}
+    >
+      <div style={{ width: card.w, height: card.h, transform: `scale(${scale})`, transformOrigin: 'top left', pointerEvents: 'none' }}>
+        {card.render()}
       </div>
     </div>
   )
@@ -468,10 +501,13 @@ export function BrowseCardGrid(props: BrowseGridProps) {
             const isExiting = exitingIds.has(card.id)
             const onClick = getCardOnClick(card, props)
 
+            const CardWrapper = onClick ? 'button' : 'div'
+            const label = card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
             return (
-              <div
+              <CardWrapper
                 key={`${card.id}-${staggerKey}`}
                 className="browse-card-wrap"
+                {...(onClick ? { type: 'button' as const, onClick, 'aria-label': `Play ${label}` } : {})}
                 style={{
                   width: `${card.w}px`,
                   height: `${card.h}px`,
@@ -479,13 +515,17 @@ export function BrowseCardGrid(props: BrowseGridProps) {
                   animation: isExiting
                     ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
                     : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 40}ms both`,
+                  padding: 0,
+                  border: 0,
+                  background: 'transparent',
+                  textAlign: 'initial',
                 }}
               >
                 {card.playable && (
                   <div className="play-badge" aria-hidden="true">▶ PLAY</div>
                 )}
-                {card.render(onClick)}
-              </div>
+                {card.render()}
+              </CardWrapper>
             )
           })}
         </div>

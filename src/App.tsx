@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
 import QuickPlay from './QuickPlay'
@@ -19,23 +19,27 @@ import SipOrSpillGame from './SipOrSpillGame'
 import DoOrDrinkGame from './DoOrDrinkGame'
 import IcebreakerGame from './IcebreakerGame'
 import RedFlagGreenFlagGame from './RedFlagGreenFlagGame'
-
-type Screen =
-  | 'home' | 'browse' | 'quick-play'
-  | 'lnt-select' | 'late-night-talks'
-  | 'dtc-select' | 'dinner-table'
-  | 'you-laugh'
-  | 'never-have-i-ever'
-  | 'charades'
-  | 'truth-or-dare' | 'spicy-starters'
-  | 'lets-reconnect' | 'everyday-conversations' | 'wnrs' | 'put-a-finger-down'
-  | 'take-a-sip' | 'sip-or-spill' | 'do-or-drink'
-  | 'icebreaker' | 'red-flag-green-flag'
+import { screenFromLocation, urlForScreen, type Screen } from './navigation'
+import { usePersistentGameState } from './hooks/usePersistentGameState'
+import PlayTogether from './multiplayer/PlayTogether'
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>('home')
-  const lntModeRef = useRef('couples')
-  const dtcModeRef = useRef('date-night')
+  const [screen, setScreenState] = useState<Screen>(screenFromLocation)
+  const [lntMode, setLntMode] = usePersistentGameState('app', 'late-night-mode', 'couples')
+  const [dtcMode, setDtcMode] = usePersistentGameState('app', 'dinner-table-mode', 'date-night')
+
+  const setScreen = useCallback((next: Screen, replace = false) => {
+    const url = urlForScreen(next)
+    window.history[replace ? 'replaceState' : 'pushState']({ screen: next }, '', url)
+    setScreenState(next)
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [])
+
+  useEffect(() => {
+    const handlePopState = () => setScreenState(screenFromLocation())
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
 
   /* ── Quick Play: route game id to screen ── */
   const playGame = useCallback((gameId: string) => {
@@ -65,19 +69,23 @@ export default function App() {
     return <QuickPlay onBack={() => setScreen('home')} onPlay={playGame} />
   }
 
+  if (screen === 'play-together') {
+    return <PlayTogether onClose={() => setScreen('home')} />
+  }
+
   /* ── Select Game Mode: LNT ── */
   if (screen === 'lnt-select') {
     return (
       <SelectGameMode
         modes={LNT_MODES}
         onBack={() => setScreen('browse')}
-        onSelect={(mode) => { lntModeRef.current = mode; setScreen('late-night-talks') }}
+        onSelect={(mode) => { setLntMode(mode); setScreen('late-night-talks') }}
       />
     )
   }
 
   if (screen === 'late-night-talks') {
-    return <LateNightTalksGame mode={lntModeRef.current} onClose={() => setScreen('browse')} />
+    return <LateNightTalksGame mode={lntMode} onClose={() => setScreen('browse')} />
   }
 
   /* ── Select Game Mode: DTC ── */
@@ -86,13 +94,13 @@ export default function App() {
       <SelectGameMode
         modes={DTC_MODES}
         onBack={() => setScreen('browse')}
-        onSelect={(mode) => { dtcModeRef.current = mode; setScreen('dinner-table') }}
+        onSelect={(mode) => { setDtcMode(mode); setScreen('dinner-table') }}
       />
     )
   }
 
   if (screen === 'dinner-table') {
-    return <DinnerTableGame mode={dtcModeRef.current} onClose={() => setScreen('browse')} />
+    return <DinnerTableGame mode={dtcMode} onClose={() => setScreen('browse')} />
   }
 
   /* ── You Laugh You're Out ── */
@@ -201,6 +209,7 @@ export default function App() {
       onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
       onPlayYouLaugh={() => setScreen('you-laugh')}
       onBrowse={() => setScreen('browse')}
+      onPlayTogether={() => setScreen('play-together')}
     />
   )
 }

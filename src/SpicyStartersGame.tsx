@@ -1,12 +1,16 @@
 import { useState, useRef, useCallback, useEffect, type CSSProperties } from 'react'
 import { useScaledCard } from './hooks/useCardScale'
-import { GameNav, GameFooter } from './components/GameShell'
+import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import MatureContentGate from './components/MatureContentGate'
 import { shuffle, getShuffledDeck } from './utils/deckShuffle'
+import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 
 /* ─── Asset URLs ─── */
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SPICY_CARD_BG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
-const SPICY_FRONT_SVG  = '/icons/spicy-front.svg'
+const SPICY_FRONT_SVG  = '/icons/spicy-front-figma.svg'
 const SPICY_FRONT_COVER = '/icons/spicy-front-cover.svg'
 const SPICY_BACK_SVG   = '/icons/spicy-back.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
@@ -23,7 +27,7 @@ function ChiliGlyph({ style }: { style?: CSSProperties }) {
   )
 }
 
-type Player = { name: string; color: string }
+type Player = { name: string; color: string; userId?: string }
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
 /* ─── Questions by spice level ─── */
@@ -101,74 +105,24 @@ const HOT_QUESTIONS = [
 
 ]
 
+export const SPICY_QUESTION_BANKS = {
+  mild: withMinimumContent(MILD_QUESTIONS, CONVERSATION_SUPPLEMENT, 150),
+  medium: withMinimumContent(MEDIUM_QUESTIONS, CONVERSATION_SUPPLEMENT, 150),
+  hot: withMinimumContent(HOT_QUESTIONS, CONVERSATION_SUPPLEMENT, 150),
+} as const
+
 
 /* ═══════════════════════════════════════════════════════
    SCREEN 1 — Age Gate
    ═══════════════════════════════════════════════════════ */
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
-  return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      {/* Outer card with checkerboard border — matches Figma 769-35803 */}
-      <div className="card-float-up" style={{
-        width: '454px', height: '504px', borderRadius: '12px', overflow: 'hidden',
-        position: 'relative', flexShrink: 0, zIndex: 2,
-        boxShadow: '0 32px 80px rgba(183,0,18,0.4)',
-      }}>
-        {/* Pink checkerboard border background */}
-        <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-        <div style={{ position: 'absolute', left: '-33px', top: 0, width: '520px', height: '504px', overflow: 'hidden' }}>
-          <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-
-        {/* Red inner area */}
-        <div style={{
-          position: 'absolute', top: '24px', right: '24px', bottom: '24px', left: '24px',
-          background: '#b70012', overflow: 'hidden',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px',
-          padding: '32px 40px',
-        }}>
-          {/* 18+ badge */}
-          <div style={{ transform: 'rotate(-6deg)', marginBottom: '4px' }}>
-            <div style={{
-              background: '#e62a24', border: '4px solid #000', borderRadius: '9999px',
-              width: '97px', height: '96px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <span style={{ fontFamily: "'Anton', sans-serif", fontSize: '52px', color: '#fff', letterSpacing: '1px', lineHeight: 1, display: 'block', textAlign: 'center' }}>
-                18+
-              </span>
-            </div>
-          </div>
-
-          {/* Heading + text */}
-          <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', whiteSpace: 'nowrap' }}>
-            MATURE CONTENT
-          </h2>
-          <div style={{ textAlign: 'center', color: '#fff', fontSize: '14px', fontFamily: "'Satoshi', sans-serif", fontWeight: 400, lineHeight: '20px', letterSpacing: '-0.2px' }}>
-            <p style={{ margin: 0 }}>Truth or Dare includes</p>
-            <p style={{ margin: 0 }}>mature content for ages 18+</p>
-            <p style={{ margin: '10px 0 0' }}>Continue?</p>
-          </div>
-
-          {/* Buttons */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '260px', marginTop: '8px' }}>
-            <button className="game-btn" onClick={() => setTimeout(onBack, 100)} style={{ flex: 1, border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center' }}>
-              NO, GO BACK
-            </button>
-            <button className="game-btn-primary" onClick={() => setTimeout(onConfirm, 100)} style={{ flex: 1, background: '#fff', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#b70012', textAlign: 'center' }}>
-              YES, I'M 18+
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  return <MatureContentGate gameName="Spicy Starters" onBack={onBack} onConfirm={onConfirm} />
 }
 
 /* ═══════════════════════════════════════════════════════
    SCREEN 2 — How Spicy Do You Like It
    ═══════════════════════════════════════════════════════ */
-type SpiceLevel = 'mild' | 'medium' | 'hot'
+export type SpiceLevel = 'mild' | 'medium' | 'hot'
 
 function ChiliIcon() {
   return (
@@ -207,7 +161,7 @@ function HowSpicy({ onSelect }: { onSelect: (level: SpiceLevel) => void }) {
                 onClick={() => handleSelect(level)}
                 className={`spicy-option stagger-item${isSelected ? ' selected' : ''}`}
                 style={{
-                  background: isSelected ? '#1e1e22' : '#111113',
+                  background: isSelected ? '#1e1e22' : '#070708',
                   border: '1px solid transparent',
                   borderRadius: '12px', height: '56px',
                   display: 'flex', alignItems: 'center', gap: '12px',
@@ -266,8 +220,8 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
   }
 
   return (
-    <div className="screen-enter" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
-      <div style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
+    <div className="screen-enter screen-enter-setup" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '40px' }}>
+      <div className="setup-container" style={{ width: '600px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '50px', alignItems: 'center' }}>
 
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px' }}>
           Who's playing?
@@ -275,7 +229,7 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {players.map((p, i) => (
-            <div key={i} className="stagger-item" style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px' }}>
+            <div key={i} className="stagger-item setup-card-row" style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flex: 1 }}>
                 <div className="avatar-circle" style={{ width: '32px', height: '32px', background: p.color, boxShadow: '0 0 0 2.5px #ffffff' }} />
                 {editingIdx === i ? (
@@ -299,9 +253,9 @@ function PlayerSetup({ players, setPlayers, onBack, onNext, onSkip }: {
             </div>
           ))}
 
-          <div style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text' }}
+          <div className="setup-card-row" style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text' }}
             onClick={() => inputRef.current?.focus()}>
-            <button onClick={e => { e.stopPropagation(); addPlayer() }}
+            <button className="circle-control" onClick={e => { e.stopPropagation(); addPlayer() }}
               style={{ background: hasInput ? nextColor : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', maxWidth: '32px', maxHeight: '32px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0, color: hasInput ? '#fff' : 'rgba(255,255,255,0.6)', fontSize: hasInput ? '16px' : '20px', lineHeight: 1, transition: 'background 0.15s', boxShadow: hasInput ? '0 0 0 2.5px #ffffff' : 'none' }}>
               {hasInput ? '✓' : '+'}
             </button>
@@ -354,7 +308,7 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
             How many cards do you want to play?
           </p>
 
-          <div style={{ background: '#111113', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text', width: '100%', marginTop: '16px', boxSizing: 'border-box' }}
+          <div className="setup-card-row" style={{ background: '#070708', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', cursor: 'text', width: '100%', marginTop: '16px', boxSizing: 'border-box' }}
             onClick={() => inputRef.current?.focus()}>
             <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '18px', lineHeight: 1 }}>#</span>
@@ -385,7 +339,7 @@ function DeckSize({ onBack, onStart }: { onBack: () => void; onStart: (n: number
    SCREEN 5 — Get Ready
    ═══════════════════════════════════════════════════════ */
 function GetReady({ player, onReady }: { player: Player | null; onReady: () => void }) {
-  const stableOnReady = useCallback(onReady, [])
+  const stableOnReady = useCallback(onReady, [onReady])
 
   useEffect(() => {
     const id = setTimeout(stableOnReady, 2400)
@@ -393,13 +347,13 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
   }, [stableOnReady])
 
   return (
-    <div className="screen-enter" onClick={onReady} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer' }}>
+    <button className="screen-enter get-ready-screen" onClick={onReady} aria-label="Start game now" style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'pointer', border: 0, background: 'transparent' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
         <h2 style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#fff', margin: 0, textAlign: 'center', lineHeight: '45px', textTransform: 'uppercase' }}>
           Get ready...
         </h2>
         {player && (
-          <div className="stagger-item" style={{ background: '#18181b', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
+          <div className="stagger-item" style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', height: '56px', display: 'flex', alignItems: 'center', padding: '12px', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: player.color, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '18px', color: '#fff', lineHeight: 'normal', whiteSpace: 'nowrap' }}>
               {player.name.toUpperCase()}
@@ -412,16 +366,16 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
           <span className="get-ready-dot" />
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
 /* ═══════════════════════════════════════════════════════
    SCREEN 6 — Intro Card (real 3D flip)
    ═══════════════════════════════════════════════════════ */
-function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion: string }) {
+export function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion: string }) {
   const [flipped, setFlipped] = useState(false)
-  const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
+  const { wrapperStyle, cardStyle } = useScaledCard(326, 409)
 
   const handleTap = () => {
     if (flipped) return
@@ -438,12 +392,12 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
         className="intro-card-hover-wrap game-card"
         style={{ ...cardStyle, flexShrink: 0, zIndex: 2, position: 'relative' }}
       >
-        <div className="spicy-flip-container" style={{ width: '365px', height: '457px' }}>
-        <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '365px', height: '457px' }}>
+        <div className="spicy-flip-container" style={{ width: '326px', height: '409px' }}>
+        <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '326px', height: '409px' }}>
 
           {/* ── FRONT: spicy starters cover (SVG) ── */}
           <div className="spicy-flip-front">
-            <img src={SPICY_FRONT_SVG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={SPICY_FRONT_SVG} alt="Spicy Starters — conversation cards to share" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
 
           {/* ── BACK: first question card (SVG bg + text overlay) ── */}
@@ -471,9 +425,9 @@ function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion:
 /* ═══════════════════════════════════════════════════════
    SCREEN 7 — Game Cards
    ═══════════════════════════════════════════════════════ */
-type FlipPhase = 'idle' | 'out' | 'in'
+export type FlipPhase = 'idle' | 'out' | 'in'
 
-function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipPhase }) {
+export function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipPhase }) {
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
   const cls = flipPhase === 'out' ? 'game-card-flip-out'
             : flipPhase === 'in'  ? 'game-card-flip-in'
@@ -496,25 +450,46 @@ function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipP
   )
 }
 
-function GameScreen({ questions, players, totalCards, onClose }: {
+function GameScreen({ questions, players, totalCards, cardIndex, playerIndex, skipCount, onAdvance, onClose, onPlayAgain }: {
   questions: string[]
   players: Player[]
   totalCards: number
+  cardIndex: number
+  playerIndex: number
+  skipCount: number
+  onAdvance: (skipped: boolean) => void
   onClose: () => void
+  onPlayAgain: () => void
 }) {
-  const [idx, setIdx] = useState(0)
-  const [playerIdx, setPlayerIdx] = useState(0)
+  const multiplayer = useMultiplayerSession()
   const [flipPhase, setFlipPhase] = useState<FlipPhase>('idle')
-  const [displayIdx, setDisplayIdx] = useState(0)  // what's actually shown
-  const [skipCount, setSkipCount] = useState(0)
+  const [displayIdx, setDisplayIdx] = useState(cardIndex)
 
   const flippingRef = useRef(false)
-  const playersRef  = useRef(players)
-  useEffect(() => { playersRef.current = players }, [players])
+
+  // The room's card index is authoritative. This also animates card changes
+  // initiated on another player's device instead of keeping a local deck.
+  useEffect(() => {
+    if (cardIndex === displayIdx || flippingRef.current) return
+    flippingRef.current = true
+    setFlipPhase('out')
+    const swapTimer = window.setTimeout(() => {
+      setDisplayIdx(cardIndex)
+      setFlipPhase('in')
+      window.setTimeout(() => {
+        setFlipPhase('idle')
+        flippingRef.current = false
+      }, 300)
+    }, 180)
+    return () => window.clearTimeout(swapTimer)
+  }, [cardIndex, displayIdx])
+
+  const currentPlayer = players.length > 0 ? players[playerIndex] : null
+  const canAdvance = !multiplayer || !currentPlayer?.userId || currentPlayer.userId === multiplayer.currentUserId
 
   const advance = useCallback((skipped = false) => {
+    if (!canAdvance) return
     if (flippingRef.current) return
-    if (skipped) setSkipCount(c => c + 1)
     flippingRef.current = true
 
     // Phase 1 — flip out
@@ -522,12 +497,8 @@ function GameScreen({ questions, players, totalCards, onClose }: {
 
     setTimeout(() => {
       // Mid-flip: update content (card is edge-on, invisible)
-      setIdx(i => i + 1)
-      setDisplayIdx(i => i + 1)
-      setPlayerIdx(i => {
-        const len = playersRef.current.length
-        return len > 0 ? (i + 1) % len : 0
-      })
+      onAdvance(skipped)
+      setDisplayIdx(cardIndex + 1)
 
       // Phase 2 — flip in
       setFlipPhase('in')
@@ -537,11 +508,10 @@ function GameScreen({ questions, players, totalCards, onClose }: {
         flippingRef.current = false
       }, 300)
     }, 180)
-  }, [])
+  }, [canAdvance, cardIndex, onAdvance])
 
-  const isDone = totalCards > 0 && idx >= totalCards
-  const currentPlayer = players.length > 0 ? players[playerIdx] : null
-  const question = questions[displayIdx % questions.length]
+  const isDone = totalCards > 0 && cardIndex >= totalCards
+  const question = questions[displayIdx]
 
   if (isDone) {
     return (
@@ -555,7 +525,7 @@ function GameScreen({ questions, players, totalCards, onClose }: {
           </p>
         </div>
 
-        <div style={{ position: 'relative', zIndex: 2, background: '#18181b', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
+        <div style={{ position: 'relative', zIndex: 2, background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px', gap: 0 }}>
           {[
             { count: totalCards,      label: 'CARDS',   cls: 'done-stat-1' },
             { count: skipCount,       label: 'SKIPPED', cls: 'done-stat-2' },
@@ -571,24 +541,15 @@ function GameScreen({ questions, players, totalCards, onClose }: {
           ))}
         </div>
 
-        <div className="done-card" style={{ position: 'relative', zIndex: 2, width: '199px', height: '200px', borderRadius: '9px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(183,0,18,0.4)', flexShrink: 0 }}>
-          <div style={{ position: 'absolute', inset: 0, background: '#df91b5' }} />
-          <div style={{ position: 'absolute', left: '-40px', top: 0, width: '260px', height: '200px', overflow: 'hidden' }}>
-            <img src={SPICY_INTRO_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div style={{ position: 'absolute', top: '13px', right: '13px', bottom: '12px', left: '11px', background: '#b70012', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ fontFamily: "'Stick', sans-serif", fontSize: '19px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>spicy{'\n'}starters</p>
-            <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '6px', color: '#df91b5', textAlign: 'center', lineHeight: 'normal', margin: '8px 0 0' }}>CONVERSATION CARDS TO SHARE</p>
-          </div>
+        <div className="done-card spicy-done-card" style={{ position: 'relative', zIndex: 2, width: '160px', height: '200px', borderRadius: '6px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(183,0,18,0.4)', flexShrink: 0 }}>
+          <img src={SPICY_FRONT_SVG} alt="Spicy Starters — conversation cards to share" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
 
         <div className="done-btns" style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px' }}>
           <button className="game-btn" onClick={onClose} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em', boxShadow: '0 10px 24px rgba(0,0,0,0.25)' }}>
             BROWSE GAMES
           </button>
-          <button className="game-btn-primary" onClick={() => { setIdx(0); setDisplayIdx(0); setPlayerIdx(0); setSkipCount(0); setFlipPhase('idle') }} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>
-            PLAY AGAIN
-          </button>
+          <button className="game-btn-primary" onClick={onPlayAgain} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}><PlayAgainLabel /></button>
         </div>
       </div>
     )
@@ -610,17 +571,17 @@ function GameScreen({ questions, players, totalCards, onClose }: {
       <SpicyCard question={question} flipPhase={flipPhase} />
 
       {totalCards > 0 && (
-        <p key={`counter-${idx}`} className="counter-in" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
-          CARD {idx + 1} OF {totalCards}
+        <p key={`counter-${cardIndex}`} className="counter-in" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
+          CARD {cardIndex + 1} OF {totalCards}
         </p>
       )}
 
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-        <button className="game-btn" onClick={() => advance(true)} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}>
+        <button className="game-btn" disabled={!canAdvance} onClick={() => advance(true)} style={{ border: `1px solid ${canAdvance ? '#fff' : 'rgba(255,255,255,.2)'}`, background: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: canAdvance ? '#fff' : 'rgba(255,255,255,.35)', textAlign: 'center', boxShadow: '0 10px 24px rgba(0,0,0,0.25)', letterSpacing: '0.05em', cursor: canAdvance ? 'pointer' : 'not-allowed' }}>
           SKIP FOR NOW
         </button>
-        <button className="game-btn-primary" onClick={() => advance(false)} style={{ background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}>
-          NEXT
+        <button className={canAdvance ? 'game-btn-primary' : ''} disabled={!canAdvance} onClick={() => advance(false)} style={{ background: canAdvance ? '#dc2827' : '#2a2a2a', border: 'none', borderRadius: '999px', padding: '12px 18px', width: '160px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: canAdvance ? '#fff' : 'rgba(255,255,255,.35)', textAlign: 'center', letterSpacing: '0.05em', cursor: canAdvance ? 'pointer' : 'not-allowed' }}>
+          {canAdvance ? 'NEXT' : `WAITING FOR ${currentPlayer?.name.toUpperCase() ?? 'PLAYER'}`}
         </button>
       </div>
     </div>
@@ -631,15 +592,17 @@ function GameScreen({ questions, players, totalCards, onClose }: {
    ROOT COMPONENT
    ═══════════════════════════════════════════════════════ */
 type Step = 'ageGate' | 'howSpicy' | 'playerSetup' | 'deckSize' | 'getReady' | 'intro' | 'game'
+const STEPS: readonly Step[] = ['ageGate', 'howSpicy', 'playerSetup', 'deckSize', 'getReady', 'intro', 'game']
 
 export default function SpicyStartersGame({ onClose }: { onClose: () => void }) {
-  const [step, setStep]           = useState<Step>('ageGate')
-  const [spiceLevel, setSpiceLevel] = useState<SpiceLevel>('medium')
-  const [players, setPlayers]     = useState<Player[]>([])
-  const [totalCards, setTotalCards] = useState(0)
-  const [cardIndex, setCardIndex] = useState(0)
-  const [playerIndex, setPlayerIndex] = useState(0)
-  const [questions, setQuestions] = useState<string[]>(() => getShuffledDeck(MEDIUM_QUESTIONS, 'spicy-starters'))
+  const [step, setStep]           = useGameStep<Step>('spicy-starters', 'ageGate', STEPS)
+  const [spiceLevel, setSpiceLevel] = usePersistentGameState<SpiceLevel>('spicy-starters', 'spiceLevel', 'medium')
+  const [players, setPlayers]     = usePersistentGameState<Player[]>('spicy-starters', 'players', [])
+  const [totalCards, setTotalCards] = usePersistentGameState('spicy-starters', 'totalCards', 0)
+  const [cardIndex, setCardIndex] = usePersistentGameState('spicy-starters', 'cardIndex', 0)
+  const [playerIndex, setPlayerIndex] = usePersistentGameState('spicy-starters', 'playerIndex', 0)
+  const [skipCount, setSkipCount] = usePersistentGameState('spicy-starters', 'skipCount', 0)
+  const [questions, setQuestions] = usePersistentGameState<string[]>('spicy-starters', 'questions', () => getShuffledDeck(SPICY_QUESTION_BANKS.medium, 'spicy-starters'))
 
   const currentPlayer = players.length > 0 ? players[playerIndex] : null
 
@@ -647,7 +610,7 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
 
   const handleSelectSpice = (level: SpiceLevel) => {
     setSpiceLevel(level)
-    const bank = level === 'mild' ? MILD_QUESTIONS : level === 'hot' ? HOT_QUESTIONS : MEDIUM_QUESTIONS
+    const bank = SPICY_QUESTION_BANKS[level]
     setQuestions(getShuffledDeck(bank, 'spicy-starters'))
     setStep('playerSetup')
   }
@@ -664,9 +627,23 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
     setStep('intro')
   }, [])
 
+  const handlePlayAgain = useCallback(() => {
+    setCardIndex(0)
+    setPlayerIndex(0)
+    setTotalCards(0)
+    setSkipCount(0)
+    setStep('howSpicy')
+  }, [setCardIndex, setPlayerIndex, setSkipCount, setStep, setTotalCards])
+
+  const handleAdvance = useCallback((skipped: boolean) => {
+    if (skipped) setSkipCount(count => count + 1)
+    setCardIndex(index => index + 1)
+    setPlayerIndex(index => players.length > 0 ? (index + 1) % players.length : 0)
+  }, [players.length, setCardIndex, setPlayerIndex, setSkipCount])
+
   return (
     <div className="game-fullscreen">
-      <GameNav onBack={onClose} />
+      <GameNav onBack={onClose} gameId="spicy-starters" />
 
       {step === 'ageGate' && (
         <AgeGate onBack={onClose} onConfirm={() => setStep('howSpicy')} />
@@ -702,7 +679,12 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
           questions={questions}
           players={players}
           totalCards={totalCards}
+          cardIndex={cardIndex}
+          playerIndex={playerIndex}
+          skipCount={skipCount}
+          onAdvance={handleAdvance}
           onClose={onClose}
+          onPlayAgain={handlePlayAgain}
         />
       )}
 
