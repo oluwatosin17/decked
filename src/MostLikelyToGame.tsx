@@ -93,7 +93,6 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
   let content: React.ReactNode
   if (step === 'playerSetup') content = <PlayerSetup minPlayers={2} initialPlayers={players} onSkip={onClose} onNext={nextPlayers => { setPlayers(nextPlayers); setStep('categories') }} />
   else if (step === 'categories') content = <Screen>
-    <img src="/icons/party.svg" alt="" aria-hidden="true" style={{ width: 56, height: 56, objectFit: 'contain' }} />
     <h1 style={title}>Choose your categories</h1>
     <p style={copy}>Pick one or more moods. Each category contains 50 unique cards.</p>
     <div style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
@@ -108,7 +107,6 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
     <Button disabled={!isHost || categories.length === 0} onClick={() => setStep('deckSize')}>CONTINUE</Button>
   </Screen>
   else if (step === 'deckSize') content = <Screen>
-    <MostLikelyArtwork compact />
     <h1 style={title}>Deck size</h1>
     <p style={copy}>How many cards would you like to play?</p>
     <label style={{ ...copy, width: '100%', textAlign: 'left' }}>Number of cards<input type="number" min={5} max={100} value={deckSize} onChange={event => setDeckSize(Math.max(5, Math.min(100, Number(event.target.value))))} style={{ ...surface, width: '100%', height: 56, marginTop: 8, padding: '0 16px', boxSizing: 'border-box', color: '#fff', fontFamily: "'Satoshi',sans-serif", fontSize: 18 }} /></label>
