@@ -248,15 +248,15 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 348, h: 348, playable: true,
+    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 310, h: 387.5, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <TwoTruthsBluffArtwork />
+        <TwoTruthsBluffArtwork portrait />
       </div>
     ),
   },
   {
-    id: 'most-likely-to', categories: ['icebreakers', 'couples', 'party-games'], w: 278, h: 348, playable: true,
+    id: 'most-likely-to', categories: ['icebreakers', 'couples', 'party-games'], w: 310, h: 387.5, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork /></div>,
   },
 ]
@@ -319,7 +319,10 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('you-laugh')}
         {getEl('do-or-drink')}
       </>, 'flex-start')}
-      {row(<>{getEl('two-truths-bluff', onPlayTwoTruthsBluff)}{getEl('most-likely-to', onPlayMostLikelyTo)}</>, 'flex-start')}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 310px)', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        {getEl('two-truths-bluff', onPlayTwoTruthsBluff)}
+        {getEl('most-likely-to', onPlayMostLikelyTo)}
+      </div>
     </div>
   )
 }
@@ -549,6 +552,9 @@ export function BrowseCardGrid(props: BrowseGridProps) {
               </CardWrapper>
             )
           })}
+          {Array.from({ length: 4 - row.length }, (_, index) => (
+            <div key={`spacer-${index}`} aria-hidden="true" style={{ width: `${row[0]?.w ?? 278}px`, height: 0, flexShrink: 0 }} />
+          ))}
         </div>
       ))}
     </div>

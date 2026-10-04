@@ -12,9 +12,9 @@ type Step = 'playerSetup' | 'write' | 'handoff' | 'guess' | 'reveal' | 'done'
 const GAME_ID = 'two-truths-bluff'
 const STEPS: readonly Step[] = ['playerSetup', 'write', 'handoff', 'guess', 'reveal', 'done']
 
-export function TwoTruthsBluffArtwork({ className = '' }: { className?: string }) {
+export function TwoTruthsBluffArtwork({ className = '', portrait = false }: { className?: string; portrait?: boolean }) {
   return (
-    <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', aspectRatio: '1', overflow: 'hidden' }}>
+    <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', width: portrait ? '100%' : undefined, height: portrait ? '100%' : undefined, aspectRatio: portrait ? '4 / 5' : '1', overflow: 'hidden' }}>
       <img
         src="/assets/games/two-truths-bluff-approved.png"
         alt=""
