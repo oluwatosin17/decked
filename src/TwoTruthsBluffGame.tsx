@@ -172,7 +172,7 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
   </Screen>
   }
 
-  return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}><GameNav onBack={onClose} /><main style={{ flex: 1, display: 'flex' }}>{content}</main><GameFooter /><style>{`.ttb-artwork{display:block;width:min(420px,82vw);aspect-ratio:1}.ttb-artwork-small{width:min(220px,48vw)}@media(max-width:768px){.ttb-artwork-small{width:150px}.ttb-game-screen{padding:28px 16px 48px!important;gap:18px!important}}`}</style></div>
+  return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}><GameNav onBack={onClose} gameId={GAME_ID} /><main style={{ flex: 1, display: 'flex' }}>{content}</main><GameFooter /><style>{`.ttb-artwork{display:block;width:min(420px,82vw);aspect-ratio:1}.ttb-artwork-small{width:min(220px,48vw)}@media(max-width:768px){.ttb-artwork-small{width:150px}.ttb-game-screen{padding:28px 16px 48px!important;gap:18px!important}}`}</style></div>
 }
 
 function Screen({ children }: { children: React.ReactNode }) {
