@@ -1,6 +1,6 @@
 export type RoomStatus = 'lobby' | 'playing' | 'finished'
 export type PromptType = 'truth' | 'dare'
-export type MultiplayerGameId = 'truth-or-dare' | 'spicy-starters' | 'never-have-i-ever' | 'late-night-talks' | 'dinner-table' | 'icebreaker' | 'everyday-conversation' | 'reconnect' | 'red-flag-green-flag' | 'charades' | 'strangers' | 'finger-down' | 'take-a-sip' | 'sip-or-spill' | 'you-laugh' | 'do-or-drink'
+export type MultiplayerGameId = 'truth-or-dare' | 'spicy-starters' | 'never-have-i-ever' | 'late-night-talks' | 'dinner-table' | 'icebreaker' | 'everyday-conversation' | 'reconnect' | 'red-flag-green-flag' | 'charades' | 'strangers' | 'finger-down' | 'take-a-sip' | 'sip-or-spill' | 'you-laugh' | 'do-or-drink' | 'two-truths-bluff'
 export type MultiplayerAnswer = 'have' | 'never' | 'red' | 'depends' | 'green'
 
 export interface MultiplayerGameState {

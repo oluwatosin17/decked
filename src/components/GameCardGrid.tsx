@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { TwoTruthsBluffArtwork } from '../TwoTruthsBluffGame'
 
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
@@ -58,6 +59,14 @@ export const GAME_CARDS = (
   onPlaySpicyStarters: () => void,
   onPlayLateNightTalks?: () => void,
 ): CardDef[] => [
+  {
+    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 348, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
+        <TwoTruthsBluffArtwork />
+      </div>
+    ),
+  },
   {
     id: 'truth-or-dare', categories: ['couples'], w: 345.716, h: 348, playable: true,
     render: (onClick) => (
@@ -328,6 +337,7 @@ interface BrowseGridProps {
   onPlayDoOrDrink?: () => void
   onPlayIcebreaker?: () => void
   onPlayRedFlagGreenFlag?: () => void
+  onPlayTwoTruthsBluff?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -348,6 +358,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'do-or-drink': handlers.onPlayDoOrDrink,
     'icebreaker': handlers.onPlayIcebreaker,
     'red-flag-green-flag': handlers.onPlayRedFlagGreenFlag,
+    'two-truths-bluff': handlers.onPlayTwoTruthsBluff,
   }
   return map[card.id]
 }

@@ -29,6 +29,7 @@ import TakeASipGame from '../TakeASipGame'
 import SipOrSpillGame from '../SipOrSpillGame'
 import LaughYouAreOutGame from '../LaughYouAreOutGame'
 import DoOrDrinkGame from '../DoOrDrinkGame'
+import TwoTruthsBluffGame from '../TwoTruthsBluffGame'
 import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startMultiGame, touchRoom } from './roomApi'
 import { ensureAnonymousUser, multiplayerConfigured, supabase } from './supabase'
 import { MULTIPLAYER_GAMES } from './gameConfig'
@@ -87,6 +88,7 @@ function Entry({ onCreate, onJoin, busy, error }: {
       onPlaySipOrSpill={() => selectGame('sip-or-spill')}
       onPlayYouLaugh={() => selectGame('you-laugh')}
       onPlayDoOrDrink={() => selectGame('do-or-drink')}
+      onPlayTwoTruthsBluff={() => selectGame('two-truths-bluff')}
     />
   </div>
 
@@ -247,6 +249,7 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   'sip-or-spill': 'sip-or-spill',
   'you-laugh': 'you-laugh',
   'do-or-drink': 'do-or-drink',
+  'two-truths-bluff': 'two-truths-bluff',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -266,6 +269,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'sip-or-spill': 'categories',
   'you-laugh': 'roundLength',
   'do-or-drink': 'categories',
+  'two-truths-bluff': 'write',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -285,6 +289,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'sip-or-spill': 'deckSize',
   'you-laugh': 'roundLength',
   'do-or-drink': 'deckSize',
+  'two-truths-bluff': 'write',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -304,6 +309,7 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   'sip-or-spill': ['game'],
   'you-laugh': ['gameplay', 'whoLaughed', 'livesRemaining', 'winner'],
   'do-or-drink': ['game'],
+  'two-truths-bluff': ['write', 'guess', 'reveal', 'done'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -321,12 +327,14 @@ const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
   'take-a-sip': 'game',
   'sip-or-spill': 'game',
   'do-or-drink': 'game',
+  'two-truths-bluff': 'write',
 }
 
 const TURN_CONTROLLED_GAMES = new Set<MultiplayerGameId>([
   'spicy-starters', 'late-night-talks', 'dinner-table', 'icebreaker',
   'everyday-conversation', 'reconnect', 'strangers', 'finger-down',
   'take-a-sip', 'sip-or-spill', 'do-or-drink',
+  'two-truths-bluff',
 ])
 
 function GuestSetupWaiting({ room, onClose }: { room: MultiplayerRoom; onClose: () => void }) {
@@ -476,6 +484,7 @@ function SharedOriginalGame({ room, currentUserId, onlineIds, onClose }: { room:
     case 'sip-or-spill': game = <SipOrSpillGame onClose={onClose} />; break
     case 'you-laugh': game = <LaughYouAreOutGame onClose={onClose} />; break
     case 'do-or-drink': game = <DoOrDrinkGame onClose={onClose} />; break
+    case 'two-truths-bluff': game = <TwoTruthsBluffGame onClose={onClose} />; break
   }
 
   return <SharedSessionProvider value={shared}>

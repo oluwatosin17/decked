@@ -42,10 +42,11 @@ interface Props {
   onPlayDoOrDrink?: () => void
   onPlayIcebreaker?: () => void
   onPlayRedFlagGreenFlag?: () => void
+  onPlayTwoTruthsBluff?: () => void
   onQuickPlay?: () => void
 }
 
-export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onPlayRedFlagGreenFlag, onQuickPlay }: Props) {
+export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onPlayRedFlagGreenFlag, onPlayTwoTruthsBluff, onQuickPlay }: Props) {
   const [active, setActive] = useState<Category>('all')
 
   return (
@@ -176,6 +177,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             onPlayDoOrDrink={onPlayDoOrDrink}
             onPlayIcebreaker={onPlayIcebreaker}
             onPlayRedFlagGreenFlag={onPlayRedFlagGreenFlag}
+            onPlayTwoTruthsBluff={onPlayTwoTruthsBluff}
           />
         </div>
       </main>

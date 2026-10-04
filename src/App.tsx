@@ -19,6 +19,7 @@ import SipOrSpillGame from './SipOrSpillGame'
 import DoOrDrinkGame from './DoOrDrinkGame'
 import IcebreakerGame from './IcebreakerGame'
 import RedFlagGreenFlagGame from './RedFlagGreenFlagGame'
+import TwoTruthsBluffGame from './TwoTruthsBluffGame'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
 import PlayTogether from './multiplayer/PlayTogether'
@@ -60,6 +61,7 @@ export default function App() {
       'do-or-drink': 'do-or-drink',
       'icebreaker': 'icebreaker',
       'red-flag-green-flag': 'red-flag-green-flag',
+      'two-truths-bluff': 'two-truths-bluff',
     }
     setScreen(map[gameId] ?? 'browse')
   }, [])
@@ -172,6 +174,10 @@ export default function App() {
     return <RedFlagGreenFlagGame onClose={() => setScreen('browse')} />
   }
 
+  if (screen === 'two-truths-bluff') {
+    return <TwoTruthsBluffGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
@@ -194,6 +200,7 @@ export default function App() {
         onPlayDoOrDrink={() => setScreen('do-or-drink')}
         onPlayIcebreaker={() => setScreen('icebreaker')}
         onPlayRedFlagGreenFlag={() => setScreen('red-flag-green-flag')}
+        onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
       />
     )
   }
