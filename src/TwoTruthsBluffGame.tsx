@@ -14,15 +14,19 @@ const STEPS: readonly Step[] = ['playerSetup', 'write', 'handoff', 'guess', 'rev
 
 export function TwoTruthsBluffArtwork({ className = '' }: { className?: string }) {
   return (
-    <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', aspectRatio: '1', overflow: 'hidden', containerType: 'inline-size' }}>
-      <img src="/icons/two-truths-bluff/shape-web-1.svg" alt="" style={{ position: 'absolute', inset: '3.6%', width: '92.8%', height: '92.8%' }} />
-      <img src="/icons/two-truths-bluff/shape-web-3.svg" alt="" style={{ position: 'absolute', left: '18.81%', top: '18.06%', width: '62.49%', height: '62.49%' }} />
-      <img src="/icons/two-truths-bluff/shape-web-2.svg" alt="" style={{ position: 'absolute', left: '19.28%', top: '18.67%', width: '61.44%', height: '61.44%' }} />
-      <div className="font-slackey" style={{ position: 'absolute', inset: 0, color: '#8e7905', lineHeight: 1, whiteSpace: 'nowrap' }}>
-        <span style={{ position: 'absolute', left: '27.43%', top: '38.79%', fontSize: '13.97cqw' }}>2</span>
-        <span style={{ position: 'absolute', left: '35.25%', top: '43.09%', fontSize: '8.16cqw' }}>TRUTHS</span>
-        <span style={{ position: 'absolute', left: '26.02%', top: '50.05%', fontSize: '12.57cqw' }}>&amp;</span>
-        <span style={{ position: 'absolute', left: '35.25%', top: '51.25%', fontSize: '8.16cqw' }}>A BLUFF</span>
+    <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', width: '100%', aspectRatio: '1', overflow: 'hidden', containerType: 'inline-size' }}>
+      <div style={{ position: 'absolute', left: '12%', top: '4%', width: '76%', height: '92%', overflow: 'hidden', borderRadius: '5.5cqw', background: 'linear-gradient(145deg, #f59aaa 0%, #ef879a 100%)', boxShadow: '0 2.8cqw 5.5cqw rgba(0,0,0,.28)' }}>
+        <div style={{ position: 'absolute', left: '5.5%', right: '5.5%', top: '20%', bottom: '18%', transform: 'rotate(-4deg)', transformOrigin: 'center', filter: 'drop-shadow(1.8cqw 2cqw 0 rgba(126,43,74,.16))' }}>
+          <div className="font-staatliches" style={{ position: 'absolute', left: 0, top: 0, width: '100%', color: '#351126', lineHeight: .82, letterSpacing: '-.025em', whiteSpace: 'nowrap' }}>
+            <span style={{ display: 'inline-block', fontSize: '23cqw', verticalAlign: 'bottom' }}>2</span>
+            <span style={{ display: 'inline-block', marginLeft: '1.5cqw', fontSize: '13.8cqw', verticalAlign: 'bottom', transform: 'translateY(-1.1cqw)' }}>TRUTHS</span>
+          </div>
+          <div className="font-staatliches" style={{ position: 'absolute', left: 0, top: '46%', width: '100%', padding: '2.6cqw 1.4cqw 3.2cqw', boxSizing: 'border-box', background: '#351126', color: '#fff6e8', lineHeight: .84, letterSpacing: '-.025em', whiteSpace: 'nowrap', clipPath: 'polygon(3% 4%, 97% 0, 100% 88%, 5% 100%, 0 14%)' }}>
+            <span style={{ display: 'inline-block', fontSize: '16.5cqw', verticalAlign: 'bottom' }}>&amp;</span>
+            <span style={{ display: 'inline-block', marginLeft: '1cqw', fontSize: '13.2cqw', verticalAlign: 'bottom' }}>A BLUFF</span>
+          </div>
+        </div>
+        <span className="font-staatliches" style={{ position: 'absolute', left: 0, right: 0, bottom: '5.6%', color: '#351126', textAlign: 'center', fontSize: '4.2cqw', letterSpacing: '.28em', paddingLeft: '.28em' }}>DECKED</span>
       </div>
     </div>
   )

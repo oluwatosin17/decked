@@ -45,7 +45,7 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'sip-or-spill': { id: 'sip-or-spill', name: 'Sip or Spill', deck: unique(Object.values(SIP_OR_SPILL_DECKS).flat()), cardColor: '#fb3757', textColor: '#ffd7f7', kind: 'conversation' },
   'you-laugh': { id: 'you-laugh', name: "You Laugh, You're Out", deck: LAUGH_YOU_ARE_OUT_DECK, cardColor: '#ef3b4b', textColor: '#fff', kind: 'conversation' },
   'do-or-drink': { id: 'do-or-drink', name: 'Do or Drink', deck: unique(Object.values(DO_OR_DRINK_DECKS).flat()), cardColor: '#d1ffd5', textColor: '#5228eb', kind: 'conversation' },
-  'two-truths-bluff': { id: 'two-truths-bluff', name: 'Two Truths and a Bluff', deck: ['Player-created statements'], cardColor: '#f0de72', textColor: '#8e7905', kind: 'vote' },
+  'two-truths-bluff': { id: 'two-truths-bluff', name: 'Two Truths and a Bluff', deck: ['Player-created statements'], cardColor: '#ef879a', textColor: '#351126', kind: 'vote' },
   'most-likely-to': { id: 'most-likely-to', name: 'Who’s Most Likely To?', deck: MOST_LIKELY_DECK, cardColor: '#0759c7', textColor: '#f7f1df', kind: 'vote' },
 }
 
