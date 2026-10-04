@@ -4,7 +4,13 @@ import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
-import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { DINNER_TABLE_DATE_NIGHT_PROMPTS } from './content/decks/dinnerTableDateNight'
+import { DINNER_TABLE_FRIENDS_NIGHT_PROMPTS } from './content/decks/dinnerTableFriendsNight'
+import { DINNER_TABLE_FAMILY_PROMPTS } from './content/decks/dinnerTableFamily'
+import { DINNER_TABLE_TEAM_PROMPTS } from './content/decks/dinnerTableTeam'
+import { DINNER_TABLE_HOLIDAY_GATHERING_PROMPTS } from './content/decks/dinnerTableHolidayGathering'
+import { DINNER_TABLE_BIRTHDAY_PROMPTS } from './content/decks/dinnerTableBirthday'
+import { DINNER_TABLE_EVERYDAY_PROMPTS } from './content/decks/dinnerTableEveryday'
 
 /* ─── Assets (permanently hosted on Cloudinary) ─── */
 const DTC_BOW = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/dtc-bow.svg'
@@ -168,12 +174,27 @@ const QUESTIONS_BY_MODE: Record<string, string[]> = {
   ],
 }
 
-export const DINNER_TABLE_DECKS = Object.fromEntries(
-  Object.entries(QUESTIONS_BY_MODE).map(([mode, questions]) => [mode, withMinimumContent(questions, CONVERSATION_SUPPLEMENT)]),
-) as Record<string, string[]>
+const DINNER_TABLE_AUTHORED_DECKS: Record<string, readonly string[]> = {
+  'date-night': DINNER_TABLE_DATE_NIGHT_PROMPTS,
+  'friends-night': DINNER_TABLE_FRIENDS_NIGHT_PROMPTS,
+  family: DINNER_TABLE_FAMILY_PROMPTS,
+  team: DINNER_TABLE_TEAM_PROMPTS,
+  'holiday-gathering': DINNER_TABLE_HOLIDAY_GATHERING_PROMPTS,
+  birthday: DINNER_TABLE_BIRTHDAY_PROMPTS,
+  everyday: DINNER_TABLE_EVERYDAY_PROMPTS,
+}
+
+const DINNER_TABLE_RANDOM_MIX = Object.values(DINNER_TABLE_AUTHORED_DECKS)
+  .flatMap(deck => deck.slice(0, 43))
+  .slice(0, 300)
+
+export const DINNER_TABLE_DECKS: Record<string, readonly string[]> = {
+  ...DINNER_TABLE_AUTHORED_DECKS,
+  'random-mix': DINNER_TABLE_RANDOM_MIX,
+}
 export const DINNER_TABLE_MULTIPLAYER_DECK = Array.from(new Set(Object.values(DINNER_TABLE_DECKS).flat()))
 
-function getQuestionsForMode(mode: string): string[] {
+function getQuestionsForMode(mode: string): readonly string[] {
   return DINNER_TABLE_DECKS[mode] ?? DINNER_TABLE_DECKS['random-mix']
 }
 

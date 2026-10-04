@@ -5,47 +5,10 @@ import SelectGameMode, { NHIE_MODES } from './SelectGameMode'
 import { haptic } from './haptics'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck, shuffle } from './utils/deckShuffle'
-import { EXPERIENCE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { NEVER_HAVE_I_EVER_PROMPTS } from './content/decks/neverHaveIEver'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
-/* ─── Prompts ─── */
-const ALL_PROMPTS = [
-  "Text-stalked an ex or someone I used to talk to from a friend's phone.",
-  "Pretended to be sick to get out of plans I actually agreed to.",
-  "Googled myself and spent more than 10 minutes looking at the results.",
-  "Said 'I'm on my way' when I hadn't even left the house yet.",
-  "Liked someone's photo from years ago while deep-diving their profile.",
-  "Laughed at a joke I didn't understand just to fit in.",
-  "Eaten food I dropped on the floor after more than 5 seconds.",
-  "Cried watching a commercial or a show I claimed to not care about.",
-  "Sent a screenshot of a conversation to the exact person in the screenshot.",
-  "Blocked someone on social media and then unblocked them to check their profile.",
-  "Started a diet and quit it by noon on the first day.",
-  "Talked badly about someone and then been totally nice to their face.",
-  "Faked knowing a song by mumbling through the parts I didn't know.",
-  "Binge-watched an entire show in one day and lied about it.",
-  "Practiced what I'd say in an argument before having it.",
-  "Eaten an entire meal standing over the sink or straight from the pot.",
-  "Used 'seen it!' as an excuse not to go to something I didn't want to attend.",
-  "Taken a selfie and deleted it because I didn't look how I wanted to.",
-  "Eavesdropped on a conversation and pretended I wasn't listening.",
-  "Bought something, kept the tags on, wore it, and returned it.",
-  "Called in sick when I was completely fine and used the day for myself.",
-  "Laughed at something at the worst possible moment and couldn't stop.",
-  "Replied 'lol' to a voice note I didn't listen to.",
-  "Blamed my bad mood on being tired when it was actually something else entirely.",
-  "Rehearsed a story in my head before telling it out loud.",
-  "Said 'no more drinking' and then accepted a drink 20 minutes later.",
-  "Checked someone's location and then acted like I didn't know where they were.",
-  "Pretended my phone died to avoid a conversation.",
-  "Made up an excuse so believable I almost believed it myself.",
-  "Watched a video on someone else's phone without saying anything.",
-]
-
-export const NEVER_HAVE_I_EVER_DECK = withMinimumContent(
-  ALL_PROMPTS,
-  EXPERIENCE_SUPPLEMENT.map(experience => `Never have I ever ${experience}.`),
-)
+export const NEVER_HAVE_I_EVER_DECK = [...NEVER_HAVE_I_EVER_PROMPTS]
 
 const PURPLE = '#bf5af2'
 const playerScoreKey = (player: Player, index: number) => `${index}:${player.name}`

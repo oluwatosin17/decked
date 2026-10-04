@@ -6,8 +6,16 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { EXPERIENCE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { PUT_FINGER_RELATIONSHIPS } from './content/decks/putFingerRelationships'
+import { PUT_FINGER_FRIENDS } from './content/decks/putFingerFriends'
+import { PUT_FINGER_SPICY } from './content/decks/putFingerSpicy'
+import { PUT_FINGER_FUNNY } from './content/decks/putFingerFunny'
+import { PUT_FINGER_SCHOOL } from './content/decks/putFingerSchool'
+import { PUT_FINGER_PARTY } from './content/decks/putFingerParty'
+import { PUT_FINGER_DRINKING } from './content/decks/putFingerDrinking'
+import { PUT_FINGER_TRAVEL } from './content/decks/putFingerTravel'
+import { PUT_FINGER_WORK } from './content/decks/putFingerWork'
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -114,23 +122,7 @@ const PROMPTS: Record<Category, string[]> = {
     "Put a finger down if you've ever played beer pong and won.",
     "Put a finger down if you've ever pregamed harder than the actual event.",
   ],
-  school: [
-    "Put a finger down if you've ever cheated on a test.",
-    "Put a finger down if you've ever had a crush on a teacher.",
-    "Put a finger down if you've ever skipped school or a class.",
-    "Put a finger down if you've ever pretended to be sick to stay home.",
-    "Put a finger down if you've ever been sent to the principal's office.",
-    "Put a finger down if you've ever plagiarized an essay.",
-    "Put a finger down if you've ever cried because of a grade.",
-    "Put a finger down if you've ever pulled an all-nighter studying.",
-    "Put a finger down if you've ever fallen asleep in class.",
-    "Put a finger down if you've ever been caught passing notes.",
-    "Put a finger down if you've ever had a school bathroom breakdown.",
-    "Put a finger down if you've ever been the class clown.",
-    "Put a finger down if you've ever forgotten a homework assignment and made up an excuse.",
-    "Put a finger down if you've ever had a teacher who changed your life.",
-    "Put a finger down if you've ever been in detention.",
-  ],
+  school: [...PUT_FINGER_SCHOOL],
   work: [
     "Put a finger down if you've ever called in sick when you were perfectly fine.",
     "Put a finger down if you've ever cried at work.",
@@ -185,26 +177,31 @@ const PROMPTS: Record<Category, string[]> = {
   random: [],
 }
 
+PROMPTS.relationships = Array.from(PUT_FINGER_RELATIONSHIPS)
+PROMPTS.friends = Array.from(PUT_FINGER_FRIENDS)
+PROMPTS.spicy = Array.from(PUT_FINGER_SPICY)
+PROMPTS.funny = Array.from(PUT_FINGER_FUNNY)
+PROMPTS.party = Array.from(PUT_FINGER_PARTY)
+PROMPTS.drinking = Array.from(PUT_FINGER_DRINKING)
+PROMPTS.travel = Array.from(PUT_FINGER_TRAVEL)
+PROMPTS.work = Array.from(PUT_FINGER_WORK)
+
 export const PUT_A_FINGER_DOWN_DECKS = Object.fromEntries(
   Object.entries(PROMPTS)
     .filter(([category]) => category !== 'random')
-    .map(([category, prompts]) => [category, withMinimumContent(
-      prompts,
-      EXPERIENCE_SUPPLEMENT.map(experience => `Put a finger down if you have ever ${experience}.`),
-    )]),
+    .map(([category, prompts]) => [category, Array.from(prompts)]),
 ) as Record<string, string[]>
 
 function getPrompts(categories: Category[]): string[] {
-  const supplemental = EXPERIENCE_SUPPLEMENT.map(experience => `Put a finger down if you have ever ${experience}.`)
   if (categories.includes('random') || categories.length === 0) {
     const allCats = Object.keys(PROMPTS).filter(k => k !== 'random') as Category[]
     const pool: string[] = []
     for (const c of allCats) pool.push(...PROMPTS[c])
-    return getShuffledDeck(withMinimumContent(pool, supplemental), 'put-a-finger-down')
+    return getShuffledDeck(pool, 'put-a-finger-down')
   }
   const pool: string[] = []
   for (const c of categories) pool.push(...(PUT_A_FINGER_DOWN_DECKS[c] ?? []))
-  return getShuffledDeck(withMinimumContent(pool, supplemental), 'put-a-finger-down')
+  return getShuffledDeck(pool, 'put-a-finger-down')
 }
 
 /* ─── Category Selection (multi-select) ─── */

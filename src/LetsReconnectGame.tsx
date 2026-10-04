@@ -6,8 +6,30 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import {
+  RECONNECT_PARTNER_LIGHT,
+  RECONNECT_PARTNER_MEANINGFUL,
+  RECONNECT_PARTNER_DEEP,
+} from './content/decks/reconnectPartner'
+import {
+  RECONNECT_FRIENDS_LIGHT,
+  RECONNECT_FRIENDS_MEANINGFUL,
+  RECONNECT_FRIENDS_DEEP,
+} from './content/decks/reconnectFriends'
+import { RECONNECT_FAMILY_LIGHT } from './content/decks/reconnectFamilyLight'
+import { RECONNECT_FAMILY_MEANINGFUL } from './content/decks/reconnectFamilyMeaningful'
+import { RECONNECT_FAMILY_DEEP } from './content/decks/reconnectFamilyDeep'
+import {
+  RECONNECT_COLLEAGUES_LIGHT,
+  RECONNECT_COLLEAGUES_MEANINGFUL,
+  RECONNECT_COLLEAGUES_DEEP,
+} from './content/decks/reconnectColleagues'
+import {
+  RECONNECT_GROUP_LIGHT,
+  RECONNECT_GROUP_MEANINGFUL,
+  RECONNECT_GROUP_DEEP,
+} from './content/decks/reconnectGroup'
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -31,7 +53,7 @@ const DEPTH_OPTIONS: { id: Depth; label: string; icon: string }[] = [
   { id: 'deep',       label: 'Deep',       icon: `${CDN}/deep.svg` },
 ]
 
-const QUESTIONS: Record<Relationship, Record<Depth, string[]>> = {
+const LEGACY_QUESTIONS: Record<Relationship, Record<Depth, string[]>> = {
   partner: {
     light: [
       "What's a small thing I do that always makes you smile?",
@@ -352,24 +374,53 @@ const QUESTIONS: Record<Relationship, Record<Depth, string[]>> = {
   },
 }
 
+type ReconnectAudience = Exclude<Relationship, 'random'>
+
+const QUESTIONS: Record<ReconnectAudience, Record<Depth, readonly string[]>> = {
+  partner: {
+    light: RECONNECT_PARTNER_LIGHT,
+    meaningful: RECONNECT_PARTNER_MEANINGFUL,
+    deep: RECONNECT_PARTNER_DEEP,
+  },
+  friends: {
+    light: RECONNECT_FRIENDS_LIGHT,
+    meaningful: RECONNECT_FRIENDS_MEANINGFUL,
+    deep: RECONNECT_FRIENDS_DEEP,
+  },
+  family: {
+    light: RECONNECT_FAMILY_LIGHT,
+    meaningful: RECONNECT_FAMILY_MEANINGFUL,
+    deep: RECONNECT_FAMILY_DEEP,
+  },
+  colleagues: {
+    light: RECONNECT_COLLEAGUES_LIGHT,
+    meaningful: RECONNECT_COLLEAGUES_MEANINGFUL,
+    deep: RECONNECT_COLLEAGUES_DEEP,
+  },
+  group: {
+    light: RECONNECT_GROUP_LIGHT,
+    meaningful: RECONNECT_GROUP_MEANINGFUL,
+    deep: RECONNECT_GROUP_DEEP,
+  },
+}
+
 export const RECONNECT_DECKS = Object.fromEntries(
   Object.entries(QUESTIONS)
-    .filter(([relationship]) => relationship !== 'random')
     .flatMap(([relationship, depths]) => Object.entries(depths).map(([depth, questions]) => [
       `${relationship}/${depth}`,
-      withMinimumContent(questions, CONVERSATION_SUPPLEMENT),
+      Array.from(questions),
     ])),
 ) as Record<string, string[]>
 export const RECONNECT_MULTIPLAYER_DECK = Array.from(new Set(Object.values(RECONNECT_DECKS).flat()))
 
 function getQuestions(relationship: Relationship, depth: Depth): string[] {
   if (relationship === 'random') {
-    const allRelationships = Object.keys(QUESTIONS) as Relationship[]
+    const allRelationships = Object.keys(QUESTIONS) as ReconnectAudience[]
     const pool: string[] = []
     for (const r of allRelationships) {
       pool.push(...QUESTIONS[r][depth])
     }
-    return getShuffledDeck(withMinimumContent(pool, CONVERSATION_SUPPLEMENT), 'lets-reconnect')
+    return getShuffledDeck(pool, 'lets-reconnect')
   }
   return getShuffledDeck(RECONNECT_DECKS[`${relationship}/${depth}`], 'lets-reconnect')
 }

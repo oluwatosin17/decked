@@ -6,8 +6,13 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { DARE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { DO_OR_DRINK_FUNNY } from './content/decks/doOrDrinkFunny'
+import { DO_OR_DRINK_SPICY } from './content/decks/doOrDrinkSpicy'
+import { DO_OR_DRINK_PARTY } from './content/decks/doOrDrinkParty'
+import { DO_OR_DRINK_DRINKING } from './content/decks/doOrDrinkDrinking'
+import { DO_OR_DRINK_DARES } from './content/decks/doOrDrinkDares'
+import { DO_OR_DRINK_SOCIAL } from './content/decks/doOrDrinkSocial'
 
 /* ---- Cloudinary assets ---- */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -130,26 +135,29 @@ const PROMPTS: Record<Category, string[]> = {
   random: [],
 }
 
+PROMPTS.funny = Array.from(DO_OR_DRINK_FUNNY)
+PROMPTS.spicy = Array.from(DO_OR_DRINK_SPICY)
+PROMPTS.party = Array.from(DO_OR_DRINK_PARTY)
+PROMPTS.drinking = Array.from(DO_OR_DRINK_DRINKING)
+PROMPTS.dares = Array.from(DO_OR_DRINK_DARES)
+PROMPTS.social = Array.from(DO_OR_DRINK_SOCIAL)
+
 export const DO_OR_DRINK_DECKS = Object.fromEntries(
   Object.entries(PROMPTS)
     .filter(([category]) => category !== 'random')
-    .map(([category, prompts]) => [category, withMinimumContent(
-      prompts,
-      DARE_SUPPLEMENT.map(prompt => `${prompt} Or drink.`),
-    )]),
+    .map(([category, prompts]) => [category, Array.from(prompts)]),
 ) as Record<string, string[]>
 
 function getPrompts(categories: Category[]): string[] {
-  const supplemental = DARE_SUPPLEMENT.map(prompt => `${prompt} Or drink.`)
   if (categories.includes('random') || categories.length === 0) {
     const allCats = Object.keys(PROMPTS).filter(k => k !== 'random') as Category[]
     const pool: string[] = []
     for (const c of allCats) pool.push(...PROMPTS[c])
-    return getShuffledDeck(withMinimumContent(pool, supplemental), 'do-or-drink')
+    return getShuffledDeck(pool, 'do-or-drink')
   }
   const pool: string[] = []
   for (const c of categories) pool.push(...(DO_OR_DRINK_DECKS[c] ?? []))
-  return getShuffledDeck(withMinimumContent(pool, supplemental), 'do-or-drink')
+  return getShuffledDeck(pool, 'do-or-drink')
 }
 
 /* ---- Category Selection (multi-select) ---- */

@@ -4,7 +4,13 @@ import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
-import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { LATE_NIGHT_COUPLES_PROMPTS } from './content/decks/lateNightCouples'
+import { LATE_NIGHT_FRIENDS_PROMPTS } from './content/decks/lateNightFriends'
+import { LATE_NIGHT_FAMILY_PROMPTS } from './content/decks/lateNightFamily'
+import { LATE_NIGHT_DEEP_PROMPTS } from './content/decks/lateNightDeep'
+import { LATE_NIGHT_FIRST_DATE_PROMPTS } from './content/decks/lateNightFirstDate'
+import { LATE_NIGHT_PARTY_PROMPTS } from './content/decks/lateNightParty'
+import { LATE_NIGHT_NOSTALGIA_PROMPTS } from './content/decks/lateNightNostalgia'
 
 /* ─── Assets (permanently hosted on Cloudinary — see decked/game-assets folder) ─── */
 const LNT_OUTER  = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-outer.svg'
@@ -173,12 +179,27 @@ const QUESTIONS_BY_MODE: Record<string, string[]> = {
   ],
 }
 
-export const LATE_NIGHT_DECKS = Object.fromEntries(
-  Object.entries(QUESTIONS_BY_MODE).map(([mode, questions]) => [mode, withMinimumContent(questions, CONVERSATION_SUPPLEMENT)]),
-) as Record<string, string[]>
+const LATE_NIGHT_AUTHORED_DECKS = {
+  couples: LATE_NIGHT_COUPLES_PROMPTS,
+  friends: LATE_NIGHT_FRIENDS_PROMPTS,
+  family: LATE_NIGHT_FAMILY_PROMPTS,
+  'deep-conversations': LATE_NIGHT_DEEP_PROMPTS,
+  'first-date': LATE_NIGHT_FIRST_DATE_PROMPTS,
+  party: LATE_NIGHT_PARTY_PROMPTS,
+  nostalgia: LATE_NIGHT_NOSTALGIA_PROMPTS,
+} as const
+
+const LATE_NIGHT_RANDOM_PROMPTS = Object.values(LATE_NIGHT_AUTHORED_DECKS)
+  .flatMap(deck => deck.slice(0, 43))
+  .slice(0, 300)
+
+export const LATE_NIGHT_DECKS: Record<string, readonly string[]> = {
+  ...LATE_NIGHT_AUTHORED_DECKS,
+  random: LATE_NIGHT_RANDOM_PROMPTS,
+}
 export const LATE_NIGHT_MULTIPLAYER_DECK = Array.from(new Set(Object.values(LATE_NIGHT_DECKS).flat()))
 
-function getQuestionsForMode(mode: string): string[] {
+function getQuestionsForMode(mode: string): readonly string[] {
   return LATE_NIGHT_DECKS[mode] ?? LATE_NIGHT_DECKS.random
 }
 

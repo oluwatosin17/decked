@@ -44,6 +44,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        // Explicit prompt libraries make the main offline bundle larger than
+        // Workbox's 2 MiB default. Keep the full game available offline.
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // Force immediate activation on all browsers including Safari
         skipWaiting: true,
         clientsClaim: true,

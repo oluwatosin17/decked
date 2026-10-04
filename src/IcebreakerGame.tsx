@@ -4,7 +4,11 @@ import SharedDeckSize from './components/DeckSize'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
-import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { ICEBREAKER_DEEP_PROMPTS } from './content/decks/icebreakerDeep'
+import { ICEBREAKER_FUN_PROMPTS } from './content/decks/icebreakerFun'
+import { ICEBREAKER_REFLECTIVE_PROMPTS } from './content/decks/icebreakerReflective'
+import { ICEBREAKER_SOCIAL_PROMPTS } from './content/decks/icebreakerSocial'
+import { ICEBREAKER_CREATIVE_PROMPTS } from './content/decks/icebreakerCreative'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 const ICEBREAKER_BG = '/assets/games/icebreaker.png'
@@ -15,66 +19,13 @@ const CATEGORIES = ['DEEP', 'FUN', 'REFLECTIVE', 'SOCIAL', 'CREATIVE'] as const
 export type IcebreakerCategory = typeof CATEGORIES[number]
 type Category = IcebreakerCategory
 
-const QUESTIONS: { category: Category; text: string }[] = [
-  { category: 'DEEP', text: "What quality do you value most in a friendship?" },
-  { category: 'DEEP', text: "What's a belief you held strongly that you've since changed your mind about?" },
-  { category: 'DEEP', text: "What's the most meaningful compliment you've ever received?" },
-  { category: 'DEEP', text: "If you could have a conversation with your younger self, what would you say?" },
-  { category: 'DEEP', text: "What's something you wish more people understood about you?" },
-  { category: 'DEEP', text: "What life experience has shaped who you are the most?" },
-  { category: 'DEEP', text: "What does 'home' mean to you beyond a physical place?" },
-  { category: 'DEEP', text: "What's a fear you've overcome that you're proud of?" },
-  { category: 'DEEP', text: "What would you do differently if you knew nobody would judge you?" },
-  { category: 'DEEP', text: "What's a lesson you learned the hard way?" },
-  { category: 'FUN', text: "What's the most spontaneous thing you've ever done?" },
-  { category: 'FUN', text: "If you could instantly become an expert in something, what would it be?" },
-  { category: 'FUN', text: "What's the weirdest food combination you secretly enjoy?" },
-  { category: 'FUN', text: "What's the funniest thing that's happened to you this year?" },
-  { category: 'FUN', text: "If you could swap lives with anyone for a day, who would it be?" },
-  { category: 'FUN', text: "What's your most useless talent?" },
-  { category: 'FUN', text: "What would your entrance song be if you had one?" },
-  { category: 'FUN', text: "What's the best impulse purchase you've ever made?" },
-  { category: 'FUN', text: "If you had to eat one meal for the rest of your life, what would it be?" },
-  { category: 'FUN', text: "What's the most embarrassing thing in your search history?" },
-  { category: 'REFLECTIVE', text: "What's one skill you'd love to master, and why?" },
-  { category: 'REFLECTIVE', text: "What's a small moment that changed the direction of your life?" },
-  { category: 'REFLECTIVE', text: "What do you think people misunderstand about your generation?" },
-  { category: 'REFLECTIVE', text: "What's the best advice you've ever ignored?" },
-  { category: 'REFLECTIVE', text: "What would your perfect day look like from start to finish?" },
-  { category: 'REFLECTIVE', text: "What's something you're currently trying to improve about yourself?" },
-  { category: 'REFLECTIVE', text: "What's a tradition you want to start or pass on?" },
-  { category: 'REFLECTIVE', text: "What does success look like to you right now?" },
-  { category: 'REFLECTIVE', text: "What's something you're grateful for that you often take for granted?" },
-  { category: 'REFLECTIVE', text: "If you could relive one day of your life, which would it be?" },
-  { category: 'SOCIAL', text: "What's the best conversation you've had with a stranger?" },
-  { category: 'SOCIAL', text: "What's a question you wish people asked you more often?" },
-  { category: 'SOCIAL', text: "What's the kindest thing a stranger has ever done for you?" },
-  { category: 'SOCIAL', text: "How do you usually break the ice when meeting someone new?" },
-  { category: 'SOCIAL', text: "What's a cultural tradition you find fascinating?" },
-  { category: 'SOCIAL', text: "What makes someone instantly likeable to you?" },
-  { category: 'SOCIAL', text: "What's the most interesting thing about the person sitting next to you?" },
-  { category: 'SOCIAL', text: "What's a topic you could talk about for hours?" },
-  { category: 'SOCIAL', text: "What's the best group activity you've ever participated in?" },
-  { category: 'SOCIAL', text: "What's a question you've always wanted to ask someone but never have?" },
-  { category: 'CREATIVE', text: "If you could create a holiday, what would it celebrate?" },
-  { category: 'CREATIVE', text: "What would the title of your autobiography be?" },
-  { category: 'CREATIVE', text: "If your life was a movie, what genre would it be?" },
-  { category: 'CREATIVE', text: "If you could design your dream house, what's the one must-have feature?" },
-  { category: 'CREATIVE', text: "What invention do you wish existed?" },
-  { category: 'CREATIVE', text: "If you could commission any artist to paint your portrait, who would you choose?" },
-  { category: 'CREATIVE', text: "What would you name a band if you started one tomorrow?" },
-  { category: 'CREATIVE', text: "If you could add one subject to every school curriculum, what would it be?" },
-  { category: 'CREATIVE', text: "What's a creative project you've always wanted to start?" },
-  { category: 'CREATIVE', text: "If you could redesign one thing about the city you live in, what would it be?" },
-]
-
-export const ICEBREAKER_DECKS = Object.fromEntries(CATEGORIES.map(category => [
-  category,
-  withMinimumContent(
-    QUESTIONS.filter(question => question.category === category).map(question => question.text),
-    CONVERSATION_SUPPLEMENT,
-  ),
-])) as Record<Category, string[]>
+export const ICEBREAKER_DECKS: Record<Category, readonly string[]> = {
+  DEEP: ICEBREAKER_DEEP_PROMPTS,
+  FUN: ICEBREAKER_FUN_PROMPTS,
+  REFLECTIVE: ICEBREAKER_REFLECTIVE_PROMPTS,
+  SOCIAL: ICEBREAKER_SOCIAL_PROMPTS,
+  CREATIVE: ICEBREAKER_CREATIVE_PROMPTS,
+}
 
 export const ICEBREAKER_DECK = CATEGORIES.flatMap(category =>
   ICEBREAKER_DECKS[category].map(text => ({ category, text })),

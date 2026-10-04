@@ -2,7 +2,11 @@
 
 All production prompt decks except Truth or Dare and Spicy Starters must contain at least 300 normalized-unique cards per selectable category. `Random` is a mixer, not a separately authored category, and is therefore excluded from per-category counts.
 
-Run `npm run audit:prompts` to print the count for every runtime deck. The command exits unsuccessfully when a deck has fewer than 300 cards, blank cards, exact duplicates, or duplicates that differ only by punctuation/capitalization.
+Run `npm run audit:prompts` to audit every production deck. The command exits unsuccessfully when a deck has fewer than 300 cards, blank cards, exact duplicates, close paraphrases, known generated suffix variants, or prompts reused across categories. A different string is not automatically a unique idea.
+
+The audit also checks game-mechanic format, practical card length, category vocabulary coverage, and known unsafe or coercive challenge patterns. These automated checks are a floor, not a substitute for editorial review.
+
+The prompt expansion utilities are transitional and do not satisfy the editorial standard. A deck passes only after generated variants and shared filler have been replaced with explicit, category-owned prompts.
 
 ## Editorial standards
 

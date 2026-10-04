@@ -6,7 +6,12 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { EVERYDAY_DEEP_CONVERSATIONS_PROMPTS } from './content/decks/everydayDeepConversations'
+import { EVERYDAY_FIRST_DATE_PROMPTS } from './content/decks/everydayFirstDate'
+import { EVERYDAY_NOSTALGIA_PROMPTS } from './content/decks/everydayNostalgia'
+import { EVERYDAY_EVERYDAY_PROMPTS } from './content/decks/everydayEveryday'
+import { EVERYDAY_TEAM_PROMPTS } from './content/decks/everydayTeam'
+import { EVERYDAY_PARTY_PROMPTS } from './content/decks/everydayParty'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ─── Cloudinary assets ─── */
@@ -160,19 +165,20 @@ const QUESTIONS: Record<Theme, string[]> = {
   random: [],
 }
 
-export const EVERYDAY_DECKS = Object.fromEntries(
-  Object.entries(QUESTIONS)
-    .filter(([theme]) => theme !== 'random')
-    .map(([theme, questions]) => [theme, withMinimumContent(questions, CONVERSATION_SUPPLEMENT)]),
-) as Record<string, string[]>
+export const EVERYDAY_DECKS: Record<string, readonly string[]> = {
+  everyday: EVERYDAY_EVERYDAY_PROMPTS,
+  'deep-convo': EVERYDAY_DEEP_CONVERSATIONS_PROMPTS,
+  'first-date': EVERYDAY_FIRST_DATE_PROMPTS,
+  nostalgia: EVERYDAY_NOSTALGIA_PROMPTS,
+  team: EVERYDAY_TEAM_PROMPTS,
+  party: EVERYDAY_PARTY_PROMPTS,
+}
 export const EVERYDAY_MULTIPLAYER_DECK = Array.from(new Set(Object.values(EVERYDAY_DECKS).flat()))
 
 function getQuestions(theme: Theme): string[] {
   if (theme === 'random') {
-    const allThemes = Object.keys(QUESTIONS).filter(k => k !== 'random') as Theme[]
-    const pool: string[] = []
-    for (const t of allThemes) pool.push(...QUESTIONS[t])
-    return getShuffledDeck(withMinimumContent(pool, CONVERSATION_SUPPLEMENT), 'everyday-conversations')
+    const pool = Object.values(EVERYDAY_DECKS).flatMap(deck => deck.slice(0, 50))
+    return getShuffledDeck(pool, 'everyday-conversations')
   }
   return getShuffledDeck(EVERYDAY_DECKS[theme], 'everyday-conversations')
 }

@@ -3,7 +3,7 @@ import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { getShuffledDeck } from './utils/deckShuffle'
-import { DARE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { DARE_SUPPLEMENT } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 /* ─── Assets (permanently hosted on Cloudinary) ─── */
@@ -73,7 +73,90 @@ const CHALLENGES = [
   "Act like a scientist explaining why you just sneezed.",
 ]
 
-export const LAUGH_YOU_ARE_OUT_DECK = withMinimumContent(CHALLENGES, DARE_SUPPLEMENT)
+const LAUGH_EXTRAS = [
+  "Interview your shoe about where it sees itself in five years.",
+  "Apologise sincerely to a spoon for never appreciating its hard work.",
+  "Act like a mosquito trying to check into a luxury hotel.",
+  "Give a breaking-news report about somebody opening a packet of snacks.",
+  "Pretend the floor is mildly inconvenient lava.",
+  "Demonstrate how a giraffe would try to hide behind a lamp.",
+  "Explain taxes to an imaginary five-year-old using only fruit metaphors.",
+  "Perform a victory dance for successfully remembering your own name.",
+  "Act like a ghost who is embarrassed about haunting the wrong house.",
+  "Give a serious TED Talk about why socks disappear in the laundry.",
+  "Pretend to be a waiter serving invisible food to a demanding customer.",
+  "Imitate a chicken attempting its first job interview.",
+  "Deliver a love confession to the nearest piece of furniture.",
+  "Act like your knees have started arguing with each other.",
+  "Present an award to yourself for doing absolutely nothing today.",
+  "Pretend to be a detective investigating a suspicious biscuit crumb.",
+  "Demonstrate a new exercise routine designed entirely for lazy people.",
+  "Act like a superhero whose only power is finding misplaced chargers.",
+  "Explain your outfit as if every item has a dangerous secret.",
+  "Pretend an invisible duck is following you and you cannot let anyone notice.",
+  "Make a dramatic phone call to inform someone that water is wet.",
+  "Act like a royal person learning how to use a vending machine.",
+  "Give directions to the bathroom as if it is a legendary quest.",
+  "Pretend your elbow has just told you shocking gossip.",
+  "Perform an advertisement for a pillow that refuses to let people sleep.",
+  "Act like a chef whose only ingredient is air.",
+  "Explain why you are late using the plot of a completely invented action film.",
+  "Pretend to be a pigeon running for political office.",
+  "Demonstrate how to sit down as if it requires years of professional training.",
+  "Give an emotional farewell speech to a snack before eating it.",
+  "Act like a dog that has suddenly realised it is adopted.",
+  "Pretend your hands are two strangers meeting on a first date.",
+  "Announce every movement you make like an airport departure.",
+  "Imitate a person trying to sneeze silently during a serious ceremony.",
+  "Hold a press conference explaining why you forgot to charge your phone.",
+  "Act like an alien attempting to blend into a supermarket queue.",
+  "Teach the group a dance move called The Unpaid Bill.",
+  "Pretend the nearest object has deeply offended your ancestors.",
+  "Give a motivational speech to someone whose toast fell butter-side down.",
+  "Act like a magician whose tricks are all extremely obvious.",
+  "Describe brushing your teeth as an Olympic sport.",
+  "Pretend to be a security guard protecting the last slice of pizza.",
+  "Sing a short national anthem for people who cancel plans.",
+  "Act like a fashion model wearing invisible shoes that are too tight.",
+  "Give a cooking demonstration for a meal nobody should ever eat.",
+  "Pretend your chair is a horse that refuses to move.",
+  "Explain a paper clip as if it is advanced alien technology.",
+  "Act like a toddler negotiating a major business deal.",
+  "Perform a dramatic reunion with someone you saw five minutes ago.",
+  "Pretend to be a dentist examining an invisible crocodile.",
+  "Narrate somebody drinking water like the final scene of a romance film.",
+  "Act like a spy whose only mission is to borrow a pen.",
+  "Explain why Mondays should be illegal in the style of a courtroom argument.",
+  "Pretend your hair is giving you terrible life advice.",
+  "Demonstrate how a confused vampire applies sunscreen.",
+  "Give a guided meditation for people trapped in a long queue.",
+  "Act like a football coach motivating a team of houseplants.",
+  "Pretend you are trapped inside a mime's invisible box and find the emergency exit.",
+  "Read an imaginary restaurant menu as if every dish is personally insulting.",
+  "Act like a squirrel trying to remember a complicated password.",
+  "Give a product review of the air in the room.",
+  "Pretend your feet are celebrities avoiding photographers.",
+  "Demonstrate how a very dramatic person opens an ordinary envelope.",
+  "Act like a teacher explaining why naps deserve academic credit.",
+  "Give a campaign speech promising free snacks for everyone.",
+  "Pretend a balloon has challenged you to a dance battle.",
+  "Explain your morning using only the names of imaginary film sequels.",
+  "Act like a waiter who has forgotten what food is.",
+  "Perform a slow-motion argument with your own reflection.",
+  "Pretend to translate a conversation between two angry potatoes.",
+  "Give an inspirational speech about surviving a low phone battery.",
+  "Act like a museum guide presenting an extremely ordinary sock.",
+  "Demonstrate how a penguin would prepare for a beach holiday.",
+  "Pretend your nose is auditioning for a musical.",
+  "Give a weather warning about an approaching cloud of bad decisions.",
+  "Act like a robot attempting to understand a knock-knock joke.",
+  "Explain why the nearest wall deserves a public apology.",
+  "Pretend you are a pirate searching the room for missing WiFi.",
+  "Perform a dramatic scene in which you discover the remote was beside you.",
+  "Act like a personal trainer encouraging someone to lift a single crisp.",
+]
+
+export const LAUGH_YOU_ARE_OUT_DECK = [...CHALLENGES, ...DARE_SUPPLEMENT, ...LAUGH_EXTRAS]
 
 
 /* ─── LYAO Card (flip-capable) ─── */

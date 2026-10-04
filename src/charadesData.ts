@@ -1,5 +1,22 @@
 import { getShuffledDeck } from './utils/deckShuffle'
-import { expandCharadesCategory } from './content/promptExpansion.js'
+import { CHARADES_MOVIES } from './content/decks/charadesMovies'
+import { CHARADES_TV_SHOWS } from './content/decks/charadesTvShows'
+import { CHARADES_HOBBIES } from './content/decks/charadesHobbies'
+import { CHARADES_SONGS } from './content/decks/charadesSongs'
+import { CHARADES_MUSIC_ARTISTS } from './content/decks/charadesMusicArtists'
+import { CHARADES_APPS } from './content/decks/charadesApps'
+import { CHARADES_COUNTRIES } from './content/decks/charadesCountries'
+import { CHARADES_ANIMALS } from './content/decks/charadesAnimals'
+import { CHARADES_INTERNET_SLANG } from './content/decks/charadesInternetSlang'
+import { CHARADES_FOOD_DRINKS } from './content/decks/charadesFoodDrinks'
+import { CHARADES_SPORTS } from './content/decks/charadesSports'
+import { CHARADES_AI_TECH } from './content/decks/charadesAiTech'
+import { CHARADES_CELEBRITIES } from './content/decks/charadesCelebrities'
+import { CHARADES_INFLUENCERS } from './content/decks/charadesInfluencers'
+import { CHARADES_NATURAL_DISASTERS } from './content/decks/charadesNaturalDisasters'
+import { CHARADES_FOOTBALL_CLUBS } from './content/decks/charadesFootballClubs'
+import { CHARADES_MUSIC_GENRES } from './content/decks/charadesMusicGenres'
+import { CHARADES_POLITICIANS } from './content/decks/charadesPoliticians'
 
 export interface CharadesCategory {
   id: string
@@ -153,9 +170,26 @@ const BASE_CHARADES_PROMPTS: Record<string, string[]> = {
   ],
 }
 
-export const CHARADES_PROMPTS: Record<string, string[]> = Object.fromEntries(
-  Object.entries(BASE_CHARADES_PROMPTS).map(([category, prompts]) => [category, expandCharadesCategory(prompts, 300)]),
-)
+export const CHARADES_PROMPTS: Record<string, string[]> = {
+  movies: Array.from(CHARADES_MOVIES),
+  'tv-shows': Array.from(CHARADES_TV_SHOWS),
+  hobbies: Array.from(CHARADES_HOBBIES),
+  songs: Array.from(CHARADES_SONGS),
+  'music-artists': Array.from(CHARADES_MUSIC_ARTISTS),
+  apps: Array.from(CHARADES_APPS),
+  countries: Array.from(CHARADES_COUNTRIES),
+  animals: Array.from(CHARADES_ANIMALS),
+  'internet-slang': Array.from(CHARADES_INTERNET_SLANG),
+  'food-drinks': Array.from(CHARADES_FOOD_DRINKS),
+  sports: Array.from(CHARADES_SPORTS),
+  'ai-tech': Array.from(CHARADES_AI_TECH),
+  celebrities: Array.from(CHARADES_CELEBRITIES),
+  influencers: Array.from(CHARADES_INFLUENCERS),
+  'natural-disasters': Array.from(CHARADES_NATURAL_DISASTERS),
+  'football-clubs': Array.from(CHARADES_FOOTBALL_CLUBS),
+  'music-genres': Array.from(CHARADES_MUSIC_GENRES),
+  politicians: Array.from(CHARADES_POLITICIANS),
+}
 
 /**
  * Build a shuffled deck for the given selection.

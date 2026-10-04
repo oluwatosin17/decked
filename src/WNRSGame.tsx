@@ -6,8 +6,22 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { CONVERSATION_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { STRANGERS_PARTNER_WARM_UP } from './content/decks/strangersPartnerWarmUp'
+import { STRANGERS_FRIENDS_WARM_UP } from './content/decks/strangersFriendsWarmUp'
+import { STRANGERS_FAMILY_WARM_UP } from './content/decks/strangersFamilyWarmUp'
+import { STRANGERS_COLLEAGUES_WARM_UP } from './content/decks/strangersColleaguesWarmUp'
+import { STRANGERS_GROUP_WARM_UP } from './content/decks/strangersGroupWarmUp'
+import { STRANGERS_FAMILY_REFLECT } from './content/decks/strangersFamilyReflect'
+import { STRANGERS_PARTNER_REFLECT } from './content/decks/strangersPartnerReflect'
+import { STRANGERS_FRIENDS_REFLECT } from './content/decks/strangersFriendsReflect'
+import { STRANGERS_GROUP_REFLECT } from './content/decks/strangersGroupReflect'
+import { STRANGERS_COLLEAGUES_REFLECT } from './content/decks/strangersColleaguesReflect'
+import { STRANGERS_GROUP_CONNECT } from './content/decks/strangersGroupConnect'
+import { STRANGERS_FAMILY_CONNECT } from './content/decks/strangersFamilyConnect'
+import { STRANGERS_PARTNER_CONNECT } from './content/decks/strangersPartnerConnect'
+import { STRANGERS_FRIENDS_CONNECT } from './content/decks/strangersFriendsConnect'
+import { STRANGERS_COLLEAGUES_CONNECT } from './content/decks/strangersColleaguesConnect'
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -223,12 +237,28 @@ const QUESTIONS: Record<Relationship, Record<Stage, string[]>> = {
   },
 }
 
+QUESTIONS.partner['warm-up'] = Array.from(STRANGERS_PARTNER_WARM_UP)
+QUESTIONS.friends['warm-up'] = Array.from(STRANGERS_FRIENDS_WARM_UP)
+QUESTIONS.family['warm-up'] = Array.from(STRANGERS_FAMILY_WARM_UP)
+QUESTIONS.colleagues['warm-up'] = Array.from(STRANGERS_COLLEAGUES_WARM_UP)
+QUESTIONS.group['warm-up'] = Array.from(STRANGERS_GROUP_WARM_UP)
+QUESTIONS.family.reflect = Array.from(STRANGERS_FAMILY_REFLECT)
+QUESTIONS.partner.reflect = Array.from(STRANGERS_PARTNER_REFLECT)
+QUESTIONS.friends.reflect = Array.from(STRANGERS_FRIENDS_REFLECT)
+QUESTIONS.group.reflect = Array.from(STRANGERS_GROUP_REFLECT)
+QUESTIONS.colleagues.reflect = Array.from(STRANGERS_COLLEAGUES_REFLECT)
+QUESTIONS.group.connect = Array.from(STRANGERS_GROUP_CONNECT)
+QUESTIONS.family.connect = Array.from(STRANGERS_FAMILY_CONNECT)
+QUESTIONS.partner.connect = Array.from(STRANGERS_PARTNER_CONNECT)
+QUESTIONS.friends.connect = Array.from(STRANGERS_FRIENDS_CONNECT)
+QUESTIONS.colleagues.connect = Array.from(STRANGERS_COLLEAGUES_CONNECT)
+
 export const STRANGERS_DECKS = Object.fromEntries(
   Object.entries(QUESTIONS)
     .filter(([relationship]) => relationship !== 'random')
     .flatMap(([relationship, stages]) => Object.entries(stages).map(([stage, questions]) => [
       `${relationship}/${stage}`,
-      withMinimumContent(questions, CONVERSATION_SUPPLEMENT),
+      Array.from(questions),
     ])),
 ) as Record<string, string[]>
 
@@ -237,7 +267,7 @@ function getQuestions(relationship: Relationship, stage: Stage): string[] {
     const allRels = Object.keys(QUESTIONS).filter(k => k !== 'random') as Relationship[]
     const pool: string[] = []
     for (const r of allRels) pool.push(...QUESTIONS[r][stage])
-    return getShuffledDeck(withMinimumContent(pool, CONVERSATION_SUPPLEMENT), 'wnrs')
+    return getShuffledDeck(pool, 'wnrs')
   }
   return getShuffledDeck(STRANGERS_DECKS[`${relationship}/${stage}`], 'wnrs')
 }

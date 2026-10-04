@@ -6,8 +6,13 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { EXPERIENCE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { SIP_OR_SPILL_RELATIONSHIPS } from './content/decks/sipOrSpillRelationships'
+import { SIP_OR_SPILL_FUNNY } from './content/decks/sipOrSpillFunny'
+import { SIP_OR_SPILL_SPICY } from './content/decks/sipOrSpillSpicy'
+import { SIP_OR_SPILL_DRINKING } from './content/decks/sipOrSpillDrinking'
+import { SIP_OR_SPILL_FRIENDS } from './content/decks/sipOrSpillFriends'
+import { SIP_OR_SPILL_PARTY } from './content/decks/sipOrSpillParty'
 
 /* ---- Cloudinary assets ---- */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -130,26 +135,29 @@ const PROMPTS: Record<Category, string[]> = {
   random: [],
 }
 
+PROMPTS.relationships = Array.from(SIP_OR_SPILL_RELATIONSHIPS)
+PROMPTS.funny = Array.from(SIP_OR_SPILL_FUNNY)
+PROMPTS.spicy = Array.from(SIP_OR_SPILL_SPICY)
+PROMPTS.drinking = Array.from(SIP_OR_SPILL_DRINKING)
+PROMPTS.friends = Array.from(SIP_OR_SPILL_FRIENDS)
+PROMPTS.party = Array.from(SIP_OR_SPILL_PARTY)
+
 export const SIP_OR_SPILL_DECKS = Object.fromEntries(
   Object.entries(PROMPTS)
     .filter(([category]) => category !== 'random')
-    .map(([category, prompts]) => [category, withMinimumContent(
-      prompts,
-      EXPERIENCE_SUPPLEMENT.map(experience => `Spill: Have you ever ${experience}? Or take a sip.`),
-    )]),
+    .map(([category, prompts]) => [category, Array.from(prompts)]),
 ) as Record<string, string[]>
 
 function getPrompts(categories: Category[]): string[] {
-  const supplemental = EXPERIENCE_SUPPLEMENT.map(experience => `Spill: Have you ever ${experience}? Or take a sip.`)
   if (categories.includes('random') || categories.length === 0) {
     const allCats = Object.keys(PROMPTS).filter(k => k !== 'random') as Category[]
     const pool: string[] = []
     for (const c of allCats) pool.push(...PROMPTS[c])
-    return getShuffledDeck(withMinimumContent(pool, supplemental), 'sip-or-spill')
+    return getShuffledDeck(pool, 'sip-or-spill')
   }
   const pool: string[] = []
   for (const c of categories) pool.push(...(SIP_OR_SPILL_DECKS[c] ?? []))
-  return getShuffledDeck(withMinimumContent(pool, supplemental), 'sip-or-spill')
+  return getShuffledDeck(pool, 'sip-or-spill')
 }
 
 /* ---- Category Selection (multi-select) ---- */

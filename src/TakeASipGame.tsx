@@ -6,8 +6,17 @@ import SharedCustomCards from './components/CustomCards'
 import SharedGetReady from './components/GetReady'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { EXPERIENCE_SUPPLEMENT, withMinimumContent } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
+import { TAKE_SIP_RELATIONSHIPS } from './content/decks/takeSipRelationships'
+import { TAKE_SIP_SPICY } from './content/decks/takeSipSpicy'
+import { TAKE_SIP_PARTY } from './content/decks/takeSipParty'
+import { TAKE_SIP_FUNNY } from './content/decks/takeSipFunny'
+import { TAKE_SIP_RED_FLAGS } from './content/decks/takeSipRedFlags'
+import { TAKE_SIP_DRINKING } from './content/decks/takeSipDrinking'
+import { TAKE_SIP_SCHOOL } from './content/decks/takeSipSchool'
+import { TAKE_SIP_WORK } from './content/decks/takeSipWork'
+import { TAKE_SIP_GREEN_FLAGS } from './content/decks/takeSipGreenFlags'
+import { TAKE_SIP_TRAVEL } from './content/decks/takeSipTravel'
 
 /* ---- Cloudinary assets ---- */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
@@ -63,23 +72,7 @@ const PROMPTS: Record<Category, string[]> = {
     "Take a sip if you've ever been dumped over text.",
     "Take a sip if you've ever had a secret relationship.",
   ],
-  spicy: [
-    "Take a sip if you've ever had a dream about someone in this room.",
-    "Take a sip if you've ever kissed someone you just met that night.",
-    "Take a sip if you've ever sent a risky text you immediately regretted.",
-    "Take a sip if you've ever lied about your body count.",
-    "Take a sip if you've ever slid into someone's DMs at 2am.",
-    "Take a sip if you've ever flirted with someone just because you were bored.",
-    "Take a sip if you've ever been someone's rebound and didn't know it.",
-    "Take a sip if you've ever kissed someone you shouldn't have.",
-    "Take a sip if you've ever been attracted to a friend's partner.",
-    "Take a sip if you've ever used a dating app while sitting next to someone you're dating.",
-    "Take a sip if you've ever sent a selfie to the wrong person.",
-    "Take a sip if you've ever had a secret you'll take to the grave.",
-    "Take a sip if you've ever gone on a date just for the free meal.",
-    "Take a sip if you've ever had a one-night stand.",
-    "Take a sip if you've ever told someone you loved them when you didn't.",
-  ],
+  spicy: [...TAKE_SIP_SPICY],
   party: [
     "Take a sip if you've ever blacked out at a party.",
     "Take a sip if you've ever danced on a table or bar.",
@@ -148,23 +141,7 @@ const PROMPTS: Record<Category, string[]> = {
     "Take a sip if you've ever lied on your CV.",
     "Take a sip if you've ever had a job you absolutely hated but stayed anyway.",
   ],
-  travel: [
-    "Take a sip if you've ever missed a flight.",
-    "Take a sip if you've ever been to another continent.",
-    "Take a sip if you've ever gone on a solo trip.",
-    "Take a sip if you've ever slept in an airport.",
-    "Take a sip if you've ever gotten completely lost in a foreign country.",
-    "Take a sip if you've ever eaten something abroad you couldn't identify.",
-    "Take a sip if you've ever been upgraded on a flight.",
-    "Take a sip if you've ever had a holiday romance.",
-    "Take a sip if you've ever booked a trip on impulse.",
-    "Take a sip if you've ever cried leaving a place you loved.",
-    "Take a sip if you've ever pretended to speak a language you didn't know.",
-    "Take a sip if you've ever lost your luggage.",
-    "Take a sip if you've ever been scammed by a tourist trap.",
-    "Take a sip if you've ever gone skydiving, bungee jumping, or something extreme.",
-    "Take a sip if you've ever visited more than five countries.",
-  ],
+  travel: Array.from(TAKE_SIP_TRAVEL),
   'green-flags': [
     "Take a sip if you always text back within a reasonable time.",
     "Take a sip if you remember people's birthdays without Facebook reminding you.",
@@ -202,26 +179,31 @@ const PROMPTS: Record<Category, string[]> = {
   random: [],
 }
 
+PROMPTS.relationships = Array.from(TAKE_SIP_RELATIONSHIPS)
+PROMPTS.party = Array.from(TAKE_SIP_PARTY)
+PROMPTS.funny = Array.from(TAKE_SIP_FUNNY)
+PROMPTS['red-flags'] = Array.from(TAKE_SIP_RED_FLAGS)
+PROMPTS.drinking = Array.from(TAKE_SIP_DRINKING)
+PROMPTS.school = Array.from(TAKE_SIP_SCHOOL)
+PROMPTS.work = Array.from(TAKE_SIP_WORK)
+PROMPTS['green-flags'] = Array.from(TAKE_SIP_GREEN_FLAGS)
+
 export const TAKE_A_SIP_DECKS = Object.fromEntries(
   Object.entries(PROMPTS)
     .filter(([category]) => category !== 'random')
-    .map(([category, prompts]) => [category, withMinimumContent(
-      prompts,
-      EXPERIENCE_SUPPLEMENT.map(experience => `Take a sip if you have ever ${experience}.`),
-    )]),
+    .map(([category, prompts]) => [category, Array.from(prompts)]),
 ) as Record<string, string[]>
 
 function getPrompts(categories: Category[]): string[] {
-  const supplemental = EXPERIENCE_SUPPLEMENT.map(experience => `Take a sip if you have ever ${experience}.`)
   if (categories.includes('random') || categories.length === 0) {
     const allCats = Object.keys(PROMPTS).filter(k => k !== 'random') as Category[]
     const pool: string[] = []
     for (const c of allCats) pool.push(...PROMPTS[c])
-    return getShuffledDeck(withMinimumContent(pool, supplemental), 'take-a-sip')
+    return getShuffledDeck(pool, 'take-a-sip')
   }
   const pool: string[] = []
   for (const c of categories) pool.push(...(TAKE_A_SIP_DECKS[c] ?? []))
-  return getShuffledDeck(withMinimumContent(pool, supplemental), 'take-a-sip')
+  return getShuffledDeck(pool, 'take-a-sip')
 }
 
 /* ---- Category Selection (multi-select) ---- */

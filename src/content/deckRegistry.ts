@@ -20,7 +20,9 @@ export interface AuditedDeck {
 }
 
 const categorized = (game: string, decks: Record<string, readonly string[]>): AuditedDeck[] =>
-  Object.entries(decks).map(([category, prompts]) => ({ game, category, prompts }))
+  Object.entries(decks)
+    .filter(([category]) => !category.toLowerCase().startsWith('random'))
+    .map(([category, prompts]) => ({ game, category, prompts }))
 
 export const AUDITED_DECKS: AuditedDeck[] = [
   { game: 'Never Have I Ever', category: 'main', prompts: NEVER_HAVE_I_EVER_DECK },

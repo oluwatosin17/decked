@@ -5,7 +5,7 @@ import SharedCustomCards from './components/CustomCards'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
 import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
-import { FLAG_SCENARIO_SUPPLEMENT, withMinimumContent } from './content/supplemental'
+import { RED_FLAG_GREEN_FLAG_SCENARIOS } from './content/decks/redFlagGreenFlag'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
 const RFGF_FRONT = '/icons/rfgf-front.svg'
@@ -18,61 +18,7 @@ const VOTE_DEPENDS_ICON = '/icons/vote-depends.svg'
 
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
-/* ─── Scenario prompts ─── */
-const SCENARIOS: string[] = [
-  "They still text their ex every week",
-  "They always remember your birthday",
-  "They check your phone while you're asleep",
-  "They cook dinner for you after a long day",
-  "They post everything about your relationship on social media",
-  "They never introduce you to their friends",
-  "They communicate when they'll be unavailable instead of disappearing",
-  "They laugh at their own jokes",
-  "They remember small details about things you've told them",
-  "They get jealous when you hang out with friends",
-  "They always take your side in an argument even when you're wrong",
-  "They go through your DMs when you leave your phone unlocked",
-  "They plan surprise dates without being asked",
-  "They never apologize after a fight",
-  "They hype you up in front of their friends",
-  "They keep score of who paid for what",
-  "They put their phone face down whenever you're around",
-  "They ask how your day was and actually listen",
-  "They cancel plans with you last minute but post on social media",
-  "They support your goals even when it doesn't benefit them",
-  "They compare you to their ex",
-  "They hold your hand in public without hesitation",
-  "They make fun of your interests in front of others",
-  "They text back within minutes even when they're busy",
-  "They refuse to meet your family after months of dating",
-  "They remember your coffee order",
-  "They flirt with other people right in front of you",
-  "They write you handwritten notes or letters",
-  "They gaslight you into thinking you're overreacting",
-  "They encourage you to spend time with your own friends",
-  "They only reach out when they need something",
-  "They defend you when someone talks behind your back",
-  "They love-bomb you with gifts but avoid real conversations",
-  "They tell you when something you did hurt them instead of shutting down",
-  "They follow and like their ex's every post",
-  "They make you feel safe enough to cry in front of them",
-  "They dismiss your feelings as being too sensitive",
-  "They share your embarrassing stories at parties",
-  "They always want to know your location",
-  "They give you space when you need it without guilt-tripping you",
-  "They take forever to text back but are always on their phone around you",
-  "They split chores without being asked",
-  "They make you feel like you have to earn their affection",
-  "They celebrate your wins like they're their own",
-  "They refuse to compromise on anything",
-  "They introduce you as their partner proudly",
-  "They keep secrets about their past relationships",
-  "They genuinely get along with your friends",
-  "They never make time for date nights",
-  "They bring you food when you're stressed without you asking",
-]
-
-export const SCENARIO_DECK = withMinimumContent(SCENARIOS, FLAG_SCENARIO_SUPPLEMENT)
+export const SCENARIO_DECK = [...RED_FLAG_GREEN_FLAG_SCENARIOS]
 
 export type VoteType = 'red' | 'depends' | 'green'
 type Vote = { playerIndex: number; vote: VoteType }
