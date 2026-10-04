@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { GameNav, GameFooter } from './components/GameShell'
+import { TwoTruthsBluffArtwork } from './TwoTruthsBluffGame'
 
 interface GameSuggestion {
   id: string
@@ -25,6 +26,7 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'do-or-drink', label: 'Do or Drink', description: 'Complete the dare or take a drink', thumbnail: '/icons/qp-do-or-drink.svg' },
   { id: 'icebreaker', label: 'Icebreaker', description: 'Fun questions to break the ice', thumbnail: '/icons/qp-icebreaker.svg' },
   { id: 'red-flag-green-flag', label: 'Red Flag Green Flag', description: 'Vote on relationship deal-breakers', thumbnail: '/icons/rfgf-front.svg' },
+  { id: 'two-truths-bluff', label: 'Two Truths and a Bluff', description: 'Spot the bluff hidden between two truths', thumbnail: '' },
 ]
 
 function pickRandom3(): GameSuggestion[] {
@@ -119,11 +121,9 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
                   overflow: 'hidden', flexShrink: 0,
                   background: '#1a1a1e',
                 }}>
-                  <img
-                    src={game.thumbnail}
-                    alt={game.label}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+                  {game.id === 'two-truths-bluff'
+                    ? <TwoTruthsBluffArtwork />
+                    : <img src={game.thumbnail} alt={game.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{

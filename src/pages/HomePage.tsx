@@ -9,7 +9,7 @@ const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
 
-const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh']
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff']
 const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
@@ -17,6 +17,7 @@ const FEATURED_ACTIONS: Record<string, string> = {
   'charades': 'onPlayCharades',
   'never-have-i-ever': 'onPlayNeverHaveIEver',
   'you-laugh': 'onPlayYouLaugh',
+  'two-truths-bluff': 'onPlayTwoTruthsBluff',
 }
 
 function useIsMobile(bp = 768) {
@@ -40,6 +41,7 @@ interface Props {
   onPlayCharades?: () => void
   onPlayNeverHaveIEver?: () => void
   onPlayYouLaugh?: () => void
+  onPlayTwoTruthsBluff: () => void
   onBrowse: () => void
   onPlayTogether: () => void
 }
@@ -101,9 +103,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onBrowse, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onBrowse, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
-  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onBrowse }
 
   if (isMobile) {
     return (
@@ -314,7 +316,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
             Pick your vibe.
           </h2>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} />
         </div>
       </section>
 

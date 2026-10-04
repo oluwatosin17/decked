@@ -15,14 +15,14 @@ const STEPS: readonly Step[] = ['playerSetup', 'write', 'guess', 'reveal', 'done
 export function TwoTruthsBluffArtwork({ className = '' }: { className?: string }) {
   return (
     <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', aspectRatio: '1', overflow: 'hidden', containerType: 'inline-size' }}>
-      <img src="/icons/two-truths-bluff/shape-web-1.svg" alt="" style={{ position: 'absolute', inset: '5.25%', width: '89.5%', height: '89.5%' }} />
-      <img src="/icons/two-truths-bluff/shape-web-3.svg" alt="" style={{ position: 'absolute', left: '19.88%', top: '19.88%', width: '60.25%', height: '60.25%' }} />
-      <img src="/icons/two-truths-bluff/shape-web-2.svg" alt="" style={{ position: 'absolute', left: '20.38%', top: '20.38%', width: '59.24%', height: '59.24%' }} />
-      <div className="font-slackey" style={{ position: 'absolute', inset: 0, color: '#8e7905', lineHeight: .86 }}>
-        <span style={{ position: 'absolute', left: '31.8%', top: '35.8%', fontSize: '13.47cqw' }}>2</span>
-        <span style={{ position: 'absolute', left: '43.5%', top: '39.2%', fontSize: '7.86cqw' }}>TRUTHS</span>
-        <span style={{ position: 'absolute', left: '31.8%', top: '49.4%', fontSize: '12.12cqw' }}>&amp;</span>
-        <span style={{ position: 'absolute', left: '43.5%', top: '52.3%', fontSize: '7.86cqw' }}>A BLUFF</span>
+      <img src="/icons/two-truths-bluff/shape-web-1.svg" alt="" style={{ position: 'absolute', inset: '3.6%', width: '92.8%', height: '92.8%' }} />
+      <img src="/icons/two-truths-bluff/shape-web-3.svg" alt="" style={{ position: 'absolute', left: '18.81%', top: '18.06%', width: '62.49%', height: '62.49%' }} />
+      <img src="/icons/two-truths-bluff/shape-web-2.svg" alt="" style={{ position: 'absolute', left: '19.28%', top: '18.67%', width: '61.44%', height: '61.44%' }} />
+      <div className="font-slackey" style={{ position: 'absolute', inset: 0, color: '#8e7905', lineHeight: 1, whiteSpace: 'nowrap' }}>
+        <span style={{ position: 'absolute', left: '27.43%', top: '38.79%', fontSize: '13.97cqw' }}>2</span>
+        <span style={{ position: 'absolute', left: '35.25%', top: '43.09%', fontSize: '8.16cqw' }}>TRUTHS</span>
+        <span style={{ position: 'absolute', left: '26.02%', top: '50.05%', fontSize: '12.57cqw' }}>&amp;</span>
+        <span style={{ position: 'absolute', left: '35.25%', top: '51.25%', fontSize: '8.16cqw' }}>A BLUFF</span>
       </div>
     </div>
   )

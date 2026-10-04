@@ -215,6 +215,7 @@ export default function App() {
       onPlayCharades={() => setScreen('charades')}
       onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
       onPlayYouLaugh={() => setScreen('you-laugh')}
+      onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
       onBrowse={() => setScreen('browse')}
       onPlayTogether={() => setScreen('play-together')}
     />

@@ -60,14 +60,6 @@ export const GAME_CARDS = (
   onPlayLateNightTalks?: () => void,
 ): CardDef[] => [
   {
-    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 348, h: 348, playable: true,
-    render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <TwoTruthsBluffArtwork />
-      </div>
-    ),
-  },
-  {
     id: 'truth-or-dare', categories: ['couples'], w: 345.716, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15.23px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
@@ -254,6 +246,14 @@ export const GAME_CARDS = (
       </div>
     ),
   },
+  {
+    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 348, h: 348, playable: true,
+    render: (onClick) => (
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
+        <TwoTruthsBluffArtwork />
+      </div>
+    ),
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -264,9 +264,10 @@ interface HomeGridProps {
   onPlayTruthOrDare: () => void
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
+  onPlayTwoTruthsBluff: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -312,6 +313,7 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('you-laugh')}
         {getEl('do-or-drink')}
       </>, 'flex-start')}
+      {row(<>{getEl('two-truths-bluff', onPlayTwoTruthsBluff)}</>, 'flex-start')}
     </div>
   )
 }
