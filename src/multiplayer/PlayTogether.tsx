@@ -273,7 +273,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'you-laugh': 'roundLength',
   'do-or-drink': 'categories',
   'two-truths-bluff': 'write',
-  'most-likely-to': 'setup',
+  'most-likely-to': 'categories',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -294,7 +294,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'you-laugh': 'roundLength',
   'do-or-drink': 'deckSize',
   'two-truths-bluff': 'write',
-  'most-likely-to': 'setup',
+  'most-likely-to': 'categories',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {

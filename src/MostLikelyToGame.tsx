@@ -5,12 +5,16 @@ import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameSt
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 import { MOST_LIKELY_CATEGORIES, MOST_LIKELY_PROMPTS, type MostLikelyCategory } from './content/mostLikelyTo'
 
-type Step = 'playerSetup' | 'setup' | 'game' | 'handoff' | 'vote' | 'reveal' | 'done'
+type Step = 'playerSetup' | 'categories' | 'deckSize' | 'game' | 'handoff' | 'vote' | 'reveal' | 'done'
 type VoteMap = Record<string, string>
 type ScoreMap = Record<string, number>
 const GAME_ID = 'most-likely-to'
-const STEPS: readonly Step[] = ['playerSetup', 'setup', 'game', 'handoff', 'vote', 'reveal', 'done']
+const STEPS: readonly Step[] = ['playerSetup', 'categories', 'deckSize', 'game', 'handoff', 'vote', 'reveal', 'done']
 const COLORS = ['#ef6655', '#ffd12d', '#66d7ad', '#f7f1df']
+const CATEGORY_ICONS: Record<MostLikelyCategory, string> = {
+  party: '/icons/party.svg', friends: '/icons/friends.svg', couples: '/icons/couples.svg',
+  everyday: '/icons/everyday.svg', adventure: '/icons/full-journey.svg', bold: '/icons/how-spicy.svg',
+}
 const surface: React.CSSProperties = { background: '#070708', border: '1px dashed rgba(255,255,255,.10)', borderRadius: 14 }
 const title: React.CSSProperties = { margin: 0, color: '#fff', fontFamily: "'Anton SC', sans-serif", fontSize: 'clamp(28px,5vw,40px)', fontWeight: 400, textAlign: 'center' }
 const copy: React.CSSProperties = { margin: 0, color: 'rgba(255,255,255,.58)', fontFamily: "'Satoshi',sans-serif", fontSize: 15, lineHeight: 1.45, textAlign: 'center' }
@@ -84,11 +88,32 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
     if (cardIndex + 1 >= deck.length) { setStep('done'); return }
     setCardIndex(index => index + 1); setVotes({}); setVoterIndex(0); setSelected(''); setStep(multiplayer ? 'game' : 'handoff')
   }
-  const restart = () => { setDeck([]); setCardIndex(0); setVotes({}); setScores({}); setVoterIndex(0); setSelected(''); setStep(multiplayer ? 'setup' : 'playerSetup') }
+  const restart = () => { setDeck([]); setCardIndex(0); setVotes({}); setScores({}); setVoterIndex(0); setSelected(''); setStep(multiplayer ? 'categories' : 'playerSetup') }
 
   let content: React.ReactNode
-  if (step === 'playerSetup') content = <PlayerSetup minPlayers={2} initialPlayers={players} onSkip={onClose} onNext={nextPlayers => { setPlayers(nextPlayers); setStep('setup') }} />
-  else if (step === 'setup') content = <Screen><MostLikelyArtwork compact /><h1 style={title}>Set up the deck</h1><p style={copy}>Choose the moods you want. There are 50 unique cards in every category.</p><div style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>{MOST_LIKELY_CATEGORIES.map(category => { const active = categories.includes(category.id); return <button key={category.id} onClick={() => setCategories(current => active ? current.filter(id => id !== category.id) : [...current, category.id])} style={{ ...surface, minHeight: 70, padding: 12, color: '#fff', textAlign: 'left', border: active ? '1px solid #fff' : surface.border }}><strong className="font-staatliches" style={{ display: 'block', fontSize: 17 }}>{category.label}{category.adult ? ' · 18+' : ''}</strong><span style={{ fontFamily: "'Satoshi',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.48)' }}>{category.description}</span></button> })}</div><label style={{ ...copy, width: '100%', textAlign: 'left' }}>Deck size<input type="number" min={5} max={100} value={deckSize} onChange={event => setDeckSize(Math.max(5, Math.min(100, Number(event.target.value))))} style={{ ...surface, width: '100%', height: 52, marginTop: 8, padding: '0 14px', boxSizing: 'border-box', color: '#fff', fontFamily: "'Satoshi',sans-serif", fontSize: 16 }} /></label><Button disabled={!isHost || categories.length === 0} onClick={begin}>START GAME</Button></Screen>
+  if (step === 'playerSetup') content = <PlayerSetup minPlayers={2} initialPlayers={players} onSkip={onClose} onNext={nextPlayers => { setPlayers(nextPlayers); setStep('categories') }} />
+  else if (step === 'categories') content = <Screen>
+    <img src="/icons/party.svg" alt="" aria-hidden="true" style={{ width: 56, height: 56, objectFit: 'contain' }} />
+    <h1 style={title}>Choose your categories</h1>
+    <p style={copy}>Pick one or more moods. Each category contains 50 unique cards.</p>
+    <div style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
+      {MOST_LIKELY_CATEGORIES.map(category => {
+        const active = categories.includes(category.id)
+        return <button key={category.id} onClick={() => setCategories(current => active ? current.filter(id => id !== category.id) : [...current, category.id])} style={{ ...surface, minHeight: 82, padding: 12, display: 'flex', alignItems: 'center', gap: 12, color: '#fff', textAlign: 'left', border: active ? '1px solid #fff' : surface.border }}>
+          <img src={CATEGORY_ICONS[category.id]} alt="" aria-hidden="true" style={{ width: 30, height: 30, objectFit: 'contain', opacity: active ? 1 : .62 }} />
+          <span><strong className="font-staatliches" style={{ display: 'block', fontSize: 17 }}>{category.label}{category.adult ? ' · 18+' : ''}</strong><span style={{ fontFamily: "'Satoshi',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.48)' }}>{category.description}</span></span>
+        </button>
+      })}
+    </div>
+    <Button disabled={!isHost || categories.length === 0} onClick={() => setStep('deckSize')}>CONTINUE</Button>
+  </Screen>
+  else if (step === 'deckSize') content = <Screen>
+    <MostLikelyArtwork compact />
+    <h1 style={title}>Deck size</h1>
+    <p style={copy}>How many cards would you like to play?</p>
+    <label style={{ ...copy, width: '100%', textAlign: 'left' }}>Number of cards<input type="number" min={5} max={100} value={deckSize} onChange={event => setDeckSize(Math.max(5, Math.min(100, Number(event.target.value))))} style={{ ...surface, width: '100%', height: 56, marginTop: 8, padding: '0 16px', boxSizing: 'border-box', color: '#fff', fontFamily: "'Satoshi',sans-serif", fontSize: 18 }} /></label>
+    <div style={{ display: 'flex', gap: 10 }}><Button secondary onClick={() => setStep('categories')}>BACK</Button><Button disabled={!isHost} onClick={begin}>START GAME</Button></div>
+  </Screen>
   else if (step === 'game') content = <Screen><h1 style={title}>Who’s most likely?</h1><PromptCard prompt={prompt} /><p style={copy}>{multiplayer ? 'Vote privately on your own phone.' : 'Pass the phone so everyone can vote privately.'}</p>{multiplayer && <Button onClick={() => setStep('vote')}>CAST MY VOTE</Button>}</Screen>
   else if (step === 'handoff') content = <Screen><p className="font-staatliches" style={{ margin: 0, color: '#66d7ad', letterSpacing: '.12em' }}>PRIVATE VOTE</p><h1 style={title}>Pass the phone to {currentVoter?.name}</h1><p style={copy}>Everyone else should look away while {currentVoter?.name} chooses.</p><Button onClick={() => setStep('vote')}>I’M {currentVoter?.name?.toUpperCase()}</Button></Screen>
   else if (step === 'vote' || step === 'reveal') {
@@ -132,7 +157,11 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
 }
 
 function PromptCard({ prompt, compact = false }: { prompt: string; compact?: boolean }) {
-  return <div style={{ width: compact ? 'min(420px,100%)' : 'min(440px,100%)', minHeight: compact ? 130 : 220, padding: compact ? 22 : 34, boxSizing: 'border-box', background: '#f7f1df', border: '10px solid #0759c7', borderRadius: 18, display: 'grid', placeItems: 'center', color: '#111318', fontFamily: "'Anton SC',sans-serif", fontSize: compact ? 21 : 28, lineHeight: 1.15, textAlign: 'center' }}>{prompt}</div>
+  return <div className="game-card" style={{ width: compact ? 'min(300px,76vw)' : 'min(330px,78vw)', aspectRatio: '4/5', padding: compact ? 12 : 14, boxSizing: 'border-box', position: 'relative', overflow: 'hidden', background: '#0759c7', borderRadius: 18, boxShadow: '0 24px 64px rgba(7,89,199,.25)' }}>
+    {COLORS.slice(0, 3).map((color, index) => <span key={color} aria-hidden="true" style={{ position: 'absolute', width: 52, height: 13, borderRadius: 999, background: color, transform: `rotate(${index % 2 ? -34 : 34}deg)`, left: index === 1 ? 'auto' : -12, right: index === 1 ? -12 : 'auto', top: `${15 + index * 31}%` }} />)}
+    <div style={{ height: '100%', padding: compact ? '38px 24px 46px' : '44px 28px 52px', boxSizing: 'border-box', background: '#f7f1df', borderRadius: 10, display: 'grid', placeItems: 'center', color: '#111318', fontFamily: "'Anton SC',sans-serif", fontSize: compact ? 22 : 26, lineHeight: 1.16, textAlign: 'center', textTransform: 'uppercase' }}>{prompt}</div>
+    <span className="font-staatliches" style={{ position: 'absolute', left: 0, right: 0, bottom: compact ? 14 : 16, color: '#fff', fontSize: 11, letterSpacing: '.2em', textAlign: 'center' }}>DECKED</span>
+  </div>
 }
 
 function Screen({ children, compact = false }: { children: React.ReactNode; compact?: boolean }) {
