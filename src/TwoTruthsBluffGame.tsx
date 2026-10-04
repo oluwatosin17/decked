@@ -7,10 +7,10 @@ import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 type Statement = { id: string; text: string }
 type VoteMap = Record<string, string>
 type ScoreMap = Record<string, number>
-type Step = 'playerSetup' | 'write' | 'guess' | 'reveal' | 'done'
+type Step = 'playerSetup' | 'write' | 'handoff' | 'guess' | 'reveal' | 'done'
 
 const GAME_ID = 'two-truths-bluff'
-const STEPS: readonly Step[] = ['playerSetup', 'write', 'guess', 'reveal', 'done']
+const STEPS: readonly Step[] = ['playerSetup', 'write', 'handoff', 'guess', 'reveal', 'done']
 
 export function TwoTruthsBluffArtwork({ className = '' }: { className?: string }) {
   return (
@@ -48,8 +48,10 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
   const [bluffId, setBluffId] = usePersistentGameState(GAME_ID, 'bluffId', '')
   const [votes, setVotes] = usePersistentGameState<VoteMap>(GAME_ID, 'votes', {})
   const [scores, setScores] = usePersistentGameState<ScoreMap>(GAME_ID, 'scores', {})
+  const [guesserIndex, setGuesserIndex] = usePersistentGameState(GAME_ID, 'guesserIndex', 0)
   const [drafts, setDrafts] = useState(['', '', ''])
   const [draftBluff, setDraftBluff] = useState(2)
+  const [selectedGuess, setSelectedGuess] = useState('')
   const active = players[round % Math.max(players.length, 1)]
   const activeKey = active ? playerKey(active, round % players.length) : ''
   const isHost = !multiplayer || multiplayer.currentUserId === multiplayer.hostUserId
@@ -61,12 +63,17 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
     return Object.fromEntries(eligible.map(key => [key, multiplayer.values[`${votePrefix}${key}`]]).filter((entry): entry is [string, string] => typeof entry[1] === 'string'))
   }, [eligible, multiplayer, votePrefix, votes])
   const allVoted = eligible.length > 0 && eligible.every(key => effectiveVotes[key])
+  const currentGuesserKey = eligible[guesserIndex] ?? ''
+  const currentGuesser = players.find((player, index) => playerKey(player, index) === currentGuesserKey)
+  const nameForKey = (key: string) => players.find((player, index) => playerKey(player, index) === key)?.name ?? 'Player'
 
   const startRound = (nextRound = round) => {
     setRound(nextRound)
     setStatements([])
     setBluffId('')
     setVotes({})
+    setGuesserIndex(0)
+    setSelectedGuess('')
     setDrafts(['', '', ''])
     setDraftBluff(2)
     setStep('write')
@@ -80,60 +87,90 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
     setStatements(shuffled)
     setBluffId(bluff)
     setVotes({})
-    setStep('guess')
+    setGuesserIndex(0)
+    setSelectedGuess('')
+    setStep(multiplayer ? 'guess' : 'handoff')
   }
 
-  const vote = (id: string) => {
+  const calculateScores = (completedVotes: VoteMap) => {
+    const nextScores = { ...scores }
+    eligible.forEach(key => {
+      if (completedVotes[key] === bluffId) nextScores[key] = (nextScores[key] ?? 0) + 1
+      else nextScores[activeKey] = (nextScores[activeKey] ?? 0) + 1
+    })
+    setScores(nextScores)
+  }
+
+  const confirmVote = () => {
+    if (!selectedGuess) return
     const me = multiplayer?.currentUserId ?? eligible.find(key => !effectiveVotes[key])
     if (!me || me === activeKey || effectiveVotes[me]) return
-    if (multiplayer) multiplayer.setValue(`${votePrefix}${me}`, id)
-    const nextVotes = { ...effectiveVotes, [me]: id }
+    if (multiplayer) multiplayer.setValue(`${votePrefix}${me}`, selectedGuess)
+    const nextVotes = { ...effectiveVotes, [me]: selectedGuess }
     if (!multiplayer) setVotes(nextVotes)
-    if (!multiplayer && eligible.every(key => nextVotes[key])) setStep('reveal')
+    setSelectedGuess('')
+    if (!multiplayer) {
+      if (eligible.every(key => nextVotes[key])) {
+        calculateScores(nextVotes)
+        setStep('reveal')
+      } else {
+        setGuesserIndex(index => index + 1)
+        setStep('handoff')
+      }
+    }
   }
 
   const reveal = () => {
     if (!allVoted) return
-    const nextScores = { ...scores }
-    eligible.forEach(key => {
-      if (effectiveVotes[key] === bluffId) nextScores[key] = (nextScores[key] ?? 0) + 1
-      else nextScores[activeKey] = (nextScores[activeKey] ?? 0) + 1
-    })
-    setScores(nextScores)
+    calculateScores(effectiveVotes)
     setStep('reveal')
   }
 
   const nextRound = () => round + 1 >= players.length ? setStep('done') : startRound(round + 1)
-  const restart = () => { setRound(0); setStatements([]); setBluffId(''); setVotes({}); setScores({}); setStep(multiplayer ? 'write' : 'playerSetup') }
+  const restart = () => { setRound(0); setStatements([]); setBluffId(''); setVotes({}); setScores({}); setGuesserIndex(0); setSelectedGuess(''); setStep(multiplayer ? 'write' : 'playerSetup') }
 
   let content: React.ReactNode
   if (step === 'playerSetup') content = <PlayerSetup minPlayers={2} initialPlayers={players} onSkip={onClose} onNext={nextPlayers => { setPlayers(nextPlayers); startRound(0) }} />
   else if (step === 'write') content = <Screen>
-    <TwoTruthsBluffArtwork className="ttb-artwork ttb-artwork-small" />
     <h1 style={titleStyle}>{active?.name ? `${active.name}'s turn` : 'Your turn'}</h1>
     {isActive ? <>
       <p style={copyStyle}>Write two true statements and one bluff. Only you should know which is which.</p>
-      <div style={{ width: '100%', display: 'grid', gap: 10 }}>{drafts.map((value, index) => <div key={index} style={{ display: 'flex', gap: 8, alignItems: 'center' }}><input value={value} onChange={event => setDrafts(items => items.map((item, i) => i === index ? event.target.value : item))} placeholder={`Statement ${index + 1}`} style={fieldStyle} /><button type="button" onClick={() => setDraftBluff(index)} className="font-staatliches" style={{ minWidth: 76, height: 42, borderRadius: 999, border: draftBluff === index ? '1px solid #8e7905' : '1px dashed rgba(255,255,255,.12)', background: draftBluff === index ? '#f0de72' : '#070708', color: draftBluff === index ? '#3a3100' : 'rgba(255,255,255,.55)' }}>BLUFF</button></div>)}</div>
-      <Button disabled={drafts.some(item => !item.trim())} onClick={submitStatements}>SHUFFLE & SHARE</Button>
+      <div style={{ width: '100%', display: 'grid', gap: 10 }}>{drafts.map((value, index) => <div key={index} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 92px', gap: 8, alignItems: 'stretch' }}><input value={value} onChange={event => setDrafts(items => items.map((item, i) => i === index ? event.target.value : item))} placeholder={`Statement ${index + 1}`} style={fieldStyle} /><button type="button" onClick={() => setDraftBluff(index)} className="font-staatliches" style={{ minWidth: 92, minHeight: 54, borderRadius: 12, border: draftBluff === index ? '1px solid #8e7905' : '1px dashed rgba(255,255,255,.12)', background: draftBluff === index ? '#f0de72' : '#070708', color: draftBluff === index ? '#3a3100' : 'rgba(255,255,255,.55)' }}>BLUFF</button></div>)}</div>
+      <Button disabled={drafts.some(item => !item.trim())} onClick={submitStatements}>READY FOR GUESSES</Button>
     </> : <p style={copyStyle}>{active?.name} is writing two truths and a bluff. You’ll see all three together when they are ready.</p>}
   </Screen>
+  else if (step === 'handoff') content = <Screen>
+    <p className="font-staatliches" style={{ margin: 0, color: '#f0de72', fontSize: 14, letterSpacing: '.12em' }}>KEEP THE BLUFF SECRET</p>
+    <h1 style={titleStyle}>Pass the phone to {currentGuesser?.name}</h1>
+    <p style={copyStyle}>{active?.name} should look away. {currentGuesser?.name} will make the next private guess.</p>
+    <div style={{ width: 78, height: 78, borderRadius: '50%', background: currentGuesser?.color, border: '3px solid #fff', boxShadow: `0 0 30px ${currentGuesser?.color ?? '#fff'}55` }} />
+    <Button onClick={() => setStep('guess')}>I'M {currentGuesser?.name?.toUpperCase()}</Button>
+  </Screen>
   else if (step === 'guess' || step === 'reveal') {
-    const me = multiplayer?.currentUserId ?? eligible.find(key => !effectiveVotes[key])
-    const canVote = step === 'guess' && Boolean(me) && me !== activeKey && !effectiveVotes[me!]
+    const me = multiplayer?.currentUserId ?? currentGuesserKey
+    const submittedGuess = me ? effectiveVotes[me] : ''
+    const canVote = step === 'guess' && Boolean(me) && me !== activeKey && !submittedGuess
+    const isStoryteller = me === activeKey
     content = <Screen>
       <h1 style={titleStyle}>{step === 'reveal' ? 'The bluff is revealed' : `Which one is ${active?.name}'s bluff?`}</h1>
-      <p style={copyStyle}>{step === 'reveal' ? 'Correct guesses earn one point. The storyteller earns one point for every player fooled.' : 'Ask questions, then choose the statement you think is the bluff.'}</p>
-      <div style={{ width: '100%', display: 'grid', gap: 12 }}>{statements.map((statement, index) => { const selected = me ? effectiveVotes[me] === statement.id : false; const isBluff = step === 'reveal' && statement.id === bluffId; return <button key={statement.id} disabled={!canVote} onClick={() => vote(statement.id)} style={{ ...surfaceStyle, minHeight: 78, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, color: '#fff', textAlign: 'left', cursor: canVote ? 'pointer' : 'default', border: isBluff ? '2px solid #f0de72' : selected ? '2px solid #e8292d' : surfaceStyle.border }}><span className="font-slackey" style={{ color: '#8e7905', fontSize: 22 }}>{index + 1}</span><span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: 16, lineHeight: 1.35, flex: 1 }}>{statement.text}</span>{isBluff && <span className="font-staatliches" style={{ color: '#f0de72' }}>BLUFF</span>}</button> })}</div>
+      <p style={copyStyle}>{step === 'reveal' ? 'See what everyone chose and who spotted the bluff.' : canVote ? `${nameForKey(me)}: ask questions, then lock in one answer.` : submittedGuess ? 'Your guess is locked. Waiting for the other players.' : isStoryteller ? 'Answer their questions without giving the bluff away.' : `${active?.name} is waiting for everyone to guess.`}</p>
+      <div style={{ width: '100%', display: 'grid', gap: 12 }}>{statements.map((statement, index) => { const selected = step === 'guess' && (selectedGuess || submittedGuess) === statement.id; const isBluff = step === 'reveal' && statement.id === bluffId; const voters = step === 'reveal' ? Object.entries(effectiveVotes).filter(([, statementId]) => statementId === statement.id).map(([key]) => nameForKey(key)) : []; return <button key={statement.id} disabled={!canVote} onClick={() => setSelectedGuess(statement.id)} style={{ ...surfaceStyle, minHeight: 78, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, color: '#fff', textAlign: 'left', cursor: canVote ? 'pointer' : 'default', border: isBluff ? '2px solid #f0de72' : selected ? '2px solid #e8292d' : surfaceStyle.border }}><span className="font-slackey" style={{ color: '#8e7905', fontSize: 22 }}>{index + 1}</span><span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: 16, lineHeight: 1.35, flex: 1 }}>{statement.text}{voters.length > 0 && <small style={{ display: 'block', marginTop: 6, color: 'rgba(255,255,255,.48)', fontSize: 12 }}>{voters.join(', ')} chose this</small>}</span>{isBluff && <span className="font-staatliches" style={{ color: '#f0de72' }}>BLUFF</span>}</button> })}</div>
+      {step === 'guess' && canVote && <Button disabled={!selectedGuess} onClick={confirmVote}>CONFIRM GUESS</Button>}
       {step === 'guess' && <p style={copyStyle}>{Object.keys(effectiveVotes).length} of {eligible.length} guesses submitted</p>}
-      {step === 'guess' && isHost && <Button disabled={!allVoted} onClick={reveal}>REVEAL THE BLUFF</Button>}
+      {step === 'guess' && isHost && (!canVote || Boolean(submittedGuess)) && <Button disabled={!allVoted} onClick={reveal}>REVEAL THE BLUFF</Button>}
       {step === 'reveal' && isHost && <Button onClick={nextRound}>{round + 1 >= players.length ? 'SEE RESULTS' : 'NEXT PLAYER'}</Button>}
     </Screen>
-  } else content = <Screen>
-    <TwoTruthsBluffArtwork className="ttb-artwork ttb-artwork-small" />
+  } else {
+    const ranked = [...players].map((player, index) => ({ player, key: playerKey(player, index), score: scores[playerKey(player, index)] ?? 0 })).sort((a, b) => b.score - a.score)
+    const topScore = ranked[0]?.score ?? 0
+    const winners = ranked.filter(item => item.score === topScore)
+    content = <Screen>
     <h1 style={titleStyle}>YOU'RE DECKED</h1>
-    <div style={{ width: '100%', display: 'grid', gap: 8 }}>{players.map((player, index) => <div key={playerKey(player, index)} style={{ ...surfaceStyle, minHeight: 56, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 12 }}><span style={{ width: 30, height: 30, borderRadius: '50%', background: player.color, border: '2px solid #fff' }} /><span className="font-anton" style={{ color: '#fff', fontSize: 17 }}>{player.name}</span><span className="font-staatliches" style={{ color: '#f0de72', marginLeft: 'auto', fontSize: 18 }}>{scores[playerKey(player, index)] ?? 0} PTS</span></div>)}</div>
+    <p style={copyStyle}>{winners.length > 1 ? `${winners.map(item => item.player.name).join(' & ')} tied for the win.` : `${winners[0]?.player.name ?? 'The winner'} spotted the stories best.`}</p>
+    <div style={{ ...surfaceStyle, width: '100%', padding: '22px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 10 }}><p className="font-staatliches" style={{ margin: 0, color: 'rgba(255,255,255,.45)', letterSpacing: '.12em', textAlign: 'center' }}>FINAL SCORES</p>{ranked.map((item, index) => <div key={item.key} style={{ minHeight: 58, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 12, background: index === 0 ? 'rgba(240,222,114,.08)' : 'transparent', borderRadius: 10 }}><span className="font-slackey" style={{ width: 24, color: index === 0 ? '#f0de72' : 'rgba(255,255,255,.32)', fontSize: 18 }}>{index + 1}</span><span style={{ width: 32, height: 32, borderRadius: '50%', background: item.player.color, border: '2px solid #fff' }} /><span className="font-anton" style={{ color: '#fff', fontSize: 17 }}>{item.player.name}</span><span className="font-staatliches" style={{ color: '#f0de72', marginLeft: 'auto', fontSize: 20 }}>{item.score} {item.score === 1 ? 'PT' : 'PTS'}</span></div>)}</div>
     <div className="done-btns" style={{ display: 'flex', gap: 10 }}><Button secondary onClick={onClose}>BROWSE GAMES</Button><Button onClick={restart}><PlayAgainLabel /></Button></div>
   </Screen>
+  }
 
   return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}><GameNav onBack={onClose} /><main style={{ flex: 1, display: 'flex' }}>{content}</main><GameFooter /><style>{`.ttb-artwork{display:block;width:min(420px,82vw);aspect-ratio:1}.ttb-artwork-small{width:min(220px,48vw)}@media(max-width:768px){.ttb-artwork-small{width:150px}.ttb-game-screen{padding:28px 16px 48px!important;gap:18px!important}}`}</style></div>
 }

@@ -334,7 +334,6 @@ const TURN_CONTROLLED_GAMES = new Set<MultiplayerGameId>([
   'spicy-starters', 'late-night-talks', 'dinner-table', 'icebreaker',
   'everyday-conversation', 'reconnect', 'strangers', 'finger-down',
   'take-a-sip', 'sip-or-spill', 'do-or-drink',
-  'two-truths-bluff',
 ])
 
 function GuestSetupWaiting({ room, onClose }: { room: MultiplayerRoom; onClose: () => void }) {
