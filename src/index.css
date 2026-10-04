@@ -1747,6 +1747,13 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   outline-offset: 3px;
 }
 
+.mlt-deck-input:focus,
+.mlt-deck-input:focus-visible {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.34) !important;
+  box-shadow: none;
+}
+
 .charades-sheet-open .sound-toggle {
   opacity: 0;
   pointer-events: none;

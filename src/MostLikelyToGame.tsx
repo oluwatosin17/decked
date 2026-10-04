@@ -109,7 +109,7 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
   else if (step === 'deckSize') content = <Screen>
     <h1 style={title}>Deck size</h1>
     <p style={copy}>How many cards would you like to play?</p>
-    <label style={{ ...copy, width: '100%', textAlign: 'left' }}>Number of cards<input type="number" min={5} max={100} value={deckSize} onChange={event => setDeckSize(Math.max(5, Math.min(100, Number(event.target.value))))} style={{ ...surface, width: '100%', height: 56, marginTop: 8, padding: '0 16px', boxSizing: 'border-box', color: '#fff', fontFamily: "'Satoshi',sans-serif", fontSize: 18 }} /></label>
+    <label style={{ ...copy, width: '100%', textAlign: 'left' }}>Number of cards<input className="mlt-deck-input" type="number" min={5} max={100} value={deckSize} onChange={event => setDeckSize(Math.max(5, Math.min(100, Number(event.target.value))))} style={{ ...surface, width: '100%', height: 56, marginTop: 8, padding: '0 16px', boxSizing: 'border-box', color: '#fff', fontFamily: "'Satoshi',sans-serif", fontSize: 18, outline: 'none' }} /></label>
     <div style={{ display: 'flex', gap: 10 }}><Button secondary onClick={() => setStep('categories')}>BACK</Button><Button disabled={!isHost} onClick={begin}>START GAME</Button></div>
   </Screen>
   else if (step === 'game') content = <Screen><h1 style={title}>Who’s most likely?</h1><PromptCard prompt={prompt} /><p style={copy}>{multiplayer ? 'Vote privately on your own phone.' : 'Pass the phone so everyone can vote privately.'}</p>{multiplayer && <Button onClick={() => setStep('vote')}>CAST MY VOTE</Button>}</Screen>
@@ -155,10 +155,10 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
 }
 
 function PromptCard({ prompt, compact = false }: { prompt: string; compact?: boolean }) {
-  return <div className="game-card" style={{ width: compact ? 'min(300px,76vw)' : 'min(330px,78vw)', aspectRatio: '4/5', padding: compact ? 12 : 14, boxSizing: 'border-box', position: 'relative', overflow: 'hidden', background: '#0759c7', borderRadius: 18, boxShadow: '0 24px 64px rgba(7,89,199,.25)' }}>
+  return <div className="game-card" style={{ width: compact ? 'min(300px,76vw)' : 'min(330px,78vw)', aspectRatio: '4/5', padding: compact ? '12px 12px 38px' : '14px 14px 42px', boxSizing: 'border-box', position: 'relative', overflow: 'hidden', background: '#0759c7', borderRadius: 18, boxShadow: '0 24px 64px rgba(7,89,199,.25)' }}>
     {COLORS.slice(0, 3).map((color, index) => <span key={color} aria-hidden="true" style={{ position: 'absolute', width: 52, height: 13, borderRadius: 999, background: color, transform: `rotate(${index % 2 ? -34 : 34}deg)`, left: index === 1 ? 'auto' : -12, right: index === 1 ? -12 : 'auto', top: `${15 + index * 31}%` }} />)}
     <div style={{ height: '100%', padding: compact ? '38px 24px 46px' : '44px 28px 52px', boxSizing: 'border-box', background: '#f7f1df', borderRadius: 10, display: 'grid', placeItems: 'center', color: '#111318', fontFamily: "'Anton SC',sans-serif", fontSize: compact ? 22 : 26, lineHeight: 1.16, textAlign: 'center', textTransform: 'uppercase' }}>{prompt}</div>
-    <span className="font-staatliches" style={{ position: 'absolute', left: 0, right: 0, bottom: compact ? 14 : 16, color: '#fff', fontSize: 11, letterSpacing: '.2em', textAlign: 'center' }}>DECKED</span>
+    <span className="font-staatliches" style={{ position: 'absolute', left: 0, right: 0, bottom: compact ? 11 : 13, color: '#fff', fontSize: compact ? 12 : 13, letterSpacing: '.2em', textAlign: 'center' }}>DECKED</span>
   </div>
 }
 
