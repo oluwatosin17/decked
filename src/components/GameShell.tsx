@@ -132,7 +132,7 @@ export function GameFooter() {
   return (
     <footer className="game-footer" style={{
       background: 'rgba(5,5,12,0.72)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
-      padding: '32px 60px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0,
+      padding: '32px 16px', display: 'flex', flexDirection: 'column', gap: '40px', flexShrink: 0,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '420px', minWidth: '200px' }}>
