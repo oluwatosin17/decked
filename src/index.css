@@ -1323,6 +1323,11 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
    ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
+  .home-footer {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
   .home-footer button,
   .home-footer a {
     min-width: 44px;

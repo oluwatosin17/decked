@@ -325,7 +325,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
       {/* ══════════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════════ */}
-      <footer className="home-footer" style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px', padding: '32px 16px', background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}>
+      <footer className="home-footer" style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px', padding: '32px 60px', background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '420px' }}>
             <p className="font-anton text-white" style={{ fontSize: '32px' }}>DECKED</p>
