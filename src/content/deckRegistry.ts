@@ -12,6 +12,7 @@ import { TAKE_A_SIP_DECKS } from '../TakeASipGame'
 import { SIP_OR_SPILL_DECKS } from '../SipOrSpillGame'
 import { LAUGH_YOU_ARE_OUT_DECK } from '../LaughYouAreOutGame'
 import { DO_OR_DRINK_DECKS } from '../DoOrDrinkGame'
+import { MOST_LIKELY_DECK } from './mostLikelyTo'
 
 export interface AuditedDeck {
   game: string
@@ -39,4 +40,5 @@ export const AUDITED_DECKS: AuditedDeck[] = [
   ...categorized('Sip or Spill', SIP_OR_SPILL_DECKS),
   { game: "You Laugh, You're Out", category: 'main', prompts: LAUGH_YOU_ARE_OUT_DECK },
   ...categorized('Do or Drink', DO_OR_DRINK_DECKS),
+  { game: "Who's Most Likely To", category: 'main', prompts: MOST_LIKELY_DECK },
 ]

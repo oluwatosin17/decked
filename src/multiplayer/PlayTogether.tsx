@@ -30,6 +30,7 @@ import SipOrSpillGame from '../SipOrSpillGame'
 import LaughYouAreOutGame from '../LaughYouAreOutGame'
 import DoOrDrinkGame from '../DoOrDrinkGame'
 import TwoTruthsBluffGame from '../TwoTruthsBluffGame'
+import MostLikelyToGame from '../MostLikelyToGame'
 import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startMultiGame, touchRoom } from './roomApi'
 import { ensureAnonymousUser, multiplayerConfigured, supabase } from './supabase'
 import { MULTIPLAYER_GAMES } from './gameConfig'
@@ -89,6 +90,7 @@ function Entry({ onCreate, onJoin, busy, error }: {
       onPlayYouLaugh={() => selectGame('you-laugh')}
       onPlayDoOrDrink={() => selectGame('do-or-drink')}
       onPlayTwoTruthsBluff={() => selectGame('two-truths-bluff')}
+      onPlayMostLikelyTo={() => selectGame('most-likely-to')}
     />
   </div>
 
@@ -250,6 +252,7 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   'you-laugh': 'you-laugh',
   'do-or-drink': 'do-or-drink',
   'two-truths-bluff': 'two-truths-bluff',
+  'most-likely-to': 'most-likely-to',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -270,6 +273,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'you-laugh': 'roundLength',
   'do-or-drink': 'categories',
   'two-truths-bluff': 'write',
+  'most-likely-to': 'setup',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -290,6 +294,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'you-laugh': 'roundLength',
   'do-or-drink': 'deckSize',
   'two-truths-bluff': 'write',
+  'most-likely-to': 'setup',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -310,6 +315,7 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   'you-laugh': ['gameplay', 'whoLaughed', 'livesRemaining', 'winner'],
   'do-or-drink': ['game'],
   'two-truths-bluff': ['write', 'guess', 'reveal', 'done'],
+  'most-likely-to': ['game', 'vote', 'reveal', 'done'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -328,6 +334,7 @@ const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
   'sip-or-spill': 'game',
   'do-or-drink': 'game',
   'two-truths-bluff': 'write',
+  'most-likely-to': 'game',
 }
 
 const TURN_CONTROLLED_GAMES = new Set<MultiplayerGameId>([
@@ -484,6 +491,7 @@ function SharedOriginalGame({ room, currentUserId, onlineIds, onClose }: { room:
     case 'you-laugh': game = <LaughYouAreOutGame onClose={onClose} />; break
     case 'do-or-drink': game = <DoOrDrinkGame onClose={onClose} />; break
     case 'two-truths-bluff': game = <TwoTruthsBluffGame onClose={onClose} />; break
+    case 'most-likely-to': game = <MostLikelyToGame onClose={onClose} />; break
   }
 
   return <SharedSessionProvider value={shared}>

@@ -9,7 +9,7 @@ const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
 
-const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff']
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to']
 const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
@@ -18,6 +18,7 @@ const FEATURED_ACTIONS: Record<string, string> = {
   'never-have-i-ever': 'onPlayNeverHaveIEver',
   'you-laugh': 'onPlayYouLaugh',
   'two-truths-bluff': 'onPlayTwoTruthsBluff',
+  'most-likely-to': 'onPlayMostLikelyTo',
 }
 
 function useIsMobile(bp = 768) {
@@ -42,6 +43,7 @@ interface Props {
   onPlayNeverHaveIEver?: () => void
   onPlayYouLaugh?: () => void
   onPlayTwoTruthsBluff: () => void
+  onPlayMostLikelyTo: () => void
   onBrowse: () => void
   onPlayTogether: () => void
 }
@@ -103,9 +105,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onBrowse, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onBrowse, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
-  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onBrowse }
 
   if (isMobile) {
     return (
@@ -316,7 +318,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
             Pick your vibe.
           </h2>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} />
         </div>
       </section>
 

@@ -20,6 +20,7 @@ import DoOrDrinkGame from './DoOrDrinkGame'
 import IcebreakerGame from './IcebreakerGame'
 import RedFlagGreenFlagGame from './RedFlagGreenFlagGame'
 import TwoTruthsBluffGame from './TwoTruthsBluffGame'
+import MostLikelyToGame from './MostLikelyToGame'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
 import PlayTogether from './multiplayer/PlayTogether'
@@ -62,6 +63,7 @@ export default function App() {
       'icebreaker': 'icebreaker',
       'red-flag-green-flag': 'red-flag-green-flag',
       'two-truths-bluff': 'two-truths-bluff',
+      'most-likely-to': 'most-likely-to',
     }
     setScreen(map[gameId] ?? 'browse')
   }, [])
@@ -178,6 +180,10 @@ export default function App() {
     return <TwoTruthsBluffGame onClose={() => setScreen('browse')} />
   }
 
+  if (screen === 'most-likely-to') {
+    return <MostLikelyToGame onClose={() => setScreen('browse')} />
+  }
+
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
@@ -201,6 +207,7 @@ export default function App() {
         onPlayIcebreaker={() => setScreen('icebreaker')}
         onPlayRedFlagGreenFlag={() => setScreen('red-flag-green-flag')}
         onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
+        onPlayMostLikelyTo={() => setScreen('most-likely-to')}
       />
     )
   }
@@ -216,6 +223,7 @@ export default function App() {
       onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
       onPlayYouLaugh={() => setScreen('you-laugh')}
       onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
+      onPlayMostLikelyTo={() => setScreen('most-likely-to')}
       onBrowse={() => setScreen('browse')}
       onPlayTogether={() => setScreen('play-together')}
     />

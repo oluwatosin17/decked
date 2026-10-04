@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { TwoTruthsBluffArtwork } from '../TwoTruthsBluffGame'
+import { MostLikelyArtwork } from '../MostLikelyToGame'
 
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
@@ -254,6 +255,10 @@ export const GAME_CARDS = (
       </div>
     ),
   },
+  {
+    id: 'most-likely-to', categories: ['icebreakers', 'couples', 'party-games'], w: 278, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork /></div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -265,9 +270,10 @@ interface HomeGridProps {
   onPlaySpicyStarters: () => void
   onPlayLateNightTalks: () => void
   onPlayTwoTruthsBluff: () => void
+  onPlayMostLikelyTo: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -313,7 +319,7 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('you-laugh')}
         {getEl('do-or-drink')}
       </>, 'flex-start')}
-      {row(<>{getEl('two-truths-bluff', onPlayTwoTruthsBluff)}</>, 'flex-start')}
+      {row(<>{getEl('two-truths-bluff', onPlayTwoTruthsBluff)}{getEl('most-likely-to', onPlayMostLikelyTo)}</>, 'flex-start')}
     </div>
   )
 }
@@ -340,6 +346,7 @@ interface BrowseGridProps {
   onPlayIcebreaker?: () => void
   onPlayRedFlagGreenFlag?: () => void
   onPlayTwoTruthsBluff?: () => void
+  onPlayMostLikelyTo?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -361,6 +368,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'icebreaker': handlers.onPlayIcebreaker,
     'red-flag-green-flag': handlers.onPlayRedFlagGreenFlag,
     'two-truths-bluff': handlers.onPlayTwoTruthsBluff,
+    'most-likely-to': handlers.onPlayMostLikelyTo,
   }
   return map[card.id]
 }

@@ -43,10 +43,11 @@ interface Props {
   onPlayIcebreaker?: () => void
   onPlayRedFlagGreenFlag?: () => void
   onPlayTwoTruthsBluff?: () => void
+  onPlayMostLikelyTo?: () => void
   onQuickPlay?: () => void
 }
 
-export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onPlayRedFlagGreenFlag, onPlayTwoTruthsBluff, onQuickPlay }: Props) {
+export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onPlayRedFlagGreenFlag, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onQuickPlay }: Props) {
   const [active, setActive] = useState<Category>('all')
 
   return (
@@ -178,6 +179,7 @@ export default function BrowsePage({ onHome, onPlayTruthOrDare, onPlaySpicyStart
             onPlayIcebreaker={onPlayIcebreaker}
             onPlayRedFlagGreenFlag={onPlayRedFlagGreenFlag}
             onPlayTwoTruthsBluff={onPlayTwoTruthsBluff}
+            onPlayMostLikelyTo={onPlayMostLikelyTo}
           />
         </div>
       </main>

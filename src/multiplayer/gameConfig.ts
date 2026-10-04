@@ -15,6 +15,7 @@ import { SIP_OR_SPILL_DECKS } from '../SipOrSpillGame'
 import { LAUGH_YOU_ARE_OUT_DECK } from '../LaughYouAreOutGame'
 import { DO_OR_DRINK_DECKS } from '../DoOrDrinkGame'
 import type { MultiplayerGameId } from './types'
+import { MOST_LIKELY_DECK } from '../content/mostLikelyTo'
 
 export interface MultiplayerGameConfig {
   id: MultiplayerGameId
@@ -45,6 +46,7 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'you-laugh': { id: 'you-laugh', name: "You Laugh, You're Out", deck: LAUGH_YOU_ARE_OUT_DECK, cardColor: '#ef3b4b', textColor: '#fff', kind: 'conversation' },
   'do-or-drink': { id: 'do-or-drink', name: 'Do or Drink', deck: unique(Object.values(DO_OR_DRINK_DECKS).flat()), cardColor: '#d1ffd5', textColor: '#5228eb', kind: 'conversation' },
   'two-truths-bluff': { id: 'two-truths-bluff', name: 'Two Truths and a Bluff', deck: ['Player-created statements'], cardColor: '#f0de72', textColor: '#8e7905', kind: 'vote' },
+  'most-likely-to': { id: 'most-likely-to', name: 'Who’s Most Likely To?', deck: MOST_LIKELY_DECK, cardColor: '#0759c7', textColor: '#f7f1df', kind: 'vote' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES

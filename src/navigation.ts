@@ -8,6 +8,7 @@ export type Screen =
   | 'take-a-sip' | 'sip-or-spill' | 'do-or-drink'
   | 'icebreaker' | 'red-flag-green-flag'
   | 'two-truths-bluff'
+  | 'most-likely-to'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<Screen, string> = {
@@ -33,6 +34,7 @@ export const SCREEN_PATHS: Record<Screen, string> = {
   icebreaker: '/games/icebreaker',
   'red-flag-green-flag': '/games/red-flag-green-flag',
   'two-truths-bluff': '/games/two-truths-and-a-bluff',
+  'most-likely-to': '/games/most-likely-to',
   'play-together': '/play-together',
 }
 
