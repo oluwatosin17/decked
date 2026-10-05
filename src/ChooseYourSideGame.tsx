@@ -24,7 +24,7 @@ const title: React.CSSProperties = { margin: 0, color: '#fff', fontFamily: "'Ant
 const copy: React.CSSProperties = { margin: 0, color: 'rgba(255,255,255,.58)', fontFamily: "'Satoshi',sans-serif", fontSize: 15, lineHeight: 1.45, textAlign: 'center' }
 
 export function ChooseYourSideArtwork({ compact = false }: { compact?: boolean }) {
-  return <div style={{ width: compact ? 130 : '100%', aspectRatio: '83 / 130', height: compact ? undefined : '100%', minHeight: compact ? undefined : 0, position: 'relative', overflow: 'hidden', borderRadius: compact ? 9 : 14 }}>
+  return <div style={{ width: compact ? 130 : '100%', aspectRatio: '4 / 5', height: compact ? undefined : '100%', minHeight: compact ? undefined : 0, position: 'relative', overflow: 'hidden', borderRadius: compact ? 9 : 14 }}>
     <img src="/assets/games/choose-your-side.png" alt="Choose Your Side" style={{ display: 'block', position: 'absolute', width: '123.4%', height: '118.2%', left: '-11.7%', top: '-9.1%', maxWidth: 'none' }} />
   </div>
 }

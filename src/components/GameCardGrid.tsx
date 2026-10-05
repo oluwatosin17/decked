@@ -261,7 +261,7 @@ export const GAME_CARDS = (
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork /></div>,
   },
   {
-    id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 485.5, playable: true,
+    id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 387.5, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><ChooseYourSideArtwork /></div>,
   },
 ]
