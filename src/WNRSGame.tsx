@@ -313,8 +313,27 @@ function getStageForCard(cardIndex: number, stageBreaks: { stage: Stage; start: 
 
 /* ─── WNRS Card ─── */
 function WNRSCard({ question, stage, flipped, onFlip }: { question: string; stage: Stage; flipped: boolean; onFlip: () => void }) {
-  const WNRS_GREEN = '#1a9e47'
   const { wrapperStyle, cardStyle } = useScaledCard(340, 440)
+  const paperTexture = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E\")"
+  const questionSize = question.length > 115 ? 25 : question.length > 80 ? 28 : question.length > 52 ? 31 : 35
+  const stageLabel = stage === 'warm-up' ? 'FIRST IMPRESSIONS' : stage === 'connect' ? 'CONNECTION' : 'REFLECTION'
+  const faceStyle = {
+    position: 'absolute' as const,
+    inset: 0,
+    backfaceVisibility: 'hidden' as const,
+    WebkitBackfaceVisibility: 'hidden' as const,
+    backgroundColor: '#f4efe4',
+    backgroundImage: paperTexture,
+    borderRadius: '16px',
+    overflow: 'hidden',
+    boxShadow: '0 24px 60px rgba(0,0,0,0.34)',
+  }
+  const redStripe = (
+    <div style={{
+      position: 'absolute', top: 0, bottom: 0, right: '28px', width: '27px',
+      backgroundColor: '#ef3f2d', backgroundImage: paperTexture,
+    }} />
+  )
 
   return (
     <div style={{ ...wrapperStyle, perspective: '1000px' }}>
@@ -329,74 +348,49 @@ function WNRSCard({ question, stage, flipped, onFlip }: { question: string; stag
         transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
         transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
       }}>
-        {/* Front - green card */}
-        <div style={{
-          position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          background: WNRS_GREEN, borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(26,158,71,0.35)',
-        }}>
-          {/* Top stripes */}
-          <div style={{ position: 'absolute', top: '8px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <div style={{ height: '2px', background: 'rgba(255,255,255,0.4)' }} />
-            <div style={{ height: '3px', background: 'rgba(255,255,255,0.4)' }} />
-          </div>
-          {/* Bottom stripes */}
-          <div style={{ position: 'absolute', bottom: '8px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <div style={{ height: '2px', background: 'rgba(255,255,255,0.4)' }} />
-            <div style={{ height: '3px', background: 'rgba(255,255,255,0.4)' }} />
-          </div>
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
-            <p style={{
-              fontFamily: "'Satoshi', sans-serif", fontWeight: 700,
-              fontSize: '18px', color: '#fff',
-              textAlign: 'center', textTransform: 'uppercase',
-              lineHeight: 1.3, margin: 0, letterSpacing: '0.04em',
-            }}>
-              We're not really strangers
-            </p>
-          </div>
+        {/* Front */}
+        <div style={faceStyle}>
+          {redStripe}
+          <p style={{
+            position: 'absolute', left: '24px', top: '36px', width: '242px',
+            fontFamily: "'Anton SC', sans-serif", fontSize: '61px', fontWeight: 400,
+            color: '#111', lineHeight: 0.88, letterSpacing: '-0.025em', margin: 0,
+            textTransform: 'uppercase',
+          }}>
+            WE'RE<br />NOT<br />REALLY<br />STRANGERS
+          </p>
+          <span style={{
+            position: 'absolute', bottom: '18px', left: 0, right: 0,
+            fontFamily: "'Satoshi', sans-serif", fontWeight: 800, fontSize: '9px',
+            color: '#111', textAlign: 'center', letterSpacing: '0.42em',
+          }}>DECKED</span>
         </div>
-        {/* Back - white card with question */}
-        <div style={{
-          position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          transform: 'rotateY(180deg)',
-          background: '#fff', borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(26,158,71,0.35)',
-        }}>
-          {/* Top green band with stripes */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '24px', background: WNRS_GREEN }}>
-            <div style={{ position: 'absolute', bottom: '4px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '1px' }}>
-              <div style={{ height: '1.5px', background: 'rgba(255,255,255,0.5)' }} />
-              <div style={{ height: '2.5px', background: 'rgba(255,255,255,0.5)' }} />
-            </div>
+        {/* Back - question */}
+        <div style={{ ...faceStyle, transform: 'rotateY(180deg)' }}>
+          {redStripe}
+          <div style={{ position: 'absolute', top: '24px', left: '22px', right: '76px' }}>
+            <span style={{
+              fontFamily: "'Satoshi', sans-serif", fontWeight: 800, fontSize: '10px',
+              color: '#111', letterSpacing: '0.16em', textTransform: 'uppercase',
+            }}>
+              LEVEL {stage === 'warm-up' ? '1' : stage === 'connect' ? '2' : '3'} · {stageLabel}
+            </span>
           </div>
-          {/* Bottom green band */}
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '24px', background: WNRS_GREEN }}>
-            <div style={{ position: 'absolute', top: '4px', left: 0, right: 0, display: 'flex', flexDirection: 'column', gap: '1px' }}>
-              <div style={{ height: '1.5px', background: 'rgba(255,255,255,0.5)' }} />
-              <div style={{ height: '2.5px', background: 'rgba(255,255,255,0.5)' }} />
-            </div>
-          </div>
-          {/* Question */}
-          <div style={{ position: 'absolute', top: '40px', left: '28px', right: '28px', bottom: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: '76px', left: '24px', right: '76px', bottom: '54px', display: 'flex', alignItems: 'center' }}>
             <p style={{
-              fontFamily: "'Satoshi', sans-serif", fontWeight: 700,
-              fontSize: '22px', color: WNRS_GREEN,
-              textAlign: 'center', textTransform: 'uppercase',
-              lineHeight: 1.3, margin: 0,
+              fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+              fontSize: `${questionSize}px`, color: '#111',
+              textAlign: 'left', textTransform: 'uppercase',
+              lineHeight: 1.04, letterSpacing: '-0.012em', margin: 0,
             }}>
               {question}
             </p>
           </div>
-          {/* Stage label */}
-          <div style={{ position: 'absolute', bottom: '32px', left: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-            <span style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 700, fontSize: '8px', color: WNRS_GREEN, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              WE'RE NOT REALLY STRANGERS
-            </span>
-            <span style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, fontSize: '8px', color: WNRS_GREEN, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-              {getStageName(stage)}
-            </span>
-          </div>
+          <span style={{
+            position: 'absolute', bottom: '18px', left: 0, right: 0,
+            fontFamily: "'Satoshi', sans-serif", fontWeight: 800, fontSize: '9px',
+            color: '#111', textAlign: 'center', letterSpacing: '0.42em',
+          }}>DECKED</span>
         </div>
       </div>
     </div>

@@ -161,22 +161,32 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'strangers', categories: ['deep-talk', 'icebreakers'], w: 348.041, h: 257.189,
+    id: 'strangers', categories: ['deep-talk', 'icebreakers'], w: 277.948, h: 348,
     playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/strangers.png" alt="We're Not Really Strangers" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        <div style={{ position: 'absolute', left: 0, right: 0, top: '5.42px', display: 'flex', flexDirection: 'column', gap: '0.452px', pointerEvents: 'none' }}>
-          <div style={{ height: '1.808px', background: '#e8e6e3', width: '100%' }} />
-          <div style={{ height: '3.164px', background: '#e8e6e3', width: '100%' }} />
-        </div>
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: '5.42px', display: 'flex', flexDirection: 'column', gap: '0.452px', pointerEvents: 'none' }}>
-          <div style={{ height: '1.808px', background: '#e8e6e3', width: '100%' }} />
-          <div style={{ height: '3.164px', background: '#e8e6e3', width: '100%' }} />
-        </div>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
-          <p className="font-satoshi" style={{ fontSize: '20px', fontWeight: 700, color: '#e8e6e3', textTransform: 'uppercase', whiteSpace: 'nowrap', margin: 0 }}>We're not really strangers</p>
-        </div>
+      <div className="card-tile" onClick={onClick} style={{
+        width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative',
+        cursor: onClick ? 'pointer' : 'default', backgroundColor: '#f4efe4',
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E\")",
+        boxShadow: '0 14px 36px rgba(0,0,0,0.28)',
+      }}>
+        <div style={{
+          position: 'absolute', top: 0, bottom: 0, right: '23px', width: '22px',
+          backgroundColor: '#ef3f2d',
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E\")",
+          pointerEvents: 'none',
+        }} />
+        <p className="font-anton" style={{
+          position: 'absolute', left: '18px', top: '29px', width: '198px', margin: 0,
+          fontSize: '49px', fontWeight: 400, color: '#111', textTransform: 'uppercase',
+          lineHeight: 0.88, letterSpacing: '-0.025em', pointerEvents: 'none',
+        }}>
+          WE'RE<br />NOT<br />REALLY<br />STRANGERS
+        </p>
+        <span className="font-satoshi" style={{
+          position: 'absolute', left: 0, right: 0, bottom: '14px', textAlign: 'center',
+          color: '#111', fontSize: '8px', fontWeight: 800, letterSpacing: '0.42em', pointerEvents: 'none',
+        }}>DECKED</span>
       </div>
     ),
   },
