@@ -261,7 +261,7 @@ export const GAME_CARDS = (
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork /></div>,
   },
   {
-    id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 387.5, playable: true,
+    id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 485.5, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><ChooseYourSideArtwork /></div>,
   },
 ]
@@ -276,9 +276,10 @@ interface HomeGridProps {
   onPlayLateNightTalks: () => void
   onPlayTwoTruthsBluff: () => void
   onPlayMostLikelyTo: () => void
+  onPlayChooseYourSide: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -322,12 +323,13 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('take-a-sip')}
         {getEl('sip-or-spill')}
         {getEl('you-laugh')}
-        {getEl('do-or-drink')}
-      </>, 'flex-start')}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 310px)', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         {getEl('two-truths-bluff', onPlayTwoTruthsBluff)}
+      </>, 'flex-start')}
+      {row(<>
+        {getEl('do-or-drink')}
         {getEl('most-likely-to', onPlayMostLikelyTo)}
-      </div>
+        {getEl('choose-your-side', onPlayChooseYourSide)}
+      </>, 'flex-start')}
     </div>
   )
 }

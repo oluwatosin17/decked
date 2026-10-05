@@ -230,6 +230,7 @@ export default function App() {
       onPlayYouLaugh={() => setScreen('you-laugh')}
       onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
       onPlayMostLikelyTo={() => setScreen('most-likely-to')}
+      onPlayChooseYourSide={() => setScreen('choose-your-side')}
       onBrowse={() => setScreen('browse')}
       onPlayTogether={() => setScreen('play-together')}
     />

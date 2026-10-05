@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { GameFooter, GameNav, PlayAgainLabel } from './components/GameShell'
 import PlayerSetup, { type Player } from './components/PlayerSetup'
+import DeckSize from './components/DeckSize'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 import { CHOOSE_SIDE_CATEGORIES, CHOOSE_SIDE_PROMPTS, type ChooseSideCategory, type ChooseSidePrompt } from './content/chooseYourSide'
@@ -12,12 +13,20 @@ type Stats = { unanimous: number; closestGap: number; mostDivisive?: ChooseSideP
 const GAME_ID = 'choose-your-side'
 const STEPS: readonly Step[] = ['playerSetup', 'categories', 'deckSize', 'handoff', 'vote', 'reveal', 'done']
 const RED = '#ef3f24', BLUE = '#0759c7', CREAM = '#f7efd9'
+const CATEGORY_ICONS: Record<ChooseSideCategory, string> = {
+  everyday: '/icons/everyday.svg', funny: '/icons/random.svg', friends: '/icons/friends.svg',
+  relationships: '/icons/couples.svg', party: '/icons/party.svg', money: '/icons/meaningful.svg',
+  morals: '/icons/reflect.svg', deep: '/icons/deep.svg', adventure: '/icons/full-journey.svg',
+  'after-dark': '/icons/how-spicy.svg',
+}
 const surface: React.CSSProperties = { background: '#070708', border: '1px dashed rgba(255,255,255,.12)', borderRadius: 14 }
 const title: React.CSSProperties = { margin: 0, color: '#fff', fontFamily: "'Anton SC',sans-serif", fontSize: 'clamp(30px,6vw,44px)', fontWeight: 400, lineHeight: 1.05, textAlign: 'center' }
 const copy: React.CSSProperties = { margin: 0, color: 'rgba(255,255,255,.58)', fontFamily: "'Satoshi',sans-serif", fontSize: 15, lineHeight: 1.45, textAlign: 'center' }
 
 export function ChooseYourSideArtwork({ compact = false }: { compact?: boolean }) {
-  return <div role="img" aria-label="Choose Your Side" style={{ width: compact ? 130 : '100%', height: '100%', minHeight: compact ? 162 : undefined, position: 'relative', overflow: 'hidden', borderRadius: compact ? 9 : 14, backgroundImage: "url('/assets/games/choose-your-side.png')", backgroundSize: 'cover', backgroundPosition: 'center', boxShadow: '0 18px 55px rgba(0,0,0,.28)' }} />
+  return <div style={{ width: compact ? 130 : '100%', aspectRatio: '83 / 130', height: compact ? undefined : '100%', minHeight: compact ? undefined : 0, position: 'relative', overflow: 'hidden', borderRadius: compact ? 9 : 14 }}>
+    <img src="/assets/games/choose-your-side.png" alt="Choose Your Side" style={{ display: 'block', position: 'absolute', width: '123.4%', height: '118.2%', left: '-11.7%', top: '-9.1%', maxWidth: 'none' }} />
+  </div>
 }
 
 function Button({ children, onClick, secondary, disabled }: { children: React.ReactNode; onClick: () => void; secondary?: boolean; disabled?: boolean }) {
@@ -57,6 +66,13 @@ export default function ChooseYourSideGame({ onClose }: { onClose: () => void })
     setCardIndex(0); setVotes({}); setVoterIndex(0); setStats({ unanimous: 0, closestGap: 999, aVotes: 0, bVotes: 0 }); setSelected('')
     setStep(multiplayer ? 'vote' : 'handoff')
   }
+  const beginWithSize = (size: number) => {
+    setDeckSize(size)
+    const pool = categories.flatMap(category => CHOOSE_SIDE_PROMPTS[category])
+    setDeck(shuffle(pool).slice(0, Math.min(size, pool.length)))
+    setCardIndex(0); setVotes({}); setVoterIndex(0); setStats({ unanimous: 0, closestGap: 999, aVotes: 0, bVotes: 0 }); setSelected('')
+    setStep(multiplayer ? 'vote' : 'handoff')
+  }
   const recordRound = (roundVotes: VoteMap) => {
     const a = Object.values(roundVotes).filter(side => side === 'a').length
     const b = Object.values(roundVotes).filter(side => side === 'b').length
@@ -91,10 +107,12 @@ export default function ChooseYourSideGame({ onClose }: { onClose: () => void })
   else if (step === 'categories') content = <Screen>
     <h1 style={title}>Choose your categories</h1><p style={copy}>Pick one or more kinds of dilemma.</p>
     <div className="cys-category-grid" style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>
-      {CHOOSE_SIDE_CATEGORIES.map(category => { const active = categories.includes(category.id); return <button key={category.id} onClick={() => setCategories(current => active ? current.filter(id => id !== category.id) : [...current, category.id])} style={{ ...surface, minHeight: 78, padding: 13, color: '#fff', textAlign: 'left', border: active ? `2px solid ${category.id === 'morals' ? '#ffd341' : '#fff'}` : surface.border }}><strong className="font-staatliches" style={{ display: 'block', fontSize: 17 }}>{category.label}{category.adult ? ' · 18+' : ''}</strong><span style={{ fontFamily: "'Satoshi',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.48)' }}>{category.description}</span></button> })}
+      {CHOOSE_SIDE_CATEGORIES.map(category => { const active = categories.includes(category.id); return <button key={category.id} aria-pressed={active} onClick={() => setCategories(current => active ? current.filter(id => id !== category.id) : [...current, category.id])} style={{ ...surface, minHeight: 78, padding: 13, display: 'flex', alignItems: 'center', gap: 12, color: '#fff', textAlign: 'left', border: active ? '2px solid #fff' : surface.border }}><img src={CATEGORY_ICONS[category.id]} alt="" aria-hidden="true" style={{ width: 30, height: 30, objectFit: 'contain', flex: '0 0 auto', opacity: active ? 1 : .62 }} /><span><strong className="font-staatliches" style={{ display: 'block', fontSize: 17 }}>{category.label}{category.adult ? ' · 18+' : ''}</strong><span style={{ fontFamily: "'Satoshi',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.48)' }}>{category.description}</span></span></button> })}
     </div><Button disabled={!isHost || categories.length === 0} onClick={() => setStep('deckSize')}>CONTINUE</Button>
   </Screen>
-  else if (step === 'deckSize') content = <Screen><h1 style={title}>Deck size</h1><p style={copy}>How many dilemmas should the group settle?</p><div style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8 }}>{[10,20,30,40].map(size => <button key={size} onClick={() => setDeckSize(size)} className="font-staatliches" style={{ ...surface, minHeight: 54, color: '#fff', fontSize: 19, border: deckSize === size ? `2px solid ${RED}` : surface.border }}>{size}</button>)}</div><div style={{ display: 'flex', gap: 10 }}><Button secondary onClick={() => setStep('categories')}>BACK</Button><Button disabled={!isHost} onClick={begin}>START GAME</Button></div></Screen>
+  else if (step === 'deckSize') content = isHost
+    ? <DeckSize onBack={() => setStep('categories')} onNext={size => { setDeckSize(size); beginWithSize(size) }} nextLabel="START GAME" />
+    : <Screen><h1 style={title}>Deck size</h1><p style={copy}>The host will choose how many dilemmas to play.</p></Screen>
   else if (step === 'handoff') content = <Screen><p className="font-staatliches" style={{ margin: 0, color: '#ffd341', letterSpacing: '.14em' }}>CHOOSE IN PRIVATE</p><h1 style={title}>Pass the phone to {currentVoter?.name}</h1><p style={copy}>Everyone else should look away. Your side stays hidden until the reveal.</p><Button onClick={() => setStep('vote')}>I’M {currentVoter?.name?.toUpperCase()}</Button></Screen>
   else if ((step === 'vote' || step === 'reveal') && prompt) {
     const aNames = players.filter((_, index) => effectiveVotes[playerKey(players[index], index)] === 'a').map(player => player.name)
@@ -112,8 +130,8 @@ export default function ChooseYourSideGame({ onClose }: { onClose: () => void })
 }
 
 function DilemmaCard({ prompt, selected, reveal, aNames, bNames, onSelect }: { prompt: ChooseSidePrompt; selected?: Side; reveal: boolean; aNames: string[]; bNames: string[]; onSelect?: (side: Side) => void }) {
-  const option = (side: Side, text: string, names: string[]) => <button aria-pressed={selected === side} disabled={!onSelect} onClick={() => onSelect?.(side)} style={{ minHeight: 154, padding: '24px 20px', border: selected === side ? '3px solid #fff' : 0, background: side === 'a' ? RED : BLUE, color: CREAM, cursor: onSelect ? 'pointer' : 'default', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 12 }}><span className="font-anton" style={{ fontSize: 'clamp(22px,5vw,32px)', lineHeight: 1.08, textTransform: 'uppercase' }}>{text}</span>{reveal ? <span className="font-satoshi" style={{ fontSize: 12, opacity: .82 }}>{names.length} {names.length === 1 ? 'vote' : 'votes'}{names.length ? ` · ${names.join(', ')}` : ''}</span> : null}</button>
-  return <div className="game-card" style={{ width: 'min(520px,92vw)', overflow: 'hidden', borderRadius: 18, boxShadow: '0 28px 70px rgba(0,0,0,.34)' }}>{option('a', prompt.optionA, aNames)}<div className="font-staatliches" style={{ height: 36, display: 'grid', placeItems: 'center', background: CREAM, color: '#111', fontSize: 16, letterSpacing: '.12em' }}>OR</div>{option('b', prompt.optionB, bNames)}<div className="font-staatliches" style={{ padding: '10px', background: '#111', color: '#fff', textAlign: 'center', letterSpacing: '.22em', fontSize: 12 }}>DECKED</div></div>
+  const option = (side: Side, text: string, names: string[]) => <button aria-pressed={selected === side} disabled={!onSelect} onClick={() => onSelect?.(side)} style={{ flex: 1, minHeight: 0, width: '100%', padding: '18px 22px', boxSizing: 'border-box', border: selected === side ? '3px solid #fff' : '3px solid transparent', borderRadius: 0, background: side === 'a' ? RED : BLUE, color: CREAM, cursor: onSelect ? 'pointer' : 'default', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, textAlign: 'center' }}><span className="font-anton" style={{ fontSize: 'clamp(20px,5vw,30px)', lineHeight: 1.04, textTransform: 'uppercase', overflowWrap: 'anywhere' }}>{text}</span>{reveal ? <span className="font-satoshi" style={{ fontSize: 12, opacity: .82 }}>{names.length} {names.length === 1 ? 'vote' : 'votes'}{names.length ? ` · ${names.join(', ')}` : ''}</span> : null}</button>
+  return <div className="game-card cys-dilemma-card" style={{ width: 'min(380px,88vw)', aspectRatio: '4 / 5', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: 20, background: '#111', boxShadow: '0 28px 70px rgba(0,0,0,.34)' }}>{option('a', prompt.optionA, aNames)}<div className="font-staatliches" style={{ height: 36, flex: '0 0 36px', display: 'grid', placeItems: 'center', background: CREAM, color: '#111', fontSize: 16, letterSpacing: '.12em' }}>OR</div>{option('b', prompt.optionB, bNames)}<div className="font-staatliches" style={{ padding: '9px', flex: '0 0 auto', background: '#111', color: '#fff', textAlign: 'center', letterSpacing: '.22em', fontSize: 12 }}>DECKED</div></div>
 }
 
 function Stat({ value, label, color = '#ffd341' }: { value: number; label: string; color?: string }) { return <div style={{ ...surface, padding: 14, textAlign: 'center' }}><strong className="font-anton" style={{ display: 'block', color, fontSize: 34 }}>{value}</strong><span className="font-staatliches" style={{ color: 'rgba(255,255,255,.58)', fontSize: 12 }}>{label}</span></div> }
