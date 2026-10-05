@@ -9,6 +9,7 @@ export type Screen =
   | 'icebreaker' | 'red-flag-green-flag'
   | 'two-truths-bluff'
   | 'most-likely-to'
+  | 'choose-your-side'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<Screen, string> = {
@@ -35,6 +36,7 @@ export const SCREEN_PATHS: Record<Screen, string> = {
   'red-flag-green-flag': '/games/red-flag-green-flag',
   'two-truths-bluff': '/games/two-truths-and-a-bluff',
   'most-likely-to': '/games/most-likely-to',
+  'choose-your-side': '/games/choose-your-side',
   'play-together': '/play-together',
 }
 

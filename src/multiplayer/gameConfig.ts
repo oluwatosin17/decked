@@ -16,6 +16,7 @@ import { LAUGH_YOU_ARE_OUT_DECK } from '../LaughYouAreOutGame'
 import { DO_OR_DRINK_DECKS } from '../DoOrDrinkGame'
 import type { MultiplayerGameId } from './types'
 import { MOST_LIKELY_DECK } from '../content/mostLikelyTo'
+import { CHOOSE_SIDE_AUDIT_TEXT } from '../content/chooseYourSide'
 
 export interface MultiplayerGameConfig {
   id: MultiplayerGameId
@@ -47,6 +48,7 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'do-or-drink': { id: 'do-or-drink', name: 'Do or Drink', deck: unique(Object.values(DO_OR_DRINK_DECKS).flat()), cardColor: '#d1ffd5', textColor: '#5228eb', kind: 'conversation' },
   'two-truths-bluff': { id: 'two-truths-bluff', name: 'Two Truths and a Bluff', deck: ['Player-created statements'], cardColor: '#ef879a', textColor: '#351126', kind: 'vote' },
   'most-likely-to': { id: 'most-likely-to', name: 'Who’s Most Likely To?', deck: MOST_LIKELY_DECK, cardColor: '#0759c7', textColor: '#f7f1df', kind: 'vote' },
+  'choose-your-side': { id: 'choose-your-side', name: 'Choose Your Side', deck: CHOOSE_SIDE_AUDIT_TEXT, cardColor: '#ef3f24', textColor: '#f7efd9', kind: 'vote' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES

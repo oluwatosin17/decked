@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { TwoTruthsBluffArtwork } from '../TwoTruthsBluffGame'
 import { MostLikelyArtwork } from '../MostLikelyToGame'
+import { ChooseYourSideArtwork } from '../ChooseYourSideGame'
 
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
@@ -259,6 +260,10 @@ export const GAME_CARDS = (
     id: 'most-likely-to', categories: ['icebreakers', 'couples', 'party-games'], w: 310, h: 387.5, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork /></div>,
   },
+  {
+    id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 387.5, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><ChooseYourSideArtwork /></div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -350,6 +355,7 @@ interface BrowseGridProps {
   onPlayRedFlagGreenFlag?: () => void
   onPlayTwoTruthsBluff?: () => void
   onPlayMostLikelyTo?: () => void
+  onPlayChooseYourSide?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -372,6 +378,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'red-flag-green-flag': handlers.onPlayRedFlagGreenFlag,
     'two-truths-bluff': handlers.onPlayTwoTruthsBluff,
     'most-likely-to': handlers.onPlayMostLikelyTo,
+    'choose-your-side': handlers.onPlayChooseYourSide,
   }
   return map[card.id]
 }
