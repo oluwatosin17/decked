@@ -1,5 +1,5 @@
 export type Screen =
-  | 'home' | 'browse' | 'quick-play'
+  | 'home' | 'browse' | 'quick-play' | 'play-mode'
   | 'lnt-select' | 'late-night-talks'
   | 'dtc-select' | 'dinner-table'
   | 'you-laugh' | 'never-have-i-ever' | 'charades'
@@ -17,6 +17,7 @@ export const SCREEN_PATHS: Record<Screen, string> = {
   home: '/',
   browse: '/games',
   'quick-play': '/quick-play',
+  'play-mode': '/games/play',
   'lnt-select': '/games/late-night-talks/mode',
   'late-night-talks': '/games/late-night-talks',
   'dtc-select': '/games/dinner-table/mode',

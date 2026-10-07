@@ -61,13 +61,14 @@ function PrimaryButton({ children, onClick, disabled = false }: { children: Reac
   return <button className="font-staatliches game-btn" onClick={onClick} disabled={disabled} style={{ height: '48px', padding: '0 22px', borderRadius: '999px', border: 0, background: disabled ? '#555' : '#e8292d', color: '#fff', fontSize: '16px', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1 }}>{children}</button>
 }
 
-function Entry({ onCreate, onJoin, busy, error }: {
+function Entry({ onCreate, onJoin, busy, error, initialGameId }: {
   onCreate: (name: string, gameId: MultiplayerGameId) => void; onJoin: (code: string, name: string) => void; busy: boolean; error: string
+  initialGameId?: MultiplayerGameId | null
 }) {
   const inviteCode = new URL(window.location.href).searchParams.get('code')?.trim().toUpperCase() ?? ''
   const openedFromInvite = inviteCode.length === 6
-  const [mode, setMode] = useState<'game' | 'actions' | 'create' | 'join'>(() => openedFromInvite ? 'join' : 'game')
-  const [gameId, setGameId] = useState<MultiplayerGameId>('truth-or-dare')
+  const [mode, setMode] = useState<'game' | 'actions' | 'create' | 'join'>(() => openedFromInvite ? 'join' : initialGameId ? 'actions' : 'game')
+  const [gameId, setGameId] = useState<MultiplayerGameId>(initialGameId ?? 'truth-or-dare')
   const [name, setName] = useState('')
   const [code, setCode] = useState(inviteCode)
 
@@ -161,7 +162,7 @@ function Lobby({ room, players, currentUserId, onStart, onExit, busy, onlineCoun
 function ExistingGameCard({ room, prompt, revealed, canReveal, onReveal }: { room: MultiplayerRoom; prompt: unknown; revealed: boolean; canReveal: boolean; onReveal: () => void }) {
   const text = typeof prompt === 'string' ? prompt : ''
   switch (room.game_id) {
-    case 'spicy-starters': return revealed ? <SpicyCard question={text} flipPhase="idle" /> : <SpicyIntroCard firstQuestion="" onTap={canReveal ? onReveal : () => {}} />
+    case 'spicy-starters': return revealed ? <SpicyCard question={text} spiceLevel="medium" flipPhase="idle" /> : <SpicyIntroCard firstQuestion="" spiceLevel="medium" onTap={canReveal ? onReveal : () => {}} />
     case 'never-have-i-ever': return <NHIECard prompt={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
     case 'late-night-talks': return <LNTCard question={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
     case 'dinner-table': return <DTCCard question={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
@@ -392,7 +393,7 @@ function isTerminalSession(values: Record<string, unknown>) {
   return step === 'game' && total > 0 && index >= total
 }
 
-function SharedOriginalGame({ room, currentUserId, onlineIds, onClose }: { room: MultiplayerRoom; currentUserId: string; onlineIds: string[]; onClose: () => void }) {
+function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onlineIds: string[]; onClose: () => void }) {
   const remoteSession = room.game_state?.session ?? {}
   const [values, setValues] = useState<Record<string, unknown>>(remoteSession)
   const valuesRef = useRef(values)
@@ -526,7 +527,7 @@ function SharedOriginalGame({ room, currentUserId, onlineIds, onClose }: { room:
   </SharedSessionProvider>
 }
 
-export default function PlayTogether({ onClose }: { onClose: () => void }) {
+export default function PlayTogether({ onClose, initialGameId = null }: { onClose: () => void; initialGameId?: MultiplayerGameId | null }) {
   const [room, setRoom] = useState<MultiplayerRoom | null>(null)
   const [players, setPlayers] = useState<MultiplayerPlayer[]>([])
   const [currentUserId, setCurrentUserId] = useState('')
@@ -614,13 +615,13 @@ export default function PlayTogether({ onClose }: { onClose: () => void }) {
   })
 
   if (room && room.status !== 'lobby') {
-    return <SharedOriginalGame room={room} currentUserId={currentUserId} onlineIds={onlineIds} onClose={exitRoom} />
+    return <SharedOriginalGame room={room} players={players} currentUserId={currentUserId} onlineIds={onlineIds} onClose={exitRoom} />
   }
 
   return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
     <GameNav onBack={onClose} />
     <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '36px 16px 72px' }}>
-      {!multiplayerConfigured ? <Panel narrow><h1 style={headingStyle}>CONNECT SUPABASE</h1><p style={{ ...bodyStyle, marginTop: '14px' }}>Add VITE_SUPABASE_PUBLISHABLE_KEY to enable Play Together.</p></Panel> : !room ? <Entry busy={busy} error={error} onCreate={(name, gameId) => run(async () => joinBundle(await createRoom(name, gameId)))} onJoin={(code, name) => run(async () => joinBundle(await joinRoom(code, name)))} /> : activeView === 'lobby' ? <Lobby room={room} players={players} currentUserId={currentUserId} onlineCount={onlineIds.length} busy={busy} onExit={exitRoom} onStart={() => run(async () => {
+      {!multiplayerConfigured ? <Panel narrow><h1 style={headingStyle}>CONNECT SUPABASE</h1><p style={{ ...bodyStyle, marginTop: '14px' }}>Add VITE_SUPABASE_PUBLISHABLE_KEY to enable Play Together.</p></Panel> : !room ? <Entry initialGameId={initialGameId} busy={busy} error={error} onCreate={(name, gameId) => run(async () => joinBundle(await createRoom(name, gameId)))} onJoin={(code, name) => run(async () => joinBundle(await joinRoom(code, name)))} /> : activeView === 'lobby' ? <Lobby room={room} players={players} currentUserId={currentUserId} onlineCount={onlineIds.length} busy={busy} onExit={exitRoom} onStart={() => run(async () => {
         const localPlayers: LocalPlayer[] = players.map((player, index) => ({ name: player.display_name, color: player.color || PLAYER_COLORS[index % PLAYER_COLORS.length], userId: player.user_id }))
         await startMultiGame(room.id, 1, 1)
         await Promise.all([

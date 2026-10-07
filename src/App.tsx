@@ -26,9 +26,40 @@ import WhoSaidThatGame from './WhoSaidThatGame'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
 import PlayTogether from './multiplayer/PlayTogether'
+import GamePlayMode from './GamePlayMode'
+import type { MultiplayerGameId } from './multiplayer/types'
+
+const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
+  'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
+  'spicy-starters': { localScreen: 'spicy-starters', multiplayerId: 'spicy-starters' },
+  'late-night-talks': { localScreen: 'lnt-select', multiplayerId: 'late-night-talks' },
+  'dinner-table': { localScreen: 'dtc-select', multiplayerId: 'dinner-table' },
+  'you-laugh': { localScreen: 'you-laugh', multiplayerId: 'you-laugh' },
+  'never-have-i-ever': { localScreen: 'never-have-i-ever', multiplayerId: 'never-have-i-ever' },
+  charades: { localScreen: 'charades', multiplayerId: 'charades' },
+  'lets-reconnect': { localScreen: 'lets-reconnect', multiplayerId: 'reconnect' },
+  'everyday-conversations': { localScreen: 'everyday-conversations', multiplayerId: 'everyday-conversation' },
+  wnrs: { localScreen: 'wnrs', multiplayerId: 'strangers' },
+  'put-a-finger-down': { localScreen: 'put-a-finger-down', multiplayerId: 'finger-down' },
+  'take-a-sip': { localScreen: 'take-a-sip', multiplayerId: 'take-a-sip' },
+  'sip-or-spill': { localScreen: 'sip-or-spill', multiplayerId: 'sip-or-spill' },
+  'do-or-drink': { localScreen: 'do-or-drink', multiplayerId: 'do-or-drink' },
+  icebreaker: { localScreen: 'icebreaker', multiplayerId: 'icebreaker' },
+  'red-flag-green-flag': { localScreen: 'red-flag-green-flag', multiplayerId: 'red-flag-green-flag' },
+  'two-truths-bluff': { localScreen: 'two-truths-bluff', multiplayerId: 'two-truths-bluff' },
+  'most-likely-to': { localScreen: 'most-likely-to', multiplayerId: 'most-likely-to' },
+  'choose-your-side': { localScreen: 'choose-your-side', multiplayerId: 'choose-your-side' },
+  'who-said-that': { localScreen: 'who-said-that', multiplayerId: 'who-said-that' },
+}
+
+const selectedGameFromLocation = () => {
+  const candidate = new URL(window.location.href).searchParams.get('game')
+  return Object.values(GAME_DESTINATIONS).find(item => item.multiplayerId === candidate)?.multiplayerId ?? null
+}
 
 export default function App() {
   const [screen, setScreenState] = useState<Screen>(screenFromLocation)
+  const [selectedGameId, setSelectedGameId] = useState<MultiplayerGameId | null>(selectedGameFromLocation)
   const [lntMode, setLntMode] = usePersistentGameState('app', 'late-night-mode', 'couples')
   const [dtcMode, setDtcMode] = usePersistentGameState('app', 'dinner-table-mode', 'date-night')
 
@@ -40,45 +71,40 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const handlePopState = () => setScreenState(screenFromLocation())
+    const handlePopState = () => { setScreenState(screenFromLocation()); setSelectedGameId(selectedGameFromLocation()) }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  /* ── Quick Play: route game id to screen ── */
-  const playGame = useCallback((gameId: string) => {
-    const map: Record<string, Screen> = {
-      'truth-or-dare': 'truth-or-dare',
-      'spicy-starters': 'spicy-starters',
-      'late-night-talks': 'lnt-select',
-      'dinner-table': 'dtc-select',
-      'you-laugh': 'you-laugh',
-      'never-have-i-ever': 'never-have-i-ever',
-      'charades': 'charades',
-      'lets-reconnect': 'lets-reconnect',
-      'everyday-conversations': 'everyday-conversations',
-      'wnrs': 'wnrs',
-      'put-a-finger-down': 'put-a-finger-down',
-      'take-a-sip': 'take-a-sip',
-      'sip-or-spill': 'sip-or-spill',
-      'do-or-drink': 'do-or-drink',
-      'icebreaker': 'icebreaker',
-      'red-flag-green-flag': 'red-flag-green-flag',
-      'two-truths-bluff': 'two-truths-bluff',
-      'most-likely-to': 'most-likely-to',
-      'choose-your-side': 'choose-your-side',
-      'who-said-that': 'who-said-that',
-    }
-    setScreen(map[gameId] ?? 'browse')
+  const chooseGame = useCallback((gameId: string) => {
+    const destination = GAME_DESTINATIONS[gameId]
+    if (!destination) { setScreen('browse'); return }
+    setSelectedGameId(destination.multiplayerId)
+    window.history.pushState({ screen: 'play-mode', gameId: destination.multiplayerId }, '', `${urlForScreen('play-mode')}?game=${destination.multiplayerId}`)
+    setScreenState('play-mode')
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [setScreen])
+
+  const openPlayTogether = useCallback((gameId: MultiplayerGameId) => {
+    setSelectedGameId(gameId)
+    window.history.pushState({ screen: 'play-together', gameId }, '', `${urlForScreen('play-together')}?game=${gameId}`)
+    setScreenState('play-together')
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }, [])
 
   /* ── Quick Play ── */
   if (screen === 'quick-play') {
-    return <QuickPlay onBack={() => setScreen('home')} onPlay={playGame} />
+    return <QuickPlay onBack={() => setScreen('home')} onPlay={chooseGame} />
+  }
+
+  if (screen === 'play-mode') {
+    if (!selectedGameId) return <BrowsePageRedirect onRedirect={() => setScreen('browse', true)} />
+    const destination = Object.values(GAME_DESTINATIONS).find(item => item.multiplayerId === selectedGameId)!
+    return <GamePlayMode gameId={selectedGameId} onBack={() => setScreen('browse')} onPassAndPlay={() => setScreen(destination.localScreen)} onPlayTogether={() => openPlayTogether(selectedGameId)} />
   }
 
   if (screen === 'play-together') {
-    return <PlayTogether onClose={() => setScreen('home')} />
+    return <PlayTogether initialGameId={selectedGameId} onClose={() => setScreen('home')} />
   }
 
   /* ── Select Game Mode: LNT ── */
@@ -200,26 +226,26 @@ export default function App() {
       <BrowsePage
         onHome={() => setScreen('home')}
         onQuickPlay={() => setScreen('quick-play')}
-        onPlayTruthOrDare={() => setScreen('truth-or-dare')}
-        onPlaySpicyStarters={() => setScreen('spicy-starters')}
-        onPlayLateNightTalks={() => setScreen('lnt-select')}
-        onPlayDinnerTable={() => setScreen('dtc-select')}
-        onPlayYouLaugh={() => setScreen('you-laugh')}
-        onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
-        onPlayCharades={() => setScreen('charades')}
-        onPlayReconnect={() => setScreen('lets-reconnect')}
-        onPlayEveryday={() => setScreen('everyday-conversations')}
-        onPlayWNRS={() => setScreen('wnrs')}
-        onPlayFingerDown={() => setScreen('put-a-finger-down')}
-        onPlayTakeASip={() => setScreen('take-a-sip')}
-        onPlaySipOrSpill={() => setScreen('sip-or-spill')}
-        onPlayDoOrDrink={() => setScreen('do-or-drink')}
-        onPlayIcebreaker={() => setScreen('icebreaker')}
-        onPlayRedFlagGreenFlag={() => setScreen('red-flag-green-flag')}
-        onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
-        onPlayMostLikelyTo={() => setScreen('most-likely-to')}
-        onPlayChooseYourSide={() => setScreen('choose-your-side')}
-        onPlayWhoSaidThat={() => setScreen('who-said-that')}
+        onPlayTruthOrDare={() => chooseGame('truth-or-dare')}
+        onPlaySpicyStarters={() => chooseGame('spicy-starters')}
+        onPlayLateNightTalks={() => chooseGame('late-night-talks')}
+        onPlayDinnerTable={() => chooseGame('dinner-table')}
+        onPlayYouLaugh={() => chooseGame('you-laugh')}
+        onPlayNeverHaveIEver={() => chooseGame('never-have-i-ever')}
+        onPlayCharades={() => chooseGame('charades')}
+        onPlayReconnect={() => chooseGame('lets-reconnect')}
+        onPlayEveryday={() => chooseGame('everyday-conversations')}
+        onPlayWNRS={() => chooseGame('wnrs')}
+        onPlayFingerDown={() => chooseGame('put-a-finger-down')}
+        onPlayTakeASip={() => chooseGame('take-a-sip')}
+        onPlaySipOrSpill={() => chooseGame('sip-or-spill')}
+        onPlayDoOrDrink={() => chooseGame('do-or-drink')}
+        onPlayIcebreaker={() => chooseGame('icebreaker')}
+        onPlayRedFlagGreenFlag={() => chooseGame('red-flag-green-flag')}
+        onPlayTwoTruthsBluff={() => chooseGame('two-truths-bluff')}
+        onPlayMostLikelyTo={() => chooseGame('most-likely-to')}
+        onPlayChooseYourSide={() => chooseGame('choose-your-side')}
+        onPlayWhoSaidThat={() => chooseGame('who-said-that')}
       />
     )
   }
@@ -228,18 +254,23 @@ export default function App() {
   return (
     <HomePage
       onQuickPlay={() => setScreen('quick-play')}
-      onPlayTruthOrDare={() => setScreen('truth-or-dare')}
-      onPlaySpicyStarters={() => setScreen('spicy-starters')}
-      onPlayLateNightTalks={() => setScreen('lnt-select')}
-      onPlayCharades={() => setScreen('charades')}
-      onPlayNeverHaveIEver={() => setScreen('never-have-i-ever')}
-      onPlayYouLaugh={() => setScreen('you-laugh')}
-      onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
-      onPlayMostLikelyTo={() => setScreen('most-likely-to')}
-      onPlayChooseYourSide={() => setScreen('choose-your-side')}
-      onPlayWhoSaidThat={() => setScreen('who-said-that')}
+      onPlayTruthOrDare={() => chooseGame('truth-or-dare')}
+      onPlaySpicyStarters={() => chooseGame('spicy-starters')}
+      onPlayLateNightTalks={() => chooseGame('late-night-talks')}
+      onPlayCharades={() => chooseGame('charades')}
+      onPlayNeverHaveIEver={() => chooseGame('never-have-i-ever')}
+      onPlayYouLaugh={() => chooseGame('you-laugh')}
+      onPlayTwoTruthsBluff={() => chooseGame('two-truths-bluff')}
+      onPlayMostLikelyTo={() => chooseGame('most-likely-to')}
+      onPlayChooseYourSide={() => chooseGame('choose-your-side')}
+      onPlayWhoSaidThat={() => chooseGame('who-said-that')}
       onBrowse={() => setScreen('browse')}
       onPlayTogether={() => setScreen('play-together')}
     />
   )
+}
+
+function BrowsePageRedirect({ onRedirect }: { onRedirect: () => void }) {
+  useEffect(onRedirect, [onRedirect])
+  return null
 }
