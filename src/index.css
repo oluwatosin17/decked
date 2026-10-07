@@ -130,7 +130,7 @@ input::placeholder {
   flex: 0 0 auto;
   overflow: hidden;
   border-radius: 20px;
-  background: #fff;
+  background: #eaf4dc;
   container-type: inline-size;
 }
 
@@ -140,7 +140,7 @@ input::placeholder {
   width: 100%;
   height: 15.313%;
   overflow: hidden;
-  background: #dc2827;
+  background: #e94b16;
 }
 
 .tod-age-band-top { top: 0; }
@@ -162,7 +162,7 @@ input::placeholder {
   display: block;
   width: 100%;
   flex: 0 0 auto;
-  background: #ecc1c9;
+  background: #fff1d6;
 }
 
 .tod-age-stripe-wide { height: 1.542cqw; }
@@ -188,6 +188,7 @@ input::placeholder {
   width: 7.048cqw;
   height: 7.048cqw;
   flex: 0 0 auto;
+  filter: sepia(1) saturate(0.22) brightness(1.34);
 }
 
 /* Avoid translateX centering inside animated cards: mobile Safari can drop
@@ -229,10 +230,10 @@ input::placeholder {
   width: 21.432cqw;
   height: 21.145cqw;
   box-sizing: border-box;
-  border: 0.881cqw solid #000;
+  border: 0.881cqw solid #103452;
   border-radius: 50%;
-  background: #e62a24;
-  color: #fff;
+  background: #e94b16;
+  color: #fff1d6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,7 +254,7 @@ input::placeholder {
 
 .tod-age-copy h2 {
   margin: 0;
-  color: #000;
+  color: #103452;
   font-family: 'Anton SC', sans-serif;
   font-size: 7.93cqw;
   font-weight: 400;
@@ -263,7 +264,7 @@ input::placeholder {
 
 .tod-age-copy p {
   margin: 0;
-  color: #5d3f3c;
+  color: #29465e;
   font-family: 'Satoshi', sans-serif;
   font-size: 3.084cqw;
   font-weight: 400;
@@ -285,9 +286,9 @@ input::placeholder {
   min-height: 0 !important;
   padding: 2.643cqw 3.965cqw;
   border-radius: 999px;
-  border: 0.22cqw solid #000;
+  border: 0.22cqw solid #103452;
   background: transparent;
-  color: #131416;
+  color: #103452;
   font-family: 'Staatliches', sans-serif;
   font-size: 3.524cqw;
   line-height: normal;
@@ -297,10 +298,10 @@ input::placeholder {
 }
 
 .tod-age-actions button:last-child {
-  border-color: #dc2827;
-  background: #dc2827;
-  color: #fff;
-  box-shadow: 0 2.203cqw 2.643cqw rgba(220,40,39,0.25);
+  border-color: #e94b16;
+  background: #e94b16;
+  color: #fff1d6;
+  box-shadow: 0 2.203cqw 2.643cqw rgba(233,75,22,0.22);
 }
 
 .mature-gate-screen {
@@ -859,8 +860,8 @@ input::placeholder {
   .tod-split-card:has(.tod-dare-half:hover)  .tod-truth-half { filter: brightness(0.88); }
 }
 
-.tod-truth-half:hover { background: #f2c5ce !important; }
-.tod-dare-half:hover  { background: #c52020 !important; }
+.tod-truth-half:hover { background: #f2f8e9 !important; }
+.tod-dare-half:hover  { background: #cf3f10 !important; }
 
 /* Label text scales on hover — gives tactile punch */
 .tod-half-label {

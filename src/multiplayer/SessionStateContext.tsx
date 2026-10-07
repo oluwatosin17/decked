@@ -9,6 +9,7 @@ export interface SharedSessionState {
   privatePrompt?: string | null
   requestedRematch?: boolean
   rematchRequestCount?: number
+  players?: Array<{ userId: string; name: string; color: string }>
 }
 
 const SessionStateContext = createContext<SharedSessionState | null>(null)

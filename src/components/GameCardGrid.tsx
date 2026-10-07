@@ -38,6 +38,7 @@ const GAME_LABELS: Record<string, string> = {
   'sip-or-spill': 'Answer or Drink',
   'you-laugh': 'Keep a Straight Face',
   'do-or-drink': 'Dare or Pour',
+  'who-said-that': 'Who Said That?',
 }
 
 function useIsMobile(breakpoint = 768) {
@@ -66,21 +67,19 @@ interface CardDef {
   playable?: boolean
 }
 
+const desktopCardHeight = (card: CardDef) =>
+  card.id === 'most-likely-to' || card.id === 'choose-your-side' ? 348 : card.h
+
 export const GAME_CARDS = (
   onPlayTruthOrDare: () => void,
   onPlaySpicyStarters: () => void,
   onPlayLateNightTalks?: () => void,
 ): CardDef[] => [
   {
-    id: 'truth-or-dare', categories: ['couples'], w: 345.716, h: 348, playable: true,
+    id: 'truth-or-dare', categories: ['couples'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15.23px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
         <img src="/assets/games/truth-or-dare.png" alt="Truth or Dare" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: '183.906px', height: '123.677px' }}>
-          <p className="font-satoshi" style={{ position: 'absolute', left: '2.29px', right: '-2.29px', top: '1.52px', fontSize: '38.074px', fontWeight: 500, color: '#000', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>TRUTH OR DARE</p>
-          <p className="font-satoshi" style={{ position: 'absolute', left: '2.29px', right: '-2.29px', top: 0, fontSize: '38.074px', fontWeight: 500, color: '#d39293', textAlign: 'center', lineHeight: 'normal', margin: 0 }}>TRUTH OR DARE</p>
-          <p className="font-satoshi" style={{ position: 'absolute', left: 0, right: 0, top: '105.4px', fontSize: '18.276px', color: '#181b25', textAlign: 'center', margin: 0 }}>FOR COUPLES</p>
-        </div>
       </div>
     ),
   },
@@ -277,6 +276,10 @@ export const GAME_CARDS = (
     id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 387.5, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><ChooseYourSideArtwork /></div>,
   },
+  {
+    id: 'who-said-that', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><img src="/assets/games/who-said-that.png" alt="Who Said That?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -290,9 +293,10 @@ interface HomeGridProps {
   onPlayTwoTruthsBluff: () => void
   onPlayMostLikelyTo: () => void
   onPlayChooseYourSide: () => void
+  onPlayWhoSaidThat: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -300,7 +304,7 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
     const c = byId[id]
     if (!c) return null
     return (
-      <div key={id} style={{ width: `${c.w}px`, height: `${c.h}px`, flexShrink: 0, ...style }}>
+      <div key={id} style={{ width: `${c.w}px`, height: `${desktopCardHeight(c)}px`, flexShrink: 0, ...style }}>
         {c.render(onClick)}
       </div>
     )
@@ -342,6 +346,7 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('do-or-drink')}
         {getEl('most-likely-to', onPlayMostLikelyTo)}
         {getEl('choose-your-side', onPlayChooseYourSide)}
+        {getEl('who-said-that', onPlayWhoSaidThat)}
       </>, 'flex-start')}
     </div>
   )
@@ -371,6 +376,7 @@ interface BrowseGridProps {
   onPlayTwoTruthsBluff?: () => void
   onPlayMostLikelyTo?: () => void
   onPlayChooseYourSide?: () => void
+  onPlayWhoSaidThat?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -394,6 +400,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'two-truths-bluff': handlers.onPlayTwoTruthsBluff,
     'most-likely-to': handlers.onPlayMostLikelyTo,
     'choose-your-side': handlers.onPlayChooseYourSide,
+    'who-said-that': handlers.onPlayWhoSaidThat,
   }
   return map[card.id]
 }
@@ -597,7 +604,7 @@ export function BrowseCardGrid(props: BrowseGridProps) {
                 {...(onClick ? { type: 'button' as const, onClick, 'aria-label': `Play ${label}` } : {})}
                 style={{
                   width: `${card.w}px`,
-                  height: `${card.h}px`,
+                  height: `${desktopCardHeight(card)}px`,
                   flexShrink: 0,
                   animation: isExiting
                     ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'

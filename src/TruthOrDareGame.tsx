@@ -12,10 +12,14 @@ type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
 
 /* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
 const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
-const HEART_GAME       = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
+
+const TOD_ORANGE = '#e94b16'
+const TOD_MINT = '#eaf4dc'
+const TOD_NAVY = '#103452'
+const TOD_CREAM = '#fff1d6'
 
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 
@@ -452,7 +456,7 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
             position: 'relative', zIndex: 2,
             borderRadius: '20px',
             overflow: 'hidden',
-            boxShadow: '0 32px 80px rgba(220,40,39,0.35)',
+            boxShadow: '0 32px 80px rgba(233,75,22,0.24)',
           }}
         >
           {/* TRUTH — top half */}
@@ -462,11 +466,11 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
             aria-disabled={!canControl}
             style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: '228.5px',
-              background: '#e9b1ba',
+              background: TOD_MINT,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#dd2a25', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: TOD_NAVY, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               TRUTH
             </span>
           </div>
@@ -478,11 +482,11 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
             aria-disabled={!canControl}
             style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, height: '228.5px',
-              background: '#dd2a25',
+              background: TOD_ORANGE,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: '#e9b1ba', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '36px', color: TOD_CREAM, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               DARE
             </span>
           </div>
@@ -494,8 +498,8 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
             display: 'flex', gap: '5px', alignItems: 'center',
             zIndex: 3, pointerEvents: 'none',
           }}>
-            <img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px' }} />
-            <img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px', transform: 'scaleY(-1)' }} />
+            <span aria-hidden="true" style={{ color: TOD_ORANGE, fontSize: '32px', lineHeight: 1 }}>♥</span>
+            <span aria-hidden="true" style={{ color: TOD_CREAM, fontSize: '32px', lineHeight: 1, transform: 'rotate(180deg)' }}>♥</span>
           </div>
         </div>
         </div>
@@ -530,8 +534,8 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
 
   /* Revealed card (truth or dare) */
   const isTruth    = cardState === 'truth'
-  const cardBg     = isTruth ? '#f7b8bc' : '#dc2827'
-  const cardText   = isTruth ? '#dc2827' : '#f7b8bc'
+  const cardBg     = isTruth ? TOD_MINT : TOD_ORANGE
+  const cardText   = isTruth ? TOD_NAVY : TOD_CREAM
   const prompt     = isTruth ? truthPrompt : darePrompt
   const typeLabel  = isTruth ? '— TRUTH —' : '— DARE —'
 
@@ -558,7 +562,7 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           padding: '52px 48px 44px', gap: '24px',
-          boxShadow: `0 32px 80px ${isTruth ? 'rgba(247,100,100,0.25)' : 'rgba(220,40,39,0.45)'}`,
+          boxShadow: `0 32px 80px ${isTruth ? 'rgba(16,52,82,0.18)' : 'rgba(233,75,22,0.28)'}`,
         }}
       >
         <div style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: cardText, opacity: 0.65, textTransform: 'uppercase' }}>
@@ -570,7 +574,7 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}>
-          <img src={HEART_GAME} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} />
+          <span aria-hidden="true" style={{ color: isTruth ? TOD_ORANGE : TOD_CREAM, fontSize: '36px', lineHeight: 1, opacity: 0.9 }}>♥</span>
         </div>
       </div>
       </div>
@@ -586,7 +590,7 @@ function GamePlay({ players, playerIndex, cardIndex, totalCards, truthCount, dar
         <button className="game-btn-primary"
           disabled={!canControl}
           onClick={() => advance(() => onAdvance(isTruth ? 'truth' : 'dare'))}
-          style={{ flex: 1, background: '#dc2827', border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', textAlign: 'center', letterSpacing: '0.05em' }}
+          style={{ flex: 1, background: TOD_ORANGE, border: 'none', borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: TOD_CREAM, textAlign: 'center', letterSpacing: '0.05em' }}
         >
           NEXT
         </button>

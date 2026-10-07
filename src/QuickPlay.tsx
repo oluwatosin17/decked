@@ -31,6 +31,7 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'two-truths-bluff', label: 'Two Truths and a Bluff', description: 'Spot the bluff hidden between two truths', thumbnail: '' },
   { id: 'most-likely-to', label: 'Who’s Most Likely To?', description: 'Vote for the person who fits best', thumbnail: '' },
   { id: 'choose-your-side', label: 'Choose Your Side', description: 'Pick a side and make your case', thumbnail: '' },
+  { id: 'who-said-that', label: 'Who Said That?', description: 'Write anonymously, then guess who said what', thumbnail: '/assets/games/who-said-that.png' },
 ]
 
 const RENAMED_THUMBNAILS: Record<string, { background: string; color: string }> = {

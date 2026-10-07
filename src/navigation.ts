@@ -10,6 +10,7 @@ export type Screen =
   | 'two-truths-bluff'
   | 'most-likely-to'
   | 'choose-your-side'
+  | 'who-said-that'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<Screen, string> = {
@@ -37,6 +38,7 @@ export const SCREEN_PATHS: Record<Screen, string> = {
   'two-truths-bluff': '/games/two-truths-and-a-bluff',
   'most-likely-to': '/games/most-likely-to',
   'choose-your-side': '/games/choose-your-side',
+  'who-said-that': '/games/who-said-that',
   'play-together': '/play-together',
 }
 

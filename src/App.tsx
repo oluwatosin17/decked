@@ -22,6 +22,7 @@ import RedFlagGreenFlagGame from './RedFlagGreenFlagGame'
 import TwoTruthsBluffGame from './TwoTruthsBluffGame'
 import MostLikelyToGame from './MostLikelyToGame'
 import ChooseYourSideGame from './ChooseYourSideGame'
+import WhoSaidThatGame from './WhoSaidThatGame'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
 import PlayTogether from './multiplayer/PlayTogether'
@@ -66,6 +67,7 @@ export default function App() {
       'two-truths-bluff': 'two-truths-bluff',
       'most-likely-to': 'most-likely-to',
       'choose-your-side': 'choose-your-side',
+      'who-said-that': 'who-said-that',
     }
     setScreen(map[gameId] ?? 'browse')
   }, [])
@@ -188,6 +190,9 @@ export default function App() {
   if (screen === 'choose-your-side') {
     return <ChooseYourSideGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'who-said-that') {
+    return <WhoSaidThatGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
@@ -214,6 +219,7 @@ export default function App() {
         onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
         onPlayMostLikelyTo={() => setScreen('most-likely-to')}
         onPlayChooseYourSide={() => setScreen('choose-your-side')}
+        onPlayWhoSaidThat={() => setScreen('who-said-that')}
       />
     )
   }
@@ -231,6 +237,7 @@ export default function App() {
       onPlayTwoTruthsBluff={() => setScreen('two-truths-bluff')}
       onPlayMostLikelyTo={() => setScreen('most-likely-to')}
       onPlayChooseYourSide={() => setScreen('choose-your-side')}
+      onPlayWhoSaidThat={() => setScreen('who-said-that')}
       onBrowse={() => setScreen('browse')}
       onPlayTogether={() => setScreen('play-together')}
     />
