@@ -33,7 +33,8 @@ import {
 
 /* ─── Cloudinary assets ─── */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
-const RECONNECT_BG = `${CDN}/reconnect-card-bg.svg`
+const RECONNECT_BG = '/assets/games/back-to-us.png'
+const RECONNECT_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.11'/%3E%3C/svg%3E\")"
 
 type Relationship = 'partner' | 'friends' | 'family' | 'colleagues' | 'group' | 'random'
 type Depth = 'light' | 'meaningful' | 'deep'
@@ -445,33 +446,46 @@ export function ReconnectCard({ question, flipped, onFlip }: { question: string;
         <div style={{
           position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
           borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(210,47,73,0.4)',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.35)',
         }}>
-          <img src={RECONNECT_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ fontFamily: "'Luckiest Guy', cursive", fontSize: '32px', color: '#d22f49', textAlign: 'center', lineHeight: 1.15, margin: 0, padding: '20px' }}>
-              Let's reconnect
-            </p>
-          </div>
+          <img src={RECONNECT_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         {/* Back */}
         <div style={{
           position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
           transform: 'rotateY(180deg)',
           borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(210,47,73,0.4)',
+          background: '#ef3526',
+          backgroundImage: RECONNECT_TEXTURE,
+          boxShadow: '0 24px 60px rgba(0,0,0,0.35)',
         }}>
-          <img src={RECONNECT_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px' }}>
+          <div style={{
+            position: 'absolute', inset: '18px', borderRadius: '13px', overflow: 'hidden',
+            background: 'linear-gradient(90deg, #f6edda 0 72%, #f3a1a2 72% 100%)',
+            boxShadow: '0 5px 0 rgba(8,45,77,0.16)',
+          }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: RECONNECT_TEXTURE, opacity: 0.72 }} />
+            <div style={{
+              position: 'absolute', left: '18px', top: '18px', padding: '6px 10px 5px',
+              background: '#f0b323', color: '#082d4d', borderRadius: '999px',
+              fontFamily: "'Staatliches', sans-serif", fontSize: '12px', letterSpacing: '0.12em',
+            }}>BACK TO US</div>
+            <div style={{ position: 'absolute', left: 'calc(72% - 14px)', top: '50%', width: '28px', height: '4px', borderRadius: '999px', background: '#f0b323', transform: 'translateY(-50%)' }} />
+            <div style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%) rotate(90deg)', whiteSpace: 'nowrap', fontFamily: "'Staatliches', sans-serif", fontSize: '8px', color: '#082d4d', letterSpacing: '0.12em' }}>
+              LISTEN · SHARE · RECONNECT
+            </div>
+          </div>
+          <div style={{ position: 'absolute', left: '36px', top: '72px', bottom: '50px', width: '174px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <p style={{
               fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-              fontSize: '22px', color: '#d22f49',
-              textAlign: 'center', textTransform: 'uppercase',
-              lineHeight: 1.25, margin: 0, letterSpacing: '0.02em',
+              fontSize: question.length > 110 ? '17px' : question.length > 75 ? '19px' : '21px', color: '#082d4d',
+              textAlign: 'left', textTransform: 'uppercase',
+              lineHeight: 1.2, margin: 0, letterSpacing: '-0.01em',
             }}>
               {question}
             </p>
           </div>
+          <span style={{ position: 'absolute', left: '36px', bottom: '30px', fontFamily: "'Satoshi', sans-serif", fontWeight: 800, fontSize: '9px', color: '#082d4d', letterSpacing: '0.42em' }}>DECKED</span>
         </div>
       </div>
     </div>
@@ -576,11 +590,8 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
             </div>
           ))}
         </div>
-        <div className="done-card" style={{ width: '140px', height: '175px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(210,47,73,0.4)', position: 'relative' }}>
-          <img src={RECONNECT_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ fontFamily: "'Luckiest Guy', cursive", fontSize: '14px', color: '#d22f49', textAlign: 'center', lineHeight: 1.15, margin: 0, padding: '8px' }}>Let's reconnect</p>
-          </div>
+        <div className="done-card" style={{ width: '140px', height: '175px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.35)', position: 'relative' }}>
+          <img src={RECONNECT_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>
@@ -720,7 +731,7 @@ export default function LetsReconnectGame({ onClose }: { onClose: () => void }) 
       )}
 
       {step === 'getReady' && (
-        <SharedGetReady player={currentPlayer} label="Let's Reconnect" onReady={goToGame} />
+        <SharedGetReady player={currentPlayer} label="Back to Us" onReady={goToGame} />
       )}
 
       {step === 'game' && (

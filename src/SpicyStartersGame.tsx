@@ -9,13 +9,30 @@ import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 
 /* ─── Asset URLs ─── */
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
-const SPICY_CARD_BG    = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
-const SPICY_FRONT_SVG  = '/icons/spicy-front-figma.svg'
-const SPICY_FRONT_COVER = '/icons/spicy-front-cover.svg'
-const SPICY_BACK_SVG   = '/icons/spicy-back.svg'
+const SPICY_FRONT_COVER = '/assets/games/spicy-opener.png'
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
+
+function SpicyOpenerCover() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#071a3b' }}>
+      <img src={SPICY_FRONT_COVER} alt="Spicy Opener" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+    </div>
+  )
+}
+
+function SpicyQuestionCard({ question, spiceLevel }: { question: string; spiceLevel: SpiceLevel }) {
+  return (
+    <div className="spicy-question-card">
+      <div className="spicy-question-level">{spiceLevel.toUpperCase()}</div>
+      <div className="spicy-question-panel">
+        <p>{question.toUpperCase()}</p>
+      </div>
+      <div className="spicy-question-brand">DECKED</div>
+    </div>
+  )
+}
 
 /* Hand-authored (no hosting needed — can never 404) */
 function ChiliGlyph({ style }: { style?: CSSProperties }) {
@@ -116,7 +133,7 @@ export const SPICY_QUESTION_BANKS = {
    SCREEN 1 — Age Gate
    ═══════════════════════════════════════════════════════ */
 function AgeGate({ onBack, onConfirm }: { onBack: () => void; onConfirm: () => void }) {
-  return <MatureContentGate gameName="Spicy Starters" onBack={onBack} onConfirm={onConfirm} />
+  return <MatureContentGate gameName="Spicy Opener" onBack={onBack} onConfirm={onConfirm} />
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -373,7 +390,7 @@ function GetReady({ player, onReady }: { player: Player | null; onReady: () => v
 /* ═══════════════════════════════════════════════════════
    SCREEN 6 — Intro Card (real 3D flip)
    ═══════════════════════════════════════════════════════ */
-export function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQuestion: string }) {
+export function IntroCard({ onTap, firstQuestion, spiceLevel }: { onTap: () => void; firstQuestion: string; spiceLevel: SpiceLevel }) {
   const [flipped, setFlipped] = useState(false)
   const { wrapperStyle, cardStyle } = useScaledCard(326, 409)
 
@@ -395,19 +412,14 @@ export function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQu
         <div className="spicy-flip-container" style={{ width: '326px', height: '409px' }}>
         <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: '326px', height: '409px' }}>
 
-          {/* ── FRONT: spicy starters cover (SVG) ── */}
+          {/* ── FRONT: Spicy Opener cover ── */}
           <div className="spicy-flip-front">
-            <img src={SPICY_FRONT_SVG} alt="Spicy Starters — conversation cards to share" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <SpicyOpenerCover />
           </div>
 
           {/* ── BACK: first question card (SVG bg + text overlay) ── */}
           <div className="spicy-flip-back">
-            <img src={SPICY_BACK_SVG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 32px' }}>
-              <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '29.7px', color: '#ab1229', textAlign: 'center', lineHeight: 'normal', margin: 0, padding: '0 16px' }}>
-                {firstQuestion.toUpperCase()}
-              </p>
-            </div>
+            <SpicyQuestionCard question={firstQuestion} spiceLevel={spiceLevel} />
           </div>
 
         </div>
@@ -427,7 +439,7 @@ export function IntroCard({ onTap, firstQuestion }: { onTap: () => void; firstQu
    ═══════════════════════════════════════════════════════ */
 export type FlipPhase = 'idle' | 'out' | 'in'
 
-export function SpicyCard({ question, flipPhase }: { question: string; flipPhase: FlipPhase }) {
+export function SpicyCard({ question, spiceLevel, flipPhase }: { question: string; spiceLevel: SpiceLevel; flipPhase: FlipPhase }) {
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
   const cls = flipPhase === 'out' ? 'game-card-flip-out'
             : flipPhase === 'in'  ? 'game-card-flip-in'
@@ -437,21 +449,17 @@ export function SpicyCard({ question, flipPhase }: { question: string; flipPhase
     <div className={`${cls} game-card`} style={{
       ...cardStyle, borderRadius: '12px', overflow: 'hidden',
       position: 'relative', flexShrink: 0, zIndex: 2,
-      boxShadow: '0 32px 80px rgba(171,18,41,0.35)',
+      boxShadow: '0 30px 70px rgba(0,0,0,0.38)',
     }}>
-      <img src={SPICY_BACK_SVG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 32px' }}>
-        <p style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '29.7px', color: '#ab1229', textAlign: 'center', lineHeight: 'normal', margin: 0, padding: '0 16px' }}>
-          {question.toUpperCase()}
-        </p>
-      </div>
+      <SpicyQuestionCard question={question} spiceLevel={spiceLevel} />
     </div>
     </div>
   )
 }
 
-function GameScreen({ questions, players, totalCards, cardIndex, playerIndex, skipCount, onAdvance, onClose, onPlayAgain }: {
+function GameScreen({ questions, spiceLevel, players, totalCards, cardIndex, playerIndex, skipCount, onAdvance, onClose, onPlayAgain }: {
   questions: string[]
+  spiceLevel: SpiceLevel
   players: Player[]
   totalCards: number
   cardIndex: number
@@ -521,7 +529,7 @@ function GameScreen({ questions, players, totalCards, cardIndex, playerIndex, sk
             YOU'RE DECKED
           </h2>
           <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-            You played all {totalCards} spicy starters cards
+            You played all {totalCards} Spicy Opener cards
           </p>
         </div>
 
@@ -542,7 +550,7 @@ function GameScreen({ questions, players, totalCards, cardIndex, playerIndex, sk
         </div>
 
         <div className="done-card spicy-done-card" style={{ position: 'relative', zIndex: 2, width: '160px', height: '200px', borderRadius: '6px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(183,0,18,0.4)', flexShrink: 0 }}>
-          <img src={SPICY_FRONT_SVG} alt="Spicy Starters — conversation cards to share" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
+          <SpicyOpenerCover />
         </div>
 
         <div className="done-btns" style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '8px' }}>
@@ -568,7 +576,7 @@ function GameScreen({ questions, players, totalCards, cardIndex, playerIndex, sk
       )}
 
       {/* Game card with 3D flip */}
-      <SpicyCard question={question} flipPhase={flipPhase} />
+      <SpicyCard question={question} spiceLevel={spiceLevel} flipPhase={flipPhase} />
 
       {totalCards > 0 && (
         <p key={`counter-${cardIndex}`} className="counter-in" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em', margin: 0, zIndex: 2 }}>
@@ -671,12 +679,13 @@ export default function SpicyStartersGame({ onClose }: { onClose: () => void }) 
       )}
 
       {step === 'intro' && (
-        <IntroCard onTap={goToGame} firstQuestion={questions[0] ?? ''} />
+        <IntroCard onTap={goToGame} firstQuestion={questions[0] ?? ''} spiceLevel={spiceLevel} />
       )}
 
       {step === 'game' && (
         <GameScreen
           questions={questions}
+          spiceLevel={spiceLevel}
           players={players}
           totalCards={totalCards}
           cardIndex={cardIndex}

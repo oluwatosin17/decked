@@ -405,7 +405,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
             You're Decked
           </h2>
           <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-            You played all {totalCards} spicy starters cards
+            You played all {totalCards} Late Night Talks cards
           </p>
         </div>
 

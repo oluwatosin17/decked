@@ -241,7 +241,7 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
   )
 }
 
-/* ---- Do Or Drink Card ---- */
+/* ---- Dare or Pour Card ---- */
 function DoOrDrinkCard({ prompt, flipped, onFlip }: { prompt: string; flipped: boolean; onFlip: () => void }) {
   const BG = '#d1ffd5'
   const PURPLE = '#5228eb'
@@ -271,7 +271,7 @@ function DoOrDrinkCard({ prompt, flipped, onFlip }: { prompt: string; flipped: b
             fontFamily: "'Fredericka the Great', cursive", fontSize: '52px', color: PURPLE,
             lineHeight: 1.05, margin: 0, textTransform: 'uppercase', textAlign: 'center',
           }}>
-            DO OR DRINK
+            DARE OR POUR
           </p>
         </div>
         {/* Back */}
@@ -285,7 +285,7 @@ function DoOrDrinkCard({ prompt, flipped, onFlip }: { prompt: string; flipped: b
           {/* Small header top left */}
           <div style={{ padding: '24px 24px 0' }}>
             <p style={{ fontFamily: "'Fredericka the Great', cursive", fontSize: '16px', color: PURPLE, lineHeight: 1.2, margin: 0, textTransform: 'uppercase' }}>
-              DO OR DRINK
+              DARE OR POUR
             </p>
           </div>
           {/* Challenge text centered */}
@@ -339,7 +339,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, prompt, onSkip, o
         </div>
         {/* Mini card */}
         <div className="done-card" style={{ width: '140px', height: '190px', background: '#d1ffd5', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(82,40,235,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '12px' }}>
-          <p style={{ fontFamily: "'Fredericka the Great', cursive", fontSize: '22px', color: '#5228eb', lineHeight: 1.1, margin: 0, textAlign: 'center', textTransform: 'uppercase' }}>DO OR DRINK</p>
+          <p style={{ fontFamily: "'Fredericka the Great', cursive", fontSize: '22px', color: '#5228eb', lineHeight: 1.1, margin: 0, textAlign: 'center', textTransform: 'uppercase' }}>DARE OR POUR</p>
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>

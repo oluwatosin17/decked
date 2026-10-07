@@ -109,7 +109,7 @@ export default function App() {
     return <DinnerTableGame mode={dtcMode} onClose={() => setScreen('browse')} />
   }
 
-  /* ── You Laugh You're Out ── */
+  /* ── Keep a Straight Face ── */
   if (screen === 'you-laugh') {
     return <LaughYouAreOutGame onClose={() => setScreen('browse')} />
   }
@@ -133,12 +133,12 @@ export default function App() {
     return <SpicyStartersGame onClose={() => setScreen('browse')} />
   }
 
-  /* ── Let's Reconnect ── */
+  /* ── Back to Us ── */
   if (screen === 'lets-reconnect') {
     return <LetsReconnectGame onClose={() => setScreen('browse')} />
   }
 
-  /* ── Everyday Conversations ── */
+  /* ── Real Talk, Every Day ── */
   if (screen === 'everyday-conversations') {
     return <EverydayConversationsGame onClose={() => setScreen('browse')} />
   }
@@ -148,7 +148,7 @@ export default function App() {
     return <WNRSGame onClose={() => setScreen('browse')} />
   }
 
-  /* ── Put a Finger Down ── */
+  /* ── Drop a Finger ── */
   if (screen === 'put-a-finger-down') {
     return <PutAFingerDownGame onClose={() => setScreen('browse')} />
   }
@@ -158,12 +158,12 @@ export default function App() {
     return <TakeASipGame onClose={() => setScreen('browse')} />
   }
 
-  /* ── Sip or Spill ── */
+  /* ── Answer or Drink ── */
   if (screen === 'sip-or-spill') {
     return <SipOrSpillGame onClose={() => setScreen('browse')} />
   }
 
-  /* ── Do or Drink ── */
+  /* ── Dare or Pour ── */
   if (screen === 'do-or-drink') {
     return <DoOrDrinkGame onClose={() => setScreen('browse')} />
   }
@@ -173,7 +173,7 @@ export default function App() {
     return <IcebreakerGame onClose={() => setScreen('browse')} />
   }
 
-  /* ── Red Flag Green Flag ── */
+  /* ── Dateable or Dealbreaker ── */
   if (screen === 'red-flag-green-flag') {
     return <RedFlagGreenFlagGame onClose={() => setScreen('browse')} />
   }

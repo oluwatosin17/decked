@@ -194,16 +194,16 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
           {/* Dots */}
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
 
-          {/* YOU */}
+          {/* KEEP */}
           <p style={{
             position: 'absolute', left: '50%', transform: 'translateX(-50%)',
             top: `${28 * scale}px`,
             fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`,
             color: '#755aa7', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
             WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill',
-          }}>YOU</p>
+            }}>KEEP</p>
 
-          {/* LAUGH banner — wide, slight CCW tilt */}
+          {/* STRAIGHT banner — wide, slight CCW tilt */}
           <div style={{
             position: 'absolute',
             left: '50%', transform: 'translateX(-50%) rotate(-4deg)',
@@ -214,21 +214,21 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
             <p style={{
               position: 'absolute', left: '50%', top: '50%',
               transform: 'translate(-50%, -50%)',
-              fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`,
+              fontFamily: "'Gasoek One', sans-serif", fontSize: `${43 * scale}px`,
               color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            }}>LAUGH</p>
+            }}>STRAIGHT</p>
           </div>
 
-          {/* YOU'RE */}
+          {/* A */}
           <p style={{
             position: 'absolute', left: '50%', transform: 'translateX(-50%)',
             top: `${246 * scale}px`,
             fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`,
             color: '#fd587c', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
             WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill',
-          }}>YOU'RE</p>
+          }}>A</p>
 
-          {/* OUT banner — narrower, slight CW tilt, text inside */}
+          {/* FACE banner — narrower, slight CW tilt, text inside */}
           <div style={{
             position: 'absolute',
             left: '50%', transform: 'translateX(-50%) rotate(3deg)',
@@ -241,7 +241,7 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
               transform: 'translate(-50%, -50%)',
               fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`,
               color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            }}>OUT</p>
+            }}>FACE</p>
           </div>
         </div>
 
@@ -274,7 +274,7 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
             fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
             fontSize: `${9 * scale}px`, color: 'rgba(255,255,255,0.6)', margin: 0, letterSpacing: '0.06em',
           }}>
-            #YOULAUGHYOUAREOUT
+            #KEEPASTRAIGHTFACE
           </p>
         </div>
       </div>
@@ -290,19 +290,19 @@ function MiniLYAOCard() {
   return (
     <div style={{ width: `${W}px`, height: `${H}px`, background: '#36a6bb', borderRadius: `${14 * scale}px`, overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', outline: '2px solid rgba(255,255,255,0.2)' }}>
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '9px 9px' }} />
-      {/* YOU */}
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${28 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#755aa7', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>YOU</p>
-      {/* LAUGH banner */}
+      {/* KEEP */}
+      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${28 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#755aa7', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>KEEP</p>
+      {/* STRAIGHT banner */}
       <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%) rotate(-4deg)', top: `${112 * scale}px`, width: `${330 * scale}px`, height: `${110 * scale}px` }}>
         <img src={BANNER_LAUGH_SM} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
-        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>LAUGH</p>
+        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${43 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>STRAIGHT</p>
       </div>
-      {/* YOU'RE */}
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${246 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#fd587c', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>YOU'RE</p>
-      {/* OUT banner */}
+      {/* A */}
+      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${246 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#fd587c', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>A</p>
+      {/* FACE banner */}
       <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%) rotate(3deg)', top: `${330 * scale}px`, width: `${210 * scale}px`, height: `${95 * scale}px` }}>
         <img src={BANNER_OUT_SM} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
-        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>OUT</p>
+        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>FACE</p>
       </div>
     </div>
   )

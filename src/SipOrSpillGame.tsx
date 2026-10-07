@@ -16,6 +16,8 @@ import { SIP_OR_SPILL_PARTY } from './content/decks/sipOrSpillParty'
 
 /* ---- Cloudinary assets ---- */
 const CDN = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets'
+const ANSWER_OR_DRINK_COVER = '/assets/games/answer-or-drink.png'
+const ANSWER_OR_DRINK_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E\")"
 
 type Category = 'funny' | 'relationships' | 'spicy' | 'party' | 'drinking' | 'friends' | 'random'
 
@@ -241,7 +243,7 @@ function CategorySelect({ onNext }: { onNext: (cats: Category[]) => void }) {
   )
 }
 
-/* ---- Sip or Spill Card ---- */
+/* ---- Answer or Drink Card ---- */
 function SipOrSpillCard({ prompt, flipped, onFlip }: { prompt: string; flipped: boolean; onFlip: () => void }) {
   const { wrapperStyle, cardStyle } = useScaledCard(340, 460)
   return (
@@ -260,58 +262,54 @@ function SipOrSpillCard({ prompt, flipped, onFlip }: { prompt: string; flipped: 
         {/* Front */}
         <div style={{
           position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          background: '#ffd5f4', borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(251,55,87,0.25)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '12px',
+          background: '#35152d', borderRadius: '16px', overflow: 'hidden',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.4)',
         }}>
-          <div style={{
-            width: 'calc(100% - 16px)', height: 'calc(100% - 16px)',
-            background: '#fb3757', borderRadius: '10px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            border: '2px solid #ffd5f4',
-          }}>
-            <p style={{
-              fontFamily: "'Freckle Face', cursive", fontSize: '52px', color: '#fff',
-              lineHeight: 1.1, margin: 0, textAlign: 'center',
-            }}>
-              Sip or Spill
-            </p>
-          </div>
+          <img src={ANSWER_OR_DRINK_COVER} alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         {/* Back */}
         <div style={{
           position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
           transform: 'rotateY(180deg)',
-          background: '#ffd5f4', borderRadius: '16px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(251,55,87,0.25)',
-          padding: '12px',
+          background: '#35152d', backgroundImage: ANSWER_OR_DRINK_TEXTURE,
+          borderRadius: '16px', overflow: 'hidden',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.4)',
+          padding: '18px',
         }}>
           <div style={{
             width: '100%', height: '100%',
-            border: '2px solid #fb3757', borderRadius: '10px',
+            border: '2px solid #f7ecd5', borderRadius: '5px',
             display: 'flex', flexDirection: 'column', position: 'relative',
-            boxSizing: 'border-box',
+            boxSizing: 'border-box', overflow: 'hidden',
           }}>
-            {/* Sip header top left */}
-            <div style={{ padding: '20px 20px 0' }}>
-              <p style={{ fontFamily: "'Freckle Face', cursive", fontSize: '24px', color: '#fb3757', margin: 0 }}>
-                Sip
-              </p>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: ANSWER_OR_DRINK_TEXTURE, opacity: 0.65 }} />
+            <div style={{ padding: '22px 22px 0', position: 'relative', zIndex: 1 }}>
+              <span style={{
+                display: 'inline-flex', padding: '6px 9px 5px', borderRadius: '3px',
+                background: '#f2b91f', color: '#35152d',
+                fontFamily: "'Staatliches', sans-serif", fontSize: '11px', letterSpacing: '0.12em',
+              }}>
+                ANSWER OR DRINK
+              </span>
             </div>
-            {/* Question text centered */}
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '18px 24px', position: 'relative', zIndex: 1 }}>
               <p style={{
-                fontFamily: "'Satoshi', sans-serif", fontSize: '20px', fontWeight: 700, color: '#181b25',
-                lineHeight: 1.4, margin: 0, textTransform: 'uppercase', textAlign: 'center',
+                fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
+                fontSize: prompt.length > 135 ? '19px' : prompt.length > 95 ? '21px' : prompt.length > 65 ? '23px' : '26px',
+                color: '#f7ecd5', lineHeight: 1.18, margin: 0,
+                textTransform: 'uppercase', textAlign: 'left', width: '100%',
               }}>
                 {prompt}
               </p>
             </div>
-            {/* Sip or Spill bottom right */}
-            <div style={{ padding: '0 20px 20px', textAlign: 'right' }}>
-              <p style={{ fontFamily: "'Freckle Face', cursive", fontSize: '14px', color: '#fb3757', margin: 0 }}>
-                Sip or Spill
-              </p>
+            <div style={{
+              minHeight: '50px', padding: '0 20px', background: '#ff6656',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              position: 'relative', zIndex: 1,
+            }}>
+              <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '12px', color: '#35152d', letterSpacing: '0.12em' }}>ANSWER IT</span>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#f2b91f' }} />
+              <span style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '12px', color: '#35152d', letterSpacing: '0.12em' }}>OR TAKE A DRINK</span>
             </div>
           </div>
         </div>
@@ -355,10 +353,8 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, prompt, onSkip, o
           ))}
         </div>
         {/* Mini card */}
-        <div className="done-card" style={{ width: '140px', height: '190px', background: '#ffd5f4', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(251,55,87,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px' }}>
-          <div style={{ width: '100%', height: '100%', background: '#fb3757', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '8px' }}>
-            <p style={{ fontFamily: "'Freckle Face', cursive", fontSize: '20px', color: '#fff', lineHeight: 1.1, margin: 0, textAlign: 'center' }}>Sip or Spill</p>
-          </div>
+        <div className="done-card" style={{ width: '140px', height: '190px', background: '#35152d', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.35)', position: 'relative' }}>
+          <img src={ANSWER_OR_DRINK_COVER} alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>

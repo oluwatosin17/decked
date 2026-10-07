@@ -357,7 +357,7 @@ function WNRSCard({ question, stage, flipped, onFlip }: { question: string; stag
             color: '#111', lineHeight: 0.88, letterSpacing: '-0.025em', margin: 0,
             textTransform: 'uppercase',
           }}>
-            WE'RE<br />NOT<br />REALLY<br />STRANGERS
+          BEYOND<br />SMALL<br />TALK
           </p>
           <span style={{
             position: 'absolute', bottom: '18px', left: 0, right: 0,
@@ -553,7 +553,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, stage, 
             <div style={{ height: '1px', background: 'rgba(255,255,255,0.4)' }} />
             <div style={{ height: '2px', background: 'rgba(255,255,255,0.4)' }} />
           </div>
-          <p style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 700, fontSize: '10px', color: '#fff', textAlign: 'center', textTransform: 'uppercase', margin: 0 }}>We're not really strangers</p>
+          <p style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 700, fontSize: '10px', color: '#fff', textAlign: 'center', textTransform: 'uppercase', margin: 0 }}>Beyond Small Talk</p>
         </div>
 
         <div className="done-btns" style={{ display: 'flex', gap: '8px' }}>

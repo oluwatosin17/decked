@@ -592,7 +592,7 @@ export const EXPERIENCE_SUPPLEMENT = [
   'said goodbye and then walked in the same direction as the other person',
 ]
 
-/** Relationship and friendship behaviours for Red Flag / Green Flag voting. */
+/** Relationship and friendship behaviours for Dateable or Dealbreaker voting. */
 export const FLAG_SCENARIO_SUPPLEMENT = [
   'They are kind to you but rude to service workers.',
   'They always arrive early and become irritated when others are late.',

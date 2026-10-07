@@ -7,8 +7,7 @@ import { ChooseYourSideArtwork } from '../ChooseYourSideGame'
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
 const SPICY_CARD_BG      = '/icons/spicy-card-bg.svg'
 const NEVER_CARD_BG      = '/icons/never-have-i-ever-card-bg.svg'
-const RECONNECT_CARD_BG  = '/icons/reconnect-card-bg.svg'
-const YOU_LAUGH_CARD_BG  = '/icons/you-laugh-card-bg.svg'
+const RECONNECT_CARD_BG  = '/assets/games/back-to-us.png'
 
 /* ── Mobile SVG card assets ── */
 const MOBILE_CARDS: Record<string, string> = {
@@ -28,6 +27,18 @@ const MOBILE_CARDS: Record<string, string> = {
   'sip-or-spill': '/icons/sip-and-spill-mobile.svg',
   'you-laugh': '/icons/you-laugh-you-are-out-mobile.svg',
   'do-or-drink': '/icons/do-or-drink-mobile.svg',
+}
+
+const GAME_LABELS: Record<string, string> = {
+  'spicy-starters': 'Spicy Opener',
+  'red-flag-green-flag': 'Dateable or Dealbreaker',
+  'everyday-conversation': 'Real Talk, Every Day',
+  strangers: 'Beyond Small Talk',
+  reconnect: 'Back to Us',
+  'finger-down': 'Drop a Finger',
+  'sip-or-spill': 'Answer or Drink',
+  'you-laugh': 'Keep a Straight Face',
+  'do-or-drink': 'Dare or Pour',
 }
 
 function useIsMobile(breakpoint = 768) {
@@ -78,17 +89,15 @@ export const GAME_CARDS = (
     id: 'spicy-starters', categories: ['couples', 'deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <img src={SPICY_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        <p className="font-stick" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 124.3px)', width: '272.19px', fontSize: '48px', color: '#df91b5', textAlign: 'center', lineHeight: 1 }}>spicy<br />starters</p>
-        <p className="font-inter-tight" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% + 102.59px)', width: '112.54px', fontSize: '10.85px', color: '#df91b5', textAlign: 'center', fontWeight: 300 }}>CONVERSATION CARDS TO SHARE</p>
+        <img src="/assets/games/spicy-opener.png" alt="Spicy Opener" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     ),
   },
   {
     id: 'red-flag-green-flag', categories: ['couples'], w: 267.692, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '8.705px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#000' }}>
-        <img src="/icons/rfgf-front.svg" alt="Red Flag / Green Flag" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#1256e8' }}>
+        <img src="/assets/games/dateable-or-dealbreaker.png" alt="Dateable or Dealbreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -105,11 +114,7 @@ export const GAME_CARDS = (
     id: 'dinner-table', categories: ['deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/dinner-table.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        <div className="font-staatliches" style={{ position: 'absolute', left: '10.85px', top: '28.92px', fontSize: '27.117px', color: '#e8e6e3', lineHeight: 'normal', whiteSpace: 'nowrap', pointerEvents: 'none' }}>
-          <p style={{ margin: 0 }}>DINNER TABLE</p>
-          <p style={{ margin: 0 }}>CONVERSATION</p>
-        </div>
+        <img src="/assets/games/dinner-table-v2.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -127,26 +132,29 @@ export const GAME_CARDS = (
     ),
   },
   {
-    id: 'everyday-conversation', categories: ['icebreakers', 'deep-talk'], w: 348, h: 277.948,
+    id: 'everyday-conversation', categories: ['icebreakers', 'deep-talk'], w: 277.948, h: 348,
     playable: true,
     render: (onClick) => (
-      <div onClick={onClick} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}>
-        <div style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
-          <div className="card-tile" style={{ width: '277.948px', height: '348px', background: '#eae6e1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, opacity: 0.55, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")", backgroundSize: '200px 200px', mixBlendMode: 'multiply' }} />
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4.52px', zIndex: 2 }}>
-              <div style={{ width: '13px', height: '182px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ transform: 'rotate(90deg)' }}>
-                  <p className="font-inter-tight" style={{ fontSize: '10.85px', color: '#181b25', textAlign: 'center', whiteSpace: 'nowrap', fontWeight: 300 }}>Questions to build genuine connection</p>
-                </div>
-              </div>
-              <div style={{ width: '94px', height: '196px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ transform: 'rotate(90deg)' }}>
-                  <p className="font-spicy" style={{ fontSize: '34.37px', color: '#0f973d', textAlign: 'center', lineHeight: 1, whiteSpace: 'nowrap' }}>everyday<br />conversation</p>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="card-tile" onClick={onClick} style={{
+        width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative',
+        cursor: onClick ? 'pointer' : 'default', background: '#f4efe4',
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.11'/%3E%3C/svg%3E\")",
+      }}>
+        <div style={{ position: 'absolute', left: '7px', top: '7px', width: '153px', height: '55px', borderRadius: '13px', background: '#1459bd' }}>
+          <span style={{ display: 'block', color: '#f4efe4', fontSize: '25px', letterSpacing: '7px', margin: '6px 0 0 40px' }}>•••</span>
+        </div>
+        <div style={{ position: 'absolute', right: '7px', top: '7px', width: '101px', height: '89px', borderRadius: '13px', background: '#ef3f2d' }} />
+      <div style={{ position: 'absolute', left: '7px', right: '7px', top: '69px', height: '101px', borderRadius: '13px', background: '#f7c928' }} />
+      <div style={{ position: 'absolute', left: '7px', right: '7px', top: '178px', height: '70px', borderRadius: '13px', background: '#ed9ca8' }} />
+      <p className="font-anton" style={{ position: 'absolute', left: '19px', right: '19px', top: '69px', height: '101px', margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', fontSize: '42px', lineHeight: 0.92, letterSpacing: '-0.02em', color: '#111', textTransform: 'uppercase' }}>
+          REAL TALK,<br />EVERY DAY
+        </p>
+        <div style={{ position: 'absolute', left: '7px', bottom: '43px', width: '155px', height: '51px', borderRadius: '13px', background: '#137b4c', display: 'flex', alignItems: 'center', padding: '0 14px' }}>
+          <span className="font-satoshi" style={{ color: '#f4efe4', fontSize: '8px', fontWeight: 700, lineHeight: 1.3, letterSpacing: '0.13em' }}>QUESTIONS FOR<br />REAL CONNECTION</span>
+        </div>
+        <div style={{ position: 'absolute', right: '7px', bottom: '43px', width: '94px', height: '51px', borderRadius: '13px', background: '#1459bd' }} />
+        <div style={{ position: 'absolute', left: '7px', right: '7px', bottom: '7px', height: '30px', borderRadius: '11px', background: '#f7c928', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="font-satoshi" style={{ color: '#111', fontSize: '8px', fontWeight: 900, letterSpacing: '0.42em' }}>DECKED</span>
         </div>
       </div>
     ),
@@ -155,8 +163,8 @@ export const GAME_CARDS = (
     id: 'charades', categories: ['party-games'], w: 277.948, h: 348,
     playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ed3844', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <p className="font-slackey" style={{ position: 'absolute', left: 'calc(50% - 124.06px)', top: 'calc(50% - 29.38px)', fontSize: '42.55px', color: '#e8e6e3', whiteSpace: 'nowrap' }}>Charades</p>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#5d0c42', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
+        <img src="/assets/games/charades-plum.png" alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
       </div>
     ),
   },
@@ -181,7 +189,7 @@ export const GAME_CARDS = (
           fontSize: '49px', fontWeight: 400, color: '#111', textTransform: 'uppercase',
           lineHeight: 0.88, letterSpacing: '-0.025em', pointerEvents: 'none',
         }}>
-          WE'RE<br />NOT<br />REALLY<br />STRANGERS
+          BEYOND<br />SMALL<br />TALK
         </p>
         <span className="font-satoshi" style={{
           position: 'absolute', left: 0, right: 0, bottom: '14px', textAlign: 'center',
@@ -204,9 +212,8 @@ export const GAME_CARDS = (
     id: 'reconnect', categories: ['deep-talk', 'couples'], w: 277.981, h: 348.041,
     playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src={RECONNECT_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        <p className="font-luckiest" style={{ position: 'absolute', left: '138.99px', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#d22f49', textAlign: 'center', lineHeight: 1.15 }}>Let's reconnect</p>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#ef3526' }}>
+        <img src={RECONNECT_CARD_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -215,8 +222,8 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/finger-down.png" alt="Put a Finger Down" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        <p className="font-luckiest" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#ed8251', textAlign: 'center', lineHeight: 'normal', margin: 0, pointerEvents: 'none' }}>PUT A FINGER DOWN</p>
+        <img src="/assets/games/finger-down.png" alt="Drop a Finger" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <p className="font-luckiest" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#ed8251', textAlign: 'center', lineHeight: 'normal', margin: 0, pointerEvents: 'none' }}>DROP A<br />FINGER</p>
       </div>
     ),
   },
@@ -231,18 +238,21 @@ export const GAME_CARDS = (
   {
     id: 'sip-or-spill', categories: ['drinking', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ffd5f4', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: '263.486px', height: '333.538px', background: '#fb3757', borderRadius: '4.519px', overflow: 'hidden' }}>
-          <p className="font-freckle" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 89.94px)', width: '242.842px', fontSize: '58.567px', color: '#ffd7f7', textAlign: 'center', lineHeight: 1.1 }}>Sip or Spill</p>
-        </div>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#35152d', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
+        <img src="/assets/games/answer-or-drink.png" alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
   {
     id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src={YOU_LAUGH_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div className="card-tile" onClick={onClick} style={{
+        width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative',
+        cursor: onClick ? 'pointer' : 'default', backgroundColor: '#36a6bb',
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 1.5px, transparent 1.5px)',
+        backgroundSize: '14px 14px',
+      }}>
+        <p className="font-gasoek" style={{ position: 'absolute', left: '18px', right: '18px', top: '72px', margin: 0, color: '#fff', fontSize: '43px', lineHeight: 0.98, textAlign: 'center', textTransform: 'uppercase', WebkitTextStroke: '2px #755aa7', paintOrder: 'stroke fill' }}>KEEP A<br />STRAIGHT<br />FACE</p>
       </div>
     ),
   },
@@ -251,15 +261,15 @@ export const GAME_CARDS = (
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#d1ffd5', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 96.27px)', width: '208.8px', textAlign: 'center' }}>
-          <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>DO</p>
+          <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>DARE</p>
           <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>OR</p>
-          <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>DRINK</p>
+          <p className="font-fredericka" style={{ fontSize: '51.774px', color: '#5228eb', lineHeight: 1, margin: 0 }}>POUR</p>
         </div>
       </div>
     ),
   },
   {
-    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 310, h: 387.5, playable: true,
+    id: 'two-truths-bluff', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
         <TwoTruthsBluffArtwork portrait />
@@ -318,13 +328,13 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('icebreaker')}
       </>)}
       {row(<>
-        {getEl('dinner-table')}
+        {getEl('strangers')}
         {getEl('late-night-talks', onPlayLateNightTalks)}
         {getEl('everyday-conversation')}
         {getEl('charades')}
       </>)}
       {row(<>
-        {getEl('strangers')}
+        {getEl('dinner-table')}
         {getEl('never-have-i-ever')}
         {getEl('reconnect')}
         {getEl('finger-down')}
@@ -402,7 +412,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
  */
 function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?: () => void; containerWidth: number }) {
   const scale = containerWidth / card.w
-  const label = card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
+  const label = GAME_LABELS[card.id] ?? card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
   return (
     <button
       type="button"
@@ -462,6 +472,13 @@ export function GameCardPreview({ gameId }: { gameId: string }) {
 export function BrowseCardGrid(props: BrowseGridProps) {
   const { filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks } = props
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
+  const dinnerTableIndex = allCards.findIndex(card => card.id === 'dinner-table')
+  const beyondSmallTalkIndex = allCards.findIndex(card => card.id === 'strangers')
+  const arrangedCards = allCards.map((card, index) => {
+    if (index === dinnerTableIndex) return allCards[beyondSmallTalkIndex]
+    if (index === beyondSmallTalkIndex) return allCards[dinnerTableIndex]
+    return card
+  })
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set())
   const prevFilter = useRef<Category>('all')
@@ -503,7 +520,7 @@ export function BrowseCardGrid(props: BrowseGridProps) {
   const [staggerKey, setStaggerKey] = useState(0)
   useEffect(() => { setStaggerKey(k => k + 1) }, [filter])
 
-  const filtered = allCards.filter(c => visibleIds.has(c.id))
+  const filtered = arrangedCards.filter(c => visibleIds.has(c.id))
 
   if (isMobile) {
     let cardIdx = 0
@@ -545,7 +562,7 @@ export function BrowseCardGrid(props: BrowseGridProps) {
             const onClick = getCardOnClick(card, props)
 
             const CardWrapper = onClick ? 'button' : 'div'
-            const label = card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
+            const label = GAME_LABELS[card.id] ?? card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
             return (
               <CardWrapper
                 key={`${card.id}-${staggerKey}`}

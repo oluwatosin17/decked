@@ -12,8 +12,9 @@ import { DINNER_TABLE_HOLIDAY_GATHERING_PROMPTS } from './content/decks/dinnerTa
 import { DINNER_TABLE_BIRTHDAY_PROMPTS } from './content/decks/dinnerTableBirthday'
 import { DINNER_TABLE_EVERYDAY_PROMPTS } from './content/decks/dinnerTableEveryday'
 
-/* ─── Assets (permanently hosted on Cloudinary) ─── */
-const DTC_BOW = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/dtc-bow.svg'
+/* ─── Assets ─── */
+const DTC_COVER = '/assets/games/dinner-table-v2.png'
+const DTC_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.11'/%3E%3C/svg%3E\")"
 
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
@@ -223,22 +224,10 @@ export function DTCCard({ question, flipped, onFlip }: { question: string; flipp
         <div style={{
           position: 'absolute', inset: 0,
           backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          background: '#5a4447', borderRadius: '13px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(90,68,71,0.4)',
+          background: '#164f30', borderRadius: '13px', overflow: 'hidden',
+          boxShadow: '0 24px 60px rgba(8,44,25,0.42)',
         }}>
-          <p style={{
-            position: 'absolute', left: '16px', top: '40px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '32px',
-            color: '#e8e6e3', lineHeight: 1.1, margin: 0, letterSpacing: '0.02em',
-          }}>
-            DINNER TABLE<br />CONVERSATION
-          </p>
-          <img src={DTC_BOW} alt="" style={{
-            position: 'absolute',
-            bottom: '36px', right: '28px',
-            width: '52px', height: '47px',
-            objectFit: 'contain',
-          }} />
+          <img src={DTC_COVER} alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
 
         {/* Back face */}
@@ -246,24 +235,25 @@ export function DTCCard({ question, flipped, onFlip }: { question: string; flipp
           position: 'absolute', inset: 0,
           backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
           transform: 'rotateY(180deg)',
-          background: '#f0ece5', borderRadius: '13px', overflow: 'hidden',
+          backgroundColor: '#164f30', backgroundImage: DTC_TEXTURE, borderRadius: '13px', overflow: 'hidden',
           boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
         }}>
-          <p style={{
-            position: 'absolute', left: '20px', top: '32px', right: '20px',
-            fontFamily: "'Staatliches', sans-serif", fontSize: '26px',
-            color: '#5a4447', lineHeight: 1.2, margin: 0, letterSpacing: '0.02em',
-            textTransform: 'uppercase',
+          <div style={{ position: 'absolute', width: '126px', height: '126px', borderRadius: '50%', background: '#f3c83d', border: '4px solid #113f29', left: '-76px', top: '137px' }} />
+          <div style={{ position: 'absolute', width: '126px', height: '126px', borderRadius: '50%', background: '#f3c83d', border: '4px solid #113f29', right: '-76px', top: '137px' }} />
+          <div style={{
+            position: 'absolute', left: '28px', right: '28px', top: '54px', bottom: '58px',
+            borderRadius: '48% 48% 46% 46% / 35% 35% 42% 42%', backgroundColor: '#f4ead3', backgroundImage: DTC_TEXTURE,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 28px', boxSizing: 'border-box',
           }}>
-            {question}
-          </p>
-          <img src={DTC_BOW} alt="" style={{
-            position: 'absolute',
-            bottom: '36px', right: '28px',
-            width: '52px', height: '47px',
-            objectFit: 'contain',
-            filter: 'brightness(0) saturate(100%) invert(28%) sepia(12%) saturate(850%) hue-rotate(310deg) brightness(85%)',
-          }} />
+            <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '10px', fontWeight: 900, color: '#dc4c32', letterSpacing: '0.2em', marginBottom: '18px' }}>TABLE TALK</span>
+            <p style={{
+              fontFamily: "'Staatliches', sans-serif", fontSize: question.length > 110 ? '21px' : question.length > 75 ? '24px' : '27px',
+              color: '#123f29', lineHeight: 1.14, margin: 0, letterSpacing: '0.01em', textAlign: 'center', textTransform: 'uppercase',
+            }}>
+              {question}
+            </p>
+          </div>
+          <span style={{ position: 'absolute', bottom: '22px', left: 0, right: 0, textAlign: 'center', fontFamily: "'Satoshi', sans-serif", fontSize: '10px', fontWeight: 900, letterSpacing: '0.42em', color: '#f4ead3' }}>DECKED</span>
         </div>
       </div>
     </div>
@@ -276,20 +266,10 @@ function MiniDTCCard() {
   return (
     <div style={{
       width: '140px', height: '175px',
-      background: '#5a4447', borderRadius: '9px', overflow: 'hidden',
+      background: '#164f30', borderRadius: '9px', overflow: 'hidden',
       position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
     }}>
-      <p style={{
-        position: 'absolute', left: '10px', top: '16px',
-        fontFamily: "'Staatliches', sans-serif", fontSize: '14px',
-        color: '#e8e6e3', lineHeight: 1.1, margin: 0,
-      }}>
-        DINNER TABLE<br />CONVERSATION
-      </p>
-      <img src={DTC_BOW} alt="" style={{
-        position: 'absolute', bottom: '14px', right: '12px',
-        width: '24px', height: '22px', objectFit: 'contain',
-      }} />
+      <img src={DTC_COVER} alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>
   )
 }

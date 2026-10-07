@@ -367,7 +367,7 @@ function PAFDCard({ prompt, flipped, onFlip }: { prompt: string; flipped: boolea
               fontFamily: "'Luckiest Guy', cursive", fontSize: '48px', color: ORANGE,
               lineHeight: 1.05, margin: 0, textTransform: 'uppercase',
             }}>
-              PUT A FINGER DOWN
+              DROP A<br />FINGER
             </p>
           </div>
         </div>
@@ -438,7 +438,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, prompt, onSkip, o
         <div className="done-card" style={{ width: '140px', height: '190px', background: '#000', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(237,130,81,0.35)', position: 'relative' }}>
           <img src={PAFD_CARD} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
           <div style={{ position: 'absolute', left: '12px', top: '24px', right: '12px' }}>
-            <p style={{ fontFamily: "'Luckiest Guy', cursive", fontSize: '18px', color: '#ed8251', lineHeight: 1.05, margin: 0 }}>PUT A FINGER DOWN</p>
+            <p style={{ fontFamily: "'Luckiest Guy', cursive", fontSize: '18px', color: '#ed8251', lineHeight: 1.05, margin: 0 }}>DROP A<br />FINGER</p>
           </div>
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>

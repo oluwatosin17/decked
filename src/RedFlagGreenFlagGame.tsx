@@ -8,15 +8,10 @@ import { createSessionDeck, getShuffledDeck } from './utils/deckShuffle'
 import { RED_FLAG_GREEN_FLAG_SCENARIOS } from './content/decks/redFlagGreenFlag'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
-const RFGF_FRONT = '/icons/rfgf-front.svg'
-const RFGF_GAME_FRONT = '/icons/rfgf-game-front.svg'
-const RFGF_BACK  = '/icons/rfgf-back.svg'
-
-const VOTE_RED_ICON = '/icons/vote-red-flag.svg'
-const VOTE_GREEN_ICON = '/icons/vote-green-flag.svg'
-const VOTE_DEPENDS_ICON = '/icons/vote-depends.svg'
-
 const PLAYER_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
+const DATEABLE_BLUE = '#1256e8'
+const VERDICT_CORAL = '#ff675f'
+const CARD_PAPER = '#f8f5ee'
 
 export const SCENARIO_DECK = [...RED_FLAG_GREEN_FLAG_SCENARIOS]
 
@@ -24,16 +19,26 @@ export type VoteType = 'red' | 'depends' | 'green'
 type Vote = { playerIndex: number; vote: VoteType }
 type CardVoteRecord = { scenario: string; votes: Vote[] }
 
-function getVoteIcon(vote: VoteType): string {
-  if (vote === 'red') return VOTE_RED_ICON
-  if (vote === 'green') return VOTE_GREEN_ICON
-  return VOTE_DEPENDS_ICON
+function getVoteColor(vote: VoteType): string {
+  if (vote === 'red') return VERDICT_CORAL
+  if (vote === 'green') return DATEABLE_BLUE
+  return '#f0b83d'
 }
 
-function getVoteColor(vote: VoteType): string {
-  if (vote === 'red') return '#dc2827'
-  if (vote === 'green') return '#27ae60'
-  return '#626262'
+function getVoteLabel(vote: VoteType): string {
+  if (vote === 'red') return 'DEALBREAKER'
+  if (vote === 'green') return 'DATEABLE'
+  return 'DEPENDS'
+}
+
+function VerdictIcon({ vote, size = 24 }: { vote: VoteType; size?: number }) {
+  const src = vote === 'green'
+    ? '/icons/verdict-dateable.svg'
+    : vote === 'depends'
+      ? '/icons/verdict-depends.svg'
+      : '/icons/verdict-dealbreaker.svg'
+
+  return <img aria-hidden="true" src={src} alt="" style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0 }} />
 }
 
 /* ─── Screen: Get Ready ─── */
@@ -83,7 +88,9 @@ export function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
   const btnBase: React.CSSProperties = {
     flex: 1,
     background: '#070708',
-    border: '1px solid rgba(255,255,255,0.1)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    borderColor: 'rgba(255,255,255,0.1)',
     borderRadius: '12px',
     padding: '14px 8px',
     display: 'flex',
@@ -95,10 +102,11 @@ export function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
   }
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Staatliches', sans-serif",
-    fontSize: '13px',
+    fontFamily: "'Satoshi', sans-serif",
+    fontSize: '11px',
+    fontWeight: 800,
     color: '#fff',
-    letterSpacing: '0.04em',
+    letterSpacing: '0.02em',
     whiteSpace: 'nowrap',
   }
 
@@ -116,27 +124,27 @@ export function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
     <div style={{ display: 'flex', gap: '8px', width: '100%', maxWidth: '365px', position: 'relative', zIndex: 2 }}>
       <button
         className="game-btn"
-        onClick={() => handleVote('red')}
-        style={{ ...btnBase, ...getSelectedStyle('red') }}
+        onClick={() => handleVote('green')}
+        style={{ ...btnBase, ...getSelectedStyle('green') }}
       >
-        <img src={VOTE_RED_ICON} alt="" style={{ width: '24px', height: '24px' }} />
-        <span style={labelStyle}>RED FLAG</span>
+        <VerdictIcon vote="green" size={24} />
+        <span style={labelStyle}>DATEABLE</span>
       </button>
       <button
         className="game-btn"
         onClick={() => handleVote('depends')}
         style={{ ...btnBase, ...getSelectedStyle('depends') }}
       >
-        <img src={VOTE_DEPENDS_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+        <VerdictIcon vote="depends" size={24} />
         <span style={labelStyle}>DEPENDS</span>
       </button>
       <button
         className="game-btn"
-        onClick={() => handleVote('green')}
-        style={{ ...btnBase, ...getSelectedStyle('green') }}
+        onClick={() => handleVote('red')}
+        style={{ ...btnBase, ...getSelectedStyle('red') }}
       >
-        <img src={VOTE_GREEN_ICON} alt="" style={{ width: '24px', height: '24px' }} />
-        <span style={labelStyle}>GREEN FLAG</span>
+        <VerdictIcon vote="red" size={24} />
+        <span style={labelStyle}>DEALBREAKER</span>
       </button>
     </div>
   )
@@ -144,7 +152,32 @@ export function VoteButtons({ onVote }: { onVote: (v: VoteType) => void }) {
 
 export function RedFlagGreenFlagCard({ scenario, flipped, onFlip }: { scenario: string; flipped: boolean; onFlip: () => void }) {
   const { wrapperStyle, cardStyle } = useScaledCard(365, 457)
-  return <div style={wrapperStyle}><div onClick={!flipped ? onFlip : undefined} className="game-card" style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer', position: 'relative' }}><div className="spicy-flip-container" style={{ width: 365, height: 457 }}><div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: 365, height: 457 }}><div className="spicy-flip-front" style={{ background: '#000' }}><img src={RFGF_GAME_FRONT} alt="Red flag, green flag" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} /><p style={{ position: 'absolute', left: 0, right: 0, bottom: 40, fontFamily: "'Inter', sans-serif", fontSize: 14, color: 'rgba(255,255,255,.5)', textAlign: 'center' }}>Tap to Reveal</p></div><div className="spicy-flip-back" style={{ background: '#fff' }}><img src={RFGF_BACK} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} /><div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', padding: '48px 32px' }}><p style={{ fontFamily: "'Anton SC', sans-serif", fontSize: 24, color: '#1a1a2e', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.3 }}>{scenario}</p></div></div></div></div></div></div>
+  return <div style={wrapperStyle}><div onClick={!flipped ? onFlip : undefined} className="game-card" style={{ ...cardStyle, cursor: flipped ? 'default' : 'pointer', position: 'relative' }}><div className="spicy-flip-container" style={{ width: 365, height: 457 }}><div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: 365, height: 457 }}><DateableCardFront /><DateableScenarioCard scenario={scenario} /></div></div></div></div>
+}
+
+function DateableCardFront() {
+  return (
+    <div className="spicy-flip-front" style={{ backgroundColor: DATEABLE_BLUE, backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27120%27 height=%27120%27 viewBox=%270 0 120 120%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.8%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27 opacity=%27.18%27/%3E%3C/svg%3E")', backgroundBlendMode: 'soft-light', padding: '42px 34px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 900, fontSize: 48, lineHeight: 0.88, letterSpacing: '-0.055em', color: '#fff', textAlign: 'left', width: 'fit-content', transform: 'translateY(-18px)' }}>
+        <div>dateable</div>
+        <div style={{ color: VERDICT_CORAL }}>or</div>
+        <div>dealbreaker</div>
+      </div>
+      <p style={{ position: 'absolute', left: 0, right: 0, bottom: 18, margin: 0, fontFamily: "'Satoshi', sans-serif", fontSize: 10, fontWeight: 800, letterSpacing: '0.5em', color: '#fff', textAlign: 'center' }}>DECKED</p>
+    </div>
+  )
+}
+
+function DateableScenarioCard({ scenario, flipFace = true }: { scenario: string; flipFace?: boolean }) {
+  return (
+    <div className={flipFace ? 'spicy-flip-back' : undefined} style={{ position: flipFace ? undefined : 'absolute', inset: flipFace ? undefined : 0, background: CARD_PAPER, color: DATEABLE_BLUE, padding: '30px 28px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <span style={{ background: VERDICT_CORAL, color: '#fff', borderRadius: 999, padding: '7px 20px', fontFamily: "'Satoshi', sans-serif", fontWeight: 800, fontSize: 11, letterSpacing: '0.16em' }}>YOUR VERDICT</span>
+      <div style={{ flex: 1, display: 'grid', placeItems: 'center', width: '100%' }}>
+        <p style={{ fontFamily: "'Anton SC', sans-serif", fontSize: 27, color: DATEABLE_BLUE, textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.22, margin: 0 }}>{scenario}</p>
+      </div>
+      <p style={{ margin: '16px 0 0', fontFamily: "'Satoshi', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: '0.5em', color: DATEABLE_BLUE }}>DECKED</p>
+    </div>
+  )
 }
 
 /* ─── Vote Results Screen ─── */
@@ -193,19 +226,19 @@ function VoteResults({ votes, players, onNext }: {
       {/* Summary row */}
       <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
         <div style={summaryCardStyle}>
-          <img src={VOTE_RED_ICON} alt="" style={{ width: '24px', height: '24px' }} />
-          <span style={summaryLabelStyle}>RED FLAG</span>
-          <span style={summaryCountStyle}>{redCount} VOTE{redCount !== 1 ? 'S' : ''}</span>
+          <VerdictIcon vote="green" size={30} />
+          <span style={summaryLabelStyle}>DATEABLE</span>
+          <span style={summaryCountStyle}>{greenCount} VOTE{greenCount !== 1 ? 'S' : ''}</span>
         </div>
         <div style={summaryCardStyle}>
-          <img src={VOTE_DEPENDS_ICON} alt="" style={{ width: '24px', height: '24px' }} />
+          <VerdictIcon vote="depends" size={30} />
           <span style={summaryLabelStyle}>DEPENDS</span>
           <span style={summaryCountStyle}>{dependsCount} VOTE{dependsCount !== 1 ? 'S' : ''}</span>
         </div>
         <div style={summaryCardStyle}>
-          <img src={VOTE_GREEN_ICON} alt="" style={{ width: '24px', height: '24px' }} />
-          <span style={summaryLabelStyle}>GREEN FLAG</span>
-          <span style={summaryCountStyle}>{greenCount} VOTE{greenCount !== 1 ? 'S' : ''}</span>
+          <VerdictIcon vote="red" size={30} />
+          <span style={summaryLabelStyle}>DEALBREAKER</span>
+          <span style={summaryCountStyle}>{redCount} VOTE{redCount !== 1 ? 'S' : ''}</span>
         </div>
       </div>
 
@@ -223,7 +256,8 @@ function VoteResults({ votes, players, onNext }: {
               <span style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '15px', color: '#fff', textTransform: 'uppercase', flex: 1 }}>
                 {player.name}
               </span>
-              <img src={getVoteIcon(v.vote)} alt={v.vote} style={{ width: '20px', height: '20px' }} />
+              <VerdictIcon vote={v.vote} />
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: 10, fontWeight: 800, color: '#fff', letterSpacing: '0.04em' }}>{getVoteLabel(v.vote)}</span>
             </div>
           )
         })}
@@ -343,9 +377,9 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
     const green = record.votes.filter(v => v.vote === 'green').length
     const depends = record.votes.filter(v => v.vote === 'depends').length
     const parts: string[] = []
-    if (red > 0) parts.push(`${red} Red`)
-    if (green > 0) parts.push(`${green} Green`)
+    if (green > 0) parts.push(`${green} Dateable`)
     if (depends > 0) parts.push(`${depends} Depends`)
+    if (red > 0) parts.push(`${red} Dealbreaker`)
     return parts.join(' / ')
   }
 
@@ -423,7 +457,7 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
           SESSION COMPLETE
         </h2>
         <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-          You've completed this round of Red Flag / Green Flag.
+          You've completed this round of Dateable or Dealbreaker.
         </p>
       </div>
 
@@ -460,17 +494,17 @@ function SessionComplete({ players, totalCards, skipCount, allCardVotes, onClose
 
           {highlights.mostGreen && (
             <div style={highlightCardStyle}>
-              <p style={highlightLabelStyle}>Most Agreed Green Flag</p>
+              <p style={highlightLabelStyle}>Most Agreed Dateable</p>
               <p style={highlightScenarioStyle}>"{highlights.mostGreen.scenario}"</p>
-              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostGreen)} ({Math.round((highlights.mostGreenPct ?? 0) * 100)}% green)</p>
+              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostGreen)} ({Math.round((highlights.mostGreenPct ?? 0) * 100)}% dateable)</p>
             </div>
           )}
 
           {highlights.mostRed && (
             <div style={highlightCardStyle}>
-              <p style={highlightLabelStyle}>Most Agreed Red Flag</p>
+              <p style={highlightLabelStyle}>Most Agreed Dealbreaker</p>
               <p style={highlightScenarioStyle}>"{highlights.mostRed.scenario}"</p>
-              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostRed)} ({Math.round((highlights.mostRedPct ?? 0) * 100)}% red)</p>
+              <p style={highlightBreakdownStyle}>{voteBreakdownText(highlights.mostRed)} ({Math.round((highlights.mostRedPct ?? 0) * 100)}% dealbreaker)</p>
             </div>
           )}
 
@@ -644,32 +678,10 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
             <div className="spicy-flip-container" style={{ width: cardWidth, height: cardHeight }}>
               <div className={`spicy-flip-inner${flipped ? ' flipped' : ''}`} style={{ width: cardWidth, height: cardHeight }}>
                 {/* FRONT */}
-                <div className="spicy-flip-front" style={{ background: '#000' }}>
-                  <img src={RFGF_GAME_FRONT} alt="Red flag, green flag" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: '40px' }}>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-                      Tap to Reveal
-                    </p>
-                  </div>
-                </div>
+                <DateableCardFront />
 
                 {/* BACK — scenario card */}
-                <div className="spicy-flip-back" style={{ background: '#fff' }}>
-                  <img src={RFGF_BACK} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    justifyContent: 'center', padding: '48px 32px',
-                  }}>
-                    <p style={{
-                      fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-                      fontSize: '24px', color: '#1a1a2e', textAlign: 'center',
-                      textTransform: 'uppercase', lineHeight: 1.3, margin: 0,
-                    }}>
-                      {scenario}
-                    </p>
-                  </div>
-                </div>
+                <DateableScenarioCard scenario={scenario} />
               </div>
             </div>
           </div>
@@ -706,20 +718,7 @@ function GamePlay({ players, totalCards, scenarios, onClose }: {
               boxShadow: '0 32px 80px rgba(0,0,0,0.4)',
             }}
           >
-            <img src={RFGF_BACK} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div style={{
-              position: 'absolute', inset: 0,
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              justifyContent: 'center', padding: '48px 32px',
-            }}>
-              <p style={{
-                fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-                fontSize: '24px', color: '#1a1a2e', textAlign: 'center',
-                textTransform: 'uppercase', lineHeight: 1.3, margin: 0,
-              }}>
-                {scenario}
-              </p>
-            </div>
+            <DateableScenarioCard scenario={scenario} flipFace={false} />
           </div>
         </div>
 

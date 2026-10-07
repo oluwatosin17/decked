@@ -13,6 +13,11 @@ import ArrowRightRegular from '@mingcute/react/core-regular/arrow-right'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 
 const RED = '#ed3844'
+const CHARADES_COVER = '/assets/games/charades-plum.png'
+const CHARADES_BLUE = '#5d0c42'
+const CHARADES_CREAM = '#f4ead3'
+const CHARADES_PINK = '#ff5a2e'
+const CHARADES_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.1'/%3E%3C/svg%3E\")"
 const STORAGE_KEY = 'charades-game-state-v3'
 const TEAM_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63','#f39c12','#1abc9c']
 const MIN_TEAM_MODE_PLAYERS = 4
@@ -518,27 +523,32 @@ export function CharadesCard({ flipped, prompt, onFlip, compact = false }: { fli
           {/* Front */}
           <div style={{
             position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            background: RED, borderRadius: '16px', boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: CHARADES_BLUE, borderRadius: '16px', boxShadow: '0 16px 40px rgba(0,0,0,0.4)', overflow: 'hidden',
           }}>
-            <p className="font-slackey" style={{ fontSize: '40px', color: '#e8e6e3', margin: 0 }}>Charades</p>
+            <img src={CHARADES_COVER} alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
           </div>
 
           {/* Back */}
           <div style={{
             position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)', borderRadius: '16px', padding: '20px', boxSizing: 'border-box',
-            background: `repeating-linear-gradient(45deg, ${RED} 0 14px, #fff 14px 28px)`,
-            boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
+            transform: 'rotateY(180deg)', borderRadius: '16px', boxSizing: 'border-box', overflow: 'hidden',
+            backgroundColor: CHARADES_BLUE, backgroundImage: CHARADES_TEXTURE, boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
           }}>
+            <div style={{ position: 'absolute', left: '-4px', top: '92px', width: '58px', height: '18px', borderRadius: '20px', background: CHARADES_PINK, transform: 'rotate(-28deg)' }} />
+            <div style={{ position: 'absolute', right: '-5px', top: '286px', width: '60px', height: '18px', borderRadius: '20px', background: CHARADES_PINK, transform: 'rotate(26deg)' }} />
+            <div style={{ position: 'absolute', left: '72px', bottom: '20px', width: '18px', height: '58px', borderRadius: '20px', background: '#75f594', transform: 'rotate(12deg)' }} />
+            <div style={{ position: 'absolute', right: '72px', bottom: '20px', width: '18px', height: '58px', borderRadius: '20px', background: '#75f594', transform: 'rotate(-12deg)' }} />
             <div style={{
-              width: '100%', height: '100%', background: RED, borderRadius: '10px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', boxSizing: 'border-box',
+              position: 'absolute', left: '22px', right: '22px', top: '34px', bottom: '58px',
+              backgroundColor: CHARADES_CREAM, backgroundImage: CHARADES_TEXTURE, borderRadius: '24px',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: compact ? '24px 18px' : '34px 28px', boxSizing: 'border-box',
             }}>
-              <p className="font-slackey" style={{ fontSize: compact ? '24px' : '32px', color: '#e8e6e3', lineHeight: 1.3, margin: 0, textAlign: 'center' }}>
+              <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: compact ? '8px' : '10px', fontWeight: 900, color: CHARADES_PINK, letterSpacing: '0.2em', marginBottom: compact ? '16px' : '24px' }}>ACT THIS OUT</span>
+              <p className="font-anton" style={{ fontSize: compact ? '26px' : prompt.length > 40 ? '34px' : '40px', color: '#111', lineHeight: 1.08, margin: 0, textAlign: 'center', textTransform: 'uppercase' }}>
                 {prompt}
               </p>
             </div>
+            <span style={{ position: 'absolute', bottom: '18px', left: 0, right: 0, textAlign: 'center', fontFamily: "'Satoshi', sans-serif", fontSize: compact ? '8px' : '10px', fontWeight: 900, letterSpacing: '0.42em', color: CHARADES_CREAM }}>DECKED</span>
           </div>
         </div>
       </div>
@@ -800,8 +810,8 @@ function ScorePill({ team, score, delay }: { team: GameTeam; score: number; dela
 /* ─── Mini card (end screens) ─── */
 function MiniCharadesCard() {
   return (
-    <div className="done-card" style={{ width: '150px', height: '196px', background: RED, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.45)' }}>
-      <p className="font-slackey" style={{ fontSize: '26px', color: '#e8e6e3', margin: 0 }}>Charades</p>
+    <div className="done-card" style={{ width: '150px', height: '196px', background: CHARADES_BLUE, borderRadius: '14px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.45)' }}>
+      <img src={CHARADES_COVER} alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
     </div>
   )
 }

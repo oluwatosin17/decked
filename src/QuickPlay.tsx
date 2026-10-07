@@ -13,25 +13,35 @@ interface GameSuggestion {
 
 const ALL_GAMES: GameSuggestion[] = [
   { id: 'truth-or-dare', label: 'Truth or Dare', description: 'Spicy truths & bold dares for couples', thumbnail: '/icons/qp-truth-or-dare.svg' },
-  { id: 'spicy-starters', label: 'Spicy Starters', description: 'Deep conversation cards to share', thumbnail: '/icons/qp-spicy-starters.svg' },
+  { id: 'spicy-starters', label: 'Spicy Opener', description: 'Flirty conversation cards that turn up the heat', thumbnail: '/assets/games/spicy-opener.png' },
   { id: 'late-night-talks', label: 'Late Night Talks', description: 'Questions that spark real conversations', thumbnail: '/icons/qp-late-night-talks.svg' },
   { id: 'dinner-table', label: 'Dinner Table', description: 'Meaningful dinner conversation starters', thumbnail: '/icons/qp-dinner-table.svg' },
-  { id: 'you-laugh', label: "You Laugh You're Out", description: 'Try not to laugh — last one standing wins', thumbnail: '/icons/qp-you-laugh.svg' },
+  { id: 'you-laugh', label: 'Keep a Straight Face', description: 'Try not to laugh — last one standing wins', thumbnail: '/icons/qp-you-laugh.svg' },
   { id: 'never-have-i-ever', label: 'Never Have I Ever', description: 'Find out who has done what', thumbnail: '/icons/qp-never-have-i-ever.svg' },
   { id: 'charades', label: 'Charades', description: 'Act it out — no words allowed', thumbnail: '/icons/qp-charades.svg' },
-  { id: 'lets-reconnect', label: "Let's Reconnect", description: 'Rebuild bonds with heartfelt questions', thumbnail: '/icons/qp-lets-reconnect.svg' },
-  { id: 'everyday-conversations', label: 'Everyday Conversations', description: 'Questions to build genuine connection', thumbnail: '/icons/qp-everyday-conversations.svg' },
-  { id: 'wnrs', label: "We're Not Really Strangers", description: 'Get to know each other for real', thumbnail: '/icons/qp-wnrs.svg' },
-  { id: 'put-a-finger-down', label: 'Put a Finger Down', description: 'Who has the most fingers down?', thumbnail: '/icons/qp-put-a-finger-down.svg' },
+  { id: 'lets-reconnect', label: 'Back to Us', description: 'Rebuild bonds with heartfelt questions', thumbnail: '/icons/qp-lets-reconnect.svg' },
+  { id: 'everyday-conversations', label: 'Real Talk, Every Day', description: 'Questions to build genuine connection', thumbnail: '/icons/qp-everyday-conversations.svg' },
+  { id: 'wnrs', label: 'Beyond Small Talk', description: 'Get to know each other for real', thumbnail: '/icons/qp-wnrs.svg' },
+  { id: 'put-a-finger-down', label: 'Drop a Finger', description: 'Drop a finger if it’s true', thumbnail: '/icons/qp-put-a-finger-down.svg' },
   { id: 'take-a-sip', label: 'Take a Sip', description: 'Sip if the statement applies to you', thumbnail: '/icons/qp-take-a-sip.svg' },
-  { id: 'sip-or-spill', label: 'Sip or Spill', description: 'Answer honestly or take a drink', thumbnail: '/icons/qp-sip-or-spill.svg' },
-  { id: 'do-or-drink', label: 'Do or Drink', description: 'Complete the dare or take a drink', thumbnail: '/icons/qp-do-or-drink.svg' },
+  { id: 'sip-or-spill', label: 'Answer or Drink', description: 'Answer honestly or take a drink', thumbnail: '/assets/games/answer-or-drink.png' },
+  { id: 'do-or-drink', label: 'Dare or Pour', description: 'Complete the dare or take a drink', thumbnail: '/icons/qp-do-or-drink.svg' },
   { id: 'icebreaker', label: 'Icebreaker', description: 'Fun questions to break the ice', thumbnail: '/icons/qp-icebreaker.svg' },
-  { id: 'red-flag-green-flag', label: 'Red Flag Green Flag', description: 'Vote on relationship deal-breakers', thumbnail: '/icons/rfgf-front.svg' },
+  { id: 'red-flag-green-flag', label: 'Dateable or Dealbreaker', description: 'Decide what is dateable, debatable, or a dealbreaker', thumbnail: '/assets/games/dateable-or-dealbreaker.png' },
   { id: 'two-truths-bluff', label: 'Two Truths and a Bluff', description: 'Spot the bluff hidden between two truths', thumbnail: '' },
   { id: 'most-likely-to', label: 'Who’s Most Likely To?', description: 'Vote for the person who fits best', thumbnail: '' },
   { id: 'choose-your-side', label: 'Choose Your Side', description: 'Pick a side and make your case', thumbnail: '' },
 ]
+
+const RENAMED_THUMBNAILS: Record<string, { background: string; color: string }> = {
+  'everyday-conversations': { background: '#f7c928', color: '#111111' },
+  wnrs: { background: '#f4efe4', color: '#111111' },
+  'lets-reconnect': { background: '#f5e9de', color: '#d22f49' },
+  'put-a-finger-down': { background: '#111111', color: '#ed8251' },
+  'sip-or-spill': { background: '#35152d', color: '#f7ecd5' },
+  'you-laugh': { background: '#36a6bb', color: '#ffffff' },
+  'do-or-drink': { background: '#d1ffd5', color: '#5228eb' },
+}
 
 function pickRandom3(): GameSuggestion[] {
   const shuffled = [...ALL_GAMES].sort(() => Math.random() - 0.5)
@@ -125,7 +135,16 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
                   overflow: 'hidden', flexShrink: 0,
                   background: '#1a1a1e',
                 }}>
-                  {game.id === 'two-truths-bluff'
+                  {RENAMED_THUMBNAILS[game.id]
+                    ? <div style={{
+                        width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        padding: '5px', boxSizing: 'border-box', textAlign: 'center',
+                        background: RENAMED_THUMBNAILS[game.id].background,
+                        color: RENAMED_THUMBNAILS[game.id].color,
+                      }}>
+                        <span className="font-anton" style={{ fontSize: '10px', lineHeight: 1, textTransform: 'uppercase' }}>{game.label}</span>
+                      </div>
+                    : game.id === 'two-truths-bluff'
                     ? <TwoTruthsBluffArtwork portrait />
                     : game.id === 'most-likely-to'
                     ? <MostLikelyArtwork compact />

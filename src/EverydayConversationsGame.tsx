@@ -183,9 +183,21 @@ function getQuestions(theme: Theme): string[] {
   return getShuffledDeck(EVERYDAY_DECKS[theme], 'everyday-conversations')
 }
 
-/* ─── Everyday Conversation Card ─── */
-export function ECCard({ question, flipped, onFlip }: { question: string; flipped: boolean; onFlip: () => void }) {
+/* ─── Real Talk, Every Day Card ─── */
+export function ECCard({ question, flipped, onFlip, theme = 'everyday' }: { question: string; flipped: boolean; onFlip: () => void; theme?: Theme }) {
   const { wrapperStyle, cardStyle } = useScaledCard(320, 400)
+  const texture = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.11'/%3E%3C/svg%3E\")"
+  const questionSize = question.length > 120 ? 22 : question.length > 85 ? 25 : question.length > 55 ? 29 : 34
+  const themeLabel: Record<Theme, string> = {
+    everyday: 'EVERYDAY', 'deep-convo': 'DEEP CONVERSATIONS', 'first-date': 'FIRST DATE',
+    nostalgia: 'NOSTALGIA', team: 'TEAM BUILDING', party: 'PARTY', random: 'RANDOM',
+  }
+  const face = {
+    position: 'absolute' as const, inset: 0, backfaceVisibility: 'hidden' as const,
+    WebkitBackfaceVisibility: 'hidden' as const, backgroundColor: '#f4efe4',
+    backgroundImage: texture, borderRadius: '16px', overflow: 'hidden',
+    boxShadow: '0 24px 60px rgba(0,0,0,0.34)',
+  }
   return (
     <div style={{ ...wrapperStyle, perspective: '1000px' }}>
     <div
@@ -200,38 +212,43 @@ export function ECCard({ question, flipped, onFlip }: { question: string; flippe
         transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
       }}>
         {/* Front */}
-        <div style={{
-          position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          background: '#eae6e1', borderRadius: '13px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(15,151,61,0.25)',
-        }}>
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, opacity: 0.55, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")", backgroundSize: '200px 200px', mixBlendMode: 'multiply' }} />
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', zIndex: 2 }}>
-            <p style={{ fontFamily: "'Spicy Rice', cursive", fontSize: '36px', color: '#0f973d', textAlign: 'center', lineHeight: 1, margin: 0 }}>
-              everyday<br />conversation
-            </p>
-            <p style={{ fontFamily: "'Inter Tight', sans-serif", fontWeight: 300, fontSize: '11px', color: '#181b25', textAlign: 'center', margin: 0 }}>
-              Questions to build genuine connection
-            </p>
+        <div style={face}>
+          <div style={{ position: 'absolute', left: '8px', top: '8px', width: '176px', height: '62px', borderRadius: '14px', background: '#1459bd', backgroundImage: texture }}>
+            <span style={{ display: 'block', color: '#f4efe4', fontSize: '28px', letterSpacing: '8px', margin: '9px 0 0 46px' }}>•••</span>
+          </div>
+          <div style={{ position: 'absolute', right: '8px', top: '8px', width: '113px', height: '104px', borderRadius: '14px', background: '#ef3f2d', backgroundImage: texture }} />
+          <div style={{ position: 'absolute', left: '8px', right: '8px', top: '78px', height: '93px', borderRadius: '14px', background: '#f7c928', backgroundImage: texture }} />
+          <div style={{ position: 'absolute', left: '8px', right: '8px', top: '180px', height: '101px', borderRadius: '14px', background: '#ed9ca8', backgroundImage: texture }} />
+          <p style={{ position: 'absolute', left: '22px', right: '22px', top: '92px', margin: 0, fontFamily: "'Anton SC', sans-serif", fontSize: '48px', lineHeight: 0.92, letterSpacing: '-0.02em', color: '#111', textTransform: 'uppercase' }}>
+            REAL TALK,<br />EVERY DAY
+          </p>
+          <div style={{ position: 'absolute', left: '8px', bottom: '49px', width: '178px', height: '58px', borderRadius: '14px', background: '#137b4c', backgroundImage: texture, display: 'flex', alignItems: 'center', padding: '0 17px' }}>
+            <span style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 700, fontSize: '10px', lineHeight: 1.25, letterSpacing: '0.13em', color: '#f4efe4' }}>QUESTIONS FOR<br />REAL CONNECTION</span>
+          </div>
+          <div style={{ position: 'absolute', right: '8px', bottom: '49px', width: '105px', height: '58px', borderRadius: '14px', background: '#1459bd', backgroundImage: texture }} />
+          <div style={{ position: 'absolute', left: '8px', right: '8px', bottom: '8px', height: '34px', borderRadius: '12px', background: '#f7c928', backgroundImage: texture, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '9px', fontWeight: 900, letterSpacing: '0.42em', color: '#111' }}>DECKED</span>
           </div>
         </div>
         {/* Back */}
-        <div style={{
-          position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          transform: 'rotateY(180deg)',
-          background: '#eae6e1', borderRadius: '13px', overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(15,151,61,0.25)',
-        }}>
-          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, opacity: 0.55, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")", backgroundSize: '200px 200px', mixBlendMode: 'multiply' }} />
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px', zIndex: 2 }}>
+        <div style={{ ...face, transform: 'rotateY(180deg)' }}>
+          <div style={{ position: 'absolute', left: '8px', top: '8px', width: '176px', height: '58px', borderRadius: '14px', background: '#1459bd', backgroundImage: texture, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: '#f4efe4', fontSize: '27px', letterSpacing: '8px' }}>•••</span>
+          </div>
+          <div style={{ position: 'absolute', right: '8px', top: '8px', width: '113px', height: '82px', borderRadius: '14px', background: '#ef3f2d', backgroundImage: texture }} />
+          <div style={{ position: 'absolute', left: '28px', right: '28px', top: '76px', bottom: '78px', borderRadius: '16px', background: '#f4efe4', backgroundImage: texture, boxShadow: 'inset 0 0 0 1px rgba(17,17,17,0.06)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '28px 22px', zIndex: 2 }}>
+            <span style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 900, fontSize: '9px', color: '#f4efe4', letterSpacing: '0.2em', background: '#137b4c', borderRadius: '999px', padding: '7px 13px', marginBottom: '22px', textTransform: 'uppercase' }}>{themeLabel[theme]}</span>
             <p style={{
               fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-              fontSize: '22px', color: '#0f973d',
+              fontSize: `${questionSize}px`, color: '#111',
               textAlign: 'center', textTransform: 'uppercase',
-              lineHeight: 1.25, margin: 0,
+              lineHeight: 1.04, letterSpacing: '-0.01em', margin: 0,
             }}>
               {question}
             </p>
+          </div>
+          <div style={{ position: 'absolute', left: '8px', right: '8px', bottom: '8px', height: '54px', borderRadius: '14px', background: '#f7c928', backgroundImage: texture, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '9px', fontWeight: 900, letterSpacing: '0.42em', color: '#111' }}>DECKED</span>
           </div>
         </div>
       </div>
@@ -300,9 +317,9 @@ function ThemeSelect({ onSelect }: { onSelect: (t: Theme) => void }) {
 }
 
 /* ─── Gameplay ─── */
-function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip, onNext, onPlayAgain, onBrowseGames }: {
+function GamePlay({ players, cardIndex, totalCards, skipCount, question, theme, onSkip, onNext, onPlayAgain, onBrowseGames }: {
   players: Player[]; cardIndex: number; totalCards: number; skipCount: number
-  question: string; onSkip: () => void; onNext: () => void
+  question: string; theme: Theme; onSkip: () => void; onNext: () => void
   onPlayAgain: () => void; onBrowseGames: () => void
 }) {
   const [flipped, setFlipped] = useState(false)
@@ -314,7 +331,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', textAlign: 'center' }}>
           <h2 className="done-heading" style={{ fontFamily: "'Anton SC', sans-serif", fontWeight: 400, fontSize: '48px', color: '#fff', margin: 0, textTransform: 'uppercase' }}>You're Decked</h2>
           <p className="done-subtitle" style={{ fontFamily: "'Satoshi', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-            You played all {totalCards} everyday conversation cards
+            You played all {totalCards} Real Talk, Every Day cards
           </p>
         </div>
         <div style={{ background: '#070708', border: '1px dashed rgba(255, 255, 255, 0.10)', borderRadius: '12px', display: 'flex', alignItems: 'center', padding: '20px 32px' }}>
@@ -332,8 +349,8 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
             </div>
           ))}
         </div>
-        <div className="done-card" style={{ width: '140px', height: '175px', background: '#eae6e1', borderRadius: '9px', overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <p style={{ fontFamily: "'Spicy Rice', cursive", fontSize: '14px', color: '#0f973d', textAlign: 'center', lineHeight: 1, margin: 0 }}>everyday<br />conversation</p>
+        <div className="done-card" style={{ width: '140px', height: '175px', background: '#f7c928', borderRadius: '9px', overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '14px' }}>
+          <p style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '27px', color: '#111', textAlign: 'center', lineHeight: 0.92, margin: 0 }}>REAL TALK,<br />EVERY DAY</p>
         </div>
         <div className="done-btns" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button className="game-btn" onClick={onBrowseGames} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff', letterSpacing: '0.05em' }}>BROWSE GAMES</button>
@@ -345,7 +362,7 @@ function GamePlay({ players, cardIndex, totalCards, skipCount, question, onSkip,
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', position: 'relative', zIndex: 2 }}>
-      <ECCard question={question} flipped={flipped} onFlip={() => setFlipped(true)} />
+      <ECCard question={question} flipped={flipped} onFlip={() => setFlipped(true)} theme={theme} />
       {!flipped ? (
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.5)', margin: 0 }}>Tap the card to flip it.</p>
       ) : (
@@ -462,7 +479,7 @@ export default function EverydayConversationsGame({ onClose }: { onClose: () => 
       {step === 'game' && (
         <GamePlay
           players={players} cardIndex={cardIndex} totalCards={totalCards}
-          skipCount={skipCount} question={currentQuestion}
+          skipCount={skipCount} question={currentQuestion} theme={theme}
           onSkip={handleSkip} onNext={handleNext}
           onPlayAgain={handlePlayAgain} onBrowseGames={onClose}
         />
