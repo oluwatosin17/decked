@@ -2,18 +2,17 @@ import { useState, useEffect, useCallback, useRef, type CSSProperties } from 're
 import SharedPlayerSetup, { type Player } from './components/PlayerSetup'
 import { useScaledCard } from './hooks/useCardScale'
 import { GameNav, GameFooter, PlayAgainLabel } from './components/GameShell'
+import { TimerControl } from './CharadesGame'
 import { getShuffledDeck } from './utils/deckShuffle'
 import { DARE_SUPPLEMENT } from './content/supplemental'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 
-/* ─── Assets (permanently hosted on Cloudinary) ─── */
-// Card banners
-const BANNER_LAUGH = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-laugh.svg'
-const BANNER_OUT   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-out.svg'
-// Winner mini-card banners (smaller versions — same art, reused at a smaller size)
-const BANNER_LAUGH_SM = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-laugh.svg'
-const BANNER_OUT_SM   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/banner-out.svg'
 const ICON_LIVE   = '/icons/live.svg'
+
+const STRAIGHT_FACE_ORANGE = '#df561b'
+const STRAIGHT_FACE_MINT = '#e5f5d5'
+const STRAIGHT_FACE_BURGUNDY = '#781d23'
+const PAPER_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E\")"
 
 /* Hand-authored (no hosting needed — can never 404) */
 function WatchIcon({ style }: { style?: CSSProperties }) {
@@ -163,7 +162,6 @@ export const LAUGH_YOU_ARE_OUT_DECK = [...CHALLENGES, ...DARE_SUPPLEMENT, ...LAU
 function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: boolean; onFlip: () => void }) {
   const W = 320
   const H = 420
-  const scale = W / 386
   const { wrapperStyle, cardStyle } = useScaledCard(W, H)
 
   return (
@@ -187,62 +185,12 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
         <div style={{
           position: 'absolute', inset: 0,
           backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-          background: '#36a6bb', borderRadius: `${14 * scale}px`,
-          overflow: 'hidden', outline: '2px solid rgba(255,255,255,0.25)',
-          boxShadow: '0 20px 50px rgba(54,166,187,0.4)',
+          backgroundColor: STRAIGHT_FACE_ORANGE,
+          backgroundImage: PAPER_TEXTURE,
+          borderRadius: '20px', overflow: 'hidden',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.38)',
         }}>
-          {/* Dots */}
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
-
-          {/* KEEP */}
-          <p style={{
-            position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-            top: `${28 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`,
-            color: '#755aa7', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill',
-            }}>KEEP</p>
-
-          {/* STRAIGHT banner — wide, slight CCW tilt */}
-          <div style={{
-            position: 'absolute',
-            left: '50%', transform: 'translateX(-50%) rotate(-4deg)',
-            top: `${112 * scale}px`,
-            width: `${330 * scale}px`, height: `${110 * scale}px`,
-          }}>
-            <img src={BANNER_LAUGH} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
-            <p style={{
-              position: 'absolute', left: '50%', top: '50%',
-              transform: 'translate(-50%, -50%)',
-              fontFamily: "'Gasoek One', sans-serif", fontSize: `${43 * scale}px`,
-              color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            }}>STRAIGHT</p>
-          </div>
-
-          {/* A */}
-          <p style={{
-            position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-            top: `${246 * scale}px`,
-            fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`,
-            color: '#fd587c', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill',
-          }}>A</p>
-
-          {/* FACE banner — narrower, slight CW tilt, text inside */}
-          <div style={{
-            position: 'absolute',
-            left: '50%', transform: 'translateX(-50%) rotate(3deg)',
-            top: `${330 * scale}px`,
-            width: `${210 * scale}px`, height: `${95 * scale}px`,
-          }}>
-            <img src={BANNER_OUT} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
-            <p style={{
-              position: 'absolute', left: '50%', top: '50%',
-              transform: 'translate(-50%, -50%)',
-              fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`,
-              color: '#f6f0f1', textAlign: 'center', whiteSpace: 'nowrap', margin: 0,
-            }}>FACE</p>
-          </div>
+          <img src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
 
         {/* ── Back face — challenge ── */}
@@ -250,31 +198,33 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
           position: 'absolute', inset: 0,
           backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
           transform: 'rotateY(180deg)',
-          background: '#36a6bb', borderRadius: `${14 * scale}px`,
-          overflow: 'hidden', outline: '2px solid rgba(255,255,255,0.25)',
-          boxShadow: '0 20px 50px rgba(54,166,187,0.4)',
+          backgroundColor: STRAIGHT_FACE_ORANGE,
+          backgroundImage: `repeating-linear-gradient(135deg, #c9431f 0, #c9431f 10px, #f47b32 10px, #f47b32 20px), ${PAPER_TEXTURE}`,
+          borderRadius: '20px', overflow: 'hidden', padding: '18px', boxSizing: 'border-box',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.38)',
         }}>
-          {/* Dots — subtle on back face */}
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.10) 1.5px, transparent 1.5px)', backgroundSize: '14px 14px' }} />
-          {/* Challenge text — Anton SC, white fill, 4px outside purple stroke */}
+          <div style={{
+            position: 'absolute', inset: '24px', borderRadius: '14px',
+            backgroundColor: STRAIGHT_FACE_MINT,
+            backgroundImage: PAPER_TEXTURE,
+          }} />
+          <p style={{ position: 'absolute', top: '38px', left: '36px', right: '36px', margin: 0, color: STRAIGHT_FACE_BURGUNDY, fontFamily: "'Anton SC', sans-serif", fontSize: '13px', letterSpacing: '0.16em', textAlign: 'center' }}>KEEP A STRAIGHT FACE</p>
+          <div style={{ position: 'absolute', top: '71px', left: '50%', width: '44px', height: '4px', borderRadius: '99px', transform: 'translateX(-50%)', background: STRAIGHT_FACE_ORANGE }} />
           <p style={{
             position: 'absolute',
-            left: '50%', top: '50%', transform: 'translate(-50%, -60%)',
-            width: `${252 * scale}px`,
+            left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+            width: '248px',
             fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-            fontSize: `${22 * scale}px`,
-            color: '#ffffff', textAlign: 'center', margin: 0, lineHeight: 1.45,
-            WebkitTextStroke: `${4 * scale}px #755aa7`, paintOrder: 'stroke fill',
+            fontSize: '24px', color: '#173654', textAlign: 'center', margin: 0, lineHeight: 1.2,
           }}>
             {challenge}
           </p>
-          {/* Hashtag */}
           <p style={{
-            position: 'absolute', right: `${14 * scale}px`, bottom: `${14 * scale}px`,
-            fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-            fontSize: `${9 * scale}px`, color: 'rgba(255,255,255,0.6)', margin: 0, letterSpacing: '0.06em',
+            position: 'absolute', left: 0, right: 0, bottom: '38px',
+            fontFamily: "'Satoshi', sans-serif", fontWeight: 800,
+            fontSize: '10px', color: STRAIGHT_FACE_BURGUNDY, margin: 0, letterSpacing: '0.32em', textAlign: 'center',
           }}>
-            #KEEPASTRAIGHTFACE
+            DECKED
           </p>
         </div>
       </div>
@@ -286,24 +236,10 @@ function LYAOCard({ challenge, flipped, onFlip }: { challenge: string; flipped: 
 
 /* ─── Mini LYAO Card (game over screen) ─── */
 function MiniLYAOCard() {
-  const W = 150, H = 195, scale = W / 386
+  const W = 150, H = 195
   return (
-    <div style={{ width: `${W}px`, height: `${H}px`, background: '#36a6bb', borderRadius: `${14 * scale}px`, overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', outline: '2px solid rgba(255,255,255,0.2)' }}>
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.22) 1.5px, transparent 1.5px)', backgroundSize: '9px 9px' }} />
-      {/* KEEP */}
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${28 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#755aa7', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>KEEP</p>
-      {/* STRAIGHT banner */}
-      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%) rotate(-4deg)', top: `${112 * scale}px`, width: `${330 * scale}px`, height: `${110 * scale}px` }}>
-        <img src={BANNER_LAUGH_SM} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
-        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${43 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>STRAIGHT</p>
-      </div>
-      {/* A */}
-      <p style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: `${246 * scale}px`, fontFamily: "'Gasoek One', sans-serif", fontSize: `${64 * scale}px`, color: '#fd587c', whiteSpace: 'nowrap', margin: 0, WebkitTextStroke: `${3 * scale}px white`, paintOrder: 'stroke fill' }}>A</p>
-      {/* FACE banner */}
-      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%) rotate(3deg)', top: `${330 * scale}px`, width: `${210 * scale}px`, height: `${95 * scale}px` }}>
-        <img src={BANNER_OUT_SM} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }} />
-        <p style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Gasoek One', sans-serif", fontSize: `${58 * scale}px`, color: '#f6f0f1', whiteSpace: 'nowrap', margin: 0 }}>FACE</p>
-      </div>
+    <div style={{ width: `${W}px`, height: `${H}px`, background: STRAIGHT_FACE_ORANGE, borderRadius: '10px', overflow: 'hidden', position: 'relative', boxShadow: '0 8px 24px rgba(0,0,0,0.4)' }}>
+      <img src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>
   )
 }
@@ -406,23 +342,18 @@ function GameplayScreen({ challenge, seconds, onDone }: { challenge: string; sec
   const [flipped, setFlipped] = useState(false)
   const [phase, setPhase] = useState<GamePhase>('card')
   const [remaining, setRemaining] = useState(seconds)
+  const [paused, setPaused] = useState(false)
 
   // Reset when challenge changes
-  useEffect(() => { setFlipped(false); setPhase('card'); setRemaining(seconds) }, [challenge, seconds])
+  useEffect(() => { setFlipped(false); setPhase('card'); setRemaining(seconds); setPaused(false) }, [challenge, seconds])
 
   // Timer
   useEffect(() => {
-    if (phase !== 'timer') return
+    if (phase !== 'timer' || paused) return
     if (remaining <= 0) { onDone(); return }
     const id = setTimeout(() => setRemaining(r => r - 1), 1000)
     return () => clearTimeout(id)
-  }, [phase, remaining, onDone])
-
-  const pct = remaining / seconds
-  const urgentColor = remaining <= 5 ? '#dc2827' : remaining <= 10 ? '#f59e0b' : '#fff'
-  const timeStr = remaining >= 60
-    ? `${Math.floor(remaining / 60)}:${(remaining % 60).toString().padStart(2, '0')}`
-    : `${remaining} SECS`
+  }, [phase, paused, remaining, onDone])
 
   return (
     <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', position: 'relative', zIndex: 2, padding: '40px' }}>
@@ -455,23 +386,13 @@ function GameplayScreen({ challenge, seconds, onDone }: { challenge: string; sec
       )}
 
       {phase === 'timer' && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-          {/* Progress bar */}
-          <div style={{ width: '200px', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${pct * 100}%`, background: urgentColor, borderRadius: '3px', transition: 'width 1s linear, background 0.3s' }} />
-          </div>
-          <p className={remaining <= 5 ? 'timer-pulse' : ''} style={{
-            fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-            fontSize: '36px', color: urgentColor, margin: 0, letterSpacing: '0.05em',
-            transition: 'color 0.3s',
-          }}>
-            {timeStr}
-          </p>
-          <button className="game-btn" onClick={onDone}
-            style={{ border: '1px solid rgba(255,255,255,0.3)', background: 'none', borderRadius: '999px', padding: '8px 24px', fontFamily: "'Staatliches', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>
-            TIME'S UP
-          </button>
-        </div>
+        <TimerControl
+          timeLeft={remaining}
+          roundLength={seconds}
+          paused={paused}
+          onTogglePause={() => setPaused(value => !value)}
+          onCancel={onDone}
+        />
       )}
     </div>
   )

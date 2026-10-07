@@ -10,7 +10,11 @@ import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameSt
 
 export const NEVER_HAVE_I_EVER_DECK = [...NEVER_HAVE_I_EVER_PROMPTS]
 
-const PURPLE = '#bf5af2'
+const NHIE_BLUE = '#0755c9'
+const NHIE_CREAM = '#f5ecd8'
+const NHIE_CORAL = '#ff6c5e'
+const NHIE_NAVY = '#15365f'
+const NHIE_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E\")"
 const playerScoreKey = (player: Player, index: number) => `${index}:${player.name}`
 const playerScore = (scores: Record<string, number>, player: Player, index: number) =>
   scores[playerScoreKey(player, index)] ?? scores[player.name] ?? 0
@@ -45,75 +49,38 @@ export function NHIECard({ flipped, prompt, onFlip }: { flipped: boolean; prompt
           transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)',
         }}>
 
-          {/* ── Front: purple card + white speech bubble ── */}
+          {/* ── Front: approved Never Have I Ever artwork ── */}
           <div style={{
             position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            background: PURPLE, borderRadius: '16px',
+            background: NHIE_BLUE, borderRadius: '20px', overflow: 'hidden',
             boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           }}>
-            {/* Speech bubble — larger, fills more of the card */}
-            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {/* White box */}
-              <div style={{
-                background: '#fff', borderRadius: '14px',
-                width: `${W - 52}px`, height: `${Math.round(H * 0.6)}px`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <p style={{
-                  fontFamily: "'Single Day', cursive", fontSize: `${W * 0.175}px`, color: PURPLE,
-                  textAlign: 'center', lineHeight: 1.12, margin: 0, padding: '8px 16px',
-                }}>
-                  NEVER<br />HAVE I<br />EVER
-                </p>
-              </div>
-              {/* Triangle pointer downward */}
-              <div style={{
-                width: 0, height: 0,
-                borderLeft: '22px solid transparent',
-                borderRight: '22px solid transparent',
-                borderTop: '30px solid #fff',
-                marginTop: '-1px',
-              }} />
-            </div>
-
-            {/* Bottom label */}
-            <p style={{
-              position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)',
-              fontFamily: "'Anton SC', sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.7)',
-              letterSpacing: '0.12em', whiteSpace: 'nowrap', margin: 0,
-            }}>
-              GAME OF POOR DECISIONS
-            </p>
+            <img src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
 
-          {/* ── Back: white card with prompt ── */}
+          {/* ── Back: prompt card derived from the cover palette ── */}
           <div style={{
             position: 'absolute', inset: 0, backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
-            background: '#fff', borderRadius: '16px',
-            border: `3px solid ${PURPLE}`,
+            backgroundColor: NHIE_BLUE, backgroundImage: NHIE_TEXTURE, borderRadius: '20px',
             boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
-            display: 'flex', flexDirection: 'column', padding: '18px',
+            overflow: 'hidden',
           }}>
-            {/* Mini bubble badge */}
-            <div style={{ alignSelf: 'flex-start', position: 'relative', marginBottom: '24px' }}>
-              <div style={{ background: PURPLE, borderRadius: '8px', padding: '8px 10px', display: 'inline-block' }}>
-                <p style={{ fontFamily: "'Single Day', cursive", fontSize: '11px', color: '#fff', textAlign: 'center', lineHeight: 1.2, margin: 0 }}>
-                  NEVER<br />HAVE I<br />EVER
-                </p>
-              </div>
-              <div style={{ position: 'absolute', bottom: '-10px', left: '14px', width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderTop: `11px solid ${PURPLE}` }} />
-            </div>
-
-            {/* Prompt text */}
+            <div style={{ position: 'absolute', inset: '20px', borderRadius: '14px', backgroundColor: NHIE_CREAM, backgroundImage: NHIE_TEXTURE }} />
+            <p style={{ position: 'absolute', top: '42px', left: '36px', right: '36px', margin: 0, fontFamily: "'Anton SC', sans-serif", fontSize: '13px', letterSpacing: '0.14em', color: NHIE_CORAL, textAlign: 'center' }}>NEVER HAVE I EVER</p>
+            <div style={{ position: 'absolute', top: '75px', left: '50%', width: '42px', height: '4px', borderRadius: '99px', transform: 'translateX(-50%)', background: NHIE_CORAL }} />
             <p style={{
+              position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '248px',
               fontFamily: "'Anton SC', sans-serif", fontWeight: 400,
-              fontSize: '21px', color: '#111', lineHeight: 1.38, margin: 0,
-              textTransform: 'uppercase',
+              fontSize: prompt.length > 88 ? '21px' : '25px', color: NHIE_NAVY, lineHeight: 1.2, margin: 0,
+              textTransform: 'uppercase', textAlign: 'center',
             }}>
               {prompt}
             </p>
+            <div aria-hidden="true" style={{ position: 'absolute', left: '32px', bottom: '30px', display: 'flex', alignItems: 'flex-end', gap: '3px' }}>
+              {[20, 27, 30, 24].map((height, i) => <span key={i} style={{ display: 'block', width: '7px', height: `${height}px`, borderRadius: '7px 7px 2px 2px', background: NHIE_CORAL, transform: i === 0 ? 'rotate(-38deg) translateY(5px)' : undefined, transformOrigin: 'bottom right' }} />)}
+            </div>
+            <p style={{ position: 'absolute', left: 0, right: 0, bottom: '34px', margin: 0, fontFamily: "'Satoshi', sans-serif", fontSize: '10px', fontWeight: 900, letterSpacing: '0.34em', color: NHIE_NAVY, textAlign: 'center' }}>DECKED</p>
           </div>
         </div>
       </div>
@@ -402,14 +369,8 @@ function PointsGainedScreen({
 /* ─── Mini NHIE card (reused in end screens) ─── */
 function MiniNHIECard() {
   return (
-    <div className="done-card" style={{ width: '150px', height: '196px', background: PURPLE, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 30px rgba(0,0,0,0.45)', position: 'relative' }}>
-      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ background: '#fff', borderRadius: '10px', width: '112px', height: '118px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <p style={{ fontFamily: "'Single Day', cursive", fontSize: '21px', color: PURPLE, textAlign: 'center', lineHeight: 1.2, margin: 0 }}>NEVER<br />HAVE I<br />EVER</p>
-        </div>
-        <div style={{ width: 0, height: 0, borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderTop: '16px solid #fff', marginTop: '-1px' }} />
-      </div>
-      <p style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)', fontFamily: "'Anton SC', sans-serif", fontSize: '7px', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em', whiteSpace: 'nowrap', margin: 0 }}>GAME OF POOR DECISIONS</p>
+    <div className="done-card" style={{ width: '150px', height: '196px', background: NHIE_BLUE, borderRadius: '10px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.45)', position: 'relative' }}>
+      <img src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>
   )
 }

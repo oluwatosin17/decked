@@ -18,7 +18,7 @@ export function TwoTruthsBluffArtwork({ className = '', portrait = false }: { cl
       <img
         src="/assets/games/two-truths-bluff-approved.png"
         alt=""
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: portrait ? 'fill' : 'contain', objectPosition: 'center' }}
       />
     </div>
   )

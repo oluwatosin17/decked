@@ -6,7 +6,6 @@ import { ChooseYourSideArtwork } from '../ChooseYourSideGame'
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
 const SPICY_CARD_BG      = '/icons/spicy-card-bg.svg'
-const NEVER_CARD_BG      = '/icons/never-have-i-ever-card-bg.svg'
 const RECONNECT_CARD_BG  = '/assets/games/back-to-us.png'
 
 /* ── Mobile SVG card assets ── */
@@ -202,9 +201,8 @@ export const GAME_CARDS = (
     id: 'never-have-i-ever', categories: ['drinking', 'party-games'], w: 277.981, h: 348.041,
     playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src={NEVER_CARD_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-        <p className="font-single-day" style={{ position: 'absolute', top: '13.9%', left: '18.37%', right: '18.21%', bottom: '43.01%', fontSize: '49.72px', color: '#bb33ff', textAlign: 'center', lineHeight: '49.72px' }}>NEVER HAVE I EVER</p>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}>
+        <img src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -246,13 +244,8 @@ export const GAME_CARDS = (
   {
     id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
-      <div className="card-tile" onClick={onClick} style={{
-        width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative',
-        cursor: onClick ? 'pointer' : 'default', backgroundColor: '#36a6bb',
-        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 1.5px, transparent 1.5px)',
-        backgroundSize: '14px 14px',
-      }}>
-        <p className="font-gasoek" style={{ position: 'absolute', left: '18px', right: '18px', top: '72px', margin: 0, color: '#fff', fontSize: '43px', lineHeight: 0.98, textAlign: 'center', textTransform: 'uppercase', WebkitTextStroke: '2px #755aa7', paintOrder: 'stroke fill' }}>KEEP A<br />STRAIGHT<br />FACE</p>
+      <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#df561b' }}>
+        <img src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -335,13 +328,13 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
       </>)}
       {row(<>
         {getEl('dinner-table')}
-        {getEl('never-have-i-ever')}
+        {getEl('take-a-sip')}
         {getEl('reconnect')}
         {getEl('finger-down')}
       </>, 'flex-start')}
       {row(<>
-        {getEl('take-a-sip')}
         {getEl('sip-or-spill')}
+        {getEl('never-have-i-ever')}
         {getEl('you-laugh')}
         {getEl('two-truths-bluff', onPlayTwoTruthsBluff)}
       </>, 'flex-start')}
@@ -420,6 +413,7 @@ function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?
       aria-label={`Play ${label}`}
       className="browse-mobile-card-scaled"
       style={{
+        display: 'block',
         width: `${containerWidth}px`,
         height: `${card.h * scale}px`,
         overflow: 'hidden',
@@ -474,9 +468,37 @@ export function BrowseCardGrid(props: BrowseGridProps) {
   const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const dinnerTableIndex = allCards.findIndex(card => card.id === 'dinner-table')
   const beyondSmallTalkIndex = allCards.findIndex(card => card.id === 'strangers')
-  const arrangedCards = allCards.map((card, index) => {
+  const swappedCards = allCards.map((card, index) => {
     if (index === dinnerTableIndex) return allCards[beyondSmallTalkIndex]
     if (index === beyondSmallTalkIndex) return allCards[dinnerTableIndex]
+    return card
+  })
+  const neverHaveIEverIndex = swappedCards.findIndex(card => card.id === 'never-have-i-ever')
+  const fingerDownIndex = swappedCards.findIndex(card => card.id === 'finger-down')
+  const fingerSwappedCards = swappedCards.map((card, index) => {
+    if (index === neverHaveIEverIndex) return swappedCards[fingerDownIndex]
+    if (index === fingerDownIndex) return swappedCards[neverHaveIEverIndex]
+    return card
+  })
+  const currentNeverHaveIEverIndex = fingerSwappedCards.findIndex(card => card.id === 'never-have-i-ever')
+  const answerOrDrinkIndex = fingerSwappedCards.findIndex(card => card.id === 'sip-or-spill')
+  const answerNeverSwappedCards = fingerSwappedCards.map((card, index) => {
+    if (index === currentNeverHaveIEverIndex) return fingerSwappedCards[answerOrDrinkIndex]
+    if (index === answerOrDrinkIndex) return fingerSwappedCards[currentNeverHaveIEverIndex]
+    return card
+  })
+  const currentFingerDownIndex = answerNeverSwappedCards.findIndex(card => card.id === 'finger-down')
+  const currentAnswerOrDrinkIndex = answerNeverSwappedCards.findIndex(card => card.id === 'sip-or-spill')
+  const dropAnswerSwappedCards = answerNeverSwappedCards.map((card, index) => {
+    if (index === currentFingerDownIndex) return answerNeverSwappedCards[currentAnswerOrDrinkIndex]
+    if (index === currentAnswerOrDrinkIndex) return answerNeverSwappedCards[currentFingerDownIndex]
+    return card
+  })
+  const currentTakeASipIndex = dropAnswerSwappedCards.findIndex(card => card.id === 'take-a-sip')
+  const latestAnswerOrDrinkIndex = dropAnswerSwappedCards.findIndex(card => card.id === 'sip-or-spill')
+  const arrangedCards = dropAnswerSwappedCards.map((card, index) => {
+    if (index === currentTakeASipIndex) return dropAnswerSwappedCards[latestAnswerOrDrinkIndex]
+    if (index === latestAnswerOrDrinkIndex) return dropAnswerSwappedCards[currentTakeASipIndex]
     return card
   })
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set(allCards.map(c => c.id)))
@@ -535,6 +557,11 @@ export function BrowseCardGrid(props: BrowseGridProps) {
             <div
               key={`${card.id}-${staggerKey}`}
               style={{
+                width: `${gridWidth}px`,
+                height: `${card.h * (gridWidth / card.w)}px`,
+                minWidth: 0,
+                overflow: 'hidden',
+                lineHeight: 0,
                 animation: isExiting
                   ? 'browse-card-exit 0.28s cubic-bezier(0.4,0,1,1) both'
                   : `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 30}ms both`,

@@ -76,17 +76,18 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
     <div ref={gridRef} className="home-featured-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px', padding: '0 16px', alignItems: 'start' }}>
       {featured.map((card, i) => {
         const scale = colW / card.w
+        const cardHeight = card.h * scale
         const action = FEATURED_ACTIONS[card.id]
         const onClick = action ? actions[action] : undefined
         const label = card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
         return (
-          <div key={card.id} style={{ minWidth: 0, maxWidth: '100%', overflow: 'hidden', animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both` }}>
+          <div key={card.id} style={{ width: `${colW}px`, height: `${cardHeight}px`, minWidth: 0, maxWidth: '100%', overflow: 'hidden', lineHeight: 0, animation: `browse-card-enter 0.4s cubic-bezier(0.22,1,0.36,1) ${i * 50}ms both` }}>
             <button
               type="button"
               onClick={onClick}
               aria-label={`Play ${label}`}
               style={{
-                width: `${colW}px`, height: `${card.h * scale}px`,
+                display: 'block', width: `${colW}px`, height: `${cardHeight}px`,
                 overflow: 'hidden', borderRadius: `${9 * scale}px`,
                 cursor: onClick ? 'pointer' : 'default',
                 WebkitTapHighlightColor: 'transparent',
