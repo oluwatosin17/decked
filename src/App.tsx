@@ -1,33 +1,34 @@
-import { useState, useEffect, useCallback } from 'react'
+import { lazy, Suspense, useState, useEffect, useCallback } from 'react'
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
-import QuickPlay from './QuickPlay'
-import TruthOrDareGame from './TruthOrDareGame'
-import SpicyStartersGame from './SpicyStartersGame'
 import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
-import LateNightTalksGame from './LateNightTalksGame'
-import DinnerTableGame from './DinnerTableGame'
-import LaughYouAreOutGame from './LaughYouAreOutGame'
-import NeverHaveIEverGame from './NeverHaveIEverGame'
-import CharadesGame from './CharadesGame'
-import LetsReconnectGame from './LetsReconnectGame'
-import EverydayConversationsGame from './EverydayConversationsGame'
-import WNRSGame from './WNRSGame'
-import PutAFingerDownGame from './PutAFingerDownGame'
-import TakeASipGame from './TakeASipGame'
-import SipOrSpillGame from './SipOrSpillGame'
-import DoOrDrinkGame from './DoOrDrinkGame'
-import IcebreakerGame from './IcebreakerGame'
-import RedFlagGreenFlagGame from './RedFlagGreenFlagGame'
-import TwoTruthsBluffGame from './TwoTruthsBluffGame'
-import MostLikelyToGame from './MostLikelyToGame'
-import ChooseYourSideGame from './ChooseYourSideGame'
-import WhoSaidThatGame from './WhoSaidThatGame'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
-import PlayTogether from './multiplayer/PlayTogether'
-import GamePlayMode from './GamePlayMode'
 import type { MultiplayerGameId } from './multiplayer/types'
+
+const QuickPlay = lazy(() => import('./QuickPlay'))
+const GamePlayMode = lazy(() => import('./GamePlayMode'))
+const PlayTogether = lazy(() => import('./multiplayer/PlayTogether'))
+const TruthOrDareGame = lazy(() => import('./TruthOrDareGame'))
+const SpicyStartersGame = lazy(() => import('./SpicyStartersGame'))
+const LateNightTalksGame = lazy(() => import('./LateNightTalksGame'))
+const DinnerTableGame = lazy(() => import('./DinnerTableGame'))
+const LaughYouAreOutGame = lazy(() => import('./LaughYouAreOutGame'))
+const NeverHaveIEverGame = lazy(() => import('./NeverHaveIEverGame'))
+const CharadesGame = lazy(() => import('./CharadesGame'))
+const LetsReconnectGame = lazy(() => import('./LetsReconnectGame'))
+const EverydayConversationsGame = lazy(() => import('./EverydayConversationsGame'))
+const WNRSGame = lazy(() => import('./WNRSGame'))
+const PutAFingerDownGame = lazy(() => import('./PutAFingerDownGame'))
+const TakeASipGame = lazy(() => import('./TakeASipGame'))
+const SipOrSpillGame = lazy(() => import('./SipOrSpillGame'))
+const DoOrDrinkGame = lazy(() => import('./DoOrDrinkGame'))
+const IcebreakerGame = lazy(() => import('./IcebreakerGame'))
+const RedFlagGreenFlagGame = lazy(() => import('./RedFlagGreenFlagGame'))
+const TwoTruthsBluffGame = lazy(() => import('./TwoTruthsBluffGame'))
+const MostLikelyToGame = lazy(() => import('./MostLikelyToGame'))
+const ChooseYourSideGame = lazy(() => import('./ChooseYourSideGame'))
+const WhoSaidThatGame = lazy(() => import('./WhoSaidThatGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -58,6 +59,10 @@ const selectedGameFromLocation = () => {
 }
 
 export default function App() {
+  return <Suspense fallback={<AppLoading />}><AppContent /></Suspense>
+}
+
+function AppContent() {
   const [screen, setScreenState] = useState<Screen>(screenFromLocation)
   const [selectedGameId, setSelectedGameId] = useState<MultiplayerGameId | null>(selectedGameFromLocation)
   const [lntMode, setLntMode] = usePersistentGameState('app', 'late-night-mode', 'couples')
@@ -268,6 +273,12 @@ export default function App() {
       onPlayTogether={() => setScreen('play-together')}
     />
   )
+}
+
+function AppLoading() {
+  return <main className="game-fullscreen" aria-busy="true" aria-label="Loading game" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
+    <span className="font-staatliches" style={{ color: 'rgba(255,255,255,.72)', fontSize: 18, letterSpacing: '.08em' }}>SHUFFLING THE DECK…</span>
+  </main>
 }
 
 function BrowsePageRedirect({ onRedirect }: { onRedirect: () => void }) {

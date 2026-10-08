@@ -4,6 +4,7 @@ import PlayerSetup, { type Player } from './components/PlayerSetup'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 import { MOST_LIKELY_CATEGORIES, MOST_LIKELY_PROMPTS, type MostLikelyCategory } from './content/mostLikelyTo'
+import { MostLikelyArtwork } from './components/GameArtworks'
 
 type Step = 'playerSetup' | 'categories' | 'deckSize' | 'game' | 'handoff' | 'vote' | 'reveal' | 'done'
 type VoteMap = Record<string, string>
@@ -18,14 +19,6 @@ const CATEGORY_ICONS: Record<MostLikelyCategory, string> = {
 const surface: React.CSSProperties = { background: '#070708', border: '1px dashed rgba(255,255,255,.10)', borderRadius: 14 }
 const title: React.CSSProperties = { margin: 0, color: '#fff', fontFamily: "'Anton SC', sans-serif", fontSize: 'clamp(28px,5vw,40px)', fontWeight: 400, textAlign: 'center' }
 const copy: React.CSSProperties = { margin: 0, color: 'rgba(255,255,255,.58)', fontFamily: "'Satoshi',sans-serif", fontSize: 15, lineHeight: 1.45, textAlign: 'center' }
-
-export function MostLikelyArtwork({ compact = false }: { compact?: boolean }) {
-  return <div role="img" aria-label="Who’s Most Likely To?" style={{ width: compact ? 130 : 'min(310px,76vw)', aspectRatio: '4/5', position: 'relative', overflow: 'hidden', borderRadius: compact ? 10 : 18, background: '#0759c7', boxShadow: '0 18px 55px rgba(0,0,0,.28)' }}>
-    {COLORS.map((color, index) => <span key={color} style={{ position: 'absolute', width: compact ? 30 : 62, height: compact ? 10 : 18, borderRadius: 999, background: color, transform: `rotate(${index % 2 ? -35 : 35}deg)`, left: index % 2 ? 'auto' : -8, right: index % 2 ? -8 : 'auto', top: `${12 + index * 22}%` }} />)}
-    <div className="font-anton" style={{ position: 'absolute', inset: compact ? '17px 12px 26px' : '38px 28px 52px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f7f1df', fontSize: compact ? 28 : 'clamp(48px,14vw,72px)', lineHeight: .9, textAlign: 'center' }}>WHO’S<br />MOST<br />LIKELY<br />TO?</div>
-    <span className="font-anton" style={{ position: 'absolute', left: 0, right: 0, bottom: compact ? 8 : 16, color: '#fff', fontSize: compact ? 8 : 12, letterSpacing: '.18em', textAlign: 'center' }}>DECKED</span>
-  </div>
-}
 
 function Button({ children, onClick, secondary, disabled }: { children: React.ReactNode; onClick: () => void; secondary?: boolean; disabled?: boolean }) {
   return <button className="font-staatliches game-btn" disabled={disabled} onClick={onClick} style={{ minHeight: 48, padding: '10px 24px', borderRadius: 999, border: secondary ? '1px solid #fff' : 0, background: secondary ? 'transparent' : disabled ? '#3f3f40' : '#0759c7', color: disabled ? 'rgba(255,255,255,.4)' : '#fff', fontSize: 16, cursor: disabled ? 'not-allowed' : 'pointer' }}>{children}</button>

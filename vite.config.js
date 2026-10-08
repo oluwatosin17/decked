@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*.svg', 'assets/games/*.png', 'assets/games/*.svg', 'favicon.svg'],
+      includeAssets: ['favicon.svg', 'pwa-192x192.png', 'pwa-512x512.png', 'apple-touch-icon-180x180.png'],
       manifest: {
         name: 'Decked — Party Card Game',
         short_name: 'Decked',
@@ -43,10 +43,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
-        // Explicit prompt libraries make the main offline bundle larger than
-        // Workbox's 2 MiB default. Keep the full game available offline.
-        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+        // Keep installation and updates lightweight. Game chunks and artwork
+        // are cached only after the player actually opens them.
+        globPatterns: ['**/*.{js,css,html,ico,woff2}'],
         // Force immediate activation on all browsers including Safari
         skipWaiting: true,
         clientsClaim: true,
@@ -56,6 +55,20 @@ export default defineConfig({
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
+          {
+            urlPattern: /\/assets\/games\/.*\.(?:png|jpe?g|webp|avif|svg)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'game-artwork',
+              expiration: {
+                maxEntries: 60,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
           {
             urlPattern: /^https:\/\/res\.cloudinary\.com\/.*/i,
             handler: 'CacheFirst',

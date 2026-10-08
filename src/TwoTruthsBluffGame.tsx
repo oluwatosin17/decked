@@ -3,6 +3,7 @@ import { GameFooter, GameNav, PlayAgainLabel } from './components/GameShell'
 import PlayerSetup, { type Player } from './components/PlayerSetup'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
+import { TwoTruthsBluffArtwork } from './components/GameArtworks'
 
 type Statement = { id: string; text: string }
 type VoteMap = Record<string, string>
@@ -11,18 +12,6 @@ type Step = 'playerSetup' | 'write' | 'handoff' | 'guess' | 'reveal' | 'done'
 
 const GAME_ID = 'two-truths-bluff'
 const STEPS: readonly Step[] = ['playerSetup', 'write', 'handoff', 'guess', 'reveal', 'done']
-
-export function TwoTruthsBluffArtwork({ className = '', portrait = false }: { className?: string; portrait?: boolean }) {
-  return (
-    <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', width: portrait ? '100%' : undefined, height: portrait ? '100%' : undefined, aspectRatio: portrait ? '4 / 5' : '1', overflow: 'hidden' }}>
-      <img
-        src="/assets/games/two-truths-bluff-approved.png"
-        alt=""
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: portrait ? 'fill' : 'contain', objectPosition: 'center' }}
-      />
-    </div>
-  )
-}
 
 const titleStyle: React.CSSProperties = { margin: 0, color: '#fff', fontFamily: "'Anton SC', sans-serif", fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 400, textAlign: 'center' }
 const copyStyle: React.CSSProperties = { margin: 0, color: 'rgba(255,255,255,.58)', fontFamily: "'Satoshi', sans-serif", fontSize: '15px', lineHeight: 1.45, textAlign: 'center' }

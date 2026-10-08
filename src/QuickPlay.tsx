@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react'
 import { GameNav, GameFooter } from './components/GameShell'
-import { TwoTruthsBluffArtwork } from './TwoTruthsBluffGame'
-import { MostLikelyArtwork } from './MostLikelyToGame'
-import { ChooseYourSideArtwork } from './ChooseYourSideGame'
+import { ChooseYourSideArtwork, MostLikelyArtwork, TwoTruthsBluffArtwork } from './components/GameArtworks'
 
 interface GameSuggestion {
   id: string
@@ -151,7 +149,7 @@ export default function QuickPlay({ onBack, onPlay }: Props) {
                     ? <MostLikelyArtwork compact />
                     : game.id === 'choose-your-side'
                     ? <ChooseYourSideArtwork compact />
-                    : <img src={game.thumbnail} alt={game.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                    : <img loading="lazy" decoding="async" src={game.thumbnail} alt={game.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{

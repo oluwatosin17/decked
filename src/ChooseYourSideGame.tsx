@@ -5,6 +5,7 @@ import DeckSize from './components/DeckSize'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 import { CHOOSE_SIDE_CATEGORIES, CHOOSE_SIDE_PROMPTS, type ChooseSideCategory, type ChooseSidePrompt } from './content/chooseYourSide'
+import { ChooseYourSideArtwork } from './components/GameArtworks'
 
 type Step = 'playerSetup' | 'categories' | 'deckSize' | 'handoff' | 'vote' | 'reveal' | 'done'
 type Side = 'a' | 'b'
@@ -22,12 +23,6 @@ const CATEGORY_ICONS: Record<ChooseSideCategory, string> = {
 const surface: React.CSSProperties = { background: '#070708', border: '1px dashed rgba(255,255,255,.12)', borderRadius: 14 }
 const title: React.CSSProperties = { margin: 0, color: '#fff', fontFamily: "'Anton SC',sans-serif", fontSize: 'clamp(30px,6vw,44px)', fontWeight: 400, lineHeight: 1.05, textAlign: 'center' }
 const copy: React.CSSProperties = { margin: 0, color: 'rgba(255,255,255,.58)', fontFamily: "'Satoshi',sans-serif", fontSize: 15, lineHeight: 1.45, textAlign: 'center' }
-
-export function ChooseYourSideArtwork({ compact = false }: { compact?: boolean }) {
-  return <div style={{ width: compact ? 130 : '100%', aspectRatio: '4 / 5', height: compact ? undefined : '100%', minHeight: compact ? undefined : 0, position: 'relative', overflow: 'hidden', borderRadius: compact ? 9 : 14 }}>
-    <img src="/assets/games/choose-your-side.png" alt="Choose Your Side" style={{ display: 'block', position: 'absolute', width: '123.4%', height: '118.2%', left: '-11.7%', top: '-9.1%', maxWidth: 'none' }} />
-  </div>
-}
 
 function Button({ children, onClick, secondary, disabled }: { children: React.ReactNode; onClick: () => void; secondary?: boolean; disabled?: boolean }) {
   return <button className="font-staatliches game-btn" disabled={disabled} onClick={onClick} style={{ minHeight: 48, padding: '10px 24px', borderRadius: 999, border: secondary ? '1px solid #fff' : 0, background: secondary ? 'transparent' : disabled ? '#414143' : RED, color: disabled ? 'rgba(255,255,255,.4)' : '#fff', fontSize: 16, cursor: disabled ? 'not-allowed' : 'pointer' }}>{children}</button>

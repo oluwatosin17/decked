@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { TwoTruthsBluffArtwork } from '../TwoTruthsBluffGame'
-import { MostLikelyArtwork } from '../MostLikelyToGame'
-import { ChooseYourSideArtwork } from '../ChooseYourSideGame'
+import { ChooseYourSideArtwork, MostLikelyArtwork, TwoTruthsBluffArtwork } from './GameArtworks'
 
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
@@ -79,7 +77,7 @@ export const GAME_CARDS = (
     id: 'truth-or-dare', categories: ['couples'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15.23px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <img src="/assets/games/truth-or-dare.png" alt="Truth or Dare" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/truth-or-dare.png" alt="Truth or Dare" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -87,7 +85,7 @@ export const GAME_CARDS = (
     id: 'spicy-starters', categories: ['couples', 'deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <img src="/assets/games/spicy-opener.png" alt="Spicy Opener" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/spicy-opener.png" alt="Spicy Opener" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     ),
   },
@@ -95,7 +93,7 @@ export const GAME_CARDS = (
     id: 'red-flag-green-flag', categories: ['couples'], w: 267.692, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#1256e8' }}>
-        <img src="/assets/games/dateable-or-dealbreaker.png" alt="Dateable or Dealbreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/dateable-or-dealbreaker.png" alt="Dateable or Dealbreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -103,7 +101,7 @@ export const GAME_CARDS = (
     id: 'icebreaker', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/icebreaker.png" alt="Icebreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/icebreaker.png" alt="Icebreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <p className="font-staatliches" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 56.04px)', fontSize: '39.088px', color: '#000', textAlign: 'center', whiteSpace: 'nowrap', margin: 0, pointerEvents: 'none' }}>ICEBREAKER</p>
       </div>
     ),
@@ -112,7 +110,7 @@ export const GAME_CARDS = (
     id: 'dinner-table', categories: ['deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/dinner-table-v2.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/dinner-table-v2.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -120,7 +118,7 @@ export const GAME_CARDS = (
     id: 'late-night-talks', categories: ['deep-talk'], w: 359.601, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', position: 'relative', display: 'inline-grid', placeItems: 'start', cursor: onClick ? 'pointer' : 'default', borderRadius: '0', overflow: 'hidden' }}>
-        <img src={LATE_NIGHT_CARD_BG} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
+        <img loading="lazy" decoding="async" src={LATE_NIGHT_CARD_BG} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
         <div style={{ gridColumn: 1, gridRow: 1, marginLeft: '77.41px', marginTop: '156px', width: '168.435px', display: 'flex', flexDirection: 'column', gap: '3.75px', position: 'relative' }}>
           <p className="font-slackey" style={{ fontSize: '33.78px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Late</p>
           <p className="font-slackey" style={{ fontSize: '33.78px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Night</p>
@@ -162,7 +160,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#5d0c42', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/charades-plum.png" alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/charades-plum.png" alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
       </div>
     ),
   },
@@ -201,7 +199,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}>
-        <img src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -210,7 +208,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#ef3526' }}>
-        <img src={RECONNECT_CARD_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src={RECONNECT_CARD_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -219,7 +217,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/finger-down.png" alt="Drop a Finger" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/finger-down.png" alt="Drop a Finger" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <p className="font-luckiest" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#ed8251', textAlign: 'center', lineHeight: 'normal', margin: 0, pointerEvents: 'none' }}>DROP A<br />FINGER</p>
       </div>
     ),
@@ -236,7 +234,7 @@ export const GAME_CARDS = (
     id: 'sip-or-spill', categories: ['drinking', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#35152d', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img src="/assets/games/answer-or-drink.png" alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/answer-or-drink.png" alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -244,7 +242,7 @@ export const GAME_CARDS = (
     id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#df561b' }}>
-        <img src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img loading="lazy" decoding="async" src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -278,7 +276,7 @@ export const GAME_CARDS = (
   },
   {
     id: 'who-said-that', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
-    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><img src="/assets/games/who-said-that.png" alt="Who Said That?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><img loading="lazy" decoding="async" src="/assets/games/who-said-that.png" alt="Who Said That?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
   },
 ]
 
