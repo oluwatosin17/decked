@@ -14,14 +14,13 @@ installAnalyticsDeliveryRecovery(() => { void flushAnalytics() }, window, docume
 // control an old document, but that document still runs its previous JS until
 // it reloads. Reload once when the controller changes so stale builds cannot
 // keep showing outdated configuration screens.
+let reloadingForServiceWorker = false
+
 if ('serviceWorker' in navigator) {
-  const hadController = Boolean(navigator.serviceWorker.controller)
-  let reloading = false
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (hadController && !reloading) {
-      reloading = true
-      window.location.reload()
-    }
+    if (reloadingForServiceWorker) return
+    reloadingForServiceWorker = true
+    window.location.reload()
   })
 }
 
@@ -32,8 +31,19 @@ const updateSW = registerSW({
   },
   onRegisteredSW(_url, registration) {
     if (!registration) return
-    void registration.update()
-    window.setInterval(() => void registration.update(), 5 * 60 * 1000)
+
+    const checkForUpdate = () => void registration.update()
+
+    checkForUpdate()
+    window.setInterval(checkForUpdate, 5 * 60 * 1000)
+
+    // Safari can restore a page from its back-forward cache without doing a
+    // normal load. Recheck the worker whenever that page becomes active.
+    window.addEventListener('pageshow', checkForUpdate)
+    window.addEventListener('focus', checkForUpdate)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') checkForUpdate()
+    })
   },
 })
 
