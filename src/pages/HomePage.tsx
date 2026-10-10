@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { HomeCardRows, GAME_CARDS } from '../components/GameCardGrid'
-
-const SOCIAL_TIKTOK   = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP = '/icons/social-whatsapp.svg'
+import SiteHeader from '../components/SiteHeader'
+import SiteFooter from '../components/SiteFooter'
 
 const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that']
 const FEATURED_ACTIONS: Record<string, string> = {
@@ -45,6 +43,8 @@ interface Props {
   onPlayChooseYourSide: () => void
   onPlayWhoSaidThat: () => void
   onBrowse: () => void
+  onGuides: () => void
+  onAbout: () => void
   onPlayTogether: () => void
 }
 
@@ -106,22 +106,19 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onBrowse, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onBrowse, onGuides, onAbout, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
   const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onBrowse }
 
   if (isMobile) {
     return (
       <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
-        {/* Mobile nav */}
-        <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px', padding: '0 16px', position: 'relative', zIndex: 20 }}>
-          <span className="font-anton" style={{ color: '#fff', fontSize: '22px', letterSpacing: '0.56px', fontWeight: 400 }}>DECKED</span>
-        </nav>
+        <SiteHeader onHome={() => {}} onBrowse={onBrowse} onGuides={onGuides} onAbout={onAbout} />
 
         {/* Mobile hero — compact, balanced */}
         <div className="screen-enter" style={{ padding: '16px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', textAlign: 'center' }}>
-          <h1 className="font-spicy" style={{ color: 'white', fontSize: '32px', lineHeight: 1.05, margin: 0 }}>
-            The party starts here
+          <h1 className="font-anton" style={{ color: 'white', fontSize: '32px', lineHeight: 1.05, margin: 0, fontWeight: 400 }}>
+            THE PARTY STARTS HERE
           </h1>
           <p className="font-satoshi" style={{ color: '#d9dbde', fontSize: '14px', lineHeight: '18px', margin: 0, maxWidth: '280px' }}>
             Pick a deck, pass the phone, and let things get interesting.
@@ -155,32 +152,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
           </div>
         </section>
 
-        {/* Mobile footer */}
-        <footer className="home-footer" style={{
-          marginTop: 'auto', background: 'rgba(5,5,12,0.92)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-          padding: '20px 16px 24px', display: 'flex', flexDirection: 'column', gap: '14px',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <p className="font-anton" style={{ color: '#fff', fontSize: '18px', margin: 0, letterSpacing: '0.4px' }}>DECKED</p>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              {[SOCIAL_TIKTOK, SOCIAL_INSTAGRAM, SOCIAL_WHATSAPP].map((src, i) => (
-                <img key={i} src={src} alt="" style={{ width: '16px', height: '16px', borderRadius: '4px', objectFit: 'contain', opacity: 0.7 }} />
-              ))}
-            </div>
-          </div>
-          <p className="font-inter" style={{ color: '#6b7280', fontSize: '12px', lineHeight: 1.4, margin: 0 }}>
-            Pick a deck, pass the phone, and let the chaos begin.
-          </p>
-          <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <p style={{ color: '#4b5563', fontSize: '11px', margin: 0, fontFamily: 'Inter, sans-serif' }}>© 2026 DECKED</p>
-            <div style={{ display: 'flex', gap: '16px' }}>
-              {['Privacy', 'Terms'].map(l => (
-                <span key={l} style={{ color: '#6b7280', fontSize: '11px', fontFamily: 'Inter, sans-serif' }}>{l}</span>
-              ))}
-            </div>
-          </div>
-        </footer>
+        <SiteFooter onGuides={onGuides} />
       </div>
     )
   }
@@ -190,30 +162,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
 
       <section className="home-hero relative w-full overflow-hidden" style={{ height: '420px' }}>
 
-        {/* Nav */}
-        <nav className="home-nav" style={{
-          position: 'relative', zIndex: 20,
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          height: '80px', padding: '0 60px',
-        }}>
-          <span className="font-anton" style={{ color: '#ffffff', fontSize: '28px', letterSpacing: '0.56px', lineHeight: 'normal', fontWeight: 400 }}>
-            DECKED
-          </span>
-          <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            {['Browse Games', 'How to Play', 'About'].map(label => (
-              <button key={label} onClick={label === 'Browse Games' ? onBrowse : undefined}
-                className="font-anton game-btn"
-                style={{
-                  background: 'none', border: 'none', padding: 0,
-                  color: 'rgba(255,255,255,0.4)',
-                  fontSize: '16px', fontWeight: 400, lineHeight: 'normal',
-                  cursor: label === 'Browse Games' ? 'pointer' : 'default',
-                }}>
-                {label}
-              </button>
-            ))}
-          </div>
-        </nav>
+        <SiteHeader onHome={() => {}} onBrowse={onBrowse} onGuides={onGuides} onAbout={onAbout} />
 
         {/* Hero copy */}
         <div className="home-hero-copy absolute z-20" style={{
@@ -221,8 +170,8 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
           width: '435px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '25px',
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '7px', textAlign: 'center', width: '100%' }}>
-            <h1 className="font-spicy" style={{ color: 'white', fontSize: '70px', lineHeight: 1, width: '100%', margin: 0 }}>
-              The party starts here
+            <h1 className="font-anton" style={{ color: 'white', fontSize: '70px', lineHeight: 1, width: '100%', margin: 0, fontWeight: 400 }}>
+              THE PARTY STARTS HERE
             </h1>
             <p className="font-satoshi" style={{ color: '#d9dbde', fontSize: '20px', lineHeight: '22px', letterSpacing: '-0.2px', width: '100%', margin: 0 }}>
               Pick a deck, pass the phone, and let things get interesting.
@@ -268,37 +217,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════
-          FOOTER
-      ══════════════════════════════════════════════ */}
-      <footer className="home-footer" style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '40px', padding: '32px 60px', background: 'rgba(5,5,12,0.80)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '420px' }}>
-            <p className="font-anton text-white" style={{ fontSize: '32px' }}>DECKED</p>
-            <p className="font-inter" style={{ color: '#9ca3af', fontSize: '14px', lineHeight: 1.5 }}>
-              Pick a deck, pass the phone, and let the chaos begin. 10+ party card games, no app, no login, no excuses.
-            </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <img src={SOCIAL_TIKTOK}    alt="TikTok"    className="rounded-[8px]" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
-            <img src={SOCIAL_INSTAGRAM} alt="Instagram" className="rounded-[8px]" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
-            <img src={SOCIAL_WHATSAPP}  alt="WhatsApp"  className="rounded-[8px]" style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
-          </div>
-        </div>
-        <div style={{ width: '100%', height: '1px', background: '#212326' }} />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', fontFamily: 'Inter, sans-serif', fontSize: '13px' }}>
-          <p style={{ color: '#9ca3af' }}>© 2026 DECKED. All rights reserved.</p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', color: 'white' }}>
-            {['Privacy', 'Terms', 'Cookie'].map(label => (
-              <a key={label} href="#" style={{ color: 'white', textDecoration: 'none' }}
-                onMouseOver={e => (e.currentTarget.style.color = '#9ca3af')}
-                onMouseOut={e => (e.currentTarget.style.color = 'white')}>
-                {label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      <SiteFooter onGuides={onGuides} />
     </div>
   )
 }

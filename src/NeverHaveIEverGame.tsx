@@ -506,6 +506,7 @@ export default function NeverHaveIEverGame({ onClose }: { onClose: () => void })
   if (step === 'modeSelect') {
     return (
       <SelectGameMode
+        gameId="never-have-i-ever"
         modes={NHIE_MODES}
         onBack={() => setStep('playerSetup')}
         onSelect={() => setStep('deckSize')}

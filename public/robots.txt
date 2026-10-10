@@ -1,0 +1,29 @@
+# ChatGPT Search. GPTBot is intentionally governed separately by the
+# catch-all policy below because training access and search access are distinct.
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /command-centre
+
+# User-requested page visits from ChatGPT.
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /command-centre
+
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /command-centre
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /command-centre
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /command-centre
+
+Sitemap: https://www.usedecked.com/sitemap.xml

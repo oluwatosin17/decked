@@ -1,0 +1,124 @@
+[
+  {
+    "screen": "guides",
+    "path": "/guides",
+    "slug": "guides",
+    "title": "Decked Game Guides — Find the Right Game for Your Group",
+    "heading": "Find the right game for the moment",
+    "description": "Practical guides to choosing free browser games for parties, couples, work icebreakers, and adult game nights.",
+    "intro": "Not every group needs the same game. These guides compare player counts, play times, tone, and setup so you can choose quickly and start playing without downloading an app or creating an account."
+  },
+  {
+    "screen": "guide-party-games",
+    "path": "/guides/best-online-party-games",
+    "slug": "best-online-party-games",
+    "title": "Best Free Online Party Games to Play in Your Browser",
+    "heading": "Best free online party games",
+    "description": "Compare free online party games for friends and groups. Find games for laughs, competition, conversation, and large gatherings—no app required.",
+    "intro": "The best party game is easy to explain, quick to start, and suited to the energy in the room. Decked runs in a browser, so one person can pass a phone around or the group can join from their own devices.",
+    "summary": "For an energetic mixed group, start with Charades or You Laugh, You’re Out. Choose Truth or Dare or Never Have I Ever when everyone is comfortable sharing more. Most Likely To, Choose Your Side, and Who Said That? work well when the group already knows one another.",
+    "tips": [
+      "Start with a low-pressure game while guests are still arriving.",
+      "Choose a game that works for the least confident person in the room.",
+      "Switch games after 20–30 minutes if the room’s energy changes.",
+      "Use pass-and-play for one shared screen or Play Together when everyone wants to join on their own phone."
+    ],
+    "recommendations": [
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Large groups and mixed ages", "alcohol": "Not required", "reason": "A familiar guessing game with almost no personal disclosure, making it a reliable opening game for groups that have just gathered." },
+      { "gameId": "you-laugh", "name": "You Laugh, You’re Out", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "Fast laughs", "alcohol": "Not required", "reason": "Short challenges make this easy to begin and keep the pace moving when the group wants something playful." },
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Friends who are comfortable together", "alcohol": "Not required", "reason": "A flexible choice when the group wants a mixture of revealing questions and active challenges." },
+      { "gameId": "never-have-i-ever", "name": "Never Have I Ever", "path": "/games/never-have-i-ever", "image": "/assets/games/never-have-i-ever.jpg", "players": "3+", "duration": "10–45 min", "bestFor": "Stories and surprising discoveries", "alcohol": "Optional", "reason": "Prompts quickly uncover shared experiences and usually lead to stories beyond the original statement." },
+      { "gameId": "most-likely-to", "name": "Most Likely To", "path": "/games/most-likely-to", "image": "/assets/games/most-likely-to.png", "players": "3+", "duration": "10–45 min", "bestFor": "Groups that know each other", "alcohol": "Not required", "reason": "Everyone votes on who best fits each prompt, creating friendly debate and inside jokes." },
+      { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Debates and divided opinions", "alcohol": "Not required", "reason": "Simple choices split the room into sides and give everyone an easy way into the conversation." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Close friends and families", "alcohol": "Not required", "reason": "Players guess who gave each answer, rewarding the group’s knowledge of one another." }
+    ],
+    "faqs": [
+      { "question": "Can we play without downloading an app?", "answer": "Yes. Every Decked game runs directly in a modern web browser and does not require an account." },
+      { "question": "Can everyone use one phone?", "answer": "Yes. Pass-and-play works from one shared phone. Selected games also support Play Together so participants can join from their own devices." },
+      { "question": "Which game is best for people meeting for the first time?", "answer": "Charades is the lowest-pressure party option. For conversation, use the dedicated Icebreaker game before moving into more personal games." }
+    ]
+  },
+  {
+    "screen": "guide-couples-games",
+    "path": "/guides/couples-games-one-phone",
+    "slug": "couples-games-one-phone",
+    "title": "Games for Couples to Play on One Phone — No App Needed",
+    "heading": "Games for couples to play on one phone",
+    "description": "Find free browser games for couples, date nights, deeper conversations, reconnection, and playful challenges—all playable on one phone.",
+    "intro": "A good couples game should make conversation easier rather than turning the phone into a distraction. Put one phone between you, choose the mood you want, and take turns without creating accounts or installing anything.",
+    "summary": "Use Spicy Starters for playful adult date nights, Late Night Talks for deeper questions, and Let’s Reconnect when you want thoughtful conversation. Red Flag, Green Flag keeps things lighter, while Everyday Conversations suits a relaxed evening without a fixed theme.",
+    "tips": [
+      "Agree on the mood before choosing: playful, reflective, flirty, or relaxed.",
+      "Either person can skip a prompt without explaining why.",
+      "Put the phone on Do Not Disturb so notifications do not interrupt the conversation.",
+      "Stop after a strong conversation instead of rushing to finish every card."
+    ],
+    "recommendations": [
+      { "gameId": "spicy-starters", "name": "Spicy Starters", "path": "/games/spicy-starters", "image": "/assets/games/spicy-opener.png", "players": "2+", "duration": "10–45 min", "bestFor": "Adult date nights", "alcohol": "Not required", "reason": "Flirty prompts and playful challenges help adult couples move beyond routine conversation." },
+      { "gameId": "late-night-talks", "name": "Late Night Talks", "path": "/games/late-night-talks", "image": "/brand/decked-social-avatar.png", "players": "2+", "duration": "15–60 min", "bestFor": "Deeper conversations", "alcohol": "Not required", "reason": "Longer-form questions work well when both people want to slow down and understand one another better." },
+      { "gameId": "lets-reconnect", "name": "Let’s Reconnect", "path": "/games/lets-reconnect", "image": "/assets/games/back-to-us.png", "players": "2+", "duration": "15–60 min", "bestFor": "Intentional reconnection", "alcohol": "Not required", "reason": "Reflective prompts create space to revisit memories, appreciation, and how the relationship has changed." },
+      { "gameId": "red-flag-green-flag", "name": "Red Flag, Green Flag", "path": "/games/red-flag-green-flag", "image": "/assets/games/dateable-or-dealbreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "Playful compatibility debates", "alcohol": "Not required", "reason": "Players decide whether different habits are dateable or dealbreakers, revealing preferences without requiring a serious format." },
+      { "gameId": "everyday-conversations", "name": "Everyday Conversations", "path": "/games/everyday-conversations", "image": "/assets/games/everyday-conversation.png", "players": "2+", "duration": "10–45 min", "bestFor": "Relaxed quality time", "alcohol": "Not required", "reason": "Accessible questions fit ordinary evenings when you want connection without making the night feel like an exercise." }
+    ],
+    "faqs": [
+      { "question": "Do both people need their own phone?", "answer": "No. These games can be played by passing one phone between both people." },
+      { "question": "Are all couples games suitable for a first date?", "answer": "No. Start with Everyday Conversations or Red Flag, Green Flag. Save Spicy Starters and deeper reconnection prompts for situations where both people are comfortable." },
+      { "question": "Do we have to answer every question?", "answer": "No. Treat every prompt as optional and skip anything that does not suit the moment." }
+    ]
+  },
+  {
+    "screen": "guide-work-icebreakers",
+    "path": "/guides/icebreaker-games-for-work",
+    "slug": "icebreaker-games-for-work",
+    "title": "Free Icebreaker Games for Work and Team Meetings",
+    "heading": "Free icebreaker games for work",
+    "description": "Choose inclusive browser-based icebreaker games for team meetings, workshops, onboarding, and remote or in-person groups.",
+    "intro": "A useful work icebreaker gives everyone a clear way to participate without forcing personal disclosure. These options are browser-based, require no account, and can fit the beginning of a meeting or a longer team session.",
+    "summary": "Use Icebreaker for new teams, Two Truths and a Bluff for onboarding, Charades for an energetic break, and Who Said That? for established teams. Everyday Conversations works best when the goal is thoughtful discussion rather than competition.",
+    "tips": [
+      "Tell participants how long the activity will take before starting.",
+      "Keep personal questions optional and avoid topics involving health, relationships, religion, or alcohol.",
+      "Use small groups when the meeting has more than ten participants.",
+      "Connect the activity to the purpose of the meeting instead of using it as filler."
+    ],
+    "recommendations": [
+      { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "New teams and workshops", "alcohol": "Not applicable", "reason": "Low-pressure prompts give new colleagues a structured way to speak without requiring specialist knowledge." },
+      { "gameId": "two-truths-bluff", "name": "Two Truths and a Bluff", "path": "/games/two-truths-and-a-bluff", "image": "/assets/games/two-truths-bluff-approved.png", "players": "3+", "duration": "10–30 min", "bestFor": "Onboarding and introductions", "alcohol": "Not applicable", "reason": "Participants share three short statements while others identify the bluff, making introductions more memorable." },
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Energetic team breaks", "alcohol": "Not applicable", "reason": "Team guessing creates movement and collaboration without asking anyone to reveal personal information." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Established teams", "alcohol": "Not applicable", "reason": "Anonymous answers become a guessing game that tests how well colleagues know one another." },
+      { "gameId": "everyday-conversations", "name": "Everyday Conversations", "path": "/games/everyday-conversations", "image": "/assets/games/everyday-conversation.png", "players": "2+", "duration": "10–45 min", "bestFor": "Thoughtful team conversations", "alcohol": "Not applicable", "reason": "Conversation themes can help a facilitator move from introductions into a more meaningful group discussion." }
+    ],
+    "faqs": [
+      { "question": "How long should a work icebreaker take?", "answer": "Five to fifteen minutes is usually enough at the start of a meeting. Use a longer format only when team building is one of the session’s main goals." },
+      { "question": "Can these games work remotely?", "answer": "Yes. Share the browser screen or use Play Together where available so participants can join from their own devices." },
+      { "question": "Which option is safest for a new professional group?", "answer": "Start with Icebreaker or a work-appropriate Charades category. Avoid adult, dating, and drinking games in professional settings." }
+    ]
+  },
+  {
+    "screen": "guide-drinking-games",
+    "path": "/guides/free-drinking-games-no-app",
+    "slug": "free-drinking-games-no-app",
+    "title": "Free Drinking Games Online — No App or Download",
+    "heading": "Free drinking games with no app",
+    "description": "Compare free browser-based drinking games for adult gatherings. Play with alcoholic or non-alcoholic drinks—no account or download required.",
+    "intro": "These games are designed for adults of legal drinking age, but alcohol is never required. Water, soft drinks, or points work just as well. Decide the limits before starting, let anyone skip without pressure, and never connect a game penalty to unsafe consumption.",
+    "summary": "Take a Sip is the simplest option, Sip or Spill adds a choice between answering and drinking, and Do or Drink combines dares with optional sips. Never Have I Ever works well for larger adult groups when people want stories as much as gameplay.",
+    "tips": [
+      "Only play if every participant is an adult of legal drinking age where you are.",
+      "Make alcohol optional and keep water and non-alcoholic alternatives available.",
+      "Use small sips, set a limit in advance, and allow every prompt to be skipped.",
+      "Never drive after drinking; arrange transport before the game begins."
+    ],
+    "recommendations": [
+      { "gameId": "take-a-sip", "name": "Take a Sip", "path": "/games/take-a-sip", "image": "/brand/decked-social-avatar.png", "players": "2+", "duration": "10–45 min", "bestFor": "Simple rules and quick starts", "alcohol": "Optional", "reason": "Direct prompts keep setup minimal and make this the easiest drinking-style game to introduce." },
+      { "gameId": "sip-or-spill", "name": "Sip or Spill", "path": "/games/sip-or-spill", "image": "/assets/games/answer-or-drink.png", "players": "2+", "duration": "10–45 min", "bestFor": "Questions with a choice", "alcohol": "Optional", "reason": "Players can answer the prompt or take an optional sip, so the format naturally mixes conversation and gameplay." },
+      { "gameId": "do-or-drink", "name": "Do or Drink", "path": "/games/do-or-drink", "image": "/brand/decked-social-avatar.png", "players": "2+", "duration": "10–45 min", "bestFor": "Challenges and dares", "alcohol": "Optional", "reason": "Each turn offers an activity with an optional drink alternative for adult groups that prefer an active game." },
+      { "gameId": "never-have-i-ever", "name": "Never Have I Ever", "path": "/games/never-have-i-ever", "image": "/assets/games/never-have-i-ever.jpg", "players": "3+", "duration": "10–45 min", "bestFor": "Larger groups and stories", "alcohol": "Optional", "reason": "The familiar format scales well and often starts conversations, whether players use drinks, fingers, or points." }
+    ],
+    "faqs": [
+      { "question": "Is alcohol required?", "answer": "No. Every game can be played with water, soft drinks, snacks, points, or another harmless substitute." },
+      { "question": "Do players need to create accounts?", "answer": "No. The games open directly in a browser without registration or an app download." },
+      { "question": "How can we keep the game safe?", "answer": "Use small or non-alcoholic drinks, set limits before playing, allow unconditional skips, stop if anyone feels unwell, and arrange safe transport." }
+    ]
+  }
+]

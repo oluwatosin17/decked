@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { useSharedSessionState } from '../multiplayer/SessionStateContext'
+import { passAndPlayTracker } from '../analytics/passAndPlay'
 
 const PREFIX = 'decked:game-session:v1'
 
@@ -25,7 +26,12 @@ export function usePersistentGameState<T>(gameId: string, key: string, initial: 
     try { window.localStorage.setItem(storageKey(gameId, key), JSON.stringify(value)) } catch { /* Storage may be unavailable. */ }
   }, [gameId, key, value])
 
-  return hasSharedSession && setSharedValue ? [sharedValue ?? resolveInitial(initial), setSharedValue] : [value, setValue]
+  const effectiveValue = hasSharedSession && setSharedValue ? sharedValue ?? resolveInitial(initial) : value
+  useEffect(() => {
+    if (!hasSharedSession) passAndPlayTracker.observeValue(gameId, key, effectiveValue)
+  }, [effectiveValue, gameId, hasSharedSession, key])
+
+  return hasSharedSession && setSharedValue ? [effectiveValue, setSharedValue] : [value, setValue]
 }
 
 export function useGameStep<T extends string>(gameId: string, initial: T, allowed: readonly T[]): [T, Dispatch<SetStateAction<T>>] {
@@ -69,5 +75,10 @@ export function useGameStep<T extends string>(gameId: string, initial: T, allowe
     window.history.replaceState({ ...window.history.state, step }, '', `${url.pathname}${url.search}${url.hash}`)
   }, [step])
 
-  return hasSharedSession && setSharedStep ? [sharedStep && allowed.includes(sharedStep) ? sharedStep : initial, setSharedStep] : [step, setStep]
+  const effectiveStep = hasSharedSession && setSharedStep && sharedStep && allowed.includes(sharedStep) ? sharedStep : step
+  useEffect(() => {
+    if (!hasSharedSession) passAndPlayTracker.observeStep(gameId, effectiveStep, initial)
+  }, [effectiveStep, gameId, hasSharedSession, initial])
+
+  return hasSharedSession && setSharedStep ? [effectiveStep, setSharedStep] : [step, setStep]
 }

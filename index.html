@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
     <!-- PWA: Apple Touch Icons (iOS requires 180x180) -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
@@ -20,8 +21,50 @@
     <!-- PWA: Splash screens for iOS (prevents white flash on launch) -->
     <meta name="apple-touch-startup-image" content="/pwa-512x512.png" />
 
-    <meta name="description" content="Pick a deck, pass the phone, and let the chaos begin. 10+ party card games, no app, no login, no excuses." />
-    <title>Decked — Party Card Game</title>
+    <meta name="description" content="Play free party and conversation games online with Decked. Pick a deck, pass the phone, or invite friends to join from their own devices—no download or account needed." />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://www.usedecked.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Decked" />
+    <meta property="og:title" content="Decked — Free Online Party & Conversation Games" />
+    <meta property="og:description" content="Play free party and conversation games online. No download, no account, and no complicated setup." />
+    <meta property="og:url" content="https://www.usedecked.com/" />
+    <meta property="og:image" content="https://www.usedecked.com/brand/decked-social-avatar.png" />
+    <meta property="og:image:alt" content="Decked party game logo" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Decked — Free Online Party & Conversation Games" />
+    <meta name="twitter:description" content="Play free party and conversation games online. No download, no account, and no complicated setup." />
+    <meta name="twitter:image" content="https://www.usedecked.com/brand/decked-social-avatar.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.usedecked.com/#website",
+            "name": "Decked",
+            "url": "https://www.usedecked.com/",
+            "description": "Free online party and conversation games for friends, couples, families, and groups.",
+            "publisher": { "@id": "https://www.usedecked.com/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://www.usedecked.com/#organization",
+            "name": "Decked",
+            "url": "https://www.usedecked.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.usedecked.com/brand/decked-mark.png"
+            },
+            "email": "hello@usedecked.com"
+          }
+        ]
+      }
+    </script>
+    <title>Decked — Free Online Party &amp; Conversation Games</title>
 
     <!-- Google Fonts — preconnect + swap for fast loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

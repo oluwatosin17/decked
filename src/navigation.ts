@@ -1,5 +1,7 @@
 export type Screen =
-  | 'home' | 'browse' | 'quick-play' | 'play-mode'
+  | 'home' | 'about' | 'privacy' | 'terms' | 'cookies' | 'browse' | 'guides'
+  | 'guide-party-games' | 'guide-couples-games' | 'guide-work-icebreakers' | 'guide-drinking-games'
+  | 'quick-play' | 'play-mode'
   | 'lnt-select' | 'late-night-talks'
   | 'dtc-select' | 'dinner-table'
   | 'you-laugh' | 'never-have-i-ever' | 'charades'
@@ -11,11 +13,21 @@ export type Screen =
   | 'most-likely-to'
   | 'choose-your-side'
   | 'who-said-that'
+  | 'we-just-met'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<Screen, string> = {
   home: '/',
+  about: '/about',
+  privacy: '/privacy',
+  terms: '/terms',
+  cookies: '/cookies',
   browse: '/games',
+  guides: '/guides',
+  'guide-party-games': '/guides/best-online-party-games',
+  'guide-couples-games': '/guides/couples-games-one-phone',
+  'guide-work-icebreakers': '/guides/icebreaker-games-for-work',
+  'guide-drinking-games': '/guides/free-drinking-games-no-app',
   'quick-play': '/quick-play',
   'play-mode': '/games/play',
   'lnt-select': '/games/late-night-talks/mode',
@@ -40,6 +52,7 @@ export const SCREEN_PATHS: Record<Screen, string> = {
   'most-likely-to': '/games/most-likely-to',
   'choose-your-side': '/games/choose-your-side',
   'who-said-that': '/games/who-said-that',
+  'we-just-met': '/games/we-just-met',
   'play-together': '/play-together',
 }
 

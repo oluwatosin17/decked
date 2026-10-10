@@ -5,6 +5,10 @@ import './index.css'
 import App from './App'
 import { initGalaxy } from './galaxy'
 import { SoundProvider } from './audio/SoundProvider'
+import { flushAnalytics } from './analytics'
+import { installAnalyticsDeliveryRecovery } from './analytics/delivery'
+
+installAnalyticsDeliveryRecovery(() => { void flushAnalytics() }, window, document)
 
 // Keep already-open tabs on the current release. A newly activated worker can
 // control an old document, but that document still runs its previous JS until

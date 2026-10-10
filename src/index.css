@@ -56,6 +56,108 @@ body {
   min-height: 100dvh;
 }
 
+/* Shared public-site header */
+.site-header {
+  position: relative;
+  z-index: 80;
+  width: 100%;
+  height: 80px;
+  padding: 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+}
+.site-header button { border: 0; padding: 0; background: none; color: #fff; }
+.site-header-brand { display: flex; align-items: center; gap: 10px; font-size: 28px; letter-spacing: .56px; cursor: pointer; }
+.site-header-brand img { width: 44px; height: 44px; object-fit: contain; }
+.site-header-links { display: flex; align-items: center; gap: 24px; }
+.site-header-links button { color: rgba(255,255,255,.4); font-size: 16px; font-weight: 400; line-height: normal; cursor: pointer; transition: color .18s ease; }
+.site-header-links button:hover, .site-header-links button.active { color: #fff; }
+.site-header-links button.active { cursor: default; }
+
+/* Shared public-site footer */
+.site-footer { width: 100%; flex-shrink: 0; display: flex; flex-direction: column; gap: 40px; padding: 32px 60px; background: rgba(5,5,12,.8); backdrop-filter: blur(4px); }
+.site-footer-top { display: flex; align-items: flex-start; justify-content: space-between; width: 100%; }
+.site-footer-intro { display: flex; flex-direction: column; gap: 10px; width: min(420px, 100%); }
+.site-footer-brand { display: flex; align-items: center; gap: 10px; }
+.site-footer-brand img { width: 42px; height: 42px; object-fit: contain; }
+.site-footer-brand p { margin: 0; color: #fff; font-size: 32px; }
+.site-footer-copy { margin: 0; color: #9ca3af; font-size: 14px; line-height: 1.5; }
+.site-footer-socials { display: flex; align-items: center; gap: 12px; }
+.site-footer-socials img { width: 20px; height: 20px; border-radius: 8px; object-fit: contain; }
+.site-footer-rule { width: 100%; height: 1px; background: #212326; }
+.site-footer-bottom { display: flex; align-items: center; justify-content: space-between; width: 100%; color: #9ca3af; font: 13px 'Inter', sans-serif; }
+.site-footer-bottom p { margin: 0; }
+.site-footer-links { display: flex; align-items: center; gap: 24px; }
+.site-footer-links button, .site-footer-links a { min-height: 0; border: 0; padding: 0; background: none; color: #fff; font: inherit; text-decoration: none; cursor: pointer; }
+.site-footer-links button:hover, .site-footer-links a:hover { color: #9ca3af; }
+
+@media (max-width: 760px) {
+  .site-header { height: 56px; padding: 0 16px; }
+  .site-header-brand { gap: 8px; font-size: 22px; }
+  .site-header-brand img { width: 34px; height: 34px; }
+  .site-header-links { display: none; }
+  .site-footer { gap: 18px; padding: 24px 16px; }
+  .site-footer-top { flex-direction: row !important; align-items: flex-start !important; gap: 16px !important; }
+  .site-footer-brand img { width: 32px; height: 32px; }
+  .site-footer-brand p { font-size: 22px; }
+  .site-footer-copy { font-size: 12px; }
+  .site-footer-socials { flex-shrink: 0; gap: 10px; }
+  .site-footer-socials img { width: 17px; height: 17px; }
+  .site-footer-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; font-size: 11px; }
+  .site-footer-links { gap: 16px; flex-wrap: wrap; }
+}
+
+/* About stays intentionally close to the home screen: one background and one story. */
+.about-simple-page { min-height: 100dvh; color: #fff; }
+.about-simple-nav { height: 80px; padding: 0 60px; display: flex; align-items: center; justify-content: space-between; }
+.about-simple-brand, .about-simple-links button { border: 0; background: none; color: inherit; cursor: pointer; }
+.about-simple-brand { font-size: 28px; letter-spacing: .56px; }
+.about-simple-links { display: flex; align-items: center; gap: 24px; }
+.about-simple-links button { padding: 0; color: rgba(255,255,255,.4); font-size: 16px; }
+.about-simple-links button:hover { color: rgba(255,255,255,.72); }
+.about-simple-links .about-simple-active { color: #fff; cursor: default; }
+.about-page-hero { margin-bottom: 56px; }
+.guide-shell.screen-enter > .about-simple-copy { width: min(760px, 100%); margin-left: 0; margin-right: 0; display: grid; gap: 26px; color: #c5c6ca; font: 400 19px/1.65 'Satoshi', sans-serif; letter-spacing: normal; }
+.about-page-hero > p, .about-simple-copy > p { font-family: 'Satoshi', sans-serif; font-weight: 400; letter-spacing: normal; }
+.about-simple-copy a { color: #fff; text-decoration-color: #dc2827; text-underline-offset: 4px; }
+.about-simple-copy a:hover { color: #dc2827; }
+
+.legal-page { min-height: 100dvh; color: #fff; }
+.legal-document > * { max-width: 820px; }
+.legal-intro { margin-bottom: 64px; }
+.legal-intro h1 { margin: 0 0 22px; font-size: 64px; font-weight: 400; line-height: 1; }
+.legal-intro p { max-width: 760px; margin: 0 0 16px; color: #c5c6ca; font: 19px/1.65 'Satoshi', sans-serif; }
+.legal-intro span { color: #858790; font: 14px 'Satoshi', sans-serif; }
+.legal-document section { margin-top: 48px; }
+.legal-document section h2 { margin: 0 0 14px; font: 30px/1.15 'Anton SC', sans-serif; }
+.legal-document section p, .legal-document section li { color: #c3c4ca; font: 16px/1.75 'Satoshi', sans-serif; }
+.legal-document section p { margin: 0; }
+.legal-document section ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.legal-document strong { color: #fff; font-weight: 600; }
+.legal-document a { color: #fff; text-decoration-color: #dc2827; text-underline-offset: 4px; }
+.legal-table { overflow: hidden; border-radius: 14px; background: #070708; }
+.legal-table-row { display: grid; grid-template-columns: 180px minmax(0,1fr) 190px; gap: 20px; padding: 18px 20px; border-top: 1px solid rgba(255,255,255,.08); color: #c3c4ca; font: 14px/1.5 'Satoshi', sans-serif; }
+.legal-table-head { border-top: 0; background: rgba(255,255,255,.05); color: #fff; font-family: 'Anton SC', sans-serif; }
+
+@media (max-width: 760px) {
+  .about-simple-nav { height: 56px; padding: 0 16px; }
+  .about-simple-brand { font-size: 22px; }
+  .about-simple-links { gap: 14px; }
+  .about-simple-links button { font-size: 12px; }
+  .about-simple-links button:nth-child(2) { display: none; }
+  .about-page-hero { margin-bottom: 48px; }
+  .guide-shell.screen-enter > .about-simple-copy { gap: 20px; font-size: 17px; line-height: 1.65; }
+  .legal-intro { margin-bottom: 46px; }
+  .legal-intro h1 { font-size: 42px; }
+  .legal-intro p { font-size: 17px; }
+  .legal-document section { margin-top: 38px; }
+  .legal-document section h2 { font-size: 26px; }
+  .legal-table-row { grid-template-columns: 1fr; gap: 7px; padding: 16px; }
+  .legal-table-head { display: none; }
+}
+
 input::placeholder {
   color: rgba(255,255,255,0.35);
   font-family: 'Anton SC', sans-serif;
@@ -2097,6 +2199,78 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
+}
+
+/* Searchable guide pages */
+.guide-page { min-height: 100vh; position: relative; z-index: 1; color: #fff; background: transparent; }
+.guide-nav { position: relative; z-index: 20; height: 80px; padding: 0 60px; display: flex; align-items: center; justify-content: space-between; }
+.guide-nav button { border: 0; background: none; color: #fff; cursor: pointer; }
+.guide-brand { display: flex; align-items: center; gap: 10px; font-size: 28px; letter-spacing: .56px; }
+.guide-brand img { width: 44px; height: 44px; object-fit: contain; }
+.guide-nav-links { display: flex; align-items: center; gap: 24px; }
+.guide-nav-links button { padding: 0; color: rgba(255,255,255,.4); font: 16px 'Anton SC', sans-serif; }
+.guide-nav-links button:hover, .guide-nav-links button.active { color: #fff; }
+.guide-shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; padding: 72px 0 96px; }
+.guide-hero { max-width: 820px; margin-bottom: 56px; }
+.guide-hero h1 { margin: 0 0 22px; color: #fff; font-size: 64px; font-weight: 400; line-height: 1.02; letter-spacing: 0; text-transform: uppercase; }
+.guide-hero > p:last-child { max-width: 760px; margin: 0; color: #c5c6ca; font: 19px/1.65 'Satoshi', sans-serif; }
+.guide-library-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+.guide-library-card { min-height: 310px; padding: 30px; border: 0; border-radius: 18px; background: #070708; color: #fff; text-align: left; cursor: pointer; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.guide-library-card:hover { transform: translateY(-4px); background: #0c0c0e; box-shadow: 0 20px 50px rgba(0,0,0,.28); }
+.guide-library-card > span { color: #b9bbc3; font: 18px 'Anton SC', sans-serif; }
+.guide-library-card h2 { max-width: 460px; margin: 42px 0 14px; font: 34px/1.08 'Anton SC', sans-serif; }
+.guide-library-card p { margin: 0 0 26px; color: #aeb0b6; font: 16px/1.55 'Satoshi', sans-serif; }
+.guide-library-card strong { color: #fff; font: 14px 'Anton SC', sans-serif; letter-spacing: .08em; }
+.guide-breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 34px; color: #8d8f96; font: 14px 'Satoshi', sans-serif; }
+.guide-breadcrumb button { padding: 0; border: 0; background: none; color: #d7d8dc; cursor: pointer; }
+.guide-section-heading { margin: 0 0 28px; }
+.guide-section-heading h2 { margin: 0; font: 42px/1.08 'Anton SC', sans-serif; }
+.guide-comparison { display: flex; flex-direction: column; gap: 18px; }
+.guide-game-card { display: grid; grid-template-columns: 240px minmax(0,1fr); overflow: hidden; border: 0; border-radius: 18px; background: #070708; }
+.guide-game-image { min-height: 320px; background: #070708; display: grid; place-items: center; overflow: hidden; }
+.guide-game-image img { width: 100%; height: 100%; object-fit: cover; }
+.guide-game-copy { padding: 28px 30px; }
+.guide-game-copy > div:first-child { display: flex; align-items: baseline; gap: 14px; }
+.guide-game-number { margin: 0; color: #b9bbc3; font: 17px 'Anton SC', sans-serif; }
+.guide-game-copy h3 { margin: 0; font: 32px/1.1 'Anton SC', sans-serif; }
+.guide-game-copy > p { margin: 16px 0 22px; color: #bfc0c5; font: 16px/1.55 'Satoshi', sans-serif; }
+.guide-game-copy dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 0 0 24px; }
+.guide-game-copy dl div { padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,.045); }
+.guide-game-copy dt { margin-bottom: 4px; color: #777982; font: 11px 'Anton SC', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.guide-game-copy dd { margin: 0; color: #fff; font: 14px/1.3 'Satoshi', sans-serif; }
+.guide-play-button, .guide-final-cta button { padding: 11px 17px; border: 0; border-radius: 999px; background: #dc2827; color: #fff; font: 15px 'Staatliches', sans-serif; cursor: pointer; }
+.guide-tips, .guide-faq { margin-top: 92px; }
+.guide-tips ol { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.guide-tips li { display: flex; gap: 16px; padding: 22px; border-radius: 14px; background: #070708; }
+.guide-tips li span { display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%; background: #202024; color: #d5d6db; font: 14px 'Anton SC', sans-serif; }
+.guide-tips li p { margin: 3px 0 0; color: #c5c6ca; font: 15px/1.5 'Satoshi', sans-serif; }
+.guide-faq details { border-top: 1px solid rgba(255,255,255,.1); }
+.guide-faq details:last-child { border-bottom: 1px solid rgba(255,255,255,.1); }
+.guide-faq summary { padding: 22px 2px; font: 20px/1.35 'Anton SC', sans-serif; cursor: pointer; }
+.guide-faq details p { max-width: 780px; margin: -6px 0 24px; color: #bfc0c5; font: 16px/1.6 'Satoshi', sans-serif; }
+.guide-final-cta { margin-top: 96px; padding: 48px; border-radius: 20px; background: #070708; }
+.guide-final-cta h2 { max-width: 650px; margin: 0 0 12px; font: 44px/1.05 'Anton SC', sans-serif; }
+.guide-final-cta > p { margin: 0 0 24px; color: #c9cacf; font: 17px 'Satoshi', sans-serif; }
+
+@media (max-width: 760px) {
+  .guide-nav { height: 56px; padding: 0 16px; }
+  .guide-brand { font-size: 22px; }
+  .guide-brand img { display: none; }
+  .guide-nav-links { display: none; }
+  .guide-shell { width: min(100% - 32px, 1120px); padding: 48px 0 72px; }
+  .guide-hero { margin-bottom: 38px; }
+  .guide-hero h1 { font-size: 42px; }
+  .guide-hero > p:last-child { font-size: 17px; }
+  .guide-library-grid, .guide-tips ol { grid-template-columns: 1fr; }
+  .guide-library-card { min-height: 270px; padding: 24px; }
+  .guide-game-card { grid-template-columns: 1fr; }
+  .guide-game-image { height: 250px; min-height: 0; }
+  .guide-game-copy { padding: 24px 20px; }
+  .guide-game-copy dl { grid-template-columns: 1fr 1fr; }
+  .guide-section-heading h2 { font-size: 34px; }
+  .guide-tips, .guide-faq { margin-top: 68px; }
+  .guide-final-cta { margin-top: 72px; padding: 32px 24px; }
+  .guide-final-cta h2 { font-size: 36px; }
 }
 
 @keyframes multiplayer-wait-pulse {

@@ -33,7 +33,9 @@ import TwoTruthsBluffGame from '../TwoTruthsBluffGame'
 import MostLikelyToGame from '../MostLikelyToGame'
 import ChooseYourSideGame from '../ChooseYourSideGame'
 import WhoSaidThatGame from '../WhoSaidThatGame'
-import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startMultiGame, touchRoom } from './roomApi'
+import WeJustMetGame from '../WeJustMetGame'
+import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, getRoomAnalyticsRef, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startMultiGame, touchRoom } from './roomApi'
+import { track } from '../analytics'
 import { ensureAnonymousUser, multiplayerConfigured, supabase } from './supabase'
 import { MULTIPLAYER_GAMES } from './gameConfig'
 import type { MultiplayerAnswer, MultiplayerGameId, MultiplayerPlayer, MultiplayerRoom, PromptType } from './types'
@@ -96,6 +98,7 @@ function Entry({ onCreate, onJoin, busy, error, initialGameId }: {
       onPlayMostLikelyTo={() => selectGame('most-likely-to')}
       onPlayChooseYourSide={() => selectGame('choose-your-side')}
       onPlayWhoSaidThat={() => selectGame('who-said-that')}
+      onPlayWeJustMet={() => selectGame('we-just-met')}
     />
   </div>
 
@@ -260,6 +263,7 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   'most-likely-to': 'most-likely-to',
   'choose-your-side': 'choose-your-side',
   'who-said-that': 'who-said-that',
+  'we-just-met': 'we-just-met',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -283,6 +287,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'most-likely-to': 'categories',
   'choose-your-side': 'categories',
   'who-said-that': 'deckSize',
+  'we-just-met': 'categories',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -306,6 +311,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'most-likely-to': 'categories',
   'choose-your-side': 'categories',
   'who-said-that': 'deckSize',
+  'we-just-met': 'categories',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -329,6 +335,7 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   'most-likely-to': ['game', 'vote', 'reveal', 'done'],
   'choose-your-side': ['vote', 'reveal', 'done'],
   'who-said-that': ['answer', 'guess', 'reveal', 'done'],
+  'we-just-met': ['game', 'done'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -350,12 +357,14 @@ const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
   'most-likely-to': 'game',
   'choose-your-side': 'vote',
   'who-said-that': 'answer',
+  'we-just-met': 'game',
 }
 
 const TURN_CONTROLLED_GAMES = new Set<MultiplayerGameId>([
   'spicy-starters', 'late-night-talks', 'dinner-table', 'icebreaker',
   'everyday-conversation', 'reconnect', 'strangers', 'finger-down',
   'take-a-sip', 'sip-or-spill', 'do-or-drink',
+  'we-just-met',
 ])
 
 function GuestSetupWaiting({ room, onClose }: { room: MultiplayerRoom; onClose: () => void }) {
@@ -510,6 +519,7 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
     case 'most-likely-to': game = <MostLikelyToGame onClose={onClose} />; break
     case 'choose-your-side': game = <ChooseYourSideGame onClose={onClose} />; break
     case 'who-said-that': game = <WhoSaidThatGame onClose={onClose} />; break
+    case 'we-just-met': game = <WeJustMetGame onClose={onClose} />; break
   }
 
   return <SharedSessionProvider value={shared}>
@@ -535,7 +545,9 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
   const [error, setError] = useState('')
   const [onlineIds, setOnlineIds] = useState<string[]>([])
   const [presenceReady, setPresenceReady] = useState(false)
+  const analyticsRoomRef = useRef<string | null>(null)
   const roomId = room?.id
+  const roomGameId = room?.game_id
 
   const refresh = useCallback(async (id: string) => {
     const bundle = await getRoom(id)
@@ -557,6 +569,14 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
   }, [refresh])
 
   useEffect(() => {
+    analyticsRoomRef.current = null
+    if (!roomId) return
+    let active = true
+    void getRoomAnalyticsRef(roomId).then(value => { if (active) analyticsRoomRef.current = value })
+    return () => { active = false }
+  }, [roomId])
+
+  useEffect(() => {
     if (!roomId || !currentUserId) return
     setPresenceReady(false)
     const changes = supabase.channel(`decked-db:${roomId}`)
@@ -570,12 +590,23 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
         void refresh(roomId)
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'decked_room_players', filter: `room_id=eq.${roomId}` }, () => refresh(roomId))
-      .subscribe()
+      .subscribe(status => track('realtime_status_changed', {
+        channel_type: 'database', status: status.toLowerCase(),
+        ...(roomGameId ? { game_id: roomGameId } : {}),
+        ...(analyticsRoomRef.current ? { multiplayer_room_ref: analyticsRoomRef.current } : {}),
+      }))
     const presence = supabase.channel(`decked-presence:${roomId}`, { config: { presence: { key: currentUserId } } })
       .on('presence', { event: 'sync' }, () => { setOnlineIds(Object.keys(presence.presenceState())); setPresenceReady(true) })
-      .subscribe(status => { if (status === 'SUBSCRIBED') presence.track({ online_at: new Date().toISOString() }) })
+      .subscribe(status => {
+        track('realtime_status_changed', {
+          channel_type: 'presence', status: status.toLowerCase(),
+          ...(roomGameId ? { game_id: roomGameId } : {}),
+          ...(analyticsRoomRef.current ? { multiplayer_room_ref: analyticsRoomRef.current } : {}),
+        })
+        if (status === 'SUBSCRIBED') presence.track({ online_at: new Date().toISOString() })
+      })
     return () => { supabase.removeChannel(changes); supabase.removeChannel(presence) }
-  }, [roomId, currentUserId, refresh])
+  }, [roomId, roomGameId, currentUserId, refresh])
 
   useEffect(() => {
     if (!roomId || !currentUserId) return

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { GameNav, GameFooter } from './components/GameShell'
+import { track } from './analytics'
+import type { MultiplayerGameId } from './multiplayer/types'
 
 export interface GameMode {
   id: string
@@ -37,12 +39,13 @@ export const DTC_MODES: GameMode[] = [
 ]
 
 interface Props {
+  gameId: MultiplayerGameId
   modes: GameMode[]
   onBack: () => void
   onSelect: (mode: string) => void
 }
 
-export default function SelectGameMode({ modes, onBack, onSelect }: Props) {
+export default function SelectGameMode({ gameId, modes, onBack, onSelect }: Props) {
   const [hovered, setHovered] = useState<string | null>(null)
   const [pressed,  setPressed]  = useState<string | null>(null)
 
@@ -71,7 +74,10 @@ export default function SelectGameMode({ modes, onBack, onSelect }: Props) {
                 onMouseLeave={() => { setHovered(null); setPressed(null) }}
                 onMouseDown={() => setPressed(mode.id)}
                 onMouseUp={() => setPressed(null)}
-                onClick={() => setTimeout(() => onSelect(mode.id), 80)}
+                onClick={() => {
+                  track('game_option_selected', { game_id: gameId, option_type: 'mode', option_ids: [mode.id], selected_count: 1 })
+                  setTimeout(() => onSelect(mode.id), 80)
+                }}
                 className="mode-btn"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',

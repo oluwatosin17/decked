@@ -6,8 +6,8 @@ export function TwoTruthsBluffArtwork({ className = '', portrait = false }: { cl
   </div>
 }
 
-export function MostLikelyArtwork({ compact = false }: { compact?: boolean }) {
-  return <div role="img" aria-label="Who’s Most Likely To?" style={{ width: compact ? 130 : 'min(310px,76vw)', aspectRatio: '4/5', position: 'relative', overflow: 'hidden', borderRadius: compact ? 10 : 18, background: '#0759c7', boxShadow: '0 18px 55px rgba(0,0,0,.28)' }}>
+export function MostLikelyArtwork({ compact = false, fluid = false }: { compact?: boolean; fluid?: boolean }) {
+  return <div role="img" aria-label="Who’s Most Likely To?" style={{ width: fluid ? '100%' : compact ? 130 : 'min(310px,76vw)', aspectRatio: '4/5', position: 'relative', overflow: 'hidden', borderRadius: fluid ? 0 : compact ? 10 : 18, background: '#0759c7', boxShadow: fluid ? 'none' : '0 18px 55px rgba(0,0,0,.28)' }}>
     {MOST_LIKELY_COLORS.map((color, index) => <span key={color} style={{ position: 'absolute', width: compact ? 30 : 62, height: compact ? 10 : 18, borderRadius: 999, background: color, transform: `rotate(${index % 2 ? -35 : 35}deg)`, left: index % 2 ? 'auto' : -8, right: index % 2 ? -8 : 'auto', top: `${12 + index * 22}%` }} />)}
     <div className="font-anton" style={{ position: 'absolute', inset: compact ? '17px 12px 26px' : '38px 28px 52px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f7f1df', fontSize: compact ? 28 : 'clamp(48px,14vw,72px)', lineHeight: .9, textAlign: 'center' }}>WHO’S<br />MOST<br />LIKELY<br />TO?</div>
     <span className="font-anton" style={{ position: 'absolute', left: 0, right: 0, bottom: compact ? 8 : 16, color: '#fff', fontSize: compact ? 8 : 12, letterSpacing: '.18em', textAlign: 'center' }}>DECKED</span>

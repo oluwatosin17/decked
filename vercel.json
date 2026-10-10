@@ -2,10 +2,30 @@
   "rewrites": [
     { "source": "/games", "destination": "/index.html" },
     { "source": "/games/:path*", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/terms", "destination": "/index.html" },
+    { "source": "/cookies", "destination": "/index.html" },
+    { "source": "/guides", "destination": "/index.html" },
+    { "source": "/guides/:path*", "destination": "/index.html" },
     { "source": "/quick-play", "destination": "/index.html" },
-    { "source": "/play-together", "destination": "/index.html" }
+    { "source": "/play-together", "destination": "/index.html" },
+    { "source": "/command-centre", "destination": "/index.html" },
+    { "source": "/command-centre/:path*", "destination": "/index.html" }
   ],
   "headers": [
+    {
+      "source": "/command-centre/:path*",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/api/:path*",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
     {
       "source": "/sw.js",
       "headers": [

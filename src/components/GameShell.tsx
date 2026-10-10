@@ -1,9 +1,19 @@
+import { useEffect, useState } from 'react'
+import { passAndPlayTracker } from '../analytics/passAndPlay'
+import { useMultiplayerSession } from '../multiplayer/SessionStateContext'
+
 const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
 const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
 const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
 
 export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: string }) {
   const [showExitChoice, setShowExitChoice] = useState(false)
+  const multiplayer = useMultiplayerSession()
+
+  const leaveGame = () => {
+    if (gameId && !multiplayer) passAndPlayTracker.abandon(gameId)
+    onBack()
+  }
 
   useEffect(() => {
     if (!showExitChoice) return
@@ -27,7 +37,7 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
       if (gameId === 'charades') window.localStorage.removeItem('charades-game-state-v3')
     } catch { /* Storage may be unavailable. */ }
     setShowExitChoice(false)
-    onBack()
+    leaveGame()
   }
 
   return (
@@ -46,8 +56,8 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
 
         {/* Desktop nav links */}
         <div className="game-nav-desktop" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          {['Browse Games', 'How to Play', 'About'].map(label => (
-            <button key={label} onClick={label === 'Browse Games' ? onBack : undefined}
+          {['Browse Games', 'Guides', 'About'].map(label => (
+            <button key={label} onClick={label === 'Browse Games' ? leaveGame : undefined}
               style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: label === 'Browse Games' ? 'pointer' : 'default', padding: 0, transition: 'color 0.2s' }}
               onMouseOver={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = '#fff' }}
               onMouseOut={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
@@ -58,7 +68,7 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
         {/* Mobile back button — only visible on small screens */}
         <button
           className="game-nav-mobile-btn"
-          onClick={onBack}
+          onClick={leaveGame}
           aria-label="Back to games"
           style={{
             display: 'none', background: 'rgba(255,255,255,0.08)', border: 'none',
@@ -163,9 +173,6 @@ export function GameFooter() {
     </footer>
   )
 }
-import { useEffect, useState } from 'react'
-import { useMultiplayerSession } from '../multiplayer/SessionStateContext'
-
 export function PlayAgainLabel() {
   const multiplayer = useMultiplayerSession()
   if (!multiplayer) return <>PLAY AGAIN</>

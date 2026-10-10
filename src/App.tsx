@@ -1,14 +1,25 @@
 import { lazy, Suspense, useState, useEffect, useCallback } from 'react'
 import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
+import AboutPage from './pages/AboutPage'
+import LegalPage from './pages/LegalPage'
+import { GuideArticlePage, GuideLibraryPage } from './pages/GuidesPage'
 import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
 import type { MultiplayerGameId } from './multiplayer/types'
+import { track } from './analytics'
+import { DiscoveryJourneyTracker } from './analytics/journey'
+import { isCommandCentrePath } from './command-centre/model'
+import { updateDocumentMetadata } from './seo'
+import { GUIDE_BY_SCREEN } from './guideData'
+
+const discoveryJourney = new DiscoveryJourneyTracker(track)
 
 const QuickPlay = lazy(() => import('./QuickPlay'))
 const GamePlayMode = lazy(() => import('./GamePlayMode'))
 const PlayTogether = lazy(() => import('./multiplayer/PlayTogether'))
+const CommandCentre = lazy(() => import('./command-centre/CommandCentre'))
 const TruthOrDareGame = lazy(() => import('./TruthOrDareGame'))
 const SpicyStartersGame = lazy(() => import('./SpicyStartersGame'))
 const LateNightTalksGame = lazy(() => import('./LateNightTalksGame'))
@@ -29,6 +40,7 @@ const TwoTruthsBluffGame = lazy(() => import('./TwoTruthsBluffGame'))
 const MostLikelyToGame = lazy(() => import('./MostLikelyToGame'))
 const ChooseYourSideGame = lazy(() => import('./ChooseYourSideGame'))
 const WhoSaidThatGame = lazy(() => import('./WhoSaidThatGame'))
+const WeJustMetGame = lazy(() => import('./WeJustMetGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -51,6 +63,7 @@ const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: Mu
   'most-likely-to': { localScreen: 'most-likely-to', multiplayerId: 'most-likely-to' },
   'choose-your-side': { localScreen: 'choose-your-side', multiplayerId: 'choose-your-side' },
   'who-said-that': { localScreen: 'who-said-that', multiplayerId: 'who-said-that' },
+  'we-just-met': { localScreen: 'we-just-met', multiplayerId: 'we-just-met' },
 }
 
 const selectedGameFromLocation = () => {
@@ -59,7 +72,8 @@ const selectedGameFromLocation = () => {
 }
 
 export default function App() {
-  return <Suspense fallback={<AppLoading />}><AppContent /></Suspense>
+  const commandCentre = isCommandCentrePath(window.location.pathname)
+  return <Suspense fallback={<AppLoading />}>{commandCentre ? <CommandCentre /> : <AppContent />}</Suspense>
 }
 
 function AppContent() {
@@ -67,6 +81,32 @@ function AppContent() {
   const [selectedGameId, setSelectedGameId] = useState<MultiplayerGameId | null>(selectedGameFromLocation)
   const [lntMode, setLntMode] = usePersistentGameState('app', 'late-night-mode', 'couples')
   const [dtcMode, setDtcMode] = usePersistentGameState('app', 'dinner-table-mode', 'date-night')
+
+  useEffect(() => {
+    updateDocumentMetadata(screen)
+  }, [screen])
+
+  useEffect(() => {
+    if (import.meta.env.VITE_CONTENT_SOURCE !== 'managed-preferred') return
+    let cancelled = false
+    void import('./content/managedRuntime').then(module => module.loadManagedContent()).then(result => {
+      if (!cancelled && import.meta.env.DEV && result.fallbackGames.length) console.info('[content] Bundled fallback active for', result.fallbackGames)
+    }).catch(error => {
+      if (!cancelled && import.meta.env.DEV) console.info('[content] Managed content unavailable; bundled content remains active.', error)
+    })
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    void Promise.all([import('./analytics/context'),import('./analytics/performance')]).then(([context,performance])=>{
+      discoveryJourney.appOpened(screen,window.location.pathname,window.matchMedia('(display-mode: standalone)').matches,context.acquisitionContext(window.location.search,document.referrer,window.location.hostname))
+      performance.captureNavigationPerformance()
+    })
+  }, [screen])
+
+  useEffect(() => {
+    discoveryJourney.screenViewed(screen, selectedGameId ?? undefined)
+  }, [screen, selectedGameId])
 
   const setScreen = useCallback((next: Screen, replace = false) => {
     const url = urlForScreen(next)
@@ -81,14 +121,20 @@ function AppContent() {
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  const chooseGame = useCallback((gameId: string) => {
+  const chooseGame = useCallback((gameId: string, analyticsContext?: { recommendationSetId: string; position: number }) => {
     const destination = GAME_DESTINATIONS[gameId]
     if (!destination) { setScreen('browse'); return }
+    const selectionSurface = screen === 'quick-play' ? 'quick_play' : screen === 'browse' ? 'browse' : screen.startsWith('guide-') ? 'guide' : 'home'
+    track('game_selected', {
+      game_id: destination.multiplayerId,
+      selection_surface: selectionSurface,
+      ...(analyticsContext ? { recommendation_set_id: analyticsContext.recommendationSetId, recommendation_position: analyticsContext.position } : {}),
+    })
     setSelectedGameId(destination.multiplayerId)
     window.history.pushState({ screen: 'play-mode', gameId: destination.multiplayerId }, '', `${urlForScreen('play-mode')}?game=${destination.multiplayerId}`)
     setScreenState('play-mode')
     window.scrollTo({ top: 0, behavior: 'auto' })
-  }, [setScreen])
+  }, [screen, setScreen])
 
   const openPlayTogether = useCallback((gameId: MultiplayerGameId) => {
     setSelectedGameId(gameId)
@@ -116,6 +162,7 @@ function AppContent() {
   if (screen === 'lnt-select') {
     return (
       <SelectGameMode
+        gameId="late-night-talks"
         modes={LNT_MODES}
         onBack={() => setScreen('browse')}
         onSelect={(mode) => { setLntMode(mode); setScreen('late-night-talks') }}
@@ -131,6 +178,7 @@ function AppContent() {
   if (screen === 'dtc-select') {
     return (
       <SelectGameMode
+        gameId="dinner-table"
         modes={DTC_MODES}
         onBack={() => setScreen('browse')}
         onSelect={(mode) => { setDtcMode(mode); setScreen('dinner-table') }}
@@ -224,13 +272,17 @@ function AppContent() {
   if (screen === 'who-said-that') {
     return <WhoSaidThatGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'we-just-met') {
+    return <WeJustMetGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
     return (
       <BrowsePage
         onHome={() => setScreen('home')}
-        onQuickPlay={() => setScreen('quick-play')}
+        onGuides={() => setScreen('guides')}
+        onAbout={() => setScreen('about')}
         onPlayTruthOrDare={() => chooseGame('truth-or-dare')}
         onPlaySpicyStarters={() => chooseGame('spicy-starters')}
         onPlayLateNightTalks={() => chooseGame('late-night-talks')}
@@ -251,8 +303,26 @@ function AppContent() {
         onPlayMostLikelyTo={() => chooseGame('most-likely-to')}
         onPlayChooseYourSide={() => chooseGame('choose-your-side')}
         onPlayWhoSaidThat={() => chooseGame('who-said-that')}
+        onPlayWeJustMet={() => chooseGame('we-just-met')}
       />
     )
+  }
+
+  if (screen === 'about') {
+    return <AboutPage onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onGuides={() => setScreen('guides')} />
+  }
+
+  if (screen === 'privacy' || screen === 'terms' || screen === 'cookies') {
+    return <LegalPage kind={screen} onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onGuides={() => setScreen('guides')} onAbout={() => setScreen('about')} />
+  }
+
+  if (screen === 'guides') {
+    return <GuideLibraryPage onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onAbout={() => setScreen('about')} onNavigateGuide={setScreen} />
+  }
+
+  const guide = GUIDE_BY_SCREEN.get(screen)
+  if (guide) {
+    return <GuideArticlePage guide={guide} onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onAbout={() => setScreen('about')} onNavigateGuide={setScreen} onPlay={chooseGame} />
   }
 
   /* ── Home ── */
@@ -270,6 +340,8 @@ function AppContent() {
       onPlayChooseYourSide={() => chooseGame('choose-your-side')}
       onPlayWhoSaidThat={() => chooseGame('who-said-that')}
       onBrowse={() => setScreen('browse')}
+      onGuides={() => setScreen('guides')}
+      onAbout={() => setScreen('about')}
       onPlayTogether={() => setScreen('play-together')}
     />
   )

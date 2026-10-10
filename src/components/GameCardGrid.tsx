@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChooseYourSideArtwork, MostLikelyArtwork, TwoTruthsBluffArtwork } from './GameArtworks'
+import { GAME_NAMES, isGameId } from '../gameRegistry'
 
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
@@ -26,18 +27,7 @@ const MOBILE_CARDS: Record<string, string> = {
   'do-or-drink': '/icons/do-or-drink-mobile.svg',
 }
 
-const GAME_LABELS: Record<string, string> = {
-  'spicy-starters': 'Spicy Opener',
-  'red-flag-green-flag': 'Dateable or Dealbreaker',
-  'everyday-conversation': 'Real Talk, Every Day',
-  strangers: 'Beyond Small Talk',
-  reconnect: 'Back to Us',
-  'finger-down': 'Drop a Finger',
-  'sip-or-spill': 'Answer or Drink',
-  'you-laugh': 'Keep a Straight Face',
-  'do-or-drink': 'Dare or Pour',
-  'who-said-that': 'Who Said That?',
-}
+const gameLabel = (id: string) => isGameId(id) ? GAME_NAMES[id] : id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
 
 function useIsMobile(breakpoint = 768) {
   const query = `(max-width: ${breakpoint}px), (max-height: 500px) and (orientation: landscape)`
@@ -278,6 +268,10 @@ export const GAME_CARDS = (
     id: 'who-said-that', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><img loading="lazy" decoding="async" src="/assets/games/who-said-that.png" alt="Who Said That?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
   },
+  {
+    id: 'we-just-met', categories: ['icebreakers', 'couples'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}><img loading="lazy" decoding="async" src="/assets/games/we-just-met.png" alt="We Just Met" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -375,6 +369,7 @@ interface BrowseGridProps {
   onPlayMostLikelyTo?: () => void
   onPlayChooseYourSide?: () => void
   onPlayWhoSaidThat?: () => void
+  onPlayWeJustMet?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -399,6 +394,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'most-likely-to': handlers.onPlayMostLikelyTo,
     'choose-your-side': handlers.onPlayChooseYourSide,
     'who-said-that': handlers.onPlayWhoSaidThat,
+    'we-just-met': handlers.onPlayWeJustMet,
   }
   return map[card.id]
 }
@@ -410,7 +406,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
  */
 function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?: () => void; containerWidth: number }) {
   const scale = containerWidth / card.w
-  const label = GAME_LABELS[card.id] ?? card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
+  const label = gameLabel(card.id)
   return (
     <button
       type="button"
@@ -466,6 +462,63 @@ export function GameCardPreview({ gameId }: { gameId: string }) {
       </div>
     </div>
   )
+}
+
+/** Reuses the complete Browse/Home card artwork inside another full-size card surface. */
+export function GameArtworkCover({ gameId, label }: { gameId: string; label: string }) {
+  const artworkId = gameId === 'lets-reconnect'
+    ? 'reconnect'
+    : gameId === 'everyday-conversations'
+      ? 'everyday-conversation'
+      : gameId
+  const card = GAME_CARDS(() => {}, () => {}, () => {}).find(item => item.id === artworkId)
+  const frameRef = useRef<HTMLDivElement>(null)
+  const [frame, setFrame] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const element = frameRef.current
+    if (!element) return
+    const updateFrame = () => setFrame({ width: element.clientWidth, height: element.clientHeight })
+    updateFrame()
+    const observer = new ResizeObserver(updateFrame)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+
+  if (!card) return null
+
+  const scale = frame.width && frame.height ? Math.max(frame.width / card.w, frame.height / card.h) : 1
+  const artworkWidth = card.w * scale
+  const artworkHeight = card.h * scale
+
+  return (
+    <div
+      ref={frameRef}
+      role="img"
+      aria-label={`${label} game artwork`}
+      style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', pointerEvents: 'none' }}
+    >
+      <div style={{ width: card.w, height: card.h, position: 'absolute', left: (frame.width - artworkWidth) / 2, top: (frame.height - artworkHeight) / 2, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+        {card.render()}
+      </div>
+    </div>
+  )
+}
+
+/** Crops the current Browse Games artwork into the square used by Quick Play. */
+export function GameArtworkThumbnail({ gameId, size = 56 }: { gameId: string; size?: number }) {
+  const card = GAME_CARDS(() => {}, () => {}, () => {}).find(item => item.id === gameId)
+  if (!card) return null
+
+  const scale = Math.max(size / card.w, size / card.h)
+  const width = card.w * scale
+  const height = card.h * scale
+
+  return <div aria-hidden="true" style={{ width: size, height: size, position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: card.w, height: card.h, position: 'absolute', left: (size - width) / 2, top: (size - height) / 2, transform: `scale(${scale})`, transformOrigin: 'top left', pointerEvents: 'none' }}>
+      {card.render()}
+    </div>
+  </div>
 }
 
 export function BrowseCardGrid(props: BrowseGridProps) {
@@ -594,7 +647,7 @@ export function BrowseCardGrid(props: BrowseGridProps) {
             const onClick = getCardOnClick(card, props)
 
             const CardWrapper = onClick ? 'button' : 'div'
-            const label = GAME_LABELS[card.id] ?? card.id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
+            const label = gameLabel(card.id)
             return (
               <CardWrapper
                 key={`${card.id}-${staggerKey}`}

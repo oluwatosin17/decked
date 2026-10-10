@@ -5,9 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender-pages.mjs",
     "lint": "oxlint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "security:bundle": "node scripts/audit-browser-secrets.mjs",
+    "verify:analytics": "vitest run src/analytics/reconciliation.test.ts",
+    "profile:analytics": "vitest run src/analytics/performance.test.ts --reporter=verbose",
     "audit:prompts": "node scripts/audit-prompts.mjs",
+    "audit:content": "node scripts/audit-content-inventory.mjs",
+    "content:seed": "node scripts/generate-content-seed.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,6 +33,7 @@
     "tailwindcss": "^3.4.19",
     "typescript": "^6.0.3",
     "vite": "^8.1.0",
-    "vite-plugin-pwa": "^1.3.0"
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^5.0.3"
   }
 }

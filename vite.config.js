@@ -2,8 +2,19 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Analytics requires a release identifier in non-development builds. Prefer an
+// explicit override, then Vercel's immutable Git/deployment identifiers.
+const appVersion = process.env.VITE_APP_VERSION
+  || process.env.VERCEL_GIT_COMMIT_SHA
+  || process.env.VERCEL_DEPLOYMENT_ID
+  || process.env.npm_package_version
+  || 'local'
+
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion),
+  },
   build: {
     target: ['es2020', 'safari14'],
   },
@@ -11,7 +22,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'pwa-192x192.png', 'pwa-512x512.png', 'apple-touch-icon-180x180.png'],
+      includeAssets: [
+        'favicon-16x16.png',
+        'favicon-32x32.png',
+        'pwa-192x192.png',
+        'pwa-512x512.png',
+        'apple-touch-icon-180x180.png',
+      ],
       manifest: {
         name: 'Decked — Party Card Game',
         short_name: 'Decked',
