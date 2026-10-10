@@ -88,7 +88,11 @@ export async function handleAnalyticsIngest(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
+    if (url.hostname === 'usedecked.com') {
+      url.hostname = 'www.usedecked.com'
+      return Response.redirect(url, 308)
+    }
     if (url.pathname === '/api/analytics/ingest') return handleAnalyticsIngest(request, env)
-    return json(404, { error: 'not_found' })
+    return env.ASSETS.fetch(request)
   },
 }
