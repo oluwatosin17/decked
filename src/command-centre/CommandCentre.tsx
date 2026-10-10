@@ -12,10 +12,11 @@ import AuditPage from './AuditPage'
 import ContentPage from './ContentPage'
 import GeographyPage from './GeographyPage'
 import AcquisitionPage from './AcquisitionPage'
+import PlayPatternsPage from './PlayPatternsPage'
 import './command-centre.css'
 
 type AuthState = 'loading' | 'signed_out' | 'checking' | 'authorized' | 'unauthorized' | 'error'
-const LABELS: Record<CommandCentreSection, string> = { overview: 'Overview', acquisition: 'Acquisition', games: 'Games', funnels: 'Funnels', multiplayer: 'Multiplayer', geography: 'Geography', reliability: 'Reliability', content: 'Content', settings: 'Settings' }
+const LABELS: Record<CommandCentreSection, string> = { overview: 'Overview', acquisition: 'Acquisition', games: 'Games', funnels: 'Funnels', multiplayer: 'Multiplayer', geography: 'Geography', 'play-patterns': 'Play Patterns', reliability: 'Reliability', content: 'Content', settings: 'Settings' }
 
 export default function CommandCentre() {
   const [authState, setAuthState] = useState<AuthState>('loading')
@@ -71,7 +72,7 @@ export default function CommandCentre() {
 
   return <div className="cc-app">
     <aside className="cc-sidebar"><a className="cc-brand" href="/" aria-label="Decked home">DECKED<span>.</span></a><p>COMMAND CENTRE</p><nav aria-label="Command Centre">{COMMAND_CENTRE_SECTIONS.map(item => <button key={item} className={item === section ? 'active' : ''} aria-current={item === section ? 'page' : undefined} onClick={() => navigate(item)}>{LABELS[item]}</button>)}</nav><div className="cc-account"><span>{access?.authorized ? access.role.toUpperCase() : 'STAFF'}</span><button onClick={signOut}>Sign out</button></div></aside>
-    <main className="cc-main">{section === 'overview' ? <OverviewPage /> : section === 'acquisition' ? <AcquisitionPage /> : section === 'games' ? <GamesPage /> : section === 'funnels' ? <FunnelsPage /> : section === 'multiplayer' ? <MultiplayerPage /> : section === 'geography' ? <GeographyPage /> : section === 'reliability' ? <ReliabilityPage /> : section === 'content' ? <ContentPage role={access?.authorized ? access.role : 'viewer'} /> : <AuditPage isAdmin={access?.authorized === true && access.role === 'admin'} />}</main>
+    <main className="cc-main">{section === 'overview' ? <OverviewPage /> : section === 'acquisition' ? <AcquisitionPage /> : section === 'games' ? <GamesPage /> : section === 'funnels' ? <FunnelsPage /> : section === 'multiplayer' ? <MultiplayerPage /> : section === 'geography' ? <GeographyPage /> : section === 'play-patterns' ? <PlayPatternsPage /> : section === 'reliability' ? <ReliabilityPage /> : section === 'content' ? <ContentPage role={access?.authorized ? access.role : 'viewer'} /> : <AuditPage isAdmin={access?.authorized === true && access.role === 'admin'} />}</main>
   </div>
 }
 

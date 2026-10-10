@@ -1,4 +1,4 @@
-export const COMMAND_CENTRE_SECTIONS = ['overview', 'acquisition', 'games', 'funnels', 'multiplayer', 'geography', 'reliability', 'content', 'settings'] as const
+export const COMMAND_CENTRE_SECTIONS = ['overview', 'acquisition', 'games', 'funnels', 'multiplayer', 'geography', 'play-patterns', 'reliability', 'content', 'settings'] as const
 export type CommandCentreSection = typeof COMMAND_CENTRE_SECTIONS[number]
 
 export interface OverviewData {
@@ -59,6 +59,16 @@ export interface AcquisitionResponse {
   landing_pages:Array<{landing_page:string;visitors:number;sessions:number;game_selections:number;game_starts:number;completions:number}>
   games:Array<{source:string;game_id:string;selections:number;game_starts:number;completions:number}>
   daily:Array<{metric_date:string;source:string;visitors:number;sessions:number;game_starts:number;completions:number}>
+  refreshed_at:string|null
+  partial_warnings:string[]
+}
+export interface PlayPatternsResponse {
+  summary:{game_starts:number;timezone_attributed_starts:number;timezone_coverage:number;peak_weekday:string|null;peak_hour:number|null;weekend_starts:number;weekday_starts:number}
+  heatmap:Array<{iso_weekday:number;weekday:string;hour:number;game_starts:number}>
+  hourly:Array<{hour:number;game_starts:number}>
+  weekdays:Array<{iso_weekday:number;weekday:string;game_starts:number}>
+  countries:Array<{country_code:string;game_starts:number;peak_weekday:string|null;peak_hour:number|null;timezone_coverage:number}>
+  games:Array<{game_id:string;game_starts:number;peak_weekday:string|null;peak_hour:number|null}>
   refreshed_at:string|null
   partial_warnings:string[]
 }

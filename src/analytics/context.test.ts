@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest'
-import {acquisitionContext} from './context'
+import {acquisitionContext,timeContext} from './context'
 
 describe('acquisitionContext',()=>{
   it('keeps campaign labels and only the external referrer hostname',()=>{
@@ -8,4 +8,13 @@ describe('acquisitionContext',()=>{
     })
   })
   it('does not report a same-site referrer',()=>{expect(acquisitionContext('','https://usedecked.com/games','usedecked.com').referrer_domain).toBeUndefined()})
+})
+
+describe('timeContext',()=>{
+  it('captures a valid IANA timezone and normalizes the browser offset',()=>{
+    expect(timeContext('Africa/Lagos',-60)).toEqual({timezone:'Africa/Lagos',timezone_offset_minutes:60})
+  })
+  it('drops invalid or overly broad time data',()=>{
+    expect(timeContext('Nigeria',9999)).toEqual({timezone:undefined,timezone_offset_minutes:undefined})
+  })
 })

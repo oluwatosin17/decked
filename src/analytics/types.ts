@@ -23,6 +23,8 @@ export interface AnalyticsEventProperties {
     utm_content?: string
     utm_term?: string
     referrer_domain?: string
+    timezone?: string
+    timezone_offset_minutes?: number
   }
   content_delivery_completed: GameContext & { content_source:'managed';release_id:string;item_count:number;fetch_duration_ms:number }
   content_delivery_failed: GameContext & { content_source:'bundled';fallback_reason:string;fetch_duration_ms:number }

@@ -207,6 +207,12 @@
 .cc-geo-bars article i { display: block; min-width: 2px; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#e43b38,#f4b860); }
 .cc-geo-bars article strong { text-align: right; }
 .cc-privacy-note { margin-top: 16px; color: #858994; font-size: 11px; line-height: 1.5; }
+.cc-play-heatmap { margin-bottom: 22px; }
+.cc-heatmap-scroll { padding: 18px; overflow-x: auto; }
+.cc-heatmap-scroll table { min-width: 1120px; width: 100%; border-spacing: 5px; font-size: 10px; }
+.cc-heatmap-scroll th { color: #92959e; font-weight: 700; text-align: center; }
+.cc-heatmap-scroll th:first-child { position: sticky; left: 0; z-index: 1; padding-right: 8px; background: #111216; text-align: left; }
+.cc-heatmap-scroll td { height: 34px; border: 1px solid rgba(255,255,255,.06); border-radius: 4px; background: color-mix(in srgb,#ef4c48 calc(var(--heat) * 90%),#191b20); color: rgba(255,255,255,.82); text-align: center; }
 .cc-trend .cc-panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .cc-trend svg { display: block; width: 100%; height: auto; max-height: 320px; padding: 18px; overflow: visible; }
 .cc-trend polyline { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }

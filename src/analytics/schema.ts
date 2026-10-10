@@ -11,7 +11,7 @@ import type {
 const GAME_ID_SET = new Set<MultiplayerGameId>(GAME_IDS)
 
 const EVENT_FIELDS = {
-  app_opened: ['initial_screen_id', 'entry_path', 'is_pwa', 'device_class', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'referrer_domain'],
+  app_opened: ['initial_screen_id', 'entry_path', 'is_pwa', 'device_class', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'referrer_domain', 'timezone', 'timezone_offset_minutes'],
   content_delivery_completed: ['game_id','content_source','release_id','item_count','fetch_duration_ms'],
   content_delivery_failed: ['game_id','content_source','fallback_reason','fetch_duration_ms'],
   performance_measured: ['metric_name','duration_ms','rating'],

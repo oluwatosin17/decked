@@ -99,7 +99,7 @@ function AppContent() {
 
   useEffect(() => {
     void Promise.all([import('./analytics/context'),import('./analytics/performance')]).then(([context,performance])=>{
-      discoveryJourney.appOpened(screen,window.location.pathname,window.matchMedia('(display-mode: standalone)').matches,context.acquisitionContext(window.location.search,document.referrer,window.location.hostname))
+      discoveryJourney.appOpened(screen,window.location.pathname,window.matchMedia('(display-mode: standalone)').matches,{...context.acquisitionContext(window.location.search,document.referrer,window.location.hostname),...context.timeContext(Intl.DateTimeFormat().resolvedOptions().timeZone,new Date().getTimezoneOffset())})
       performance.captureNavigationPerformance()
     })
   }, [screen])
