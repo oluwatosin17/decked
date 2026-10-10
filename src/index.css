@@ -2257,7 +2257,7 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .guide-brand { font-size: 22px; }
   .guide-brand img { display: none; }
   .guide-nav-links { display: none; }
-  .guide-shell { width: min(100% - 32px, 1120px); padding: 48px 0 72px; }
+  .guide-shell { width: 100%; padding: 48px 16px 72px; box-sizing: border-box; }
   .guide-hero { margin-bottom: 38px; }
   .guide-hero h1 { font-size: 42px; }
   .guide-hero > p:last-child { font-size: 17px; }
