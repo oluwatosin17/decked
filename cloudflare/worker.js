@@ -26,6 +26,25 @@ function acceptedEventIds(result) {
   return new Set(ids.filter(value => typeof value === 'string'))
 }
 
+function withResponseHeaders(response, pathname) {
+  const headers = new Headers(response.headers)
+  if (pathname.startsWith('/command-centre') || pathname.startsWith('/api/')) {
+    headers.set('x-robots-tag', 'noindex, nofollow')
+  }
+  if (pathname === '/sw.js') {
+    headers.set('cache-control', 'no-cache, no-store, must-revalidate')
+    headers.set('pragma', 'no-cache')
+    headers.set('expires', '0')
+    headers.set('service-worker-allowed', '/')
+  }
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers })
+}
+
+async function fetchAsset(request, env, url) {
+  const response = await env.ASSETS.fetch(request)
+  return withResponseHeaders(response, url.pathname)
+}
+
 export async function handleAnalyticsIngest(request, env) {
   if (request.method !== 'POST') {
     return json(405, { error: 'method_not_allowed' }, { allow: 'POST' })
@@ -93,6 +112,6 @@ export default {
       return Response.redirect(url, 308)
     }
     if (url.pathname === '/api/analytics/ingest') return handleAnalyticsIngest(request, env)
-    return env.ASSETS.fetch(request)
+    return fetchAsset(request, env, url)
   },
 }

@@ -1,0 +1,340 @@
+[
+  {
+    "screen": "guide-free-games-to-play-online",
+    "path": "/guides/free-games-to-play-online",
+    "slug": "free-games-to-play-online",
+    "title": "Best Free Games to Play Online With Friends — No Download",
+    "heading": "Free games to play online with friends",
+    "description": "Compare free browser games for friends, couples, families, and groups. Start instantly with no download, account, or payment.",
+    "intro": "Free online games should be genuinely easy to start. Decked games open in a browser, work with one shared phone or supported multiplayer rooms, and do not place registration between the group and the first round.",
+    "summary": "Choose Charades for energetic groups, Truth or Dare for a flexible mix of questions and challenges, Icebreaker for people who are still getting comfortable, or Real Talk, Every Day when the goal is relaxed connection.",
+    "sections": [
+      { "heading": "How to choose a free online game", "paragraphs": ["Begin with the number of players and whether everyone is in the same room. Pass-and-play is simplest when people are together, while Play Together is useful when each participant wants a separate screen.", "Then match the game to the group’s comfort level. Guessing and debate games require little disclosure; conversation, dating, and adult decks work best after everyone understands the tone and can skip freely."] },
+      { "heading": "What free should mean", "paragraphs": ["A useful free game should let the group reach actual play without a trial, payment card, or mandatory account. Decked’s public games can be opened directly and shared with the group.", "The games also avoid physical setup. There are no cards to print and no rules booklet to study, so the host can change games when the room’s energy changes."] }
+    ],
+    "tips": ["Pick one host to control the first round.", "Start with a familiar format before trying a deeper deck.", "Use one shared phone when setup speed matters most.", "Change games when conversation or energy begins to slow."],
+    "recommendations": [
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Energetic groups", "alcohol": "Not required", "reason": "A familiar team game that is easy to explain and works for mixed groups." },
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Friends and couples", "alcohol": "Not required", "reason": "Questions and challenges make this a flexible choice for different moods." },
+      { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "New groups", "alcohol": "Not applicable", "reason": "Low-pressure prompts help people participate without needing shared history." },
+      { "gameId": "everyday-conversations", "name": "Real Talk, Every Day", "path": "/games/everyday-conversations", "image": "/assets/games/everyday-conversation.png", "players": "2+", "duration": "10–45 min", "bestFor": "Relaxed conversation", "alcohol": "Not required", "reason": "Accessible prompts suit ordinary hangouts, family time, and quiet evenings." }
+    ],
+    "faqs": [
+      { "question": "Are these games completely free?", "answer": "Yes. The listed Decked games can be opened and played without entering payment details." },
+      { "question": "Do we need to install an app?", "answer": "No. Decked runs in a modern browser on phones, tablets, and computers." },
+      { "question": "Can people play from different locations?", "answer": "Selected games support Play Together. A host can also share their screen during a video call." }
+    ]
+  },
+  {
+    "screen": "guide-online-question-games",
+    "path": "/guides/online-question-games",
+    "slug": "online-question-games",
+    "title": "Online Question Games — Free Games for Friends and Couples",
+    "heading": "Online question games for every kind of group",
+    "description": "Find free online question games for friends, couples, parties, teams, and new connections. Play in your browser with no app required.",
+    "intro": "Question games turn a quiet room into a conversation by giving everyone a clear prompt. The best choice depends on whether the group wants laughter, stories, debate, discovery, or a deeper exchange.",
+    "summary": "Use Icebreaker for new groups, Who’s Most Likely To? for friends who know one another, Late Night Talks for deeper exchanges, and Truth or Dare when questions should be mixed with challenges.",
+    "sections": [
+      { "heading": "Choose questions that fit the relationship", "paragraphs": ["New groups need prompts that are easy to answer without revealing private information. Established friends can usually handle predictions, shared memories, and playful accusations because the group already understands the context.", "Couples and close friends may prefer reflective questions, but depth should be invited rather than forced. A visible skip rule makes honest participation more likely."] },
+      { "heading": "Ways to play online question games", "paragraphs": ["In one room, place a phone in the middle and take turns reading the next card. On a call, one person can share the prompts or the group can use a supported multiplayer room.", "There is no requirement to finish a deck. Ten good questions that create real conversation are more valuable than rushing through fifty prompts."] }
+    ],
+    "tips": ["State that every question is optional.", "Begin light and increase depth gradually.", "Let answers lead to conversation instead of racing ahead.", "Choose a new deck if the tone stops fitting the group."],
+    "recommendations": [
+      { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "New groups and teams", "alcohol": "Not applicable", "reason": "Approachable prompts create an easy first contribution for every player." },
+      { "gameId": "most-likely-to", "name": "Who’s Most Likely To?", "path": "/games/most-likely-to", "image": "/brand/decked-social-avatar.png", "players": "3+", "duration": "10–45 min", "bestFor": "Friends who know each other", "alcohol": "Not required", "reason": "The group answers each question by voting, which naturally creates explanations and stories." },
+      { "gameId": "late-night-talks", "name": "Late Night Talks", "path": "/games/late-night-talks", "image": "/brand/decked-social-avatar.png", "players": "2+", "duration": "15–60 min", "bestFor": "Deeper conversation", "alcohol": "Not required", "reason": "Reflective questions create room for longer answers and attentive listening." },
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Questions plus challenges", "alcohol": "Not required", "reason": "Players can alternate revealing questions with active, playful dares." }
+    ],
+    "faqs": [
+      { "question": "What is an online question game?", "answer": "It is a browser-based game that supplies prompts for players to answer, discuss, vote on, or use as the basis for a challenge." },
+      { "question": "What question game is best for people meeting for the first time?", "answer": "Icebreaker or We Just Met provides the lowest-pressure starting point." },
+      { "question": "Can two people play?", "answer": "Yes. Conversation decks, Truth or Dare, and couple-focused games all work with two players." }
+    ]
+  },
+  {
+    "screen": "guide-card-games-to-play-online",
+    "path": "/guides/card-games-to-play-online",
+    "slug": "card-games-to-play-online",
+    "title": "Card Games to Play Online — Free Digital Decks for Groups",
+    "heading": "Card games to play online",
+    "description": "Explore free digital card-style games for parties, conversations, couples, and friends. No physical deck, download, or account required.",
+    "intro": "Online card games can preserve the satisfying rhythm of drawing one prompt at a time without requiring a physical deck. Decked uses digital cards for questions, choices, challenges, and group reactions.",
+    "summary": "Choose Drop a Finger for quick group reactions, Choose Your Side for debate, Who Said That? for familiar groups, or Dinner Table when you want a conversation deck that fits several generations.",
+    "sections": [
+      { "heading": "Digital prompt decks versus traditional cards", "paragraphs": ["A digital deck handles shuffling, keeps prompts readable, and is always available on the phone already in the room. It is especially useful when a group decides to play spontaneously.", "The phone should support the interaction rather than dominate it. Read the card aloud, place the screen where everyone can see it, and return attention to the people answering."] },
+      { "heading": "Pick a card format", "paragraphs": ["Reaction games ask everyone to respond at once, question decks take turns, and guessing decks introduce hidden information. Matching the format to the group matters more than choosing the longest deck.", "For a mixed group, begin with choices or guessing. Save revealing questions and adult challenges for groups that have explicitly chosen that tone."] }
+    ],
+    "tips": ["Pass the phone clockwise so turns feel predictable.", "Read each card aloud before anyone answers.", "Use a short round when testing a new deck.", "Keep the screen brightness comfortable in darker rooms."],
+    "recommendations": [
+      { "gameId": "put-a-finger-down", "name": "Drop a Finger", "path": "/games/put-a-finger-down", "image": "/assets/games/finger-down.png", "players": "3+", "duration": "10–30 min", "bestFor": "Quick group reactions", "alcohol": "Not required", "reason": "Each digital card produces an immediate response from the whole group." },
+      { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Choices and debate", "alcohol": "Not required", "reason": "Binary choices make every card easy to understand while leaving room for discussion." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Guessing among friends", "alcohol": "Not required", "reason": "Anonymous answers turn each prompt into a test of how well the group knows one another." },
+      { "gameId": "dinner-table", "name": "Dinner Table", "path": "/games/dinner-table", "image": "/assets/games/dinner-table-v2.png", "players": "2+", "duration": "10–45 min", "bestFor": "Mixed ages and meals", "alcohol": "Not required", "reason": "Conversation cards fit shared meals without requiring competition or physical activity." }
+    ],
+    "faqs": [
+      { "question": "Do these use a standard 52-card deck?", "answer": "No. These are digital prompt and activity decks rather than traditional playing-card games such as poker or solitaire." },
+      { "question": "Can one phone replace the deck?", "answer": "Yes. One device can display and advance the cards for the entire group." },
+      { "question": "Are the cards shuffled?", "answer": "Decked randomizes game content so repeat sessions do not always follow the same order." }
+    ]
+  },
+  {
+    "screen": "guide-games-for-friends",
+    "path": "/guides/games-for-friends",
+    "slug": "games-for-friends",
+    "title": "Best Online Games for Friends — Free Group Games",
+    "heading": "Games to play online with friends",
+    "description": "Find free online games for close friends, new friends, small hangouts, and group parties. Play immediately without downloading an app.",
+    "intro": "The right game for friends depends on how well everyone knows one another and what the group wants from the moment. Some games create noise and competition; others uncover stories or turn shared history into the mechanic.",
+    "summary": "Try Keep a Straight Face for instant energy, Who’s Most Likely To? for established friends, We Just Met for newer connections, and Who Said That? when the group wants to test its shared knowledge.",
+    "sections": [
+      { "heading": "Games for new friends and close friends", "paragraphs": ["New friends benefit from prompts that offer choice and do not assume shared memories. Icebreakers, preferences, and light bluffing give everyone a safe way to contribute.", "Close friends can use games built around predictions, anonymous answers, and personal stories. These formats work because the fun comes from comparing the group’s assumptions with what people actually say."] },
+      { "heading": "Match the game to the hangout", "paragraphs": ["For a loud party, choose a game with simultaneous reactions or short turns. For a smaller evening, use a conversation deck that allows stories to develop.", "A group does not have to stay with one format. Start energetic, move into questions when everyone settles, and finish before the game begins to feel repetitive."] }
+    ],
+    "tips": ["Choose for the least familiar person in the group.", "Avoid inside jokes that exclude newer friends.", "Use teams when a large group needs faster turns.", "Let anyone skip a personal prompt."],
+    "recommendations": [
+      { "gameId": "you-laugh", "name": "Keep a Straight Face", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "Immediate laughs", "alcohol": "Not required", "reason": "Fast challenges work when friends want action without a long explanation." },
+      { "gameId": "most-likely-to", "name": "Who’s Most Likely To?", "path": "/games/most-likely-to", "image": "/brand/decked-social-avatar.png", "players": "3+", "duration": "10–45 min", "bestFor": "Established friend groups", "alcohol": "Not required", "reason": "Voting prompts reward shared knowledge and create friendly disagreement." },
+      { "gameId": "we-just-met", "name": "We Just Met", "path": "/games/we-just-met", "image": "/assets/games/we-just-met.png", "players": "2+", "duration": "10–45 min", "bestFor": "New friends", "alcohol": "Not required", "reason": "Progressive prompts help newer connections move beyond basic introductions." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Friends with shared history", "alcohol": "Not required", "reason": "The group guesses who supplied each answer, making familiarity part of the game." }
+    ],
+    "faqs": [
+      { "question": "What can friends play online for free?", "answer": "Decked offers question, guessing, acting, voting, and conversation games that open directly in a browser." },
+      { "question": "What is best for three friends?", "answer": "Who’s Most Likely To?, Never Have I Ever, Drop a Finger, and Who Said That? all work well with three." },
+      { "question": "Can distant friends play?", "answer": "Yes. Use a supported Play Together room or share prompts during a voice or video call." }
+    ]
+  },
+  {
+    "screen": "guide-games-for-two-people",
+    "path": "/guides/games-for-two-people",
+    "slug": "games-for-two-people",
+    "title": "Free Online Games for Two People — Play on One Phone",
+    "heading": "Online games for two people",
+    "description": "Discover free browser games for two friends, couples, siblings, or dates. Play together on one phone with no app or account.",
+    "intro": "Two-player games do not need a large group to feel social. A good prompt deck gives both people equal turns and creates something to react to, discuss, guess, or attempt together.",
+    "summary": "Use Choose Your Side for easy debate, Truth or Dare for variety, Real Talk, Every Day for a relaxed exchange, or Dateable or Dealbreaker for playful compatibility decisions.",
+    "sections": [
+      { "heading": "What works with exactly two players", "paragraphs": ["Voting games designed around a crowd often lose their tension with two people. Choice, conversation, challenge, and guessing formats work better because each turn still creates a complete interaction.", "Two-player sessions can also move faster, so it helps to let a good answer develop into conversation rather than treating every card as a race."] },
+      { "heading": "Friends, siblings, dates, and couples", "paragraphs": ["The relationship determines the appropriate deck. Friends and siblings may prefer choices, challenges, and familiar stories, while dates often need lower-pressure questions before anything personal.", "For couples, agree whether the goal is laughter, flirting, or reconnection. Selecting the mood together prevents the game from feeling like a surprise test."] }
+    ],
+    "tips": ["Choose the mood together before starting.", "Alternate who reads the prompt.", "Skip freely without asking for a reason.", "Stop on a good conversation instead of completing the deck."],
+    "recommendations": [
+      { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Friendly debate", "alcohol": "Not required", "reason": "Each person chooses a side and explains it, so two players are enough." },
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Questions and challenges", "alcohol": "Not required", "reason": "Alternating truth and dare turns keeps a two-person session varied." },
+      { "gameId": "everyday-conversations", "name": "Real Talk, Every Day", "path": "/games/everyday-conversations", "image": "/assets/games/everyday-conversation.png", "players": "2+", "duration": "10–45 min", "bestFor": "Relaxed connection", "alcohol": "Not required", "reason": "Approachable prompts suit friends, family members, dates, and couples." },
+      { "gameId": "red-flag-green-flag", "name": "Dateable or Dealbreaker", "path": "/games/red-flag-green-flag", "image": "/assets/games/dateable-or-dealbreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "Playful compatibility", "alcohol": "Not required", "reason": "Two people can compare their judgment of each scenario and explain the differences." }
+    ],
+    "faqs": [
+      { "question": "Can two friends play without being a couple?", "answer": "Yes. Choose general games such as Choose Your Side, Truth or Dare, or Real Talk, Every Day." },
+      { "question": "Do both players need a phone?", "answer": "No. Place one phone between both players and alternate turns." },
+      { "question": "What is a low-pressure first-date game?", "answer": "Real Talk, Every Day or Dateable or Dealbreaker is a gentler starting point than intimate decks." }
+    ]
+  },
+  {
+    "screen": "guide-games-for-friends-one-phone",
+    "path": "/guides/games-for-friends-one-phone",
+    "slug": "games-for-friends-one-phone",
+    "title": "Games for Friends to Play on One Phone — No App",
+    "heading": "Games for friends to play on one phone",
+    "description": "Play free pass-and-play games with friends using one shared phone. Find question, party, guessing, and conversation games with no download.",
+    "intro": "One-phone games are useful when a group wants to begin immediately without sending links or installing apps. Put the device where everyone can reach it, read each card aloud, and pass control when the turn changes.",
+    "summary": "Choose Drop a Finger when everyone should react together, Truth or Dare for rotating turns, Charades for teams, or Never Have I Ever when the group wants stories and shared discoveries.",
+    "sections": [
+      { "heading": "How pass-and-play works", "paragraphs": ["One person opens the game, selects the deck, and reads the first card. The phone can then move around the group, stay with a host, or sit in the center while everyone responds.", "Pass-and-play reduces setup but makes screen visibility important. Reading prompts aloud keeps the game accessible and prevents people at the edge of the group from missing the card."] },
+      { "heading": "Best formats for a shared screen", "paragraphs": ["Games with group reactions, spoken answers, or physical acting translate naturally to one phone. Games that require private information on every device are less suitable.", "For more than eight people, use teams or appoint a reader. This shortens downtime and keeps the screen from becoming a bottleneck."] }
+    ],
+    "tips": ["Turn on Do Not Disturb before handing the phone around.", "Read every prompt aloud.", "Use teams for a larger room.", "Keep the device away from drinks and the edge of the table."],
+    "recommendations": [
+      { "gameId": "put-a-finger-down", "name": "Drop a Finger", "path": "/games/put-a-finger-down", "image": "/assets/games/finger-down.png", "players": "3+", "duration": "10–30 min", "bestFor": "Whole-group reactions", "alcohol": "Not required", "reason": "Only the reader needs the screen while everyone responds at the same time." },
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Rotating turns", "alcohol": "Not required", "reason": "A single device can supply every question and challenge as turns move around the room." },
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Teams and large groups", "alcohol": "Not required", "reason": "The acting player uses the phone while teammates focus on guessing." },
+      { "gameId": "never-have-i-ever", "name": "Never Have I Ever", "path": "/games/never-have-i-ever", "image": "/assets/games/never-have-i-ever.jpg", "players": "3+", "duration": "10–45 min", "bestFor": "Stories and discoveries", "alcohol": "Optional", "reason": "One reader presents each statement and the entire group responds together." }
+    ],
+    "faqs": [
+      { "question": "Can everyone really use one phone?", "answer": "Yes. These games use spoken prompts, reactions, acting, or rotating turns, so one shared screen is enough." },
+      { "question": "Do players need accounts?", "answer": "No. The host can open a game immediately without registration." },
+      { "question": "How many friends can join?", "answer": "Most formats have no strict maximum, although teams help larger groups move faster." }
+    ]
+  },
+  {
+    "screen": "guide-games-for-video-calls",
+    "path": "/guides/games-for-video-calls",
+    "slug": "games-for-video-calls",
+    "title": "Games to Play on FaceTime and Video Calls — Free Online",
+    "heading": "Games to play on FaceTime and video calls",
+    "description": "Find free games for FaceTime, Zoom, and video calls. Play question, guessing, and party games remotely without downloading another app.",
+    "intro": "A good video-call game survives small delays, works through conversation, and does not require everyone to watch a complicated board. Prompt, guessing, and choice games keep attention on the people already on the call.",
+    "summary": "Use Icebreaker for a new remote group, Choose Your Side for easy participation, Charades for visual energy, or Who Said That? when friends want a guessing game built around their answers.",
+    "sections": [
+      { "heading": "Set up a remote game", "paragraphs": ["The host can open Decked beside the call and read or screen-share each prompt. If a supported game offers Play Together, participants can join a room from their own browsers.", "Explain the response order before starting so people do not speak over one another. For larger calls, use the hand-raise feature, chat, or teams to make participation clear."] },
+      { "heading": "Games that work well through a camera", "paragraphs": ["Conversation and choice games tolerate connection delays because each person responds in turn. Charades uses the camera itself as part of the game, making it a useful change from ordinary call conversation.", "Avoid formats that require whispering, passing physical objects, or reading very small text. The best remote game remains understandable even if someone briefly loses audio."] }
+    ],
+    "tips": ["Test screen sharing before the call begins.", "Keep turns short to reduce remote-call fatigue.", "Say each prompt aloud even when sharing the screen.", "Use teams or chat responses for larger calls."],
+    "recommendations": [
+      { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "New remote groups", "alcohol": "Not applicable", "reason": "Clear prompts create a predictable speaking turn for participants who have just joined." },
+      { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Easy remote participation", "alcohol": "Not required", "reason": "Players can answer with a gesture, chat message, or spoken explanation." },
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Visual team play", "alcohol": "Not required", "reason": "The call camera becomes the stage while teammates guess from another location." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Remote friend groups", "alcohol": "Not required", "reason": "Anonymous answers and group guesses translate naturally to a shared online room." }
+    ],
+    "faqs": [
+      { "question": "Can we play on FaceTime?", "answer": "Yes. One person can read the prompts while everyone remains on the FaceTime call." },
+      { "question": "Does everyone need Decked open?", "answer": "Not for screen-shared or host-led play. Supported Play Together games can also let participants join separately." },
+      { "question": "What works for a work video call?", "answer": "Use Icebreaker, Two Truths and a Bluff, or a work-appropriate Charades category." }
+    ]
+  },
+  {
+    "screen": "guide-date-night-games",
+    "path": "/guides/date-night-games",
+    "slug": "date-night-games",
+    "title": "Free Date Night Games for Couples — Play on One Phone",
+    "heading": "Free date night games for couples",
+    "description": "Choose free browser games for first dates, established couples, playful evenings, and deeper conversations. One phone is enough.",
+    "intro": "A date-night game can remove the pressure to invent conversation while still leaving room for spontaneity. The right deck depends on the stage of the relationship and whether the evening should feel light, flirty, thoughtful, or restorative.",
+    "summary": "Start with Real Talk, Every Day or Dateable or Dealbreaker on an earlier date. Choose Spicy Opener for consensual adult flirting, Late Night Talks for depth, or Back to Us for an established relationship.",
+    "sections": [
+      { "heading": "First dates versus established relationships", "paragraphs": ["Earlier dates benefit from preferences, stories, and playful choices that allow both people to reveal as much as they choose. Avoid treating questions as an interview or using a deep deck to force intimacy.", "Established couples can use shared memories, appreciation, future hopes, and compatibility prompts. Even then, either person should be able to skip without defending the choice."] },
+      { "heading": "Create the right atmosphere", "paragraphs": ["Put one phone between you, silence notifications, and choose the mood together. A game feels more connecting when the device supplies prompts and then fades into the background.", "There is no score required. A memorable answer, disagreement, or story can become the rest of the date instead of an interruption to the game."] }
+    ],
+    "tips": ["Agree on playful, flirty, deep, or relaxed before choosing.", "Keep notifications off.", "Never pressure an answer or challenge.", "Let the best conversations run beyond the prompt."],
+    "recommendations": [
+      { "gameId": "everyday-conversations", "name": "Real Talk, Every Day", "path": "/games/everyday-conversations", "image": "/assets/games/everyday-conversation.png", "players": "2+", "duration": "10–45 min", "bestFor": "Relaxed dates", "alcohol": "Not required", "reason": "Accessible questions create conversation without making the date feel overly structured." },
+      { "gameId": "red-flag-green-flag", "name": "Dateable or Dealbreaker", "path": "/games/red-flag-green-flag", "image": "/assets/games/dateable-or-dealbreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "Playful compatibility", "alcohol": "Not required", "reason": "Hypothetical habits reveal preferences through a light decision game." },
+      { "gameId": "spicy-starters", "name": "Spicy Opener", "path": "/games/spicy-starters", "image": "/assets/games/spicy-opener.png", "players": "2+", "duration": "10–45 min", "bestFor": "Consenting adult couples", "alcohol": "Not required", "reason": "Flirty prompts suit adults who have explicitly chosen a more intimate tone." },
+      { "gameId": "late-night-talks", "name": "Late Night Talks", "path": "/games/late-night-talks", "image": "/brand/decked-social-avatar.png", "players": "2+", "duration": "15–60 min", "bestFor": "Deeper conversation", "alcohol": "Not required", "reason": "Reflective prompts are designed for slower answers and closer listening." }
+    ],
+    "faqs": [
+      { "question": "What is best for a first date?", "answer": "Real Talk, Every Day or Dateable or Dealbreaker offers a lighter, lower-pressure starting point." },
+      { "question": "Are the spicy games required?", "answer": "No. Decked includes relaxed, funny, reflective, and flirty options so couples can choose their own comfort level." },
+      { "question": "Can we play at a restaurant?", "answer": "Yes. Conversation and choice games work quietly from one phone and do not require physical setup." }
+    ]
+  },
+  {
+    "screen": "guide-family-games-online",
+    "path": "/guides/family-games-online",
+    "slug": "family-games-online",
+    "title": "Free Online Family Games — Play Together With No Download",
+    "heading": "Free online games for families",
+    "description": "Find browser-based family games for meals, gatherings, mixed ages, and video calls. Play together with no app or account.",
+    "intro": "Family games work best when the rules are easy to explain, turns stay short, and the content does not assume everyone is the same age. Guessing, acting, and general conversation formats make it easier to include several generations.",
+    "summary": "Choose Charades for active teams, Dinner Table for conversation across generations, Keep a Straight Face for quick silliness, or Choose Your Side for simple questions that everyone can answer.",
+    "sections": [
+      { "heading": "Choose for the youngest and quietest players", "paragraphs": ["A mixed-age group should be able to understand the prompt without specialist knowledge or adult context. The lowest-pressure participant is a better guide than the loudest person in the room.", "Teams can pair younger players with adults and make acting or guessing games more inclusive. Conversation games should allow short answers as well as longer stories."] },
+      { "heading": "Family games for meals and calls", "paragraphs": ["At a table, choose a game that does not require movement or shouting. Dinner Table and choice-based prompts can fill pauses without taking over the meal.", "On a video call, read prompts aloud and use a clear turn order. Charades also works remotely when every participant can see the acting player."] }
+    ],
+    "tips": ["Review the selected category for age suitability.", "Pair younger players with adults when using teams.", "Keep score optional.", "Use conversation decks during meals and active games afterward."],
+    "recommendations": [
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Mixed-age teams", "alcohol": "Not required", "reason": "A familiar acting format includes people without requiring personal answers." },
+      { "gameId": "dinner-table", "name": "Dinner Table", "path": "/games/dinner-table", "image": "/assets/games/dinner-table-v2.png", "players": "2+", "duration": "10–45 min", "bestFor": "Meals and generations", "alcohol": "Not required", "reason": "Conversation prompts are designed to fit naturally around a shared table." },
+      { "gameId": "you-laugh", "name": "Keep a Straight Face", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "Quick family laughs", "alcohol": "Not required", "reason": "Short silly challenges create energy without a complicated scoring system." },
+      { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Simple family debate", "alcohol": "Not required", "reason": "Everyone can choose an option and explain the reason at their own level." }
+    ],
+    "faqs": [
+      { "question": "Are all Decked games family-friendly?", "answer": "No. Choose general games and age-appropriate categories; avoid dating, spicy, and drinking decks for family play." },
+      { "question": "What works at a family dinner?", "answer": "Dinner Table and Real Talk, Every Day are designed for seated conversation." },
+      { "question": "Can grandparents join remotely?", "answer": "Yes. A host can read prompts aloud on a video call, so only one person needs to operate the game." }
+    ]
+  },
+  {
+    "screen": "guide-games-for-large-groups",
+    "path": "/guides/games-for-large-groups",
+    "slug": "games-for-large-groups",
+    "title": "Online Games for Large Groups — Free Party and Team Games",
+    "heading": "Online games for large groups",
+    "description": "Find free browser games for large parties, family gatherings, classrooms, and teams. Compare formats that keep everyone involved.",
+    "intro": "Large-group games need short instructions, visible turns, and ways for several people to participate at once. Teams, simultaneous reactions, and group voting reduce the waiting that can drain energy from a crowded room.",
+    "summary": "Use Charades for teams, Drop a Finger for simultaneous reactions, Who’s Most Likely To? for group voting, or Keep a Straight Face when the group wants short, energetic challenges.",
+    "sections": [
+      { "heading": "Keep a large group involved", "paragraphs": ["Divide the room into teams when individual turns would create long waits. Give each round a time limit and make the scoring system visible before play begins.", "Reaction and voting formats let everyone participate from the start. They are particularly useful when the group is too large for extended personal answers."] },
+      { "heading": "Hosting with one screen", "paragraphs": ["Connect the host device to a larger display when possible, or appoint a reader with a clear voice. Repeat each prompt before starting the response period.", "For remote groups, use breakout teams or chat responses. A single facilitator should control pacing so delays and cross-talk do not overwhelm the game."] }
+    ],
+    "tips": ["Use teams for more than eight players.", "Explain scoring before the first round.", "Choose simultaneous-response games to reduce downtime.", "Assign one host to control pacing."],
+    "recommendations": [
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Competing teams", "alcohol": "Not required", "reason": "Teams allow many people to guess while one person acts." },
+      { "gameId": "put-a-finger-down", "name": "Drop a Finger", "path": "/games/put-a-finger-down", "image": "/assets/games/finger-down.png", "players": "3+", "duration": "10–30 min", "bestFor": "Simultaneous reactions", "alcohol": "Not required", "reason": "Every player responds to every statement, even in a crowded room." },
+      { "gameId": "most-likely-to", "name": "Who’s Most Likely To?", "path": "/games/most-likely-to", "image": "/brand/decked-social-avatar.png", "players": "3+", "duration": "10–45 min", "bestFor": "Group voting", "alcohol": "Not required", "reason": "The whole room can point or vote at once and then discuss the result." },
+      { "gameId": "you-laugh", "name": "Keep a Straight Face", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "High-energy challenges", "alcohol": "Not required", "reason": "Short rounds make it easy to rotate performers and keep spectators entertained." }
+    ],
+    "faqs": [
+      { "question": "How many people count as a large group?", "answer": "Once a group reaches roughly eight people, teams or simultaneous-response formats usually improve pacing." },
+      { "question": "Can a large group use one phone?", "answer": "Yes, although casting to a television or appointing a reader makes prompts easier to follow." },
+      { "question": "What is best for people who do not know one another?", "answer": "Use Icebreaker, Charades, or another low-disclosure team format." }
+    ]
+  },
+  {
+    "screen": "guide-truth-or-dare-online",
+    "path": "/guides/truth-or-dare-online",
+    "slug": "truth-or-dare-online",
+    "title": "Play Truth or Dare Online — Free Game, Rules and Ideas",
+    "heading": "How to play Truth or Dare online",
+    "description": "Play Truth or Dare online for free. Learn the rules, choose the right tone, and start questions and challenges with no app or account.",
+    "intro": "Online Truth or Dare replaces the handwritten list with a shuffled browser deck. Players still choose truth or dare, answer honestly or attempt the challenge, and keep every turn within the group’s agreed boundaries.",
+    "summary": "Open Truth or Dare, decide who begins, choose truth or dare on each turn, and follow the displayed prompt. Establish a skip rule before starting and select a tone that fits the least comfortable player.",
+    "sections": [
+      { "heading": "Truth or Dare rules", "paragraphs": ["Sit together or join a call, choose a first player, and move turns in a clear order. On each turn the player selects truth or dare, reads the prompt aloud, and either responds, completes it, or uses the group’s skip rule.", "Do not invent punishments for skipping. The game is more enjoyable when consent is continuous and nobody has to justify a boundary. Avoid dares involving danger, illegality, humiliation, unwanted contact, or sharing private information."] },
+      { "heading": "Play in person or remotely", "paragraphs": ["In person, one phone can stay in the middle or move with the turns. Online, a host can share the screen or read prompts while everyone remains on the call.", "For a new group, begin with light questions and simple challenges. Couples or established adult friends may deliberately choose a bolder tone, but every participant should know that before the round starts."] }
+    ],
+    "tips": ["Agree on boundaries before the first turn.", "Make skipping unconditional.", "Never record or post a response without permission.", "Keep dares safe, legal, and appropriate for the setting."],
+    "recommendations": [
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "The complete classic game", "alcohol": "Not required", "reason": "The playable Decked game provides shuffled truths and dares directly in the browser." },
+      { "gameId": "never-have-i-ever", "name": "Never Have I Ever", "path": "/games/never-have-i-ever", "image": "/assets/games/never-have-i-ever.jpg", "players": "3+", "duration": "10–45 min", "bestFor": "Questions without dares", "alcohol": "Optional", "reason": "Use this alternative when the group prefers shared experiences and stories." },
+      { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Lower-pressure choices", "alcohol": "Not required", "reason": "Binary choices are a gentler option for a group that does not want personal truths." },
+      { "gameId": "spicy-starters", "name": "Spicy Opener", "path": "/games/spicy-starters", "image": "/assets/games/spicy-opener.png", "players": "2+", "duration": "10–45 min", "bestFor": "Consenting adults", "alcohol": "Not required", "reason": "Adult couples can choose a deliberately flirty deck instead of surprising a mixed group." }
+    ],
+    "faqs": [
+      { "question": "Can I play Truth or Dare online for free?", "answer": "Yes. Decked’s Truth or Dare game runs in a browser without payment, registration, or an app download." },
+      { "question": "Can two people play?", "answer": "Yes. Alternate turns on one phone or use the prompts during a call." },
+      { "question": "What happens if someone does not want to answer?", "answer": "They should be able to skip immediately without a penalty or explanation." }
+    ]
+  },
+  {
+    "screen": "guide-truth-or-dare-questions",
+    "path": "/guides/truth-or-dare-questions",
+    "slug": "truth-or-dare-questions",
+    "title": "Truth or Dare Questions — Ideas for Friends and Couples",
+    "heading": "Truth or Dare questions and ideas",
+    "description": "Find ways to choose good Truth or Dare questions for friends, couples, parties, and online play, with safe examples and clear boundaries.",
+    "intro": "Good Truth or Dare prompts create a story, laugh, or playful challenge without making someone regret joining. The strongest questions are specific enough to answer but open enough to reveal something new.",
+    "summary": "Use light truths and simple performance dares for newer groups. Established friends can use shared-history questions, while couples can choose reflective or flirty prompts only when both people want that tone.",
+    "sections": [
+      { "heading": "Truth question examples", "paragraphs": ["Light examples include: What harmless opinion would you defend forever? What skill do you wish you could learn instantly? What is the funniest misunderstanding you have had? Which ordinary thing makes you unusually happy?", "For closer groups, try: What is something you changed your mind about recently? Which shared memory always makes you laugh? What compliment have you remembered for years? What is one goal you want support with?"] },
+      { "heading": "Safe dare examples", "paragraphs": ["Low-pressure dares include giving a dramatic weather report, acting like a movie character for one round, inventing a short advertisement for an object nearby, or attempting to make the group laugh without touching anyone.", "A dare should not involve dangerous consumption, driving, property damage, harassment, unwanted contact, public humiliation, passwords, private messages, or posting content. Replace any unsuitable card immediately."] }
+    ],
+    "tips": ["Match questions to how well the group knows one another.", "Use specific prompts instead of demanding secrets.", "Keep dares brief and reversible.", "Remove any prompt that depends on pressure or embarrassment."],
+    "recommendations": [
+      { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Ready-to-play prompts", "alcohol": "Not required", "reason": "Use the shuffled browser deck when the group wants questions and dares supplied automatically." },
+      { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "Gentler questions", "alcohol": "Not applicable", "reason": "A low-pressure alternative for groups that want questions without challenges." },
+      { "gameId": "late-night-talks", "name": "Late Night Talks", "path": "/games/late-night-talks", "image": "/brand/decked-social-avatar.png", "players": "2+", "duration": "15–60 min", "bestFor": "Reflective truths", "alcohol": "Not required", "reason": "Choose this when honest conversation matters more than dares or competition." },
+      { "gameId": "you-laugh", "name": "Keep a Straight Face", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "Silly challenges", "alcohol": "Not required", "reason": "This offers playful performance tasks without requiring personal disclosures." }
+    ],
+    "faqs": [
+      { "question": "What makes a good truth question?", "answer": "It invites a story or opinion, fits the relationship, and can be skipped without pressure." },
+      { "question": "What dares should be avoided?", "answer": "Avoid danger, illegality, humiliation, unwanted contact, private information, destructive actions, and anything involving non-consenting people." },
+      { "question": "Are these suitable for children?", "answer": "The examples on this guide are mild, but adults should still review the game category and supervise age-appropriate play." }
+    ]
+  },
+  {
+    "screen": "guide-birthday-party-games",
+    "path": "/guides/birthday-party-games",
+    "slug": "birthday-party-games",
+    "title": "Free Birthday Party Games Online — Easy Group Games",
+    "heading": "Free games for a birthday party",
+    "description": "Choose free browser games for birthday parties, small celebrations, and large groups. Start quickly with no app, printing, or account.",
+    "intro": "Birthday games should include the guest of honor without turning every round into a performance. Formats with teams, group voting, and quick challenges help guests with different relationships join the same activity.",
+    "summary": "Use Charades for teams, Who Said That? for a group that knows the celebrant well, Keep a Straight Face for fast entertainment, or Icebreaker when several guests are meeting for the first time.",
+    "sections": [
+      { "heading": "Plan around the guest list", "paragraphs": ["If guests come from different parts of the celebrant’s life, begin with a low-context game. Inside-joke formats work better later, after people have had time to meet.", "Children, mixed ages, and adult groups need different categories. Choose the safest suitable tone for everyone present rather than relying on the invitation label alone."] },
+      { "heading": "Run a game without slowing the party", "paragraphs": ["Keep the first round under fifteen minutes and explain only the rules needed to begin. A game should support the celebration, not delay food, conversation, or other plans.", "Use teams to include a larger room, and switch activities when turns begin to feel long. Decked makes that easy because the next game does not require new materials."] }
+    ],
+    "tips": ["Start with a game that does not depend on inside jokes.", "Use teams when more than eight people join.", "Choose age-appropriate categories before guests arrive.", "Keep the first round short and extend it only if people want more."],
+    "recommendations": [
+      { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Birthday teams", "alcohol": "Not required", "reason": "Guests can join immediately and teams mix people who arrived from different friend groups." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Friends of the celebrant", "alcohol": "Not required", "reason": "Anonymous answers become a guessing game that highlights how people know one another." },
+      { "gameId": "you-laugh", "name": "Keep a Straight Face", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "Fast entertainment", "alcohol": "Not required", "reason": "Short challenges fit naturally between other parts of the celebration." },
+      { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "Guests meeting for the first time", "alcohol": "Not applicable", "reason": "Low-pressure prompts help separate friend groups become one room." }
+    ],
+    "faqs": [
+      { "question": "What game works when birthday guests do not know each other?", "answer": "Start with Icebreaker, Charades, or another team game that requires little personal knowledge." },
+      { "question": "Do I need party supplies?", "answer": "No. A phone and web browser are enough for these games." },
+      { "question": "What works for a large birthday party?", "answer": "Charades, Drop a Finger, and Who’s Most Likely To? can involve many people through teams or simultaneous responses." }
+    ]
+  }
+]

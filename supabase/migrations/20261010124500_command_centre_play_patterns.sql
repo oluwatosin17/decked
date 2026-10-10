@@ -73,7 +73,7 @@ begin
     select *,extract(isodow from local_at)::int iso_weekday,to_char(local_at,'Dy') weekday,extract(hour from local_at)::int local_hour
     from facts where local_at is not null
   ), heat_grid as (
-    select day iso_weekday,trim(to_char(date '2024-01-01'+(day-1),'Dy')) weekday,local_hour as "hour",
+    select day iso_weekday,trim(to_char(date '2024-01-01'+(day-1),'Dy')) weekday,hours.local_hour as "hour",
       count(l.game_session_id)::int game_starts
     from generate_series(1,7) day cross join generate_series(0,23) as hours(local_hour)
     left join localized l on l.iso_weekday=day and l.local_hour=hours.local_hour group by day,hours.local_hour

@@ -2233,6 +2233,8 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .guide-game-copy > div:first-child { display: flex; align-items: baseline; gap: 14px; }
 .guide-game-number { margin: 0; color: #b9bbc3; font: 17px 'Anton SC', sans-serif; }
 .guide-game-copy h3 { margin: 0; font: 32px/1.1 'Anton SC', sans-serif; }
+.guide-game-copy .guide-game-descriptor { margin: 10px 0 0; color: #e8e8eb; font-size: 14px; }
+.guide-game-copy .guide-game-descriptor + p { margin-top: 10px; }
 .guide-game-copy > p { margin: 16px 0 22px; color: #bfc0c5; font: 16px/1.55 'Satoshi', sans-serif; }
 .guide-game-copy dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 0 0 24px; }
 .guide-game-copy dl div { padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,.045); }
@@ -2240,6 +2242,13 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .guide-game-copy dd { margin: 0; color: #fff; font: 14px/1.3 'Satoshi', sans-serif; }
 .guide-play-button, .guide-final-cta button { padding: 11px 17px; border: 0; border-radius: 999px; background: #dc2827; color: #fff; font: 15px 'Staatliches', sans-serif; cursor: pointer; }
 .guide-tips, .guide-faq { margin-top: 92px; }
+.guide-explainer { max-width: 860px; margin-top: 92px; }
+.guide-explainer p { margin: 0 0 18px; color: #c5c6ca; font: 17px/1.7 'Satoshi', sans-serif; }
+.guide-related { margin-top: 92px; }
+.guide-related-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.guide-related-grid button { min-height: 190px; padding: 24px; border: 0; border-radius: 14px; background: #070708; color: #fff; text-align: left; cursor: pointer; }
+.guide-related-grid strong { display: block; font: 25px/1.1 'Anton SC', sans-serif; }
+.guide-related-grid span { display: block; margin-top: 14px; color: #aeb0b6; font: 15px/1.5 'Satoshi', sans-serif; }
 .guide-tips ol { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
 .guide-tips li { display: flex; gap: 16px; padding: 22px; border-radius: 14px; background: #070708; }
 .guide-tips li span { display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%; background: #202024; color: #d5d6db; font: 14px 'Anton SC', sans-serif; }
@@ -2268,7 +2277,8 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .guide-game-copy { padding: 24px 20px; }
   .guide-game-copy dl { grid-template-columns: 1fr 1fr; }
   .guide-section-heading h2 { font-size: 34px; }
-  .guide-tips, .guide-faq { margin-top: 68px; }
+  .guide-tips, .guide-faq, .guide-explainer, .guide-related { margin-top: 68px; }
+  .guide-related-grid { grid-template-columns: 1fr; }
   .guide-final-cta { margin-top: 72px; padding: 32px 24px; }
   .guide-final-cta h2 { font-size: 36px; }
 }

@@ -1,5 +1,6 @@
 import { SCREEN_PATHS, type Screen } from './navigation'
 import { GUIDE_BY_SCREEN } from './guideData'
+import searchDescriptors from './content/gameSearchDescriptors.json'
 
 const SITE_URL = 'https://www.usedecked.com'
 const DEFAULT_IMAGE = `${SITE_URL}/brand/decked-social-avatar.png`
@@ -7,22 +8,22 @@ const DEFAULT_IMAGE = `${SITE_URL}/brand/decked-social-avatar.png`
 const gameNames: Partial<Record<Screen, string>> = {
   'late-night-talks': 'Late Night Talks',
   'dinner-table': 'Dinner Table',
-  'you-laugh': "You Laugh, You're Out",
+  'you-laugh': 'Keep a Straight Face',
   'never-have-i-ever': 'Never Have I Ever',
   charades: 'Charades',
   'truth-or-dare': 'Truth or Dare',
-  'spicy-starters': 'Spicy Starters',
-  'lets-reconnect': "Let's Reconnect",
-  'everyday-conversations': 'Everyday Conversations',
-  wnrs: "We're Not Really Strangers",
-  'put-a-finger-down': 'Put a Finger Down',
+  'spicy-starters': 'Spicy Opener',
+  'lets-reconnect': 'Back to Us',
+  'everyday-conversations': 'Real Talk, Every Day',
+  wnrs: 'Beyond Small Talk',
+  'put-a-finger-down': 'Drop a Finger',
   'take-a-sip': 'Take a Sip',
-  'sip-or-spill': 'Sip or Spill',
-  'do-or-drink': 'Do or Drink',
+  'sip-or-spill': 'Answer or Drink',
+  'do-or-drink': 'Dare or Pour',
   icebreaker: 'Icebreaker',
-  'red-flag-green-flag': 'Red Flag, Green Flag',
+  'red-flag-green-flag': 'Dateable or Dealbreaker',
   'two-truths-bluff': 'Two Truths and a Bluff',
-  'most-likely-to': 'Most Likely To',
+  'most-likely-to': 'Who’s Most Likely To?',
   'choose-your-side': 'Choose Your Side',
   'who-said-that': 'Who Said That?',
   'we-just-met': 'We Just Met',
@@ -85,7 +86,10 @@ export function updateDocumentMetadata(screen: Screen) {
     description = 'Learn how Decked uses cookies, local storage, anonymous authentication, preferences, and analytics technologies.'
   } else if (gameName) {
     title = `${gameName} Online — Play Free on Decked`
-    description = `Play ${gameName} online for free with Decked. Start instantly in your browser with friends—no download or account needed.`
+    const descriptor = (searchDescriptors as Record<string, string>)[path]
+    description = descriptor
+      ? `Play ${gameName} online for free with Decked, ${descriptor}. Start instantly in your browser—no download or account needed.`
+      : `Play ${gameName} online for free with Decked. Start instantly in your browser with friends—no download or account needed.`
   }
 
   document.title = title

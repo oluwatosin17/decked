@@ -1,6 +1,6 @@
 export type Screen =
   | 'home' | 'about' | 'privacy' | 'terms' | 'cookies' | 'browse' | 'guides'
-  | 'guide-party-games' | 'guide-couples-games' | 'guide-work-icebreakers' | 'guide-drinking-games'
+  | `guide-${string}`
   | 'quick-play' | 'play-mode'
   | 'lnt-select' | 'late-night-talks'
   | 'dtc-select' | 'dinner-table'
@@ -16,7 +16,7 @@ export type Screen =
   | 'we-just-met'
   | 'play-together'
 
-export const SCREEN_PATHS: Record<Screen, string> = {
+export const SCREEN_PATHS: Record<string, string> = {
   home: '/',
   about: '/about',
   privacy: '/privacy',
@@ -24,10 +24,6 @@ export const SCREEN_PATHS: Record<Screen, string> = {
   cookies: '/cookies',
   browse: '/games',
   guides: '/guides',
-  'guide-party-games': '/guides/best-online-party-games',
-  'guide-couples-games': '/guides/couples-games-one-phone',
-  'guide-work-icebreakers': '/guides/icebreaker-games-for-work',
-  'guide-drinking-games': '/guides/free-drinking-games-no-app',
   'quick-play': '/quick-play',
   'play-mode': '/games/play',
   'lnt-select': '/games/late-night-talks/mode',
@@ -60,9 +56,11 @@ const PATH_SCREENS = new Map(Object.entries(SCREEN_PATHS).map(([screen, path]) =
 
 export function screenFromLocation(): Screen {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
+  if (path.startsWith('/guides/')) return `guide-${path.slice('/guides/'.length)}`
   return PATH_SCREENS.get(path) ?? 'home'
 }
 
 export function urlForScreen(screen: Screen) {
+  if (screen.startsWith('guide-')) return `/guides/${screen.slice('guide-'.length)}`
   return SCREEN_PATHS[screen]
 }

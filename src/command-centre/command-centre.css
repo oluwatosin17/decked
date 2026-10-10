@@ -213,6 +213,25 @@
 .cc-heatmap-scroll th { color: #92959e; font-weight: 700; text-align: center; }
 .cc-heatmap-scroll th:first-child { position: sticky; left: 0; z-index: 1; padding-right: 8px; background: #111216; text-align: left; }
 .cc-heatmap-scroll td { height: 34px; border: 1px solid rgba(255,255,255,.06); border-radius: 4px; background: color-mix(in srgb,#ef4c48 calc(var(--heat) * 90%),#191b20); color: rgba(255,255,255,.82); text-align: center; }
+.cc-play-timeline { margin-bottom: 22px; }
+.cc-timeline-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.cc-interval-tabs { padding: 3px; border: 1px solid #34363d; border-radius: 8px; display: flex; gap: 3px; }
+.cc-interval-tabs button { min-height: 34px; padding: 0 13px; border: 0; border-radius: 6px; background: transparent; color: #aeb1b9; font: 700 12px 'Satoshi',sans-serif; cursor: pointer; }
+.cc-interval-tabs button.active { background: #e43b38; color: #fff; }
+.cc-timeline-chart { padding: 18px 22px 24px; border-bottom: 1px solid #292b30; }
+.cc-timeline-chart svg { width: 100%; height: 280px; overflow: visible; }
+.cc-timeline-chart line { stroke: #292b30; stroke-width: .4; vector-effect: non-scaling-stroke; }
+.cc-timeline-chart polyline { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.cc-timeline-chart polyline.starts { stroke: #ef4c48; }
+.cc-timeline-chart polyline.completions { stroke: #f4b860; }
+.cc-timeline-chart polyline.players { stroke: #63b3ed; }
+.cc-timeline-chart circle { fill: #ef4c48; stroke: #111216; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.cc-timeline-labels { position: relative; height: 34px; margin: 0 5%; }
+.cc-timeline-labels span { position: absolute; top: 5px; translate: -50% 0; color: #858994; font-size: 10px; white-space: nowrap; }
+.cc-timeline-chart .cc-legend { justify-content: center; }
+.cc-timeline-chart .cc-legend span:nth-child(2)::before { background: #f4b860; }
+.cc-timeline-chart .cc-legend span:nth-child(3)::before { background: #63b3ed; }
+.cc-timeline-note { padding: 14px 22px; color: #c5b994 !important; font-size: 12px; }
 .cc-trend .cc-panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .cc-trend svg { display: block; width: 100%; height: auto; max-height: 320px; padding: 18px; overflow: visible; }
 .cc-trend polyline { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }

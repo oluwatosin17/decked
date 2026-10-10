@@ -25,4 +25,6 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+.supabase/
+supabase/.temp/
 .env*

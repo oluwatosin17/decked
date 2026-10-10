@@ -72,6 +72,13 @@ export interface PlayPatternsResponse {
   refreshed_at:string|null
   partial_warnings:string[]
 }
+export interface PlayPatternsTimelineResponse {
+  granularity:TrendGranularity
+  rows:Array<{bucket_start:string;bucket_end:string;active_players:number;game_starts:number;completions:number;completion_rate:number;cards_played:number;pass_and_play_starts:number;play_together_starts:number}>
+  timezone_attributed_starts:number
+  unattributed_starts:number
+  refreshed_at:string|null
+}
 
 const DEVICE_CLASSES = ['mobile','tablet','desktop','unknown'] as const
 const ACCESS_MODES = ['browser','pwa','unknown'] as const
@@ -153,6 +160,17 @@ export function trendLabelIndexes(length:number,granularity:TrendGranularity){
   const visibleLimit=granularity==='month'||granularity==='year'?12:granularity==='week'?13:10
   const stride=length<=visibleLimit?1:Math.ceil((length-1)/(visibleLimit-1))
   return Array.from({length},(_,index)=>index).filter(index=>index%stride===0||index===length-1)
+}
+
+export function formatTimelinePeriod(from:string,to:string,granularity:TrendGranularity){
+  const start=new Date(`${from}T00:00:00Z`),end=new Date(`${to}T00:00:00Z`)
+  if(granularity==='year')return start.toLocaleDateString(undefined,{year:'numeric',timeZone:'UTC'})
+  if(granularity==='month')return start.toLocaleDateString(undefined,{month:'short',year:'numeric',timeZone:'UTC'})
+  if(granularity==='day')return start.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'})
+  const sameMonth=start.getUTCMonth()===end.getUTCMonth()&&start.getUTCFullYear()===end.getUTCFullYear()
+  const left=start.toLocaleDateString(undefined,{month:'short',day:'numeric',timeZone:'UTC'})
+  const right=sameMonth?`${end.getUTCDate()}, ${end.getUTCFullYear()}`:end.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'})
+  return `${left}–${right}`
 }
 
 export function sectionFromPath(pathname: string): CommandCentreSection {

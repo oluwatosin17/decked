@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react'
-import { GUIDE_ARTICLES, GUIDE_LIBRARY, type Guide } from '../guideData'
+import { GAME_SEARCH_DESCRIPTORS, GUIDE_ARTICLES, GUIDE_LIBRARY, type Guide } from '../guideData'
 import type { Screen } from '../navigation'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
@@ -42,7 +42,7 @@ export function GuideLibraryPage(props: SharedProps) {
       <section className="guide-library-grid" aria-label="Decked game guides">
         {GUIDE_ARTICLES.map((guide, index) => (
           <button key={guide.slug} className="guide-library-card" onClick={() => props.onNavigateGuide(guide.screen)}>
-            <span>0{index + 1}</span>
+            <span>{String(index + 1).padStart(2, '0')}</span>
             <h2>{guide.heading}</h2>
             <p>{guide.description}</p>
             <strong>READ GUIDE →</strong>
@@ -54,6 +54,17 @@ export function GuideLibraryPage(props: SharedProps) {
 }
 
 export function GuideArticlePage({ guide, onPlay, ...props }: SharedProps & { guide: Guide; onPlay: (gameId: string) => void }) {
+  const gameIds = new Set(guide.recommendations?.map(game => game.gameId) ?? [])
+  const relatedGuides = GUIDE_ARTICLES
+    .filter(candidate => candidate.slug !== guide.slug)
+    .map(candidate => ({
+      guide: candidate,
+      score: candidate.recommendations?.filter(game => gameIds.has(game.gameId)).length ?? 0,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(item => item.guide)
+
   useEffect(() => {
     const firstHeading = document.querySelector<HTMLElement>('.guide-article h1')
     firstHeading?.focus({ preventScroll: true })
@@ -82,6 +93,7 @@ export function GuideArticlePage({ guide, onPlay, ...props }: SharedProps & { gu
                 </div>
                 <div className="guide-game-copy">
                   <div><p className="guide-game-number">{String(index + 1).padStart(2, '0')}</p><h3>{game.name}</h3></div>
+                  {GAME_SEARCH_DESCRIPTORS[game.path] && <p className="guide-game-descriptor"><strong>Game style:</strong> {GAME_SEARCH_DESCRIPTORS[game.path]}.</p>}
                   <p>{game.reason}</p>
                   <dl>
                     <div><dt>Players</dt><dd>{game.players}</dd></div>
@@ -99,6 +111,13 @@ export function GuideArticlePage({ guide, onPlay, ...props }: SharedProps & { gu
           </div>
         </section>
 
+        {guide.sections?.map(section => (
+          <section className="guide-explainer" key={section.heading}>
+            <div className="guide-section-heading"><h2>{section.heading}</h2></div>
+            {section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+          </section>
+        ))}
+
         <section className="guide-tips" aria-labelledby="guide-tips">
           <div className="guide-section-heading"><h2 id="guide-tips">Practical tips</h2></div>
           <ol>{guide.tips?.map((tip, index) => <li key={tip}><span>{index + 1}</span><p>{tip}</p></li>)}</ol>
@@ -107,6 +126,18 @@ export function GuideArticlePage({ guide, onPlay, ...props }: SharedProps & { gu
         <section className="guide-faq" aria-labelledby="guide-faq">
           <div className="guide-section-heading"><h2 id="guide-faq">Frequently asked questions</h2></div>
           {guide.faqs?.map(item => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+        </section>
+
+        <section className="guide-related" aria-labelledby="related-guides">
+          <div className="guide-section-heading"><h2 id="related-guides">Related game guides</h2></div>
+          <div className="guide-related-grid">
+            {relatedGuides.map(item => (
+              <button key={item.slug} onClick={() => props.onNavigateGuide(item.screen)}>
+                <strong>{item.heading}</strong>
+                <span>{item.description}</span>
+              </button>
+            ))}
+          </div>
         </section>
 
         <aside className="guide-final-cta">

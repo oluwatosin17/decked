@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { commandCentrePath, comparisonDelta, comparisonDescription, completeDeviceBreakdown, formatMetric, formatTrendBucketLabel, isCommandCentrePath, normalizeOverview, overviewDashboardViewState, overviewViewState, parseDashboardFilters, sectionFromPath, serializeDashboardFilters, trendLabelIndexes, type DashboardFilters, type OverviewDashboardResponse } from './model'
+import { commandCentrePath, comparisonDelta, comparisonDescription, completeDeviceBreakdown, formatMetric, formatTimelinePeriod, formatTrendBucketLabel, isCommandCentrePath, normalizeOverview, overviewDashboardViewState, overviewViewState, parseDashboardFilters, sectionFromPath, serializeDashboardFilters, trendLabelIndexes, type DashboardFilters, type OverviewDashboardResponse } from './model'
 
 const overviewFixture = (overrides: Partial<OverviewDashboardResponse['current']> = {}): OverviewDashboardResponse => ({
   current: { daily_active: 12, weekly_active: 30, monthly_active: 70, new_players: 4, returning_players: 8, game_starts: 10, completions: 7, cards_played: 35, replays: 2, median_session_duration_seconds: 180, rooms_created: 3, rooms_started: 2, eligible_rooms: 2, rematch_starts: 1, sessions: 12, error_sessions: 1, ...overrides },
@@ -49,6 +49,8 @@ describe('Command Centre routing and fixtures', () => {
     expect(formatTrendBucketLabel('2026-01-01','year',0)).toBe('2026')
     expect(trendLabelIndexes(12,'month')).toHaveLength(12)
     expect(trendLabelIndexes(24,'month')).toEqual([0,3,6,9,12,15,18,21,23])
+    expect(formatTimelinePeriod('2026-09-14','2026-09-20','week')).toBe('Sep 14–20, 2026')
+    expect(formatTimelinePeriod('2026-01-01','2026-01-31','month')).toBe('Jan 2026')
   })
   it('covers loading, empty, populated, error-only, and query-failure states', () => {
     const zero = overviewFixture({ daily_active: 0, weekly_active: 0, monthly_active: 0, new_players: 0, returning_players: 0, game_starts: 0, completions: 0, cards_played: 0, replays: 0, median_session_duration_seconds: null, rooms_created: 0, rooms_started: 0, eligible_rooms: 0, rematch_starts: 0, sessions: 0, error_sessions: 0 })

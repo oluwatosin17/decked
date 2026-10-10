@@ -5,26 +5,29 @@ const SITE_URL = 'https://www.usedecked.com'
 const OUTPUT_DIRECTORY = 'dist'
 const DEFAULT_IMAGE = '/brand/decked-social-avatar.png'
 const guides = JSON.parse(await readFile('src/content/guides.json', 'utf8'))
+const guideExpansion = JSON.parse(await readFile('src/content/guideExpansion.json', 'utf8'))
+const searchDescriptors = JSON.parse(await readFile('src/content/gameSearchDescriptors.json', 'utf8'))
+guides.push(...guideExpansion)
 
 const games = [
   game('/games/truth-or-dare', 'Truth or Dare', '/assets/games/truth-or-dare.png', 'friends, couples, and parties', '2 or more', '10–60 minutes', 'Party game'),
-  game('/games/spicy-starters', 'Spicy Starters', '/assets/games/spicy-opener.png', 'adult couples and date nights', '2 or more', '10–45 minutes', 'Conversation game'),
+  game('/games/spicy-starters', 'Spicy Opener', '/assets/games/spicy-opener.png', 'adult couples and date nights', '2 or more', '10–45 minutes', 'Conversation game'),
   game('/games/late-night-talks', 'Late Night Talks', DEFAULT_IMAGE, 'couples, friends, and late-night hangouts', '2 or more', '15–60 minutes', 'Conversation game'),
   game('/games/dinner-table', 'Dinner Table', '/assets/games/dinner-table-v2.png', 'families, friends, dates, and teams', '2 or more', '10–45 minutes', 'Conversation game'),
-  game('/games/you-laugh-youre-out', "You Laugh, You're Out", '/assets/games/keep-a-straight-face.png', 'friends, families, and parties', '2 or more', '10–30 minutes', 'Party game'),
+  game('/games/you-laugh-youre-out', 'Keep a Straight Face', '/assets/games/keep-a-straight-face.png', 'friends, families, and parties', '2 or more', '10–30 minutes', 'Party game'),
   game('/games/never-have-i-ever', 'Never Have I Ever', '/assets/games/never-have-i-ever.jpg', 'friends and parties', '3 or more', '10–45 minutes', 'Party game'),
   game('/games/charades', 'Charades', '/assets/games/charades-v2.png', 'families, friends, and groups', '4 or more', '15–60 minutes', 'Guessing game'),
-  game('/games/lets-reconnect', "Let's Reconnect", '/assets/games/back-to-us.png', 'couples, friends, and families', '2 or more', '15–60 minutes', 'Conversation game'),
-  game('/games/everyday-conversations', 'Everyday Conversations', '/assets/games/everyday-conversation.png', 'friends, families, couples, and teams', '2 or more', '10–45 minutes', 'Conversation game'),
-  game('/games/were-not-really-strangers', "We're Not Really Strangers", '/assets/games/wnrs-card.png', 'friends, dates, and new connections', '2 or more', '15–60 minutes', 'Conversation game'),
-  game('/games/put-a-finger-down', 'Put a Finger Down', '/assets/games/finger-down.png', 'friends and parties', '3 or more', '10–30 minutes', 'Party game'),
+  game('/games/lets-reconnect', 'Back to Us', '/assets/games/back-to-us.png', 'couples, friends, and families', '2 or more', '15–60 minutes', 'Conversation game'),
+  game('/games/everyday-conversations', 'Real Talk, Every Day', '/assets/games/everyday-conversation.png', 'friends, families, couples, and teams', '2 or more', '10–45 minutes', 'Conversation game'),
+  game('/games/were-not-really-strangers', 'Beyond Small Talk', '/assets/games/wnrs-card.png', 'friends, dates, and new connections', '2 or more', '15–60 minutes', 'Conversation game'),
+  game('/games/put-a-finger-down', 'Drop a Finger', '/assets/games/finger-down.png', 'friends and parties', '3 or more', '10–30 minutes', 'Party game'),
   game('/games/take-a-sip', 'Take a Sip', DEFAULT_IMAGE, 'adult friends and parties', '2 or more', '10–45 minutes', 'Party game', true),
-  game('/games/sip-or-spill', 'Sip or Spill', '/assets/games/answer-or-drink.png', 'adult friends and parties', '2 or more', '10–45 minutes', 'Party game', true),
-  game('/games/do-or-drink', 'Do or Drink', DEFAULT_IMAGE, 'adult friends and parties', '2 or more', '10–45 minutes', 'Party game', true),
+  game('/games/sip-or-spill', 'Answer or Drink', '/assets/games/answer-or-drink.png', 'adult friends and parties', '2 or more', '10–45 minutes', 'Party game', true),
+  game('/games/do-or-drink', 'Dare or Pour', DEFAULT_IMAGE, 'adult friends and parties', '2 or more', '10–45 minutes', 'Party game', true),
   game('/games/icebreaker', 'Icebreaker', '/assets/games/icebreaker.png', 'new groups, teams, friends, and dates', '2 or more', '10–45 minutes', 'Icebreaker game'),
-  game('/games/red-flag-green-flag', 'Red Flag, Green Flag', '/assets/games/dateable-or-dealbreaker.png', 'friends, couples, and dates', '2 or more', '10–45 minutes', 'Conversation game'),
+  game('/games/red-flag-green-flag', 'Dateable or Dealbreaker', '/assets/games/dateable-or-dealbreaker.png', 'friends, couples, and dates', '2 or more', '10–45 minutes', 'Conversation game'),
   game('/games/two-truths-and-a-bluff', 'Two Truths and a Bluff', '/assets/games/two-truths-bluff-approved.png', 'friends, teams, and new groups', '3 or more', '10–30 minutes', 'Icebreaker game'),
-  game('/games/most-likely-to', 'Most Likely To', DEFAULT_IMAGE, 'friends, families, and parties', '3 or more', '10–45 minutes', 'Party game'),
+  game('/games/most-likely-to', 'Who’s Most Likely To?', DEFAULT_IMAGE, 'friends, families, and parties', '3 or more', '10–45 minutes', 'Party game'),
   game('/games/choose-your-side', 'Choose Your Side', '/assets/games/choose-your-side.png', 'friends, teams, and parties', '2 or more', '10–45 minutes', 'Party game'),
   game('/games/who-said-that', 'Who Said That?', '/assets/games/who-said-that.png', 'friends, families, and groups', '3 or more', '10–45 minutes', 'Guessing game'),
   game('/games/we-just-met', 'We Just Met', '/assets/games/we-just-met.png', 'new friends, dates, and groups', '2 or more', '10–45 minutes', 'Icebreaker game'),
@@ -82,7 +85,9 @@ const pages = [
   ...games.map(game => ({
     ...game,
     title: `${game.name} Online — Play Free on Decked`,
-    description: `Play ${game.name} online for free with Decked. Start instantly in your browser with ${game.audience}—no download or account needed.`,
+    description: searchDescriptors[game.path]
+      ? `Play ${game.name} online for free with Decked, ${searchDescriptors[game.path]}. Start instantly in your browser—no download or account needed.`
+      : `Play ${game.name} online for free with Decked. Start instantly in your browser with ${game.audience}—no download or account needed.`,
     type: 'WebPage',
     body: `
       <main>
@@ -90,6 +95,7 @@ const pages = [
         <article>
           <h1>Play ${escapeHtml(game.name)} online</h1>
           <p>Start a free game of ${escapeHtml(game.name)} for ${escapeHtml(game.audience)}. Decked works directly in your browser, with no app download and no account required.</p>
+          ${searchDescriptors[game.path] ? `<p><strong>Game style:</strong> ${escapeHtml(searchDescriptors[game.path])}.</p>` : ''}
           <dl>
             <dt>Players</dt><dd>${escapeHtml(game.players)}</dd>
             <dt>Typical play time</dt><dd>${escapeHtml(game.duration)}</dd>
@@ -272,7 +278,10 @@ function guideLibraryBody(guide) {
 }
 
 function guideArticleBody(guide) {
-  return `<main><nav><a href="/">Decked</a> · <a href="/guides">Guides</a></nav><article><h1>${escapeHtml(guide.heading)}</h1><p>${escapeHtml(guide.intro)}</p><section><h2>Quick answer</h2><p>${escapeHtml(guide.summary)}</p></section><section><h2>Recommended games</h2>${guide.recommendations.map(game => `<article><h3><a href="${game.path}">${escapeHtml(game.name)}</a></h3><p>${escapeHtml(game.reason)}</p><dl><dt>Players</dt><dd>${escapeHtml(game.players)}</dd><dt>Time</dt><dd>${escapeHtml(game.duration)}</dd><dt>Best for</dt><dd>${escapeHtml(game.bestFor)}</dd><dt>Alcohol</dt><dd>${escapeHtml(game.alcohol)}</dd></dl></article>`).join('')}</section><section><h2>Practical tips</h2><ol>${guide.tips.map(tip => `<li>${escapeHtml(tip)}</li>`).join('')}</ol></section><section><h2>Frequently asked questions</h2>${guide.faqs.map(item => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}</section></article></main>`
+  const sections = (guide.sections ?? []).map(section => `<section><h2>${escapeHtml(section.heading)}</h2>${section.paragraphs.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}</section>`).join('')
+  const ids = new Set(guide.recommendations.map(game => game.gameId))
+  const related = guides.slice(1).filter(candidate => candidate.slug !== guide.slug).map(candidate => ({ candidate, score: candidate.recommendations.filter(game => ids.has(game.gameId)).length })).sort((a, b) => b.score - a.score).slice(0, 3).map(item => item.candidate)
+  return `<main><nav><a href="/">Decked</a> · <a href="/guides">Guides</a></nav><article><h1>${escapeHtml(guide.heading)}</h1><p>${escapeHtml(guide.intro)}</p><section><h2>Quick answer</h2><p>${escapeHtml(guide.summary)}</p></section><section><h2>Recommended games</h2>${guide.recommendations.map(game => `<article><h3><a href="${game.path}">${escapeHtml(game.name)}</a></h3>${searchDescriptors[game.path] ? `<p><strong>Game style:</strong> ${escapeHtml(searchDescriptors[game.path])}.</p>` : ''}<p>${escapeHtml(game.reason)}</p><dl><dt>Players</dt><dd>${escapeHtml(game.players)}</dd><dt>Time</dt><dd>${escapeHtml(game.duration)}</dd><dt>Best for</dt><dd>${escapeHtml(game.bestFor)}</dd><dt>Alcohol</dt><dd>${escapeHtml(game.alcohol)}</dd></dl></article>`).join('')}</section>${sections}<section><h2>Practical tips</h2><ol>${guide.tips.map(tip => `<li>${escapeHtml(tip)}</li>`).join('')}</ol></section><section><h2>Frequently asked questions</h2>${guide.faqs.map(item => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}</section><section><h2>Related game guides</h2><ul>${related.map(item => `<li><a href="${item.path}">${escapeHtml(item.heading)}</a></li>`).join('')}</ul></section></article></main>`
 }
 
 function setMeta(html, page) {
