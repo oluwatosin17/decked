@@ -1,5 +1,5 @@
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
-import { supabase } from '../multiplayer/supabase'
+import { staffSupabase as supabase, supabase as gameplaySupabase } from '../multiplayer/supabase'
 import { completeDeviceBreakdown, normalizeOverview, type AcquisitionResponse, type DashboardFilters, type DeviceBreakdownResponse, type FunnelMetricsResponse, type GameMetricsResponse, type GeographyResponse, type MultiplayerMetricsResponse, type OverviewDashboardResponse, type OverviewTrendsResponse, type PlayPatternsResponse, type PlayPatternsTimelineResponse, type ReliabilityMetricsResponse, type RetentionResponse, type TrendGranularity } from './model'
 import type { GameDetailResponse, GamesAnalyticsResponse } from './gamesModel'
 import type { FunnelsResponse } from './funnelsModel'
@@ -10,7 +10,20 @@ export type StaffAccess = { authorized: true; role: 'admin' | 'editor' | 'viewer
 export async function restoreStaffSession(): Promise<Session | null> {
   const { data, error } = await supabase.auth.getSession()
   if (error) throw error
-  return data.session
+  if (data.session) return data.session
+
+  // One-time compatibility path for staff sessions created before Command
+  // Centre auth was isolated from anonymous multiplayer auth.
+  const legacy = await gameplaySupabase.auth.getSession()
+  if (legacy.error) return null
+  const candidate = legacy.data.session
+  if (!candidate?.user.email || candidate.user.is_anonymous === true) return null
+  const migrated = await supabase.auth.setSession({
+    access_token: candidate.access_token,
+    refresh_token: candidate.refresh_token,
+  })
+  if (migrated.error) return null
+  return migrated.data.session
 }
 
 export async function signInStaff(email: string, password: string) {

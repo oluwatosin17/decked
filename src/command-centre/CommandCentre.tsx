@@ -13,7 +13,7 @@ import ContentPage from './ContentPage'
 import GeographyPage from './GeographyPage'
 import AcquisitionPage from './AcquisitionPage'
 import PlayPatternsPage from './PlayPatternsPage'
-import { isPasswordRecoveryUrl, passwordUpdateErrorMessage } from './authRecovery'
+import { isPasswordRecoveryUrl, passwordUpdateErrorMessage, staffSignInErrorMessage } from './authRecovery'
 import './command-centre.css'
 
 type AuthState = 'loading' | 'signed_out' | 'checking' | 'authorized' | 'unauthorized' | 'error'
@@ -87,7 +87,7 @@ function AuthFrame({ children }: { children: ReactNode }) { return <main classNa
 
 function SignIn({ onSuccess }: { onSuccess: (session: Session | null) => Promise<void> }) {
   const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [resetSent, setResetSent] = useState(false)
-  const submit = async (event: FormEvent) => { event.preventDefault(); setBusy(true); setError(''); try { await onSuccess(await signInStaff(email, password)) } catch { setError('Sign-in failed. Check your staff credentials.'); setBusy(false) } }
+  const submit = async (event: FormEvent) => { event.preventDefault(); setBusy(true); setError(''); try { await onSuccess(await signInStaff(email, password)) } catch (caught) { setError(staffSignInErrorMessage(caught)); setBusy(false) } }
   const requestReset = async () => { if (!email) { setError('Enter your staff email first.'); return } setBusy(true); setError(''); try { await requestStaffPasswordReset(email); setResetSent(true) } catch { setError('We could not send the reset link. Please try again.'); } finally { setBusy(false) } }
   return <form className="cc-signin" onSubmit={submit}><p>INTERNAL ANALYTICS</p><h1>Command Centre</h1><span>Sign in with a provisioned staff account.</span><label>Email<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={event => setPassword(event.target.value)} required /></label>{error ? <div className="cc-inline-error" role="alert">{error}</div> : null}{resetSent ? <div className="cc-inline-success" role="status">Check your email for a new Decked password-reset link.</div> : null}<button className="cc-button" disabled={busy}>{busy ? 'Please wait…' : 'Sign in'}</button><button className="cc-text-button" type="button" disabled={busy} onClick={() => void requestReset()}>Forgot password?</button></form>
 }

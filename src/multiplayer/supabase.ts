@@ -1,13 +1,25 @@
 import { createClient } from '@supabase/supabase-js'
 
-const projectUrl = import.meta.env.VITE_SUPABASE_URL || 'https://aurirjornlsqepblndwa.supabase.co'
-const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+export const supabaseProjectUrl = import.meta.env.VITE_SUPABASE_URL || 'https://aurirjornlsqepblndwa.supabase.co'
+export const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
-export const multiplayerConfigured = Boolean(projectUrl && publishableKey)
+export const multiplayerConfigured = Boolean(supabaseProjectUrl && supabasePublishableKey)
 
-export const supabase = createClient(projectUrl, publishableKey || 'missing-publishable-key', {
+export const supabase = createClient(supabaseProjectUrl, supabasePublishableKey || 'missing-publishable-key', {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
   realtime: { params: { eventsPerSecond: 10 } },
+})
+
+// Staff authentication must not share storage with anonymous multiplayer auth.
+// Otherwise opening or joining a room can replace a persisted Command Centre
+// session (and signing out of one surface can sign out the other).
+export const staffSupabase = createClient(supabaseProjectUrl, supabasePublishableKey || 'missing-publishable-key', {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: 'decked:command-centre:auth:v1',
+  },
 })
 
 export async function ensureAnonymousUser() {

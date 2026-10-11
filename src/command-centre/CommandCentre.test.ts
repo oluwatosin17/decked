@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPasswordRecoveryUrl, passwordUpdateErrorMessage } from './authRecovery'
+import { isPasswordRecoveryUrl, passwordUpdateErrorMessage, staffSignInErrorMessage } from './authRecovery'
 
 describe('Command Centre password recovery', () => {
   it('recognizes a Supabase recovery callback after the auth client has consumed it', () => {
@@ -21,5 +21,19 @@ describe('password update errors', () => {
   it('does not expose unexpected backend details', () => {
     expect(passwordUpdateErrorMessage(new Error('sensitive backend detail')))
       .toBe('We could not update your password. Please try a different password.')
+  })
+})
+
+describe('staff sign-in errors', () => {
+  it('distinguishes throttling from rejected credentials', () => {
+    expect(staffSignInErrorMessage(new Error('Email rate limit exceeded')))
+      .toBe('Too many sign-in attempts. Wait a few minutes, then try again.')
+    expect(staffSignInErrorMessage(new Error('Invalid login credentials')))
+      .toBe('That email or password was not accepted. You can reset the password below.')
+  })
+
+  it('does not expose unexpected authentication details', () => {
+    expect(staffSignInErrorMessage(new Error('sensitive backend detail')))
+      .toBe('Sign-in could not be completed. Please try again.')
   })
 })
