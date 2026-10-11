@@ -345,6 +345,8 @@ function AppContent() {
       onPlayMostLikelyTo={() => chooseGame('most-likely-to')}
       onPlayChooseYourSide={() => chooseGame('choose-your-side')}
       onPlayWhoSaidThat={() => chooseGame('who-said-that')}
+      onPlayWeJustMet={() => chooseGame('we-just-met')}
+      onPlayWhot={() => chooseGame('whot')}
       onBrowse={() => setScreen('browse')}
       onGuides={() => setScreen('guides')}
       onAbout={() => setScreen('about')}

@@ -292,9 +292,11 @@ interface HomeGridProps {
   onPlayMostLikelyTo: () => void
   onPlayChooseYourSide: () => void
   onPlayWhoSaidThat: () => void
+  onPlayWeJustMet: () => void
+  onPlayWhot: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -346,6 +348,10 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('choose-your-side', onPlayChooseYourSide)}
         {getEl('who-said-that', onPlayWhoSaidThat)}
       </>, 'flex-start')}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '28px' }}>
+        {getEl('we-just-met', onPlayWeJustMet)}
+        {getEl('whot', onPlayWhot)}
+      </div>
     </div>
   )
 }

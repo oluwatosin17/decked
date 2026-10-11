@@ -3,7 +3,7 @@ import { HomeCardRows, GAME_CARDS } from '../components/GameCardGrid'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 
-const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that']
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot']
 const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
@@ -15,6 +15,8 @@ const FEATURED_ACTIONS: Record<string, string> = {
   'most-likely-to': 'onPlayMostLikelyTo',
   'choose-your-side': 'onPlayChooseYourSide',
   'who-said-that': 'onPlayWhoSaidThat',
+  'we-just-met': 'onPlayWeJustMet',
+  whot: 'onPlayWhot',
 }
 
 function useIsMobile(bp = 768) {
@@ -42,6 +44,8 @@ interface Props {
   onPlayMostLikelyTo: () => void
   onPlayChooseYourSide: () => void
   onPlayWhoSaidThat: () => void
+  onPlayWeJustMet: () => void
+  onPlayWhot: () => void
   onBrowse: () => void
   onGuides: () => void
   onAbout: () => void
@@ -106,9 +110,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onBrowse, onGuides, onAbout, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onBrowse, onGuides, onAbout, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
-  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onBrowse }
 
   if (isMobile) {
     return (
@@ -213,7 +217,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
       <section className="cards-section home-cards-section w-full" style={{ paddingTop: '90px', paddingBottom: '80px' }}>
         <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} />
         </div>
       </section>
 
