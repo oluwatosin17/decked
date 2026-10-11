@@ -13,6 +13,7 @@ import ContentPage from './ContentPage'
 import GeographyPage from './GeographyPage'
 import AcquisitionPage from './AcquisitionPage'
 import PlayPatternsPage from './PlayPatternsPage'
+import { isPasswordRecoveryUrl, passwordUpdateErrorMessage } from './authRecovery'
 import './command-centre.css'
 
 type AuthState = 'loading' | 'signed_out' | 'checking' | 'authorized' | 'unauthorized' | 'error'
@@ -24,7 +25,9 @@ export default function CommandCentre() {
   const [session, setSession] = useState<Session | null>(null)
   const [section, setSection] = useState(() => sectionFromPath(window.location.pathname))
   const [authError, setAuthError] = useState('')
-  const [isRecoveringPassword, setIsRecoveringPassword] = useState(false)
+  // Supabase can consume the recovery hash before this lazy route subscribes to
+  // auth events, so the URL itself must also be treated as recovery intent.
+  const [isRecoveringPassword, setIsRecoveringPassword] = useState(() => isPasswordRecoveryUrl(window.location.hash))
 
   const authorize = useCallback(async (candidate: Session | null) => {
     setSession(candidate)
@@ -64,7 +67,11 @@ export default function CommandCentre() {
   }
   const signOut = async () => { try { await signOutStaff() } finally { setAccess(null); setSession(null); setAuthState('signed_out') } }
 
-  if (isRecoveringPassword) return <AuthFrame><UpdatePassword onComplete={() => { setIsRecoveringPassword(false); void authorize(session) }} /></AuthFrame>
+  if (isRecoveringPassword) return <AuthFrame><UpdatePassword onComplete={() => {
+    window.history.replaceState({}, '', `${window.location.pathname}${window.location.search}`)
+    setIsRecoveringPassword(false)
+    void authorize(session)
+  }} /></AuthFrame>
   if (authState === 'loading' || authState === 'checking') return <AuthFrame><LoadingState /></AuthFrame>
   if (authState === 'signed_out') return <AuthFrame><SignIn onSuccess={authorize} /></AuthFrame>
   if (authState === 'unauthorized') return <AuthFrame><StatePanel title="Staff access required" action={<button className="cc-button" onClick={signOut}>Use another account</button>}><p>This signed-in account is not provisioned for the Command Centre.</p></StatePanel></AuthFrame>
@@ -92,7 +99,7 @@ function UpdatePassword({ onComplete }: { onComplete: () => void }) {
     if (password.length < 8) { setError('Use at least 8 characters.'); return }
     if (password !== confirmation) { setError('The passwords do not match.'); return }
     setBusy(true)
-    try { await updateStaffPassword(password); onComplete() } catch { setError('We could not update your password. Request a new reset link and try again.'); setBusy(false) }
+    try { await updateStaffPassword(password); onComplete() } catch (caught) { setError(passwordUpdateErrorMessage(caught)); setBusy(false) }
   }
   return <form className="cc-signin" onSubmit={submit}><p>ACCOUNT RECOVERY</p><h1>Update password</h1><span>Choose a new password for your Decked staff account.</span><label>New password<input type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} minLength={8} required /></label><label>Confirm new password<input type="password" autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} minLength={8} required /></label>{error ? <div className="cc-inline-error" role="alert">{error}</div> : null}<button className="cc-button" disabled={busy}>{busy ? 'Updating…' : 'Update password'}</button></form>
 }

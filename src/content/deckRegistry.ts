@@ -31,7 +31,7 @@ export interface AuditedDeck {
 export interface AuditedGame {
   gameId: GameId
   game: string
-  contentModel: 'bundled' | 'player-authored'
+  contentModel: 'bundled' | 'player-authored' | 'rules-based'
   decks: AuditedDeck[]
   note?: string
 }
@@ -99,4 +99,5 @@ export const CONTENT_AUDIT_GAMES: AuditedGame[] = [
   { gameId: 'choose-your-side', game: 'Choose Your Side', contentModel: 'bundled', decks: gameDecks('choose-your-side', 'Choose Your Side', chooseSideDecks) },
   { gameId: 'who-said-that', game: 'Who Said That?', contentModel: 'bundled', decks: [{ gameId: 'who-said-that', game: 'Who Said That?', category: 'main', prompts: WHO_SAID_THAT_PROMPTS }] },
   { gameId: 'we-just-met', game: 'We Just Met', contentModel: 'bundled', decks: gameDecks('we-just-met', 'We Just Met', WE_JUST_MET_PROMPTS) },
+  { gameId: 'whot', game: 'Whot', contentModel: 'rules-based', decks: [], note: 'Whot uses a fixed card deck and configurable rules rather than written prompt content.' },
 ]

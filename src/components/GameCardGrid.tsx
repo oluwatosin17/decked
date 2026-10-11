@@ -258,7 +258,7 @@ export const GAME_CARDS = (
   },
   {
     id: 'most-likely-to', categories: ['icebreakers', 'couples', 'party-games'], w: 310, h: 387.5, playable: true,
-    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork /></div>,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><MostLikelyArtwork fluid /></div>,
   },
   {
     id: 'choose-your-side', categories: ['icebreakers', 'deep-talk', 'party-games'], w: 310, h: 387.5, playable: true,
@@ -271,6 +271,12 @@ export const GAME_CARDS = (
   {
     id: 'we-just-met', categories: ['icebreakers', 'couples'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}><img loading="lazy" decoding="async" src="/assets/games/we-just-met.png" alt="We Just Met" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+  },
+  {
+    id: 'whot', categories: ['party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#35152d', position: 'relative' }}>
+      <img loading="lazy" decoding="async" src="/assets/games/whot-cover.png" alt="Whot" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
   },
 ]
 
@@ -370,6 +376,7 @@ interface BrowseGridProps {
   onPlayChooseYourSide?: () => void
   onPlayWhoSaidThat?: () => void
   onPlayWeJustMet?: () => void
+  onPlayWhot?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -395,6 +402,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'choose-your-side': handlers.onPlayChooseYourSide,
     'who-said-that': handlers.onPlayWhoSaidThat,
     'we-just-met': handlers.onPlayWeJustMet,
+    whot: handlers.onPlayWhot,
   }
   return map[card.id]
 }

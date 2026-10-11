@@ -41,6 +41,7 @@ const MostLikelyToGame = lazy(() => import('./MostLikelyToGame'))
 const ChooseYourSideGame = lazy(() => import('./ChooseYourSideGame'))
 const WhoSaidThatGame = lazy(() => import('./WhoSaidThatGame'))
 const WeJustMetGame = lazy(() => import('./WeJustMetGame'))
+const WhotGame = lazy(() => import('./WhotGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -64,6 +65,7 @@ const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: Mu
   'choose-your-side': { localScreen: 'choose-your-side', multiplayerId: 'choose-your-side' },
   'who-said-that': { localScreen: 'who-said-that', multiplayerId: 'who-said-that' },
   'we-just-met': { localScreen: 'we-just-met', multiplayerId: 'we-just-met' },
+  whot: { localScreen: 'whot', multiplayerId: 'whot' },
 }
 
 const selectedGameFromLocation = () => {
@@ -275,6 +277,9 @@ function AppContent() {
   if (screen === 'we-just-met') {
     return <WeJustMetGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'whot') {
+    return <WhotGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
@@ -304,6 +309,7 @@ function AppContent() {
         onPlayChooseYourSide={() => chooseGame('choose-your-side')}
         onPlayWhoSaidThat={() => chooseGame('who-said-that')}
         onPlayWeJustMet={() => chooseGame('we-just-met')}
+        onPlayWhot={() => chooseGame('whot')}
       />
     )
   }

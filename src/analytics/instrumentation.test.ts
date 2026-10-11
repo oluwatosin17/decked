@@ -55,8 +55,8 @@ describe('discovery instrumentation', () => {
 describe('pass-and-play instrumentation', () => {
   it('covers every canonical game exactly once', () => {
     const canonicalIds = Object.values(PASS_AND_PLAY_GAMES).map(game => game.gameId)
-    expect(canonicalIds).toHaveLength(21)
-    expect(new Set(canonicalIds)).toHaveLength(21)
+    expect(canonicalIds).toHaveLength(22)
+    expect(new Set(canonicalIds)).toHaveLength(22)
   })
 
   it('records setup through completion without reading prompt content', () => {

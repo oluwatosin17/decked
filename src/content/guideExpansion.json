@@ -7,13 +7,14 @@
     "heading": "Free games to play online with friends",
     "description": "Compare free browser games for friends, couples, families, and groups. Start instantly with no download, account, or payment.",
     "intro": "Free online games should be genuinely easy to start. Decked games open in a browser, work with one shared phone or supported multiplayer rooms, and do not place registration between the group and the first round.",
-    "summary": "Choose Charades for energetic groups, Truth or Dare for a flexible mix of questions and challenges, Icebreaker for people who are still getting comfortable, or Real Talk, Every Day when the goal is relaxed connection.",
+    "summary": "Choose Whot for a competitive card game, Charades for energetic groups, Truth or Dare for questions and challenges, or Icebreaker when people are still getting comfortable.",
     "sections": [
       { "heading": "How to choose a free online game", "paragraphs": ["Begin with the number of players and whether everyone is in the same room. Pass-and-play is simplest when people are together, while Play Together is useful when each participant wants a separate screen.", "Then match the game to the group’s comfort level. Guessing and debate games require little disclosure; conversation, dating, and adult decks work best after everyone understands the tone and can skip freely."] },
       { "heading": "What free should mean", "paragraphs": ["A useful free game should let the group reach actual play without a trial, payment card, or mandatory account. Decked’s public games can be opened directly and shared with the group.", "The games also avoid physical setup. There are no cards to print and no rules booklet to study, so the host can change games when the room’s energy changes."] }
     ],
     "tips": ["Pick one host to control the first round.", "Start with a familiar format before trying a deeper deck.", "Use one shared phone when setup speed matters most.", "Change games when conversation or energy begins to slow."],
     "recommendations": [
+      { "gameId": "whot", "name": "Whot", "path": "/games/whot", "image": "/assets/games/whot-cover.png", "players": "2+", "duration": "15–60 min", "bestFor": "Competitive card play", "alcohol": "Not required", "reason": "A complete browser-based Whot game with configurable rules, pass-and-play, and multiplayer support." },
       { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Energetic groups", "alcohol": "Not required", "reason": "A familiar team game that is easy to explain and works for mixed groups." },
       { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Friends and couples", "alcohol": "Not required", "reason": "Questions and challenges make this a flexible choice for different moods." },
       { "gameId": "icebreaker", "name": "Icebreaker", "path": "/games/icebreaker", "image": "/assets/games/icebreaker.png", "players": "2+", "duration": "10–45 min", "bestFor": "New groups", "alcohol": "Not applicable", "reason": "Low-pressure prompts help people participate without needing shared history." },
@@ -58,22 +59,23 @@
     "title": "Card Games to Play Online — Free Digital Decks for Groups",
     "heading": "Card games to play online",
     "description": "Explore free digital card-style games for parties, conversations, couples, and friends. No physical deck, download, or account required.",
-    "intro": "Online card games can preserve the satisfying rhythm of drawing one prompt at a time without requiring a physical deck. Decked uses digital cards for questions, choices, challenges, and group reactions.",
-    "summary": "Choose Drop a Finger for quick group reactions, Choose Your Side for debate, Who Said That? for familiar groups, or Dinner Table when you want a conversation deck that fits several generations.",
+    "intro": "Online card games can recreate a traditional hand of cards or preserve the satisfying rhythm of drawing one prompt at a time without requiring a physical deck. Decked includes competitive card play alongside digital cards for questions, choices, challenges, and group reactions.",
+    "summary": "Choose Whot for traditional competitive card play, Drop a Finger for quick group reactions, Choose Your Side for debate, or Who Said That? for familiar groups.",
     "sections": [
-      { "heading": "Digital prompt decks versus traditional cards", "paragraphs": ["A digital deck handles shuffling, keeps prompts readable, and is always available on the phone already in the room. It is especially useful when a group decides to play spontaneously.", "The phone should support the interaction rather than dominate it. Read the card aloud, place the screen where everyone can see it, and return attention to the people answering."] },
+      { "heading": "Traditional card play and digital prompt decks", "paragraphs": ["Whot recreates a complete competitive hand with drawing, matching, action cards, penalties, and configurable house rules. Digital prompt decks use one card at a time for questions, choices, challenges, and group reactions.", "Both formats handle shuffling and setup in the browser. Use separate devices for private Whot hands, or pass one phone around for a shared-screen game."] },
       { "heading": "Pick a card format", "paragraphs": ["Reaction games ask everyone to respond at once, question decks take turns, and guessing decks introduce hidden information. Matching the format to the group matters more than choosing the longest deck.", "For a mixed group, begin with choices or guessing. Save revealing questions and adult challenges for groups that have explicitly chosen that tone."] }
     ],
     "tips": ["Pass the phone clockwise so turns feel predictable.", "Read each card aloud before anyone answers.", "Use a short round when testing a new deck.", "Keep the screen brightness comfortable in darker rooms."],
     "recommendations": [
+      { "gameId": "whot", "name": "Whot", "path": "/games/whot", "image": "/assets/games/whot-cover.png", "players": "2+", "duration": "15–60 min", "bestFor": "Traditional competitive card play", "alcohol": "Not required", "reason": "Match shapes or numbers, use action cards, and configure the house rules your group already knows." },
       { "gameId": "put-a-finger-down", "name": "Drop a Finger", "path": "/games/put-a-finger-down", "image": "/assets/games/finger-down.png", "players": "3+", "duration": "10–30 min", "bestFor": "Quick group reactions", "alcohol": "Not required", "reason": "Each digital card produces an immediate response from the whole group." },
       { "gameId": "choose-your-side", "name": "Choose Your Side", "path": "/games/choose-your-side", "image": "/assets/games/choose-your-side.png", "players": "2+", "duration": "10–45 min", "bestFor": "Choices and debate", "alcohol": "Not required", "reason": "Binary choices make every card easy to understand while leaving room for discussion." },
       { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Guessing among friends", "alcohol": "Not required", "reason": "Anonymous answers turn each prompt into a test of how well the group knows one another." },
       { "gameId": "dinner-table", "name": "Dinner Table", "path": "/games/dinner-table", "image": "/assets/games/dinner-table-v2.png", "players": "2+", "duration": "10–45 min", "bestFor": "Mixed ages and meals", "alcohol": "Not required", "reason": "Conversation cards fit shared meals without requiring competition or physical activity." }
     ],
     "faqs": [
-      { "question": "Do these use a standard 52-card deck?", "answer": "No. These are digital prompt and activity decks rather than traditional playing-card games such as poker or solitaire." },
-      { "question": "Can one phone replace the deck?", "answer": "Yes. One device can display and advance the cards for the entire group." },
+      { "question": "Do these use a standard 52-card deck?", "answer": "Whot uses its own 54-card shape-and-number deck. The other recommendations use digital prompt or activity cards rather than a standard playing-card deck." },
+      { "question": "Can one phone replace the deck?", "answer": "Yes. Whot supports pass-and-play on one phone, while prompt games can display and advance cards for the entire group." },
       { "question": "Are the cards shuffled?", "answer": "Decked randomizes game content so repeat sessions do not always follow the same order." }
     ]
   },

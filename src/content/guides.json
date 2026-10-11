@@ -16,7 +16,7 @@
     "heading": "Best free online party games",
     "description": "Compare free online party games for friends and groups. Find games for laughs, competition, conversation, and large gatherings—no app required.",
     "intro": "The best party game is easy to explain, quick to start, and suited to the energy in the room. Decked runs in a browser, so one person can pass a phone around or the group can join from their own devices.",
-    "summary": "For an energetic mixed group, start with Charades or Keep a Straight Face. Choose Truth or Dare or Never Have I Ever when everyone is comfortable sharing more. Who’s Most Likely To?, Choose Your Side, and Who Said That? work well when the group already knows one another.",
+    "summary": "For an energetic mixed group, start with Whot, Charades, or Keep a Straight Face. Choose Truth or Dare or Never Have I Ever when everyone is comfortable sharing more. Who’s Most Likely To?, Choose Your Side, and Who Said That? work well when the group already knows one another.",
     "tips": [
       "Start with a low-pressure game while guests are still arriving.",
       "Choose a game that works for the least confident person in the room.",
@@ -24,6 +24,7 @@
       "Use pass-and-play for one shared screen or Play Together when everyone wants to join on their own phone."
     ],
     "recommendations": [
+      { "gameId": "whot", "name": "Whot", "path": "/games/whot", "image": "/assets/games/whot-cover.png", "players": "2+", "duration": "15–60 min", "bestFor": "Competitive friends and families", "alcohol": "Not required", "reason": "A familiar shape-and-number card game with configurable Nigerian house rules, playable together or across devices." },
       { "gameId": "charades", "name": "Charades", "path": "/games/charades", "image": "/assets/games/charades-v2.png", "players": "4+", "duration": "15–60 min", "bestFor": "Large groups and mixed ages", "alcohol": "Not required", "reason": "A familiar guessing game with almost no personal disclosure, making it a reliable opening game for groups that have just gathered." },
       { "gameId": "you-laugh", "name": "Keep a Straight Face", "path": "/games/you-laugh-youre-out", "image": "/assets/games/keep-a-straight-face.png", "players": "2+", "duration": "10–30 min", "bestFor": "Fast laughs", "alcohol": "Not required", "reason": "Short challenges make this easy to begin and keep the pace moving when the group wants something playful." },
       { "gameId": "truth-or-dare", "name": "Truth or Dare", "path": "/games/truth-or-dare", "image": "/assets/games/truth-or-dare.png", "players": "2+", "duration": "10–60 min", "bestFor": "Friends who are comfortable together", "alcohol": "Not required", "reason": "A flexible choice when the group wants a mixture of revealing questions and active challenges." },

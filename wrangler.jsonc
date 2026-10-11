@@ -12,6 +12,18 @@
     "binding": "ASSETS",
     "html_handling": "drop-trailing-slash",
     "not_found_handling": "single-page-application",
-    "run_worker_first": true
+    "run_worker_first": [
+      "/*",
+      "!/assets/*",
+      "!/icons/*",
+      "!/brand/*",
+      "!/favicon*",
+      "!/pwa-*",
+      "!/apple-touch-icon-*",
+      "!/manifest.webmanifest",
+      "!/robots.txt",
+      "!/sitemap.xml",
+      "!/workbox-*"
+    ]
   }
 }

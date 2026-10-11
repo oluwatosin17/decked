@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-09T15:09:27.892Z",
+  "generatedAt": "2026-10-11T19:56:42.179Z",
   "minimumPerSelectableCategory": 300,
-  "canonicalGameCount": 21,
-  "auditedGameCount": 21,
+  "canonicalGameCount": 22,
+  "auditedGameCount": 22,
   "definitions": {
     "rawRecords": "Array entries in the bundled runtime content sources.",
     "renderedCardCount": "Cards available to the runtime selector before session-size truncation. Composite cards count as one.",
@@ -19,7 +19,7 @@
     "customItems": 0,
     "gamesMeeting300": 17,
     "gamesBelow300": 3,
-    "gamesNotApplicable": 1
+    "gamesNotApplicable": 2
   },
   "games": [
     {
@@ -3722,6 +3722,27 @@
           "readiness": "below-300"
         }
       ]
+    },
+    {
+      "gameId": "whot",
+      "gameName": "Whot",
+      "contentModel": "rules-based",
+      "note": "Whot uses a fixed card deck and configurable rules rather than written prompt content.",
+      "rawRecords": 0,
+      "renderedCardCount": 0,
+      "uniqueItems": 0,
+      "categoryMemberships": 0,
+      "enabledItems": 0,
+      "disabledItems": 0,
+      "legacyItems": 0,
+      "exactDuplicates": 0,
+      "normalizedDuplicates": 0,
+      "missingStableIds": 0,
+      "duplicateStableIds": 0,
+      "customItems": 0,
+      "readiness": "not-applicable",
+      "checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "categories": []
     }
   ]
 }

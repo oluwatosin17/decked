@@ -95,7 +95,7 @@ try {
       missingStableIds: totalMemberships,
       duplicateStableIds: 0,
       customItems: 0,
-      readiness: game.contentModel === 'player-authored'
+      readiness: game.contentModel === 'player-authored' || game.contentModel === 'rules-based'
         ? 'not-applicable'
         : categoryRows.every(category => category.readiness === 'meets-300')
           ? 'meets-300'
@@ -147,7 +147,7 @@ Generated deterministically by \`pnpm audit:content\` at ${report.generatedAt}.
 - Normalized-unique payloads across all games: **${report.totals.uniqueItemsAcrossGames.toLocaleString()}**
 - Games whose every selectable bundled category meets 300 cards: **${report.totals.gamesMeeting300}**
 - Games below the 300-card target: **${report.totals.gamesBelow300}**
-- Not applicable: **${report.totals.gamesNotApplicable}** (Two Truths and a Bluff is player-authored)
+- Not applicable: **${report.totals.gamesNotApplicable}** (player-authored and rules-based games have no managed prompt inventory)
 
 The audit does not generate or pad content. Random mixers are excluded because they are selectors over authored categories, not independently authored categories. Player custom cards remain separate and are not migration input.
 
@@ -174,7 +174,7 @@ ${games.map(game => `| ${game.gameName} (\`${game.gameId}\`) | ${game.rawRecords
 ## Decisions and migration constraints
 
 1. Categories below 300 are reported as gaps; no synthetic cards were added.
-2. Two Truths and a Bluff is correctly classified as not applicable because its statements are player-authored and must not be stored as managed bundled content.
+2. Two Truths and a Bluff is not applicable because its statements are player-authored. Whot is not applicable because it uses a fixed rules-based card deck rather than managed prompt content.
 3. Every bundled source entry lacks an authored persistent ID. The migration must use deterministic IDs derived from game, category, normalized payload, and occurrence, with a mapping artifact for reversibility.
 4. Existing arrays stay in the repository as the fallback and rollback source until a separately approved removal.
 5. Composite Choose Your Side records are counted as one card with two options. The migration must preserve that structure rather than treating the two options as two prompts.

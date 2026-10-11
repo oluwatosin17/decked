@@ -15,7 +15,7 @@ export default function AboutPage({ onHome, onBrowse, onGuides }: Props) {
       <article className="guide-shell screen-enter">
         <header className="guide-hero about-page-hero">
           <h1 className="font-anton">ABOUT DECKED</h1>
-          <p>Decked is a browser-based collection of party and conversation games made to help people have a better time together. There is nothing to download, no account to create, and no complicated setup.</p>
+          <p>Decked is a browser-based collection of party, card, and conversation games made to help people have a better time together. There is nothing to download, no account to create, and no complicated setup.</p>
         </header>
         <div className="about-simple-copy font-satoshi">
           <p>Play in the same room by passing one phone around, or create a multiplayer room and invite everyone to join from their own device. Both ways to play are designed to get the game started quickly and keep the focus on the group.</p>

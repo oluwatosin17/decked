@@ -27,7 +27,7 @@ export interface MultiplayerGameConfig {
   deck: readonly string[]
   cardColor: string
   textColor: string
-  kind: 'truth-or-dare' | 'conversation' | 'score' | 'vote' | 'charades'
+  kind: 'truth-or-dare' | 'conversation' | 'score' | 'vote' | 'charades' | 'card-game'
 }
 
 const unique = (items: readonly string[]) => Array.from(new Set(items))
@@ -54,6 +54,7 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'choose-your-side': { id: 'choose-your-side', name: GAME_NAMES['choose-your-side'], deck: CHOOSE_SIDE_AUDIT_TEXT, cardColor: '#ef3f24', textColor: '#f7efd9', kind: 'vote' },
   'who-said-that': { id: 'who-said-that', name: GAME_NAMES['who-said-that'], deck: WHO_SAID_THAT_PROMPTS, cardColor: '#35152d', textColor: '#fff1d6', kind: 'vote' },
   'we-just-met': { id: 'we-just-met', name: GAME_NAMES['we-just-met'], deck: WE_JUST_MET_DECK, cardColor: '#ff7a16', textColor: '#170d34', kind: 'conversation' },
+  whot: { id: 'whot', name: GAME_NAMES.whot, deck: ['54-card Nigerian Whot deck'], cardColor: '#35152d', textColor: '#fff9e9', kind: 'card-game' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES

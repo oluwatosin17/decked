@@ -14,6 +14,7 @@ export type Screen =
   | 'choose-your-side'
   | 'who-said-that'
   | 'we-just-met'
+  | 'whot'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<string, string> = {
@@ -49,6 +50,7 @@ export const SCREEN_PATHS: Record<string, string> = {
   'choose-your-side': '/games/choose-your-side',
   'who-said-that': '/games/who-said-that',
   'we-just-met': '/games/we-just-met',
+  whot: '/games/whot',
   'play-together': '/play-together',
 }
 

@@ -27,6 +27,7 @@ const gameNames: Partial<Record<Screen, string>> = {
   'choose-your-side': 'Choose Your Side',
   'who-said-that': 'Who Said That?',
   'we-just-met': 'We Just Met',
+  whot: 'Whot',
 }
 
 const noIndexScreens = new Set<Screen>([

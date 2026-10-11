@@ -34,6 +34,7 @@ import MostLikelyToGame from '../MostLikelyToGame'
 import ChooseYourSideGame from '../ChooseYourSideGame'
 import WhoSaidThatGame from '../WhoSaidThatGame'
 import WeJustMetGame from '../WeJustMetGame'
+import WhotGame from '../WhotGame'
 import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, getRoomAnalyticsRef, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startMultiGame, touchRoom } from './roomApi'
 import { track } from '../analytics'
 import { ensureAnonymousUser, multiplayerConfigured, supabase } from './supabase'
@@ -99,6 +100,7 @@ function Entry({ onCreate, onJoin, busy, error, initialGameId }: {
       onPlayChooseYourSide={() => selectGame('choose-your-side')}
       onPlayWhoSaidThat={() => selectGame('who-said-that')}
       onPlayWeJustMet={() => selectGame('we-just-met')}
+      onPlayWhot={() => selectGame('whot')}
     />
   </div>
 
@@ -264,6 +266,7 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   'choose-your-side': 'choose-your-side',
   'who-said-that': 'who-said-that',
   'we-just-met': 'we-just-met',
+  whot: 'whot',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -288,6 +291,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'choose-your-side': 'categories',
   'who-said-that': 'deckSize',
   'we-just-met': 'categories',
+  whot: 'rules',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -312,6 +316,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'choose-your-side': 'categories',
   'who-said-that': 'deckSize',
   'we-just-met': 'categories',
+  whot: 'rules',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -336,6 +341,7 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   'choose-your-side': ['vote', 'reveal', 'done'],
   'who-said-that': ['answer', 'guess', 'reveal', 'done'],
   'we-just-met': ['game', 'done'],
+  whot: ['game'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -358,6 +364,7 @@ const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
   'choose-your-side': 'vote',
   'who-said-that': 'answer',
   'we-just-met': 'game',
+  whot: 'game',
 }
 
 const TURN_CONTROLLED_GAMES = new Set<MultiplayerGameId>([
@@ -392,6 +399,8 @@ function GuestSetupWaiting({ room, onClose }: { room: MultiplayerRoom; onClose: 
 function isTerminalSession(values: Record<string, unknown>) {
   const step = typeof values.step === 'string' ? values.step : ''
   if (step === 'done' || step === 'winner') return true
+  const whotState = values.whotState && typeof values.whotState === 'object' ? values.whotState as { winnerId?: unknown } : null
+  if (typeof whotState?.winnerId === 'string' && whotState.winnerId) return true
   const total = typeof values.totalCards === 'number' ? values.totalCards : 0
   const index = typeof values.cardIndex === 'number' ? values.cardIndex
     : typeof values.cardIdx === 'number' ? values.cardIdx
@@ -520,6 +529,7 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
     case 'choose-your-side': game = <ChooseYourSideGame onClose={onClose} />; break
     case 'who-said-that': game = <WhoSaidThatGame onClose={onClose} />; break
     case 'we-just-met': game = <WeJustMetGame onClose={onClose} />; break
+    case 'whot': game = <WhotGame onClose={onClose} />; break
   }
 
   return <SharedSessionProvider value={shared}>

@@ -1,16 +1,16 @@
 # Decked content audit v1
 
-Generated deterministically by `pnpm audit:content` at 2026-10-09T15:09:27.892Z.
+Generated deterministically by `pnpm audit:content` at 2026-10-11T19:56:42.179Z.
 
 ## Result
 
-- Canonical games: **21**
-- Audited games: **21**
+- Canonical games: **22**
+- Audited games: **22**
 - Raw bundled records / category memberships: **35,207**
 - Normalized-unique payloads across all games: **34,437**
 - Games whose every selectable bundled category meets 300 cards: **17**
 - Games below the 300-card target: **3**
-- Not applicable: **1** (Two Truths and a Bluff is player-authored)
+- Not applicable: **2** (player-authored and rules-based games have no managed prompt inventory)
 
 The audit does not generate or pad content. Random mixers are excluded because they are selectors over authored categories, not independently authored categories. Player custom cards remain separate and are not migration input.
 
@@ -162,6 +162,7 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | we-just-met | dating | 50 | 50 | 50 | 0 | 34/49/68/75 | below-300 | `16debfc796ef` |
 | we-just-met | online | 50 | 50 | 50 | 0 | 37/53/62/66 | below-300 | `481e37806ad7` |
 | we-just-met | fun | 50 | 50 | 50 | 0 | 34/54/66/70 | below-300 | `91b366e71c9f` |
+| whot | — | 0 | 0 | 0 | 0 | 0/0/0/0 | not-applicable | `e3b0c44298fc` |
 
 ## Per-game reconciliation
 
@@ -188,11 +189,12 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | Choose Your Side (`choose-your-side`) | 300 | 300 | 300 | 300 | 0 | 300 | below-300 |
 | Who Said That? (`who-said-that`) | 300 | 300 | 300 | 300 | 0 | 300 | meets-300 |
 | We Just Met (`we-just-met`) | 300 | 300 | 300 | 300 | 0 | 300 | below-300 |
+| Whot (`whot`) | 0 | 0 | 0 | 0 | 0 | 0 | not-applicable |
 
 ## Decisions and migration constraints
 
 1. Categories below 300 are reported as gaps; no synthetic cards were added.
-2. Two Truths and a Bluff is correctly classified as not applicable because its statements are player-authored and must not be stored as managed bundled content.
+2. Two Truths and a Bluff is not applicable because its statements are player-authored. Whot is not applicable because it uses a fixed rules-based card deck rather than managed prompt content.
 3. Every bundled source entry lacks an authored persistent ID. The migration must use deterministic IDs derived from game, category, normalized payload, and occurrence, with a mapping artifact for reversibility.
 4. Existing arrays stay in the repository as the fallback and rollback source until a separately approved removal.
 5. Composite Choose Your Side records are counted as one card with two options. The migration must preserve that structure rather than treating the two options as two prompts.

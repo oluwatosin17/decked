@@ -31,6 +31,7 @@ const games = [
   game('/games/choose-your-side', 'Choose Your Side', '/assets/games/choose-your-side.png', 'friends, teams, and parties', '2 or more', '10–45 minutes', 'Party game'),
   game('/games/who-said-that', 'Who Said That?', '/assets/games/who-said-that.png', 'friends, families, and groups', '3 or more', '10–45 minutes', 'Guessing game'),
   game('/games/we-just-met', 'We Just Met', '/assets/games/we-just-met.png', 'new friends, dates, and groups', '2 or more', '10–45 minutes', 'Icebreaker game'),
+  game('/games/whot', 'Whot', '/assets/games/whot-cover.png', 'friends, families, and competitive groups', '2 or more', '15–60 minutes', 'Card game'),
 ]
 
 const pages = [
@@ -68,7 +69,7 @@ const pages = [
       <main>
         <a href="/">Decked</a>
         <h1>About Decked</h1>
-        <p>Decked is a collection of browser-based party and conversation games created to make spending time together more memorable.</p>
+        <p>Decked is a collection of browser-based party, card, and conversation games created to make spending time together more memorable.</p>
         <p>Pass one phone around or invite everyone to join from their own device. There is nothing to download, no account to create, and no complicated setup.</p>
         <p><a href="/games">Browse all Decked games</a></p>
       </main>`,
