@@ -3,7 +3,7 @@ export function isPasswordRecoveryUrl(hash: string) {
 }
 
 export function passwordUpdateErrorMessage(error: unknown) {
-  const message = error instanceof Error ? error.message.toLowerCase() : ''
+  const message = authErrorText(error)
   if (message.includes('different from the old password')) {
     return 'Choose a password you have not used for this account.'
   }
@@ -17,7 +17,7 @@ export function passwordUpdateErrorMessage(error: unknown) {
 }
 
 export function staffSignInErrorMessage(error: unknown) {
-  const message = error instanceof Error ? error.message.toLowerCase() : ''
+  const message = authErrorText(error)
   if (message.includes('rate limit') || message.includes('too many')) {
     return 'Too many sign-in attempts. Wait a few minutes, then try again.'
   }
@@ -27,8 +27,24 @@ export function staffSignInErrorMessage(error: unknown) {
   if (message.includes('email not confirmed')) {
     return 'Confirm this staff email before signing in.'
   }
-  if (message.includes('invalid login credentials')) {
+  if (message.includes('invalid login credentials') || message.includes('invalid_credentials')) {
     return 'That email or password was not accepted. You can reset the password below.'
   }
+  if (message.includes('user not found') || message.includes('user_not_found')) {
+    return 'That staff account could not be found. Check the email or ask an administrator to provision it.'
+  }
+  if (message.includes('disabled') || message.includes('banned')) {
+    return 'This staff account is disabled. Ask an administrator to restore access.'
+  }
   return 'Sign-in could not be completed. Please try again.'
+}
+
+function authErrorText(error: unknown) {
+  if (error instanceof Error) return `${error.name} ${error.message}`.toLowerCase()
+  if (!error || typeof error !== 'object') return String(error ?? '').toLowerCase()
+  const value = error as Record<string, unknown>
+  return [value.name, value.message, value.msg, value.code, value.error_code, value.status]
+    .filter(part => typeof part === 'string' || typeof part === 'number')
+    .join(' ')
+    .toLowerCase()
 }

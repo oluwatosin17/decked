@@ -17,7 +17,7 @@ declare
     'dinner-table','icebreaker','everyday-conversation','reconnect',
     'red-flag-green-flag','charades','strangers','finger-down','take-a-sip',
     'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff',
-    'most-likely-to','choose-your-side','who-said-that','we-just-met','whot'
+    'most-likely-to','choose-your-side','who-said-that','we-just-met','whot','imposter','mini-mystery'
   ];
 begin
   if uid is null then raise exception 'A player session is required.'; end if;
@@ -44,17 +44,17 @@ alter table public.analytics_events drop constraint if exists analytics_events_g
 alter table public.analytics_events add constraint analytics_events_game_id_check check (game_id is null or game_id in (
   'truth-or-dare','spicy-starters','never-have-i-ever','late-night-talks','dinner-table','icebreaker',
   'everyday-conversation','reconnect','red-flag-green-flag','charades','strangers','finger-down','take-a-sip',
-  'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot'
+  'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot','imposter','mini-mystery'
 ));
 alter table public.analytics_game_sessions drop constraint if exists analytics_game_sessions_game_id_check;
 alter table public.analytics_game_sessions add constraint analytics_game_sessions_game_id_check check (game_id in (
   'truth-or-dare','spicy-starters','never-have-i-ever','late-night-talks','dinner-table','icebreaker',
   'everyday-conversation','reconnect','red-flag-green-flag','charades','strangers','finger-down','take-a-sip',
-  'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot'
+  'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot','imposter','mini-mystery'
 ));
 alter table public.analytics_room_facts drop constraint if exists analytics_room_facts_game_id_check;
 alter table public.analytics_room_facts add constraint analytics_room_facts_game_id_check check (game_id in (
   'truth-or-dare','spicy-starters','never-have-i-ever','late-night-talks','dinner-table','icebreaker',
   'everyday-conversation','reconnect','red-flag-green-flag','charades','strangers','finger-down','take-a-sip',
-  'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot'
+  'sip-or-spill','you-laugh','do-or-drink','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot','imposter','mini-mystery'
 ));

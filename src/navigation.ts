@@ -15,6 +15,8 @@ export type Screen =
   | 'who-said-that'
   | 'we-just-met'
   | 'whot'
+  | 'imposter'
+  | 'mini-mystery'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<string, string> = {
@@ -51,6 +53,8 @@ export const SCREEN_PATHS: Record<string, string> = {
   'who-said-that': '/games/who-said-that',
   'we-just-met': '/games/we-just-met',
   whot: '/games/whot',
+  imposter: '/games/imposter',
+  'mini-mystery': '/games/mini-mystery',
   'play-together': '/play-together',
 }
 

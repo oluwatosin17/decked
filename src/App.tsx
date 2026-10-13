@@ -42,6 +42,8 @@ const ChooseYourSideGame = lazy(() => import('./ChooseYourSideGame'))
 const WhoSaidThatGame = lazy(() => import('./WhoSaidThatGame'))
 const WeJustMetGame = lazy(() => import('./WeJustMetGame'))
 const WhotGame = lazy(() => import('./WhotGame'))
+const ImposterPassAndPlayGame = lazy(() => import('./ImposterPassAndPlayGame'))
+const MiniMysteryGame = lazy(() => import('./MiniMysteryGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -66,6 +68,8 @@ const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: Mu
   'who-said-that': { localScreen: 'who-said-that', multiplayerId: 'who-said-that' },
   'we-just-met': { localScreen: 'we-just-met', multiplayerId: 'we-just-met' },
   whot: { localScreen: 'whot', multiplayerId: 'whot' },
+  imposter: { localScreen: 'imposter', multiplayerId: 'imposter' },
+  'mini-mystery': { localScreen: 'mini-mystery', multiplayerId: 'mini-mystery' },
 }
 
 const selectedGameFromLocation = () => {
@@ -280,6 +284,12 @@ function AppContent() {
   if (screen === 'whot') {
     return <WhotGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'imposter') {
+    return <ImposterPassAndPlayGame onClose={() => setScreen('browse')} />
+  }
+  if (screen === 'mini-mystery') {
+    return <MiniMysteryGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
@@ -310,6 +320,8 @@ function AppContent() {
         onPlayWhoSaidThat={() => chooseGame('who-said-that')}
         onPlayWeJustMet={() => chooseGame('we-just-met')}
         onPlayWhot={() => chooseGame('whot')}
+        onPlayImposter={() => chooseGame('imposter')}
+        onPlayMiniMystery={() => chooseGame('mini-mystery')}
       />
     )
   }
@@ -347,6 +359,8 @@ function AppContent() {
       onPlayWhoSaidThat={() => chooseGame('who-said-that')}
       onPlayWeJustMet={() => chooseGame('we-just-met')}
       onPlayWhot={() => chooseGame('whot')}
+      onPlayImposter={() => chooseGame('imposter')}
+      onPlayMiniMystery={() => chooseGame('mini-mystery')}
       onBrowse={() => setScreen('browse')}
       onGuides={() => setScreen('guides')}
       onAbout={() => setScreen('about')}

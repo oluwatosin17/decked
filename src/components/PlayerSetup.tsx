@@ -10,11 +10,13 @@ interface Props {
   skipLabel?: string
   /** Minimum number of players required before NEXT activates (default 1) */
   minPlayers?: number
+  /** Maximum number of players that can be added */
+  maxPlayers?: number
   onSkip: () => void
   onNext: (players: Player[]) => void
 }
 
-export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR NOW', minPlayers = 1, onSkip, onNext }: Props) {
+export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR NOW', minPlayers = 1, maxPlayers, onSkip, onNext }: Props) {
   const [players, setPlayers]   = useState<Player[]>(initialPlayers)
   const [input, setInput]       = useState('')
   const [editingIdx, setEditingIdx] = useState<number | null>(null)
@@ -25,8 +27,10 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
   const nextColor = PLAYER_COLORS[players.length % PLAYER_COLORS.length]
   const hasInput  = input.trim().length > 0
   const canNext   = players.length >= minPlayers
+  const atMaximum = maxPlayers !== undefined && players.length >= maxPlayers
 
   const addPlayer = () => {
+    if (atMaximum) return
     const name = input.trim()
     if (!name) return
     setPlayers(prev => [...prev, { name, color: PLAYER_COLORS[prev.length % PLAYER_COLORS.length] }])
@@ -112,7 +116,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
           ))}
 
           {/* Add player input row */}
-          <div
+          {!atMaximum ? <div
             className="setup-card-row"
             style={{
               background: '#070708', border: '1px dashed rgba(255,255,255,0.1)',
@@ -155,7 +159,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
                 TAP TO ADD →
               </button>
             )}
-          </div>
+          </div> : <p style={{ margin: 0, color: 'rgba(255,255,255,.45)', fontFamily: "'Satoshi',sans-serif", fontSize: 13, textAlign: 'center' }}>Maximum of {maxPlayers} players reached.</p>}
         </div>
 
         <div className="setup-buttons" style={{ display: 'flex', gap: '8px', alignItems: 'center', width: '380px' }}>

@@ -27,6 +27,7 @@ const optionStyle: React.CSSProperties = {
 }
 
 export default function GamePlayMode({ gameId, onBack, onPassAndPlay, onPlayTogether }: Props) {
+  const playTogetherAvailable = true
   const selectPassAndPlay = () => {
     track('play_mode_selected', { game_id: gameId, play_mode: 'pass_and_play' })
     onPassAndPlay()
@@ -49,7 +50,7 @@ export default function GamePlayMode({ gameId, onBack, onPassAndPlay, onPlayToge
             <span className="font-anton" style={{ fontSize: 21 }}>PASS &amp; PLAY</span>
             <span style={{ color: 'rgba(255,255,255,.5)', font: "13px/1.4 'Satoshi', sans-serif" }}>Play together on one device.</span>
           </button>
-          <button className="game-btn-primary" onClick={selectPlayTogether} style={{ ...optionStyle, background: '#dc2827', borderColor: '#dc2827' }}>
+          <button className={playTogetherAvailable ? 'game-btn-primary' : 'game-btn'} disabled={!playTogetherAvailable} onClick={selectPlayTogether} style={{ ...optionStyle, background: playTogetherAvailable ? '#dc2827' : '#171719', borderColor: playTogetherAvailable ? '#dc2827' : 'rgba(255,255,255,.08)', cursor: playTogetherAvailable ? 'pointer' : 'not-allowed', opacity: playTogetherAvailable ? 1 : .62 }}>
             <span className="font-anton" style={{ fontSize: 21 }}>PLAY TOGETHER</span>
             <span style={{ color: 'rgba(255,255,255,.72)', font: "13px/1.4 'Satoshi', sans-serif" }}>Create or join a room on separate devices.</span>
           </button>

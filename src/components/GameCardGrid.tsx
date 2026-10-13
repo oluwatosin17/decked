@@ -21,7 +21,7 @@ const MOBILE_CARDS: Record<string, string> = {
   'never-have-i-ever': '/icons/never-have-i-ever-mobile.svg',
   'reconnect': '/icons/reconnect-mobile.svg',
   'finger-down': '/icons/put-a-finger-down-mobile.svg',
-  'take-a-sip': '/icons/take-a-sip-mobile.svg',
+  'take-a-sip': '/assets/games/take-a-sip.png',
   'sip-or-spill': '/icons/sip-and-spill-mobile.svg',
   'you-laugh': '/icons/you-laugh-you-are-out-mobile.svg',
   'do-or-drink': '/icons/do-or-drink-mobile.svg',
@@ -216,7 +216,7 @@ export const GAME_CARDS = (
     id: 'take-a-sip', categories: ['drinking'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ffecd1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <p className="font-gasoek" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 112.54px)', width: '208.8px', fontSize: '51.774px', color: '#eb5e28', textAlign: 'center', lineHeight: 1.1 }}>TAKE A SIP IF ...</p>
+        <img loading="lazy" decoding="async" src="/assets/games/take-a-sip.png" alt="Take a Sip" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -278,6 +278,18 @@ export const GAME_CARDS = (
       <img loading="lazy" decoding="async" src="/assets/games/whot-cover.png" alt="Whot" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
+  {
+    id: 'imposter', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#082a48' }}>
+      <img loading="lazy" decoding="async" src="/assets/games/imposter.png" alt="Imposter" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
+  },
+  {
+    id: 'mini-mystery', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#0b452e' }}>
+      <img loading="lazy" decoding="async" src="/assets/games/mini-mystery-dossier.png" alt="Mini Mystery" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -294,9 +306,11 @@ interface HomeGridProps {
   onPlayWhoSaidThat: () => void
   onPlayWeJustMet: () => void
   onPlayWhot: () => void
+  onPlayImposter: () => void
+  onPlayMiniMystery: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -351,6 +365,8 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '28px' }}>
         {getEl('we-just-met', onPlayWeJustMet)}
         {getEl('whot', onPlayWhot)}
+        {getEl('imposter', onPlayImposter)}
+        {getEl('mini-mystery', onPlayMiniMystery)}
       </div>
     </div>
   )
@@ -383,6 +399,8 @@ interface BrowseGridProps {
   onPlayWhoSaidThat?: () => void
   onPlayWeJustMet?: () => void
   onPlayWhot?: () => void
+  onPlayImposter?: () => void
+  onPlayMiniMystery?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -409,6 +427,8 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'who-said-that': handlers.onPlayWhoSaidThat,
     'we-just-met': handlers.onPlayWeJustMet,
     whot: handlers.onPlayWhot,
+    imposter: handlers.onPlayImposter,
+    'mini-mystery': handlers.onPlayMiniMystery,
   }
   return map[card.id]
 }

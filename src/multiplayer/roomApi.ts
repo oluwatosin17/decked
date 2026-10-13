@@ -4,6 +4,43 @@ import type { MultiplayerAnswer, MultiplayerGameId, MultiplayerPlayer, Multiplay
 
 type RoomBundle = { room: MultiplayerRoom; players: MultiplayerPlayer[] }
 
+export interface ImposterPrivateState {
+  phase: 'role_reveal' | 'clue' | 'discussion' | 'voting' | 'results'
+  gameNumber: number
+  clueRound: number
+  turnIndex: number
+  activeUserId: string | null
+  category: string | null
+  word: string | null
+  ready: boolean
+  readyCount: number
+  hasVoted: boolean
+  voteCount: number
+  groupWon: boolean | null
+  imposterName: string | null
+  accusedName: string | null
+  regularWord: string | null
+  imposterWord: string | null
+}
+
+export interface MiniMysteryPrivateState {
+  phase: 'role_reveal' | 'opening' | 'objective' | 'discussion' | 'evidence' | 'voting' | 'reveal' | 'results'
+  gameNumber: number
+  caseId: string
+  round: number
+  rounds: number
+  revealBeat: number
+  roleIndex: number
+  ready: boolean
+  readyCount: number
+  hasVoted: boolean
+  voteCount: number
+  culpritName: string | null
+  accusedName: string | null
+  groupWon: boolean | null
+  voteCounts: Record<string, number>
+}
+
 export async function createRoom(displayName: string, gameId: MultiplayerGameId): Promise<RoomBundle> {
   track('room_create_attempted', { game_id: gameId })
   const { data, error } = await supabase.rpc('decked_create_room', { p_display_name: displayName.trim(), p_game_id: gameId })
@@ -90,6 +127,99 @@ export async function getRoomAnalyticsRef(roomId: string): Promise<string | null
   const { data, error } = await supabase.rpc('decked_get_room_analytics_ref', { p_room_id: roomId })
   if (error) return null
   return typeof data === 'string' ? data : null
+}
+
+export async function startImposterGame(roomId: string) {
+  const { error } = await supabase.rpc('decked_start_imposter', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_start_imposter')
+}
+
+export async function getImposterState(roomId: string): Promise<ImposterPrivateState> {
+  const { data, error } = await supabase.rpc('decked_get_imposter_state', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_get_imposter_state')
+  const value = data as Record<string, unknown>
+  return {
+    phase: value.phase as ImposterPrivateState['phase'],
+    gameNumber: Number(value.game_number ?? 1),
+    clueRound: Number(value.clue_round ?? 1),
+    turnIndex: Number(value.turn_index ?? 0),
+    activeUserId: typeof value.active_user_id === 'string' ? value.active_user_id : null,
+    category: typeof value.category === 'string' ? value.category : null,
+    word: typeof value.word === 'string' ? value.word : null,
+    ready: value.ready === true,
+    readyCount: Number(value.ready_count ?? 0),
+    hasVoted: value.has_voted === true,
+    voteCount: Number(value.vote_count ?? 0),
+    groupWon: typeof value.group_won === 'boolean' ? value.group_won : null,
+    imposterName: typeof value.imposter_name === 'string' ? value.imposter_name : null,
+    accusedName: typeof value.accused_name === 'string' ? value.accused_name : null,
+    regularWord: typeof value.regular_word === 'string' ? value.regular_word : null,
+    imposterWord: typeof value.imposter_word === 'string' ? value.imposter_word : null,
+  }
+}
+
+export async function toggleImposterReady(roomId: string) {
+  const { error } = await supabase.rpc('decked_imposter_ready', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_imposter_ready')
+}
+
+export async function advanceImposterClue(roomId: string) {
+  const { error } = await supabase.rpc('decked_imposter_advance_clue', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_imposter_advance_clue')
+}
+
+export async function continueImposterRound(roomId: string) {
+  const { error } = await supabase.rpc('decked_imposter_continue', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_imposter_continue')
+}
+
+export async function submitImposterVote(roomId: string, targetUserId: string) {
+  const { error } = await supabase.rpc('decked_imposter_vote', { p_room_id: roomId, p_target_user_id: targetUserId })
+  throwTrackedRpcError(error, 'decked_imposter_vote')
+}
+
+export async function startMiniMysteryGame(roomId: string, caseId: string, rounds: number) {
+  const { error } = await supabase.rpc('decked_start_mini_mystery', { p_room_id: roomId, p_case_id: caseId, p_rounds: rounds })
+  throwTrackedRpcError(error, 'decked_start_mini_mystery')
+}
+
+export async function getMiniMysteryState(roomId: string): Promise<MiniMysteryPrivateState> {
+  const { data, error } = await supabase.rpc('decked_get_mini_mystery_state', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_get_mini_mystery_state')
+  const value = data as Record<string, unknown>
+  const rawCounts = value.vote_counts && typeof value.vote_counts === 'object' ? value.vote_counts as Record<string, unknown> : {}
+  return {
+    phase: value.phase as MiniMysteryPrivateState['phase'],
+    gameNumber: Number(value.game_number ?? 1),
+    caseId: String(value.case_id ?? ''),
+    round: Number(value.round_number ?? 1),
+    rounds: Number(value.rounds ?? 3),
+    revealBeat: Number(value.reveal_beat ?? 0),
+    roleIndex: Number(value.role_index ?? -1),
+    ready: value.ready === true,
+    readyCount: Number(value.ready_count ?? 0),
+    hasVoted: value.has_voted === true,
+    voteCount: Number(value.vote_count ?? 0),
+    culpritName: typeof value.culprit_name === 'string' ? value.culprit_name : null,
+    accusedName: typeof value.accused_name === 'string' ? value.accused_name : null,
+    groupWon: typeof value.group_won === 'boolean' ? value.group_won : null,
+    voteCounts: Object.fromEntries(Object.entries(rawCounts).map(([key, count]) => [key, Number(count)])),
+  }
+}
+
+export async function toggleMiniMysteryReady(roomId: string) {
+  const { error } = await supabase.rpc('decked_mini_mystery_ready', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_mini_mystery_ready')
+}
+
+export async function advanceMiniMystery(roomId: string) {
+  const { error } = await supabase.rpc('decked_mini_mystery_advance', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_mini_mystery_advance')
+}
+
+export async function submitMiniMysteryVote(roomId: string, targetUserId: string) {
+  const { error } = await supabase.rpc('decked_mini_mystery_vote', { p_room_id: roomId, p_target_user_id: targetUserId })
+  throwTrackedRpcError(error, 'decked_mini_mystery_vote')
 }
 
 async function trackRoomSuccess(kind: 'room_created' | 'room_joined', bundle: RoomBundle, gameId: MultiplayerGameId) {

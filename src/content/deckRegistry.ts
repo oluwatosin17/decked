@@ -20,6 +20,8 @@ import { SPICY_QUESTION_BANKS } from '../SpicyStartersGame'
 import { WHO_SAID_THAT_PROMPTS } from './whoSaidThat'
 import { WE_JUST_MET_PROMPTS } from './weJustMet'
 import type { GameId } from '../gameRegistry'
+import { IMPOSTER_DECKS } from './imposter'
+import { ALL_MINI_MYSTERIES } from './miniMystery'
 
 export interface AuditedDeck {
   gameId?: GameId
@@ -72,6 +74,13 @@ const chooseSideDecks: Record<string, readonly string[]> = Object.fromEntries(
   ]),
 )
 
+const mysteryAuditPayload = (mystery: (typeof ALL_MINI_MYSTERIES)[number]) => [...new Set([
+  mystery.incident, ...mystery.briefing, ...mystery.knownFacts, ...mystery.evidence,
+  ...mystery.solutionBeats, mystery.motive, ...mystery.culpritProof,
+  ...mystery.redHerringResolutions, mystery.finalReveal.what,
+  ...mystery.roles.flatMap(role => [role.publicStory, role.secret, role.clue, ...role.objectives, ...(role.guiltyPlan ? [role.guiltyPlan] : [])]),
+])]
+
 /**
  * Complete, canonical inventory used by the Content Management migration audit.
  * Keep this aligned with GAME_REGISTRY. Player-authored games intentionally have
@@ -100,4 +109,6 @@ export const CONTENT_AUDIT_GAMES: AuditedGame[] = [
   { gameId: 'who-said-that', game: 'Who Said That?', contentModel: 'bundled', decks: [{ gameId: 'who-said-that', game: 'Who Said That?', category: 'main', prompts: WHO_SAID_THAT_PROMPTS }] },
   { gameId: 'we-just-met', game: 'We Just Met', contentModel: 'bundled', decks: gameDecks('we-just-met', 'We Just Met', WE_JUST_MET_PROMPTS) },
   { gameId: 'whot', game: 'Whot', contentModel: 'rules-based', decks: [], note: 'Whot uses a fixed card deck and configurable rules rather than written prompt content.' },
+  { gameId: 'imposter', game: 'Imposter', contentModel: 'bundled', decks: gameDecks('imposter', 'Imposter', Object.fromEntries(Object.entries(IMPOSTER_DECKS).map(([category, pairs]) => [category, pairs.map(pair => `${pair.regular} OR ${pair.imposter}`)]))) },
+  { gameId: 'mini-mystery', game: 'Mini Mystery', contentModel: 'bundled', decks: gameDecks('mini-mystery', 'Mini Mystery', Object.fromEntries(ALL_MINI_MYSTERIES.map(mystery => [mystery.id, mysteryAuditPayload(mystery)]))) },
 ]

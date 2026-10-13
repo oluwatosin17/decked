@@ -13,7 +13,7 @@ const uuid = value => {
 }
 const literal = value => `'${String(value).replaceAll("'", "''")}'`
 const jsonLiteral = value => `${literal(JSON.stringify(value))}::jsonb`
-const kindFor = gameId => gameId === 'choose-your-side' ? 'choice' : gameId === 'charades' ? 'challenge' : gameId === 'red-flag-green-flag' ? 'scenario' : ['you-laugh','do-or-drink'].includes(gameId) ? 'challenge' : 'prompt'
+const kindFor = gameId => ['choose-your-side','imposter'].includes(gameId) ? 'choice' : gameId === 'charades' ? 'challenge' : gameId === 'red-flag-green-flag' ? 'scenario' : ['you-laugh','do-or-drink'].includes(gameId) ? 'challenge' : 'prompt'
 
 const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true, hmr: false } })
 try {
@@ -25,13 +25,16 @@ try {
 
   for (const game of bundledGames) {
     for (const [categoryIndex, deck] of game.decks.entries()) {
-      categories.push({ gameId: game.gameId, categoryId: deck.category, label: deck.category.replaceAll('-', ' ').replaceAll('/', ' / '), order: categoryIndex })
+      // A Mini Mystery case is a finite authored dossier, not an open-ended
+      // prompt bank. Its readiness target is the complete case payload.
+      const targetCount = game.gameId === 'mini-mystery' ? deck.prompts.length : 300
+      categories.push({ gameId: game.gameId, categoryId: deck.category, label: deck.category.replaceAll('-', ' ').replaceAll('/', ' / '), targetCount, order: categoryIndex })
       for (const [index, bodyValue] of deck.prompts.entries()) {
         const body = String(bodyValue).trim()
         const key = `${game.gameId}\u0000${normalize(body)}`
         const id = uuid(`decked-content-item-v1\u0000${key}`)
         if (!itemMap.has(key)) {
-          const metadata = game.gameId === 'choose-your-side'
+          const metadata = ['choose-your-side','imposter'].includes(game.gameId)
             ? (() => { const marker = body.indexOf(' OR '); return marker < 0 ? {} : { option_a: body.slice(0, marker), option_b: body.slice(marker + 4) } })()
             : {}
           itemMap.set(key, { id, gameId: game.gameId, kind: kindFor(game.gameId), body, normalized: normalize(body), metadata, sourceRef: `${game.gameId}:${deck.category}:${index}` })
@@ -54,7 +57,7 @@ try {
     '-- Idempotent and non-destructive: source arrays remain unchanged as runtime fallback.',
     '',
     'insert into public.content_categories(game_id,category_id,label,target_count,sort_order,enabled) values',
-    categories.map(row => `  (${literal(row.gameId)},${literal(row.categoryId)},${literal(row.label)},300,${row.order},true)`).join(',\n'),
+    categories.map(row => `  (${literal(row.gameId)},${literal(row.categoryId)},${literal(row.label)},${row.targetCount},${row.order},true)`).join(',\n'),
     'on conflict(game_id,category_id) do update set label=excluded.label,target_count=excluded.target_count,sort_order=excluded.sort_order,updated_at=now();',
     '',
   ]

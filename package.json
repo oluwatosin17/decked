@@ -18,6 +18,7 @@
     "audit:prompts": "node scripts/audit-prompts.mjs",
     "audit:content": "node scripts/audit-content-inventory.mjs",
     "content:seed": "node scripts/generate-content-seed.mjs",
+    "content:imposter-db": "node scripts/generate-imposter-db.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

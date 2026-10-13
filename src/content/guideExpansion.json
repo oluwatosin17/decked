@@ -1,5 +1,31 @@
 [
   {
+    "screen": "guide-mystery-and-social-deduction-games",
+    "path": "/guides/mystery-and-social-deduction-games",
+    "slug": "mystery-and-social-deduction-games",
+    "title": "Mystery and Social Deduction Games Online — Free Group Games",
+    "heading": "Mystery and social deduction games for groups",
+    "description": "Compare free browser mystery and social deduction games. Play Mini Mystery or Imposter in person or from separate phones with no account required.",
+    "intro": "Mystery and social deduction games give every player a reason to talk. Players receive private information, question one another, notice contradictions, and make a final accusation instead of simply drawing unrelated prompts.",
+    "summary": "Choose Mini Mystery when your group wants characters, evidence, evolving rounds, and a complete case to solve. Choose Imposter for a faster clue game where one player has a different word and must avoid being identified.",
+    "sections": [
+      { "heading": "Choose the right level of depth", "paragraphs": ["Mini Mystery suits groups that want a longer, story-led game. Each player receives a role, public story, secret, private knowledge, and round objectives before the group studies evidence and votes.", "Imposter is quicker to explain and replay. Everyone gives clues about a private word, but one randomly selected player receives a related word and must blend in while working out what the group knows."] },
+      { "heading": "One phone or separate devices", "paragraphs": ["In pass-and-play, players privately open their role or word and hand the phone to the next person. Nobody needs to identify themselves as the host inside the story.", "Play Together gives each participant private information on their own device while the host advances shared rounds. Both formats work without creating a Decked account."] }
+    ],
+    "tips": ["Do not read another player’s private screen.", "Ask direct questions instead of only repeating your own story.", "Use Quick or Classic depth for a first Mini Mystery session.", "After solving a case, choose Remix Case for an alternate culprit and evidence path."],
+    "recommendations": [
+      { "gameId": "mini-mystery", "name": "Mini Mystery", "path": "/games/mini-mystery", "image": "/assets/games/mini-mystery-dossier.png", "players": "4–8", "duration": "20–50 min", "bestFor": "Story-led investigation and roleplay", "alcohol": "Not required", "reason": "Players receive private dossiers, investigate evidence over two to four rounds, accuse a suspect, and see how every clue connects in the final reveal." },
+      { "gameId": "imposter", "name": "Imposter", "path": "/games/imposter", "image": "/assets/games/imposter.png", "players": "3–10", "duration": "10–25 min", "bestFor": "Fast social deduction", "alcohol": "Not required", "reason": "A randomly selected Imposter receives a related word, listens to everyone’s clues, and tries to survive the vote without exposing the difference." },
+      { "gameId": "two-truths-bluff", "name": "Two Truths and a Bluff", "path": "/games/two-truths-and-a-bluff", "image": "/assets/games/two-truths-and-a-bluff.png", "players": "3+", "duration": "10–30 min", "bestFor": "Light bluffing", "alcohol": "Not required", "reason": "A simpler deception game for groups that want deduction without assigned characters or a longer story." },
+      { "gameId": "who-said-that", "name": "Who Said That?", "path": "/games/who-said-that", "image": "/assets/games/who-said-that.png", "players": "3+", "duration": "10–45 min", "bestFor": "Anonymous guessing", "alcohol": "Not required", "reason": "Anonymous answers create a lighter identity puzzle for groups that already know one another." }
+    ],
+    "faqs": [
+      { "question": "Does the host choose the culprit or Imposter?", "answer": "No. Decked assigns the guilty role or Imposter randomly and reveals private information only to the relevant player." },
+      { "question": "Can a solved Mini Mystery be played again?", "answer": "Yes. Remix Case uses an authored alternate culprit, motive, evidence path, and reveal while preserving the same setting and characters." },
+      { "question": "Do players need accounts?", "answer": "No. Pass-and-play requires no login, and players can join a Play Together room without creating a Decked profile." }
+    ]
+  },
+  {
     "screen": "guide-free-games-to-play-online",
     "path": "/guides/free-games-to-play-online",
     "slug": "free-games-to-play-online",

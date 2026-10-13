@@ -36,6 +36,9 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'choose-your-side', artworkId: 'choose-your-side', label: 'Choose Your Side', description: 'Pick a side and make your case' },
   { id: 'who-said-that', artworkId: 'who-said-that', label: 'Who Said That?', description: 'Write anonymously, then guess who said what' },
   { id: 'we-just-met', artworkId: 'we-just-met', label: 'We Just Met', description: 'Easy questions for a first date or a new connection' },
+  { id: 'whot', artworkId: 'whot', label: 'Whot', description: 'Fast Nigerian card play with familiar house rules' },
+  { id: 'imposter', artworkId: 'imposter', label: 'Imposter', description: 'Give clues, spot the odd word, and expose the Imposter' },
+  { id: 'mini-mystery', artworkId: 'mini-mystery', label: 'Mini Mystery', description: 'Take a role, question suspects, and solve the case' },
 ]
 
 function shuffleGames(): GameSuggestion[] {

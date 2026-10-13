@@ -1,4 +1,4 @@
-import { SCREEN_PATHS, type Screen } from './navigation'
+import { urlForScreen, type Screen } from './navigation'
 import { GUIDE_BY_SCREEN } from './guideData'
 import searchDescriptors from './content/gameSearchDescriptors.json'
 
@@ -28,6 +28,8 @@ const gameNames: Partial<Record<Screen, string>> = {
   'who-said-that': 'Who Said That?',
   'we-just-met': 'We Just Met',
   whot: 'Whot',
+  imposter: 'Imposter',
+  'mini-mystery': 'Mini Mystery',
 }
 
 const noIndexScreens = new Set<Screen>([
@@ -61,7 +63,7 @@ function setCanonical(url: string) {
 export function updateDocumentMetadata(screen: Screen) {
   const gameName = gameNames[screen]
   const guide = GUIDE_BY_SCREEN.get(screen)
-  const path = SCREEN_PATHS[screen]
+  const path = urlForScreen(screen)
   const canonical = `${SITE_URL}${path === '/' ? '/' : path}`
 
   let title = 'Decked — Free Online Party & Conversation Games'

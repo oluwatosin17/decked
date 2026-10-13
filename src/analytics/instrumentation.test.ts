@@ -55,8 +55,8 @@ describe('discovery instrumentation', () => {
 describe('pass-and-play instrumentation', () => {
   it('covers every canonical game exactly once', () => {
     const canonicalIds = Object.values(PASS_AND_PLAY_GAMES).map(game => game.gameId)
-    expect(canonicalIds).toHaveLength(22)
-    expect(new Set(canonicalIds)).toHaveLength(22)
+    expect(canonicalIds).toHaveLength(24)
+    expect(new Set(canonicalIds)).toHaveLength(24)
   })
 
   it('records setup through completion without reading prompt content', () => {
@@ -109,6 +109,32 @@ describe('pass-and-play instrumentation', () => {
     expect(events.filter(event => event.name === 'game_started')).toHaveLength(1)
     expect(events.find(event => event.name === 'card_presented')?.properties).toMatchObject({ play_mode: 'pass_and_play' })
     expect(events.filter(event => event.name === 'card_presented')).toHaveLength(1)
+  })
+
+  it.each([
+    { localId: 'imposter', initial: 'categories', playable: 'word', totalKey: 'roundCount', total: 3 },
+    { localId: 'mini-mystery', initial: 'case', playable: 'role', totalKey: 'rounds', total: 4 },
+  ])('records the complete lifecycle for $localId', ({ localId, initial, playable, totalKey, total }) => {
+    const { events, emit } = recordingTrack()
+    const storage = new ReadStorage()
+    storage.set(localId, 'players', [{}, {}, {}, {}])
+    storage.set(localId, totalKey, total)
+    storage.set(localId, 'roundIndex', 0)
+    const journey = new PassAndPlayTracker(emit, storage)
+
+    journey.observeStep(localId, initial, initial)
+    journey.observeStep(localId, playable, initial)
+    storage.set(localId, 'roundIndex', 1)
+    journey.observeValue(localId, 'roundIndex', 1)
+    journey.observeStep(localId, 'results', initial)
+
+    expect(events.map(event => event.name)).toEqual([
+      'game_setup_started', 'deck_configured', 'game_started', 'card_presented',
+      'card_advanced', 'card_presented', 'game_completed',
+    ])
+    expect(events.find(event => event.name === 'game_started')?.properties).toMatchObject({
+      play_mode: 'pass_and_play', player_count: 4, configured_card_count: total,
+    })
   })
 
   it('records built-in card positions without inspecting content and omits ambiguous mixed provenance', () => {

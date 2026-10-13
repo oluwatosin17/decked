@@ -39,9 +39,11 @@ interface Props {
   onPlayWhoSaidThat?: () => void
   onPlayWeJustMet?: () => void
   onPlayWhot?: () => void
+  onPlayImposter?: () => void
+  onPlayMiniMystery?: () => void
 }
 
-export default function BrowsePage({ onHome, onGuides, onAbout, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onPlayRedFlagGreenFlag, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot }: Props) {
+export default function BrowsePage({ onHome, onGuides, onAbout, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayDinnerTable, onPlayYouLaugh, onPlayNeverHaveIEver, onPlayCharades, onPlayReconnect, onPlayEveryday, onPlayWNRS, onPlayFingerDown, onPlayTakeASip, onPlaySipOrSpill, onPlayDoOrDrink, onPlayIcebreaker, onPlayRedFlagGreenFlag, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery }: Props) {
   const [active, setActive] = useState<Category>('all')
   const selectCategory = (category: Category, target: HTMLButtonElement) => {
     if (category === active) return
@@ -130,6 +132,8 @@ export default function BrowsePage({ onHome, onGuides, onAbout, onPlayTruthOrDar
             onPlayWhoSaidThat={onPlayWhoSaidThat}
             onPlayWeJustMet={onPlayWeJustMet}
             onPlayWhot={onPlayWhot}
+            onPlayImposter={onPlayImposter}
+            onPlayMiniMystery={onPlayMiniMystery}
           />
         </div>
       </main>

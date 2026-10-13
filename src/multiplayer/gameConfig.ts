@@ -55,6 +55,8 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'who-said-that': { id: 'who-said-that', name: GAME_NAMES['who-said-that'], deck: WHO_SAID_THAT_PROMPTS, cardColor: '#35152d', textColor: '#fff1d6', kind: 'vote' },
   'we-just-met': { id: 'we-just-met', name: GAME_NAMES['we-just-met'], deck: WE_JUST_MET_DECK, cardColor: '#ff7a16', textColor: '#170d34', kind: 'conversation' },
   whot: { id: 'whot', name: GAME_NAMES.whot, deck: ['54-card Nigerian Whot deck'], cardColor: '#35152d', textColor: '#fff9e9', kind: 'card-game' },
+  imposter: { id: 'imposter', name: GAME_NAMES.imposter, deck: ['Private related-word pairs'], cardColor: '#082a48', textColor: '#f5ea18', kind: 'vote' },
+  'mini-mystery': { id: 'mini-mystery', name: GAME_NAMES['mini-mystery'], deck: ['Three guided mystery cases'], cardColor: '#123953', textColor: '#f4ead2', kind: 'vote' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES

@@ -32,6 +32,11 @@ describe('staff sign-in errors', () => {
       .toBe('That email or password was not accepted. You can reset the password below.')
   })
 
+  it('understands structured Supabase auth responses', () => {
+    expect(staffSignInErrorMessage({ code: 400, error_code: 'invalid_credentials', msg: 'Invalid login credentials' }))
+      .toBe('That email or password was not accepted. You can reset the password below.')
+  })
+
   it('does not expose unexpected authentication details', () => {
     expect(staffSignInErrorMessage(new Error('sensitive backend detail')))
       .toBe('Sign-in could not be completed. Please try again.')

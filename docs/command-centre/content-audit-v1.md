@@ -1,15 +1,15 @@
 # Decked content audit v1
 
-Generated deterministically by `pnpm audit:content` at 2026-10-11T19:56:42.179Z.
+Generated deterministically by `pnpm audit:content` at 2026-10-13T03:23:38.315Z.
 
 ## Result
 
-- Canonical games: **22**
-- Audited games: **22**
-- Raw bundled records / category memberships: **35,207**
-- Normalized-unique payloads across all games: **34,437**
-- Games whose every selectable bundled category meets 300 cards: **17**
-- Games below the 300-card target: **3**
+- Canonical games: **24**
+- Audited games: **24**
+- Raw bundled records / category memberships: **40,017**
+- Normalized-unique payloads across all games: **38,008**
+- Games whose every selectable bundled category meets 300 cards: **18**
+- Games below the 300-card target: **4**
 - Not applicable: **2** (player-authored and rules-based games have no managed prompt inventory)
 
 The audit does not generate or pad content. Random mixers are excluded because they are selectors over authored categories, not independently authored categories. Player custom cards remain separate and are not migration input.
@@ -163,6 +163,56 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | we-just-met | online | 50 | 50 | 50 | 0 | 37/53/62/66 | below-300 | `481e37806ad7` |
 | we-just-met | fun | 50 | 50 | 50 | 0 | 34/54/66/70 | below-300 | `91b366e71c9f` |
 | whot | — | 0 | 0 | 0 | 0 | 0/0/0/0 | not-applicable | `e3b0c44298fc` |
+| imposter | places | 303 | 303 | 303 | 0 | 11/18/25/33 | meets-300 | `15119ed67b9c` |
+| imposter | food | 303 | 303 | 303 | 0 | 11/16/21/27 | meets-300 | `8a3d8f66d3e9` |
+| imposter | nature | 303 | 303 | 303 | 0 | 10/15/19/22 | meets-300 | `6619cbf6a0f2` |
+| imposter | everyday | 303 | 303 | 303 | 0 | 11/17/22/26 | meets-300 | `e814656c3123` |
+| imposter | culture | 303 | 303 | 303 | 0 | 11/18/22/25 | meets-300 | `5edc276f1ef9` |
+| imposter | events | 303 | 303 | 303 | 0 | 12/19/26/31 | meets-300 | `0367296830b3` |
+| mini-mystery | phone-that-could-ruin-everyone | 69 | 69 | 69 | 0 | 34/69/149/246 | below-300 | `8425b031d743` |
+| mini-mystery | vanished-crypto-wallet | 69 | 69 | 69 | 0 | 27/67/155/226 | below-300 | `d71adc335a0f` |
+| mini-mystery | engagement-ring-came-back | 69 | 69 | 69 | 0 | 27/67/131/224 | below-300 | `b48013707bd0` |
+| mini-mystery | deepfake-confession | 69 | 69 | 69 | 0 | 30/66/124/208 | below-300 | `bfb53f8f27c9` |
+| mini-mystery | cancelled-at-midnight | 69 | 69 | 69 | 0 | 29/65/145/190 | below-300 | `e238a642fa6e` |
+| mini-mystery | final-interview | 69 | 69 | 69 | 0 | 30/67/133/244 | below-300 | `84966219e949` |
+| mini-mystery | guest-never-checked-out | 69 | 69 | 69 | 0 | 27/66/123/222 | below-300 | `5744fb12a83f` |
+| mini-mystery | last-seen-217 | 69 | 69 | 69 | 0 | 27/66/109/199 | below-300 | `abe18d697cfa` |
+| mini-mystery | live-after-vanished | 69 | 69 | 69 | 0 | 31/66/133/228 | below-300 | `90d8d5037f96` |
+| mini-mystery | smart-home-lockdown | 69 | 69 | 69 | 0 | 29/66/122/207 | below-300 | `4a3301f4c929` |
+| mini-mystery | wrong-person-drank-it | 69 | 69 | 69 | 0 | 30/66/124/213 | below-300 | `0a7f2be38ae9` |
+| mini-mystery | crash-already-online | 69 | 69 | 69 | 0 | 30/66/128/227 | below-300 | `d80095917312` |
+| mini-mystery | bride-never-arrived | 69 | 69 | 69 | 0 | 21/53/154/241 | below-300 | `611210c7bde4` |
+| mini-mystery | bishops-announcement | 69 | 69 | 69 | 0 | 21/54/125/198 | below-300 | `ebd820000203` |
+| mini-mystery | harvest-offering | 69 | 69 | 69 | 0 | 19/47/123/195 | below-300 | `c5b2399f8d37` |
+| mini-mystery | reunion-broadcast | 69 | 69 | 69 | 0 | 22/50/139/203 | below-300 | `8fe8958f5b43` |
+| mini-mystery | reading-of-will | 69 | 69 | 69 | 0 | 18/51/143/212 | below-300 | `3d764a29ca11` |
+| mini-mystery | cooperative-payout | 69 | 69 | 69 | 0 | 15/49/148/183 | below-300 | `01ecc6b0e9af` |
+| mini-mystery | last-bus-enugu | 69 | 69 | 69 | 0 | 18/51/138/227 | below-300 | `05dae25ec3c1` |
+| mini-mystery | grooms-second-ring | 69 | 69 | 69 | 0 | 17/46/141/195 | below-300 | `d48f94a44328` |
+| mini-mystery | senators-empty-coffin | 69 | 69 | 69 | 0 | 22/47/140/217 | below-300 | `048549c9dd95` |
+| mini-mystery | missing-afrobeats-star | 69 | 69 | 69 | 0 | 16/50/129/210 | below-300 | `536b3ad03484` |
+| mini-mystery | phone-that-could-ruin-everyone--remix | 67 | 67 | 67 | 0 | 34/71/156/180 | below-300 | `d542bd5a5576` |
+| mini-mystery | vanished-crypto-wallet--remix | 67 | 67 | 67 | 0 | 27/67/144/186 | below-300 | `9b429c8e4544` |
+| mini-mystery | engagement-ring-came-back--remix | 67 | 67 | 67 | 0 | 27/68/131/175 | below-300 | `bbcd7448ddd3` |
+| mini-mystery | deepfake-confession--remix | 67 | 67 | 67 | 0 | 30/68/124/177 | below-300 | `3a046b772425` |
+| mini-mystery | cancelled-at-midnight--remix | 67 | 67 | 67 | 0 | 29/67/146/175 | below-300 | `bb8ea179c76d` |
+| mini-mystery | final-interview--remix | 67 | 67 | 67 | 0 | 30/68/133/195 | below-300 | `80c83576025a` |
+| mini-mystery | guest-never-checked-out--remix | 67 | 67 | 67 | 0 | 27/67/123/176 | below-300 | `e45d0fc26cf4` |
+| mini-mystery | last-seen-217--remix | 67 | 67 | 67 | 0 | 27/69/109/179 | below-300 | `f1fede89cc43` |
+| mini-mystery | live-after-vanished--remix | 67 | 67 | 67 | 0 | 31/67/133/173 | below-300 | `1e78482fb2b3` |
+| mini-mystery | smart-home-lockdown--remix | 67 | 67 | 67 | 0 | 29/68/122/174 | below-300 | `88c87b9d7839` |
+| mini-mystery | wrong-person-drank-it--remix | 67 | 67 | 67 | 0 | 30/67/127/185 | below-300 | `16f711cb5f47` |
+| mini-mystery | crash-already-online--remix | 67 | 67 | 67 | 0 | 30/67/119/177 | below-300 | `5ecd099dfc42` |
+| mini-mystery | bride-never-arrived--remix | 67 | 67 | 67 | 0 | 21/53/154/184 | below-300 | `07b709d1319c` |
+| mini-mystery | bishops-announcement--remix | 67 | 67 | 67 | 0 | 21/53/136/198 | below-300 | `44404cc62834` |
+| mini-mystery | harvest-offering--remix | 67 | 67 | 67 | 0 | 19/47/123/195 | below-300 | `ea4b5e11638d` |
+| mini-mystery | reunion-broadcast--remix | 67 | 67 | 67 | 0 | 22/50/145/203 | below-300 | `bfac8ff1cfc0` |
+| mini-mystery | reading-of-will--remix | 67 | 67 | 67 | 0 | 18/50/149/212 | below-300 | `1ea1ba3fdca7` |
+| mini-mystery | cooperative-payout--remix | 67 | 67 | 67 | 0 | 15/49/153/178 | below-300 | `468f6ab503e6` |
+| mini-mystery | last-bus-enugu--remix | 67 | 67 | 67 | 0 | 18/49/138/193 | below-300 | `8c0eb3026500` |
+| mini-mystery | grooms-second-ring--remix | 67 | 67 | 67 | 0 | 17/46/141/195 | below-300 | `67757b94ff35` |
+| mini-mystery | senators-empty-coffin--remix | 67 | 67 | 67 | 0 | 22/46/140/200 | below-300 | `6351200c87cc` |
+| mini-mystery | missing-afrobeats-star--remix | 67 | 67 | 67 | 0 | 16/50/120/198 | below-300 | `4f9ad83f329a` |
 
 ## Per-game reconciliation
 
@@ -190,6 +240,8 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | Who Said That? (`who-said-that`) | 300 | 300 | 300 | 300 | 0 | 300 | meets-300 |
 | We Just Met (`we-just-met`) | 300 | 300 | 300 | 300 | 0 | 300 | below-300 |
 | Whot (`whot`) | 0 | 0 | 0 | 0 | 0 | 0 | not-applicable |
+| Imposter (`imposter`) | 1818 | 1818 | 1818 | 1818 | 0 | 1818 | meets-300 |
+| Mini Mystery (`mini-mystery`) | 2992 | 1753 | 2992 | 2992 | 0 | 2992 | below-300 |
 
 ## Decisions and migration constraints
 

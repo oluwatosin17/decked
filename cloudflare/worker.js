@@ -107,7 +107,8 @@ export async function handleAnalyticsIngest(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
-    if (url.hostname === 'usedecked.com') {
+    if (url.protocol !== 'https:' || url.hostname === 'usedecked.com') {
+      url.protocol = 'https:'
       url.hostname = 'www.usedecked.com'
       return Response.redirect(url, 308)
     }

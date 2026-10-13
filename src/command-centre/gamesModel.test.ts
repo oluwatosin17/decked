@@ -6,9 +6,9 @@ const row=(game_id:GameId,overrides:Partial<GameAnalyticsRow>={}):GameAnalyticsR
 const nameFor=(id:GameId)=>GAME_NAMES[id]
 
 describe('games report transformations',()=>{
-  it('uses the canonical 22-game registry',()=>{
-    expect(GAME_REGISTRY).toHaveLength(22)
-    expect(new Set(GAME_REGISTRY.map(game=>game.id)).size).toBe(22)
+  it('uses the canonical 24-game registry',()=>{
+    expect(GAME_REGISTRY).toHaveLength(24)
+    expect(new Set(GAME_REGISTRY.map(game=>game.id)).size).toBe(24)
   })
   it('sorts numeric values and filters by canonical name or id',()=>{
     const rows=[row('charades',{completion_rate:40}),row('icebreaker',{completion_rate:80})]
@@ -28,7 +28,7 @@ describe('games report transformations',()=>{
     expect(gamesFilterCount('production','',7)).toBe(0)
     expect(gamesFilterCount('preview','pass_and_play',30)).toBe(3)
   })
-  it('keeps all 22 canonical games visible when the query returns no activity',()=>{const completed=completeGameRows([]);expect(completed).toHaveLength(22);expect(completed.every(item=>item.game_views===0&&item.completion_rate===0)).toBe(true)})
+  it('keeps all 24 canonical games visible when the query returns no activity',()=>{const completed=completeGameRows([]);expect(completed).toHaveLength(24);expect(completed.every(item=>item.game_views===0&&item.completion_rate===0)).toBe(true)})
   it('distinguishes loading, error, zero-data and realistic data fixtures',()=>{
     const empty=[row('charades'),row('we-just-met')]
     expect(gamesViewState('loading',null)).toBe('loading')
