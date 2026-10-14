@@ -41,6 +41,21 @@ export interface MiniMysteryPrivateState {
   voteCounts: Record<string, number>
 }
 
+export interface DoYouKnowMeState {
+  phase: 'answering' | 'reveal' | 'results'
+  gameNumber: number
+  mode: 'read-me' | 'match-me'
+  relationship: string
+  round: number
+  rounds: number
+  promptId: string
+  spotlightUserId: string | null
+  hasAnswered: boolean
+  answerCount: number
+  answers: Record<string, number>
+  scores: Record<string, number>
+}
+
 export async function createRoom(displayName: string, gameId: MultiplayerGameId): Promise<RoomBundle> {
   track('room_create_attempted', { game_id: gameId })
   const { data, error } = await supabase.rpc('decked_create_room', { p_display_name: displayName.trim(), p_game_id: gameId })
@@ -220,6 +235,29 @@ export async function advanceMiniMystery(roomId: string) {
 export async function submitMiniMysteryVote(roomId: string, targetUserId: string) {
   const { error } = await supabase.rpc('decked_mini_mystery_vote', { p_room_id: roomId, p_target_user_id: targetUserId })
   throwTrackedRpcError(error, 'decked_mini_mystery_vote')
+}
+
+export async function startDoYouKnowMeGame(roomId: string, mode: 'read-me' | 'match-me', relationship: string, categoryIds: string[], promptIds: string[], rounds: number) {
+  const { error } = await supabase.rpc('decked_start_do_you_know_me', { p_room_id: roomId, p_mode: mode, p_relationship: relationship, p_category_ids: categoryIds, p_prompt_ids: promptIds, p_rounds: rounds })
+  throwTrackedRpcError(error, 'decked_start_do_you_know_me')
+}
+
+export async function getDoYouKnowMeState(roomId: string): Promise<DoYouKnowMeState> {
+  const { data, error } = await supabase.rpc('decked_get_do_you_know_me_state', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_get_do_you_know_me_state')
+  const value = data as Record<string, unknown>
+  const numericRecord = (raw: unknown) => Object.fromEntries(Object.entries(raw && typeof raw === 'object' ? raw as Record<string, unknown> : {}).map(([key, item]) => [key, Number(item)]))
+  return { phase: value.phase as DoYouKnowMeState['phase'], gameNumber: Number(value.game_number ?? 1), mode: value.mode as DoYouKnowMeState['mode'], relationship: String(value.relationship ?? ''), round: Number(value.round_number ?? 1), rounds: Number(value.rounds ?? 3), promptId: String(value.prompt_id ?? ''), spotlightUserId: typeof value.spotlight_user_id === 'string' ? value.spotlight_user_id : null, hasAnswered: value.has_answered === true, answerCount: Number(value.answer_count ?? 0), answers: numericRecord(value.answers), scores: numericRecord(value.scores) }
+}
+
+export async function submitDoYouKnowMeAnswer(roomId: string, optionIndex: number) {
+  const { error } = await supabase.rpc('decked_do_you_know_me_answer', { p_room_id: roomId, p_option_index: optionIndex })
+  throwTrackedRpcError(error, 'decked_do_you_know_me_answer')
+}
+
+export async function advanceDoYouKnowMe(roomId: string) {
+  const { error } = await supabase.rpc('decked_do_you_know_me_advance', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_do_you_know_me_advance')
 }
 
 async function trackRoomSuccess(kind: 'room_created' | 'room_joined', bundle: RoomBundle, gameId: MultiplayerGameId) {

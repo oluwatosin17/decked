@@ -1,14 +1,14 @@
 # Decked content audit v1
 
-Generated deterministically by `pnpm audit:content` at 2026-10-13T03:23:38.315Z.
+Generated deterministically by `pnpm audit:content` at 2026-10-14T08:49:57.346Z.
 
 ## Result
 
-- Canonical games: **24**
-- Audited games: **24**
-- Raw bundled records / category memberships: **40,017**
-- Normalized-unique payloads across all games: **38,008**
-- Games whose every selectable bundled category meets 300 cards: **18**
+- Canonical games: **25**
+- Audited games: **25**
+- Raw bundled records / category memberships: **42,417**
+- Normalized-unique payloads across all games: **40,408**
+- Games whose every selectable bundled category meets 300 cards: **19**
 - Games below the 300-card target: **4**
 - Not applicable: **2** (player-authored and rules-based games have no managed prompt inventory)
 
@@ -213,6 +213,14 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | mini-mystery | grooms-second-ring--remix | 67 | 67 | 67 | 0 | 17/46/141/195 | below-300 | `67757b94ff35` |
 | mini-mystery | senators-empty-coffin--remix | 67 | 67 | 67 | 0 | 22/46/140/200 | below-300 | `6351200c87cc` |
 | mini-mystery | missing-afrobeats-star--remix | 67 | 67 | 67 | 0 | 16/50/120/198 | below-300 | `4f9ad83f329a` |
+| do-you-know-me | personality | 300 | 300 | 300 | 0 | 94/171/201/220 | meets-300 | `47c7f08b67f2` |
+| do-you-know-me | everyday | 300 | 300 | 300 | 0 | 122/183/209/222 | meets-300 | `0133e9b605b7` |
+| do-you-know-me | food | 300 | 300 | 300 | 0 | 96/182/209/223 | meets-300 | `a88d069e674f` |
+| do-you-know-me | opinions | 300 | 300 | 300 | 0 | 129/228/263/282 | meets-300 | `6d61419c6024` |
+| do-you-know-me | entertainment | 300 | 300 | 300 | 0 | 159/215/241/258 | meets-300 | `9eeb4dd93fbc` |
+| do-you-know-me | future | 300 | 300 | 300 | 0 | 150/219/240/252 | meets-300 | `b87814657f2a` |
+| do-you-know-me | nigerian-life | 300 | 300 | 300 | 0 | 167/219/243/260 | meets-300 | `bb254a16c0e2` |
+| do-you-know-me | wild-cards | 300 | 300 | 300 | 0 | 112/199/227/245 | meets-300 | `7392fd3184d0` |
 
 ## Per-game reconciliation
 
@@ -242,6 +250,7 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | Whot (`whot`) | 0 | 0 | 0 | 0 | 0 | 0 | not-applicable |
 | Imposter (`imposter`) | 1818 | 1818 | 1818 | 1818 | 0 | 1818 | meets-300 |
 | Mini Mystery (`mini-mystery`) | 2992 | 1753 | 2992 | 2992 | 0 | 2992 | below-300 |
+| Do You Know Me? (`do-you-know-me`) | 2400 | 2400 | 2400 | 2400 | 0 | 2400 | meets-300 |
 
 ## Decisions and migration constraints
 

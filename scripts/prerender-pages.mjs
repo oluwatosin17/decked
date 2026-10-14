@@ -34,6 +34,7 @@ const games = [
   game('/games/whot', 'Whot', '/assets/games/whot-cover.png', 'friends, families, and competitive groups', '2 or more', '15–60 minutes', 'Card game'),
   game('/games/imposter', 'Imposter', '/assets/games/imposter.png', 'friends and social deduction groups', '3 or more', '10–25 minutes', 'Social deduction game'),
   game('/games/mini-mystery', 'Mini Mystery', '/assets/games/mini-mystery-dossier.png', 'friends who enjoy mysteries and roleplay', '4–8', '20–50 minutes', 'Mystery game'),
+  game('/games/do-you-know-me', 'Do You Know Me?', '/assets/games/do-you-know-me.png', 'couples, friends, families, and groups', '2–10', '10–45 minutes', 'Social prediction game'),
 ]
 
 const pages = [

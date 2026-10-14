@@ -30,6 +30,7 @@ const gameNames: Partial<Record<Screen, string>> = {
   whot: 'Whot',
   imposter: 'Imposter',
   'mini-mystery': 'Mini Mystery',
+  'do-you-know-me': 'Do You Know Me?',
 }
 
 const noIndexScreens = new Set<Screen>([

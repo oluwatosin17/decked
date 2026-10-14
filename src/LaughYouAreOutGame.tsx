@@ -25,10 +25,6 @@ function WatchIcon({ style }: { style?: CSSProperties }) {
   )
 }
 
-const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
-
 /* ─── Lives modes ─── */
 const LIVES_MODES = [
   { id: 'sudden-death', label: 'Sudden Death',             lives: 1 },

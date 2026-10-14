@@ -22,6 +22,7 @@ import { WE_JUST_MET_PROMPTS } from './weJustMet'
 import type { GameId } from '../gameRegistry'
 import { IMPOSTER_DECKS } from './imposter'
 import { ALL_MINI_MYSTERIES } from './miniMystery'
+import { KNOW_ME_CATEGORIES, KNOW_ME_PROMPTS } from './doYouKnowMe'
 
 export interface AuditedDeck {
   gameId?: GameId
@@ -111,4 +112,5 @@ export const CONTENT_AUDIT_GAMES: AuditedGame[] = [
   { gameId: 'whot', game: 'Whot', contentModel: 'rules-based', decks: [], note: 'Whot uses a fixed card deck and configurable rules rather than written prompt content.' },
   { gameId: 'imposter', game: 'Imposter', contentModel: 'bundled', decks: gameDecks('imposter', 'Imposter', Object.fromEntries(Object.entries(IMPOSTER_DECKS).map(([category, pairs]) => [category, pairs.map(pair => `${pair.regular} OR ${pair.imposter}`)]))) },
   { gameId: 'mini-mystery', game: 'Mini Mystery', contentModel: 'bundled', decks: gameDecks('mini-mystery', 'Mini Mystery', Object.fromEntries(ALL_MINI_MYSTERIES.map(mystery => [mystery.id, mysteryAuditPayload(mystery)]))) },
+  { gameId: 'do-you-know-me', game: 'Do You Know Me?', contentModel: 'bundled', decks: gameDecks('do-you-know-me', 'Do You Know Me?', Object.fromEntries(KNOW_ME_CATEGORIES.map(category => [category.id, KNOW_ME_PROMPTS.filter(prompt => prompt.category === category.id).map(prompt => `${prompt.question} — ${prompt.options.join(' / ')}`)]))) },
 ]

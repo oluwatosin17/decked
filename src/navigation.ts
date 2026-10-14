@@ -17,6 +17,7 @@ export type Screen =
   | 'whot'
   | 'imposter'
   | 'mini-mystery'
+  | 'do-you-know-me'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<string, string> = {
@@ -55,6 +56,7 @@ export const SCREEN_PATHS: Record<string, string> = {
   whot: '/games/whot',
   imposter: '/games/imposter',
   'mini-mystery': '/games/mini-mystery',
+  'do-you-know-me': '/games/do-you-know-me',
   'play-together': '/play-together',
 }
 

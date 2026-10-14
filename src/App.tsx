@@ -44,6 +44,7 @@ const WeJustMetGame = lazy(() => import('./WeJustMetGame'))
 const WhotGame = lazy(() => import('./WhotGame'))
 const ImposterPassAndPlayGame = lazy(() => import('./ImposterPassAndPlayGame'))
 const MiniMysteryGame = lazy(() => import('./MiniMysteryGame'))
+const DoYouKnowMeGame = lazy(() => import('./DoYouKnowMeGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -70,6 +71,7 @@ const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: Mu
   whot: { localScreen: 'whot', multiplayerId: 'whot' },
   imposter: { localScreen: 'imposter', multiplayerId: 'imposter' },
   'mini-mystery': { localScreen: 'mini-mystery', multiplayerId: 'mini-mystery' },
+  'do-you-know-me': { localScreen: 'do-you-know-me', multiplayerId: 'do-you-know-me' },
 }
 
 const selectedGameFromLocation = () => {
@@ -290,6 +292,9 @@ function AppContent() {
   if (screen === 'mini-mystery') {
     return <MiniMysteryGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'do-you-know-me') {
+    return <DoYouKnowMeGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
@@ -322,6 +327,7 @@ function AppContent() {
         onPlayWhot={() => chooseGame('whot')}
         onPlayImposter={() => chooseGame('imposter')}
         onPlayMiniMystery={() => chooseGame('mini-mystery')}
+        onPlayDoYouKnowMe={() => chooseGame('do-you-know-me')}
       />
     )
   }
@@ -361,8 +367,10 @@ function AppContent() {
       onPlayWhot={() => chooseGame('whot')}
       onPlayImposter={() => chooseGame('imposter')}
       onPlayMiniMystery={() => chooseGame('mini-mystery')}
+      onPlayDoYouKnowMe={() => chooseGame('do-you-know-me')}
       onBrowse={() => setScreen('browse')}
       onGuides={() => setScreen('guides')}
+      onFreeGamesGuide={() => setScreen('guide-free-games-to-play-online')}
       onAbout={() => setScreen('about')}
       onPlayTogether={() => setScreen('play-together')}
     />

@@ -12,10 +12,6 @@ type SetPlayers = React.Dispatch<React.SetStateAction<Player[]>>
 
 /* ─── Asset URLs (permanently hosted on Cloudinary) ─── */
 const HEART_FILLED     = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
-const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
-
 const TOD_ORANGE = '#e94b16'
 const TOD_MINT = '#eaf4dc'
 const TOD_NAVY = '#103452'

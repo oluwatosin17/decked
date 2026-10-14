@@ -277,21 +277,19 @@ function buildDeck(relationship: Relationship, journey: Journey, deckSize: numbe
     ? ['warm-up', 'connect', 'reflect']
     : [journey as Stage]
 
-  const aiSlots = Math.max(0, deckSize - customCards.length)
+  const custom = createSessionDeck([], { customCards, deckSize })
+  const aiSlots = Math.max(0, deckSize - custom.length)
   const perStage = Math.ceil(aiSlots / stages.length)
-  // Distribute custom cards evenly across stages
-  const customPerStage = Math.ceil(customCards.length / stages.length)
 
-  const allQuestions: string[] = []
+  const allQuestions: string[] = [...custom]
   const stageBreaks: { stage: Stage; start: number; end: number }[] = []
 
-  let currentIdx = 0
+  let currentIdx = custom.length
   for (let si = 0; si < stages.length; si++) {
     const stage = stages[si]
     const stageAI = getQuestions(relationship, stage).slice(0, perStage)
-    const stageCustom = customCards.slice(si * customPerStage, (si + 1) * customPerStage)
-    const stageAll = createSessionDeck(stageAI, { customCards: stageCustom })
-    const start = currentIdx
+    const stageAll = createSessionDeck(stageAI)
+    const start = si === 0 ? 0 : currentIdx
     allQuestions.push(...stageAll)
     currentIdx += stageAll.length
     stageBreaks.push({ stage, start, end: currentIdx })

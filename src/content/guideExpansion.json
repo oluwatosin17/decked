@@ -29,14 +29,16 @@
     "screen": "guide-free-games-to-play-online",
     "path": "/guides/free-games-to-play-online",
     "slug": "free-games-to-play-online",
-    "title": "Best Free Games to Play Online With Friends — No Download",
-    "heading": "Free games to play online with friends",
-    "description": "Compare free browser games for friends, couples, families, and groups. Start instantly with no download, account, or payment.",
-    "intro": "Free online games should be genuinely easy to start. Decked games open in a browser, work with one shared phone or supported multiplayer rooms, and do not place registration between the group and the first round.",
-    "summary": "Choose Whot for a competitive card game, Charades for energetic groups, Truth or Dare for questions and challenges, or Icebreaker when people are still getting comfortable.",
+    "title": "Free Browser Party Games — Play Online, No Download | Decked",
+    "heading": "Free browser party games to play online",
+    "description": "Play free browser party games for friends, couples, families, and groups. No download, account, or payment—choose a game and start instantly.",
+    "intro": "Play free party games directly in your browser with friends, couples, families, or groups. There is no download, account, or payment required: choose a game, share one phone or a supported multiplayer room, and start immediately.",
+    "summary": "For a quick choice, try Charades with an energetic group, Truth or Dare with friends or a partner, Whot for competitive card play, or Icebreaker when people are still getting comfortable. Every option opens in the browser with no app or sign-up required.",
     "sections": [
-      { "heading": "How to choose a free online game", "paragraphs": ["Begin with the number of players and whether everyone is in the same room. Pass-and-play is simplest when people are together, while Play Together is useful when each participant wants a separate screen.", "Then match the game to the group’s comfort level. Guessing and debate games require little disclosure; conversation, dating, and adult decks work best after everyone understands the tone and can skip freely."] },
-      { "heading": "What free should mean", "paragraphs": ["A useful free game should let the group reach actual play without a trial, payment card, or mandatory account. Decked’s public games can be opened directly and shared with the group.", "The games also avoid physical setup. There are no cards to print and no rules booklet to study, so the host can change games when the room’s energy changes."] }
+      { "heading": "Choose by group and mood", "paragraphs": ["For a party or large group, begin with a familiar format such as Charades or a quick question game so everyone can join without a long explanation. Friends sharing one phone can use pass-and-play, while supported Play Together rooms give each participant a separate screen.", "For two people or a date night, Truth or Dare and conversation decks create a more personal pace. Families and mixed-age groups should choose familiar guessing, card, or icebreaker formats and select categories that suit everyone present."] },
+      { "heading": "Play together on one phone or separate devices", "paragraphs": ["When everyone is in the same room, place one phone in the middle and take turns reading, answering, acting, or passing it to the next player. This is the fastest setup because nobody needs to install an app or create an account.", "For remote friends or video calls, use a supported multiplayer room or let one person share the game screen. The host can change games whenever the group wants a different pace."] },
+      { "heading": "What free and no download mean on Decked", "paragraphs": ["A useful free browser game should let the group reach actual play without a trial, payment card, mandatory account, or app-store visit. Decked’s public games open directly in a modern browser on phones, tablets, and computers.", "There are no physical cards to print or lengthy rulebooks to study. Choose a deck, explain the turn order, and begin. Players can skip any prompt that does not suit the group."] },
+      { "heading": "Quick recommendations by audience", "paragraphs": ["Choose Charades for energetic parties, Icebreaker for coworkers or people meeting for the first time, Whot for competitive friends and families, Truth or Dare for friends or couples, and Real Talk, Every Day for a relaxed conversation.", "If none of those matches the moment, browse the related guides below for games for couples, friends on one phone, families, video calls, large groups, and online question games."] }
     ],
     "tips": ["Pick one host to control the first round.", "Start with a familiar format before trying a deeper deck.", "Use one shared phone when setup speed matters most.", "Change games when conversation or energy begins to slow."],
     "recommendations": [
@@ -49,7 +51,9 @@
     "faqs": [
       { "question": "Are these games completely free?", "answer": "Yes. The listed Decked games can be opened and played without entering payment details." },
       { "question": "Do we need to install an app?", "answer": "No. Decked runs in a modern browser on phones, tablets, and computers." },
-      { "question": "Can people play from different locations?", "answer": "Selected games support Play Together. A host can also share their screen during a video call." }
+      { "question": "Can people play from different locations?", "answer": "Selected games support Play Together. A host can also share their screen during a video call." },
+      { "question": "What is the best free browser party game for a group?", "answer": "Charades is a familiar high-energy choice for larger groups. Icebreaker works well for new groups, while Truth or Dare suits friends who want questions and challenges." },
+      { "question": "Can we play using only one phone?", "answer": "Yes. Many Decked games support pass-and-play, so the group can share one phone and take turns without installing anything." }
     ]
   },
   {

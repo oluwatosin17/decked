@@ -38,19 +38,21 @@ export function uniqueCards<T>(items: readonly T[]): T[] {
 }
 
 /**
- * Build one repeat-free game session. Custom cards are mixed into the same
- * pool and deduplicated against built-in content. When the requested size is
- * larger than the unique source, the session ends instead of recycling cards.
+ * Build one repeat-free game session. User-created cards always play first,
+ * in the order they were entered. Remaining slots are filled from a shuffled
+ * built-in pool, deduplicated against the custom content.
  */
 export function createSessionDeck<T>(
   builtInCards: readonly T[],
   options: { customCards?: readonly T[]; deckSize?: number } = {},
 ): T[] {
-  const source = uniqueCards([...(options.customCards ?? []), ...builtInCards])
-  const shuffled = shuffle(source)
+  const custom = uniqueCards(options.customCards ?? [])
+  const customKeys = new Set(custom.map(cardKey))
+  const builtIn = shuffle(uniqueCards(builtInCards).filter(card => !customKeys.has(cardKey(card))))
+  const ordered = [...custom, ...builtIn]
   const requested = options.deckSize
-  if (!requested || requested <= 0) return shuffled
-  return shuffled.slice(0, Math.min(Math.floor(requested), shuffled.length))
+  if (!requested || requested <= 0) return ordered
+  return ordered.slice(0, Math.min(Math.floor(requested), ordered.length))
 }
 
 /** Backward-compatible wrapper used by the existing game implementations. */

@@ -6,19 +6,11 @@ import CustomCards from './components/CustomCards'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 import { WE_JUST_MET_CATEGORIES, WE_JUST_MET_PROMPTS, type WeJustMetCategory } from './content/weJustMet'
+import { createSessionDeck } from './utils/deckShuffle'
 
 const GAME_ID = 'we-just-met'
 const STEPS = ['playerSetup', 'categories', 'deckSize', 'customCards', 'game', 'done'] as const
 type Step = typeof STEPS[number]
-
-const shuffle = <T,>(items: readonly T[]) => {
-  const result = [...items]
-  for (let index = result.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1))
-    ;[result[index], result[swapIndex]] = [result[swapIndex], result[index]]
-  }
-  return result
-}
 
 const primaryButton: React.CSSProperties = {
   border: 0, borderRadius: 999, minHeight: 48, padding: '0 26px', background: '#dc2827', color: '#fff',
@@ -64,8 +56,7 @@ export default function WeJustMetGame({ onClose }: { onClose: () => void }) {
   const buildDeck = (custom: string[]) => {
     const prompts = Array.from(new Set(selectedCategories.flatMap(category => WE_JUST_MET_PROMPTS[category])))
     const customUnique = Array.from(new Set(custom.map(card => card.trim()).filter(Boolean)))
-    const builtInCount = Math.max(0, deckSize - customUnique.length)
-    const nextDeck = shuffle([...shuffle(prompts).slice(0, builtInCount), ...customUnique]).slice(0, deckSize)
+    const nextDeck = createSessionDeck(prompts, { customCards: customUnique, deckSize })
     setCustomCards(customUnique)
     setDeck(nextDeck)
     setCardIndex(0)

@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import { passAndPlayTracker } from '../analytics/passAndPlay'
 import { useMultiplayerSession } from '../multiplayer/SessionStateContext'
-
-const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
+import { SOCIAL_LINKS } from '../socialLinks'
 
 export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: string }) {
   const [showExitChoice, setShowExitChoice] = useState(false)
@@ -150,8 +147,10 @@ export function GameFooter() {
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: '#9ca3af', lineHeight: 1.5, margin: 0 }}>Pick a deck, pass the phone, and let the chaos begin. 10+ party card games, no app, no login, no excuses.</p>
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          {[SOCIAL_TIKTOK, SOCIAL_INSTAGRAM, SOCIAL_WHATSAPP].map((src, i) => (
-            <img key={i} src={src} alt="" style={{ width: '20px', height: '20px', borderRadius: '8px', objectFit: 'contain' }} />
+          {SOCIAL_LINKS.map(social => (
+            <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} style={{ display: 'inline-flex' }}>
+              <img src={social.icon} alt="" style={{ width: '20px', height: '20px', borderRadius: '8px', objectFit: 'contain' }} />
+            </a>
           ))}
         </div>
       </div>

@@ -290,6 +290,12 @@ export const GAME_CARDS = (
       <img loading="lazy" decoding="async" src="/assets/games/mini-mystery-dossier.png" alt="Mini Mystery" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
+  {
+    id: 'do-you-know-me', categories: ['icebreakers', 'couples', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#46112f' }}>
+      <img loading="lazy" decoding="async" src="/assets/games/do-you-know-me.png" alt="Do You Know Me?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -308,9 +314,10 @@ interface HomeGridProps {
   onPlayWhot: () => void
   onPlayImposter: () => void
   onPlayMiniMystery: () => void
+  onPlayDoYouKnowMe: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe }: HomeGridProps) {
   const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -362,11 +369,12 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('choose-your-side', onPlayChooseYourSide)}
         {getEl('who-said-that', onPlayWhoSaidThat)}
       </>, 'flex-start')}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '28px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '28px', flexWrap: 'wrap' }}>
         {getEl('we-just-met', onPlayWeJustMet)}
         {getEl('whot', onPlayWhot)}
         {getEl('imposter', onPlayImposter)}
         {getEl('mini-mystery', onPlayMiniMystery)}
+        {getEl('do-you-know-me', onPlayDoYouKnowMe)}
       </div>
     </div>
   )
@@ -401,6 +409,7 @@ interface BrowseGridProps {
   onPlayWhot?: () => void
   onPlayImposter?: () => void
   onPlayMiniMystery?: () => void
+  onPlayDoYouKnowMe?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -429,6 +438,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     whot: handlers.onPlayWhot,
     imposter: handlers.onPlayImposter,
     'mini-mystery': handlers.onPlayMiniMystery,
+    'do-you-know-me': handlers.onPlayDoYouKnowMe,
   }
   return map[card.id]
 }

@@ -10,10 +10,6 @@ import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 /* ─── Asset URLs ─── */
 const SPICY_INTRO_BG   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/spicy-talks.svg'
 const SPICY_FRONT_COVER = '/assets/games/spicy-opener.png'
-const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
-
 function SpicyOpenerCover() {
   return (
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#071a3b' }}>

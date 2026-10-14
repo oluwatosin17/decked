@@ -37,8 +37,10 @@ import WeJustMetGame from '../WeJustMetGame'
 import WhotGame from '../WhotGame'
 import ImposterGame from '../ImposterGame'
 import MiniMysteryMultiplayerGame from '../MiniMysteryMultiplayerGame'
+import DoYouKnowMeMultiplayerGame from '../DoYouKnowMeMultiplayerGame'
 import { chooseMiniMysteryVariant, MINI_MYSTERIES } from '../content/miniMystery'
-import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, getRoomAnalyticsRef, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startImposterGame, startMiniMysteryGame, startMultiGame, touchRoom } from './roomApi'
+import { KNOW_ME_CATEGORIES, promptsFor, shuffledPrompts, type KnowMeCategory, type KnowMeMode, type KnowMeRelationship } from '../content/doYouKnowMe'
+import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, getRoomAnalyticsRef, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startDoYouKnowMeGame, startImposterGame, startMiniMysteryGame, startMultiGame, touchRoom } from './roomApi'
 import { track } from '../analytics'
 import { ensureAnonymousUser, multiplayerConfigured, supabase } from './supabase'
 import { MULTIPLAYER_GAMES } from './gameConfig'
@@ -147,12 +149,10 @@ function ExitRoomButton({ isHost, busy, onExit }: { isHost: boolean; busy: boole
   </div>
 }
 
-function Lobby({ room, players, currentUserId, onStart, onExit, busy, onlineCount }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onStart: (settings?: { caseId: string; rounds: number }) => void; onExit: () => void; busy: boolean; onlineCount: number }) {
+function Lobby({ room, players, currentUserId, onContinue, onExit, busy, onlineCount }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onContinue: () => void; onExit: () => void; busy: boolean; onlineCount: number }) {
   const shareUrl = `${window.location.origin}/play-together?code=${room.code}`
   const isHost = room.host_user_id === currentUserId
   const minimumPlayers = room.game_id === 'mini-mystery' ? 4 : room.game_id === 'imposter' ? 3 : 2
-  const [mysteryCase, setMysteryCase] = useState(MINI_MYSTERIES[0].id)
-  const [mysteryRounds, setMysteryRounds] = useState(3)
   const copyInvite = async () => { await navigator.clipboard.writeText(`Join my DECKED game: ${shareUrl}\nRoom code: ${room.code}`) }
   return <Panel>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
@@ -164,15 +164,64 @@ function Lobby({ room, players, currentUserId, onStart, onExit, busy, onlineCoun
       <button onClick={copyInvite} className="font-staatliches game-btn" style={{ height: '44px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.35)', background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '15px', cursor: 'pointer' }}>COPY INVITE LINK</button>
       <PlayerList players={players} currentUserId={currentUserId} />
       {isHost ? <>
-        {room.game_id === 'mini-mystery' ? <div style={{ display: 'grid', gap: 12, padding: 14, borderRadius: 14, border: '1px dashed rgba(255,255,255,.14)' }}>
-          <label className="font-staatliches" style={{ color: '#fff', letterSpacing: '.08em' }}>CASE<select aria-label="Mystery case" value={mysteryCase} onChange={event => setMysteryCase(event.target.value)} style={{ ...inputStyle, marginTop: 8 }}>{MINI_MYSTERIES.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
-          <div><span className="font-staatliches" style={{ color: '#fff', letterSpacing: '.08em' }}>CASE DEPTH</span><div role="radiogroup" aria-label="Case depth" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginTop: 8 }}>{[{ value: 2, label: 'QUICK' }, { value: 3, label: 'CLASSIC' }, { value: 4, label: 'DEEP' }].map(option => <button key={option.value} type="button" role="radio" aria-checked={mysteryRounds === option.value} onClick={() => setMysteryRounds(option.value)} className="game-btn" style={{ minHeight: 48, borderRadius: 10, border: mysteryRounds === option.value ? '1px solid #fff' : '1px dashed rgba(255,255,255,.14)', background: mysteryRounds === option.value ? '#123953' : '#070708', color: '#fff', font: "15px 'Staatliches',sans-serif" }}><b style={{ display: 'block', fontSize: 18 }}>{option.value}</b>{option.label}{option.value === 3 ? ' ★' : ''}</button>)}</div></div>
-        </div> : null}
-        <PrimaryButton disabled={busy || players.length < minimumPlayers} onClick={() => onStart(room.game_id === 'mini-mystery' ? { caseId: mysteryCase, rounds: mysteryRounds } : undefined)}>{players.length < minimumPlayers ? `WAITING FOR ${minimumPlayers - players.length} MORE` : room.game_id === 'imposter' ? 'DEAL SECRET WORDS' : room.game_id === 'mini-mystery' ? 'DEAL PRIVATE DOSSIERS' : 'SET UP GAME'}</PrimaryButton>
+        <PrimaryButton disabled={busy || players.length < minimumPlayers} onClick={onContinue}>{players.length < minimumPlayers ? `WAITING FOR ${minimumPlayers - players.length} MORE` : room.game_id === 'imposter' ? 'DEAL SECRET WORDS' : 'SET UP GAME'}</PrimaryButton>
       </> : <p style={{ ...bodyStyle, padding: '10px 0' }}>Waiting for the host to start the game…</p>}
       <ExitRoomButton isHost={isHost} busy={busy} onExit={onExit} />
     </div>
   </Panel>
+}
+
+const setupShell: React.CSSProperties = { width: 'min(940px, calc(100vw - 32px))', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, textAlign: 'center' }
+const setupKicker: React.CSSProperties = { margin: 0, color: '#ef352f', font: "14px/1 'Staatliches', sans-serif", letterSpacing: '.15em', textTransform: 'uppercase' }
+const setupSecondary: React.CSSProperties = { minHeight: 48, padding: '12px 22px', borderRadius: 999, border: '1px solid #fff', background: 'transparent', color: '#fff', font: "16px/1 'Staatliches', sans-serif", cursor: 'pointer' }
+
+function MultiplayerSetupFrame({ gameId, onBack, children }: { gameId: MultiplayerGameId; onBack: () => void; children: React.ReactNode }) {
+  return <div className="game-fullscreen"><GameNav onBack={onBack} gameId={gameId} /><main style={{ flex: 1, display: 'grid', placeItems: 'center', padding: '36px 16px 72px' }}>{children}</main><GameFooter /></div>
+}
+
+function MiniMysterySetup({ busy, onBack, onStart }: { busy: boolean; onBack: () => void; onStart: (caseId: string, rounds: number) => void }) {
+  const [step, setStep] = useState<'case' | 'rounds'>('case')
+  const [category, setCategory] = useState('All')
+  const [caseId, setCaseId] = useState(MINI_MYSTERIES[0].id)
+  const [rounds, setRounds] = useState(3)
+  const selectedCase = MINI_MYSTERIES.find(item => item.id === caseId) ?? MINI_MYSTERIES[0]
+  const levels = [
+    { rounds: 2, label: 'QUICK CASE', detail: 'The same mystery at a faster pace.' },
+    { rounds: 3, label: 'CLASSIC CASE', detail: 'A balanced mix of clues and discussion.', recommended: true },
+    { rounds: 4, label: 'DEEP CASE', detail: 'More time to question and investigate.' },
+  ]
+  if (step === 'rounds') return <MultiplayerSetupFrame gameId="mini-mystery" onBack={() => setStep('case')}><section style={{ ...setupShell, width: 'min(660px, calc(100vw - 32px))' }}>
+    <p style={setupKicker}>CHOOSE YOUR EXPERIENCE</p><h1 style={headingStyle}>HOW DO YOU WANT TO PLAY?</h1><p style={bodyStyle}>{selectedCase.title} · Choose how many rounds you’d like to investigate.</p>
+    <div style={{ width: '100%', display: 'grid', gap: 10 }}>{levels.map(level => <button key={level.rounds} type="button" onClick={() => setRounds(level.rounds)} style={{ padding: 18, display: 'grid', gridTemplateColumns: '52px 1fr auto', alignItems: 'center', gap: 14, textAlign: 'left', borderRadius: 14, border: rounds === level.rounds ? '2px solid #fff' : '1px dashed rgba(255,255,255,.18)', background: rounds === level.rounds ? '#123953' : '#070708', color: '#fff', cursor: 'pointer' }}><strong style={{ font: "400 34px/1 'Anton SC',sans-serif", textAlign: 'center' }}>{level.rounds}</strong><span><b style={{ display: 'block', font: "400 19px/1 'Staatliches',sans-serif", letterSpacing: '.06em' }}>{level.label}</b><small style={{ color: 'rgba(255,255,255,.58)', font: "13px/1.35 'Satoshi',sans-serif" }}>{level.detail}</small></span>{level.recommended ? <em style={{ color: '#ffe800', font: "12px 'Staatliches',sans-serif", fontStyle: 'normal' }}>RECOMMENDED</em> : null}</button>)}</div>
+    <div style={{ display: 'flex', gap: 10 }}><button style={setupSecondary} onClick={() => setStep('case')}>GO BACK</button><PrimaryButton disabled={busy} onClick={() => onStart(caseId, rounds)}>{busy ? 'STARTING…' : 'DEAL PRIVATE DOSSIERS'}</PrimaryButton></div>
+  </section></MultiplayerSetupFrame>
+  return <MultiplayerSetupFrame gameId="mini-mystery" onBack={onBack}><section style={setupShell}>
+    <p style={setupKicker}>CHOOSE A CASE</p><h1 style={headingStyle}>MINI MYSTERY</h1>
+    <div className="mm-category-row" role="group" aria-label="Mystery category" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8 }}>{['All', ...new Set(MINI_MYSTERIES.map(item => item.category))].map(item => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)} className="game-btn" style={{ minHeight: 40, padding: '8px 15px', borderRadius: 999, border: category === item ? '1px solid #fff' : '1px dashed rgba(255,255,255,.2)', background: category === item ? '#dc2827' : '#070708', color: '#fff', font: "15px 'Staatliches',sans-serif", cursor: 'pointer' }}>{item.toUpperCase()}</button>)}</div>
+    <div className="mm-case-grid" style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>{MINI_MYSTERIES.filter(item => category === 'All' || item.category === category).map(item => <button key={item.id} className="game-btn" onClick={() => { setCaseId(item.id); setStep('rounds') }} style={{ minHeight: 220, padding: 20, borderRadius: 16, border: '2px solid #f4ead2', background: '#123953', color: '#fff', textAlign: 'left', cursor: 'pointer' }}><span style={{ ...setupKicker, color: '#f4ead2' }}>{item.category}</span><strong style={{ display: 'block', marginTop: 14, font: "400 28px/1.05 'Anton SC',sans-serif" }}>{item.title.toUpperCase()}</strong><span style={{ display: 'block', marginTop: 10, color: 'rgba(255,255,255,.48)', font: "12px/1.3 'Satoshi',sans-serif", textTransform: 'uppercase' }}>{item.setting}</span><span style={{ display: 'block', marginTop: 12, color: 'rgba(255,255,255,.72)', font: "14px/1.4 'Satoshi',sans-serif" }}>{item.incident}</span></button>)}</div>
+    <style>{`@media(max-width:720px){.mm-case-grid{grid-template-columns:1fr!important}.mm-category-row{justify-content:flex-start!important;overflow-x:auto;flex-wrap:nowrap!important;padding-bottom:4px}.mm-category-row button{flex:0 0 auto}}`}</style>
+  </section></MultiplayerSetupFrame>
+}
+
+const knowRelationships: Array<{ id: KnowMeRelationship; label: string }> = [
+  { id: 'couple', label: 'Couple' }, { id: 'friends', label: 'Friends' }, { id: 'family', label: 'Family' },
+  { id: 'new-connections', label: 'New Connections' }, { id: 'mixed-group', label: 'Mixed Group' },
+]
+
+function DoYouKnowMeSetup({ busy, onBack, onStart }: { busy: boolean; onBack: () => void; onStart: (mode: KnowMeMode, relationship: KnowMeRelationship, categories: KnowMeCategory[], rounds: number) => void }) {
+  const [step, setStep] = useState<'mode' | 'relationship' | 'categories' | 'rounds'>('mode')
+  const [mode, setMode] = useState<KnowMeMode>('read-me')
+  const [relationship, setRelationship] = useState<KnowMeRelationship>('friends')
+  const [categories, setCategories] = useState<KnowMeCategory[]>(['personality', 'everyday'])
+  const [rounds, setRounds] = useState(10)
+  const goBack = () => step === 'mode' ? onBack() : setStep(step === 'relationship' ? 'mode' : step === 'categories' ? 'relationship' : 'categories')
+  const toggle = (id: KnowMeCategory) => setCategories(current => current.includes(id) ? current.length === 1 ? current : current.filter(item => item !== id) : [...current, id])
+  let content: React.ReactNode
+  if (step === 'mode') content = <><p style={setupKicker}>HOW SHOULD ANSWERS MATCH?</p><h1 style={headingStyle}>CHOOSE YOUR MODE</h1><div className="multiplayer-setup-grid">{([{ id: 'read-me', label: 'READ ME', detail: 'Predict the spotlight player’s real answer.' }, { id: 'match-me', label: 'MATCH ME', detail: 'Try to choose the same answer as everyone else.' }] as const).map(item => <button key={item.id} className={mode === item.id ? 'selected' : ''} onClick={() => setMode(item.id)}><b>{item.label}</b><span>{item.detail}</span></button>)}</div></>
+  else if (step === 'relationship') content = <><p style={setupKicker}>WHO’S PLAYING?</p><h1 style={headingStyle}>CHOOSE YOUR GROUP</h1><div className="multiplayer-setup-grid">{knowRelationships.map(item => <button key={item.id} className={relationship === item.id ? 'selected' : ''} onClick={() => setRelationship(item.id)}><b>{item.label}</b>{relationship === item.id ? <em>✓</em> : null}</button>)}</div></>
+  else if (step === 'categories') content = <><p style={setupKicker}>PICK ONE OR MIX A FEW</p><h1 style={headingStyle}>CHOOSE CATEGORIES</h1><div className="multiplayer-setup-grid">{KNOW_ME_CATEGORIES.map(item => <button key={item.id} className={categories.includes(item.id) ? 'selected' : ''} onClick={() => toggle(item.id)}><b>{item.label}</b>{categories.includes(item.id) ? <em>✓</em> : null}</button>)}</div></>
+  else content = <><p style={setupKicker}>GAME LENGTH</p><h1 style={headingStyle}>HOW MANY ROUNDS?</h1><p style={bodyStyle}>Everyone will get a chance to answer.</p><input aria-label="Number of rounds" type="number" min={3} max={30} value={rounds} onChange={event => setRounds(Math.max(3, Math.min(30, Number(event.target.value))))} style={{ ...inputStyle, width: 150, textAlign: 'center', fontSize: 28 }} /></>
+  return <MultiplayerSetupFrame gameId="do-you-know-me" onBack={goBack}><section style={{ ...setupShell, width: 'min(620px, calc(100vw - 32px))' }}>{content}<div style={{ display: 'flex', gap: 10 }}><button style={setupSecondary} onClick={goBack}>GO BACK</button><PrimaryButton disabled={busy} onClick={() => step === 'mode' ? setStep('relationship') : step === 'relationship' ? setStep('categories') : step === 'categories' ? setStep('rounds') : onStart(mode, relationship, categories, rounds)}>{step === 'rounds' ? busy ? 'STARTING…' : 'START THE QUESTIONS' : 'CONTINUE'}</PrimaryButton></div><style>{`.multiplayer-setup-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.multiplayer-setup-grid button{position:relative;min-height:78px;padding:14px;border-radius:13px;border:1px dashed rgba(255,255,255,.18);background:#070708;color:#fff;text-align:left;cursor:pointer}.multiplayer-setup-grid button.selected{border:2px solid #fff;background:#47123c}.multiplayer-setup-grid b{display:block;font:20px 'Staatliches',sans-serif}.multiplayer-setup-grid span{display:block;margin-top:5px;color:rgba(255,255,255,.58);font:13px/1.35 'Satoshi',sans-serif}.multiplayer-setup-grid em{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-style:normal}@media(max-width:520px){.multiplayer-setup-grid{grid-template-columns:1fr}}`}</style></section></MultiplayerSetupFrame>
 }
 
 function ExistingGameCard({ room, prompt, revealed, canReveal, onReveal }: { room: MultiplayerRoom; prompt: unknown; revealed: boolean; canReveal: boolean; onReveal: () => void }) {
@@ -280,6 +329,7 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   whot: 'whot',
   imposter: 'imposter',
   'mini-mystery': 'mini-mystery',
+  'do-you-know-me': 'do-you-know-me',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -307,6 +357,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   whot: 'rules',
   imposter: 'game',
   'mini-mystery': 'game',
+  'do-you-know-me': 'game',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -334,6 +385,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   whot: 'rules',
   imposter: 'game',
   'mini-mystery': 'game',
+  'do-you-know-me': 'game',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -361,6 +413,7 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   whot: ['game'],
   imposter: ['game'],
   'mini-mystery': ['game'],
+  'do-you-know-me': ['game'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -576,6 +629,7 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
   const [error, setError] = useState('')
   const [onlineIds, setOnlineIds] = useState<string[]>([])
   const [presenceReady, setPresenceReady] = useState(false)
+  const [setupGameId, setSetupGameId] = useState<MultiplayerGameId | null>(null)
   const analyticsRoomRef = useRef<string | null>(null)
   const roomId = room?.id
   const roomGameId = room?.game_id
@@ -668,6 +722,7 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
     window.history.replaceState({}, '', `${url.pathname}${url.search}`)
     setRoom(null)
     setPlayers([])
+    setSetupGameId(null)
   }
   const exitRoom = () => run(async () => {
     if (!room) return
@@ -679,21 +734,39 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
   if (room && room.status !== 'lobby') {
     if (room.game_id === 'imposter') return <ImposterGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     if (room.game_id === 'mini-mystery') return <MiniMysteryMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
+    if (room.game_id === 'do-you-know-me') return <DoYouKnowMeMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     return <SharedOriginalGame room={room} players={players} currentUserId={currentUserId} onlineIds={onlineIds} onClose={exitRoom} />
+  }
+
+  if (room?.status === 'lobby' && room.host_user_id === currentUserId && setupGameId === 'mini-mystery') {
+    return <MiniMysterySetup busy={busy} onBack={() => setSetupGameId(null)} onStart={(caseId, rounds) => run(async () => {
+      const selectedCase = chooseMiniMysteryVariant(caseId)
+      await startMiniMysteryGame(room.id, selectedCase.id, rounds)
+      setSetupGameId(null)
+      await refresh(room.id)
+    })} />
+  }
+
+  if (room?.status === 'lobby' && room.host_user_id === currentUserId && setupGameId === 'do-you-know-me') {
+    return <DoYouKnowMeSetup busy={busy} onBack={() => setSetupGameId(null)} onStart={(mode, relationship, categoryIds, rounds) => run(async () => {
+      const prompts = shuffledPrompts(promptsFor(relationship, categoryIds)).slice(0, rounds)
+      await startDoYouKnowMeGame(room.id, mode, relationship, categoryIds, prompts.map(prompt => prompt.id), rounds)
+      setSetupGameId(null)
+      await refresh(room.id)
+    })} />
   }
 
   return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
     <GameNav onBack={onClose} />
     <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '36px 16px 72px' }}>
-      {!multiplayerConfigured ? <Panel narrow><h1 style={headingStyle}>CONNECT SUPABASE</h1><p style={{ ...bodyStyle, marginTop: '14px' }}>Add VITE_SUPABASE_PUBLISHABLE_KEY to enable Play Together.</p></Panel> : !room ? <Entry initialGameId={initialGameId} busy={busy} error={error} onCreate={(name, gameId) => run(async () => joinBundle(await createRoom(name, gameId)))} onJoin={(code, name) => run(async () => joinBundle(await joinRoom(code, name)))} /> : activeView === 'lobby' ? <Lobby room={room} players={players} currentUserId={currentUserId} onlineCount={onlineIds.length} busy={busy} onExit={exitRoom} onStart={settings => run(async () => {
-        if (room.game_id === 'imposter') {
-          await startImposterGame(room.id)
-          await refresh(room.id)
+      {!multiplayerConfigured ? <Panel narrow><h1 style={headingStyle}>CONNECT SUPABASE</h1><p style={{ ...bodyStyle, marginTop: '14px' }}>Add VITE_SUPABASE_PUBLISHABLE_KEY to enable Play Together.</p></Panel> : !room ? <Entry initialGameId={initialGameId} busy={busy} error={error} onCreate={(name, gameId) => run(async () => joinBundle(await createRoom(name, gameId)))} onJoin={(code, name) => run(async () => joinBundle(await joinRoom(code, name)))} /> : activeView === 'lobby' ? <Lobby room={room} players={players} currentUserId={currentUserId} onlineCount={onlineIds.length} busy={busy} onExit={exitRoom} onContinue={() => {
+        if (room.game_id === 'mini-mystery' || room.game_id === 'do-you-know-me') {
+          setSetupGameId(room.game_id)
           return
         }
-        if (room.game_id === 'mini-mystery') {
-          const selectedCase = chooseMiniMysteryVariant(settings?.caseId ?? MINI_MYSTERIES[0].id)
-          await startMiniMysteryGame(room.id, selectedCase.id, settings?.rounds ?? 3)
+        void run(async () => {
+        if (room.game_id === 'imposter') {
+          await startImposterGame(room.id)
           await refresh(room.id)
           return
         }
@@ -704,7 +777,8 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
           setSessionValue(room.id, 'step', INITIAL_STEPS[room.game_id]),
         ])
         await refresh(room.id)
-      })} /> : null}
+        })
+      }} /> : null}
     </main>
     <GameFooter />
   </div>

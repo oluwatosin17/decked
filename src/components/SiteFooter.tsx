@@ -1,8 +1,4 @@
-const SOCIALS = [
-  { src: '/icons/social-tiktok.svg', label: 'TikTok' },
-  { src: '/icons/social-instagram.svg', label: 'Instagram' },
-  { src: '/icons/social-whatsapp.svg', label: 'WhatsApp' },
-]
+import { SOCIAL_LINKS } from '../socialLinks'
 
 export default function SiteFooter({ onGuides }: { onGuides: () => void }) {
   return (
@@ -16,7 +12,11 @@ export default function SiteFooter({ onGuides }: { onGuides: () => void }) {
           <p className="font-inter site-footer-copy">Pick a deck, pass the phone, and let the chaos begin. 10+ party card games, no app, no login, no excuses.</p>
         </div>
         <div className="site-footer-socials">
-          {SOCIALS.map(social => <img key={social.label} src={social.src} alt={social.label} />)}
+          {SOCIAL_LINKS.map(social => (
+            <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}>
+              <img src={social.icon} alt="" />
+            </a>
+          ))}
         </div>
       </div>
       <div className="site-footer-rule" />

@@ -16,10 +16,6 @@ import { DINNER_TABLE_EVERYDAY_PROMPTS } from './content/decks/dinnerTableEveryd
 const DTC_COVER = '/assets/games/dinner-table-v2.png'
 const DTC_TEXTURE = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.11'/%3E%3C/svg%3E\")"
 
-const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
-
 /* ─── Questions by mode ─── */
 const QUESTIONS_BY_MODE: Record<string, string[]> = {
   'date-night': [

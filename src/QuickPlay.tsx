@@ -39,6 +39,7 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'whot', artworkId: 'whot', label: 'Whot', description: 'Fast Nigerian card play with familiar house rules' },
   { id: 'imposter', artworkId: 'imposter', label: 'Imposter', description: 'Give clues, spot the odd word, and expose the Imposter' },
   { id: 'mini-mystery', artworkId: 'mini-mystery', label: 'Mini Mystery', description: 'Take a role, question suspects, and solve the case' },
+  { id: 'do-you-know-me', artworkId: 'do-you-know-me', label: 'Do You Know Me?', description: 'Predict each other’s answers and match minds' },
 ]
 
 function shuffleGames(): GameSuggestion[] {

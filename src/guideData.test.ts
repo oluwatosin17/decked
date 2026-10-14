@@ -27,6 +27,7 @@ const guideIdToRegistryId: Record<string, GameId> = {
   whot: 'whot',
   imposter: 'imposter',
   'mini-mystery': 'mini-mystery',
+  'do-you-know-me': 'do-you-know-me',
 }
 
 describe('guide game names', () => {

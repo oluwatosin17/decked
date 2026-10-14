@@ -3,7 +3,7 @@ import { HomeCardRows, GAME_CARDS } from '../components/GameCardGrid'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 
-const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot', 'imposter', 'mini-mystery']
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot', 'imposter', 'mini-mystery', 'do-you-know-me']
 const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
@@ -19,6 +19,7 @@ const FEATURED_ACTIONS: Record<string, string> = {
   whot: 'onPlayWhot',
   imposter: 'onPlayImposter',
   'mini-mystery': 'onPlayMiniMystery',
+  'do-you-know-me': 'onPlayDoYouKnowMe',
 }
 
 function useIsMobile(bp = 768) {
@@ -50,8 +51,10 @@ interface Props {
   onPlayWhot: () => void
   onPlayImposter: () => void
   onPlayMiniMystery: () => void
+  onPlayDoYouKnowMe: () => void
   onBrowse: () => void
   onGuides: () => void
+  onFreeGamesGuide: () => void
   onAbout: () => void
   onPlayTogether: () => void
 }
@@ -114,9 +117,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onBrowse, onGuides, onAbout, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onBrowse, onGuides, onFreeGamesGuide, onAbout, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
-  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onBrowse }
 
   if (isMobile) {
     return (
@@ -158,6 +161,13 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
               width: '100%', letterSpacing: '0.04em',
             }}>VIEW ALL GAMES</button>
           </div>
+        </section>
+
+        <section className="home-guide-pathway">
+          <p className="home-guide-eyebrow">NOT SURE WHAT TO PLAY?</p>
+          <h2 className="font-anton">FIND A GAME FOR YOUR GROUP</h2>
+          <p>Compare free browser party games for friends, couples, families, and groups—no download or sign-up required.</p>
+          <button className="font-staatliches" onClick={onFreeGamesGuide}>FIND THE RIGHT GAME</button>
         </section>
 
         <SiteFooter onGuides={onGuides} />
@@ -221,8 +231,15 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
       <section className="cards-section home-cards-section w-full" style={{ paddingTop: '90px', paddingBottom: '80px' }}>
         <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} onPlayImposter={onPlayImposter} onPlayMiniMystery={onPlayMiniMystery} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} onPlayImposter={onPlayImposter} onPlayMiniMystery={onPlayMiniMystery} onPlayDoYouKnowMe={onPlayDoYouKnowMe} />
         </div>
+      </section>
+
+      <section className="home-guide-pathway">
+        <p className="home-guide-eyebrow">NOT SURE WHAT TO PLAY?</p>
+        <h2 className="font-anton">FIND A GAME FOR YOUR GROUP</h2>
+        <p>Compare free browser party games for friends, couples, families, and groups—no download or sign-up required.</p>
+        <button className="font-staatliches" onClick={onFreeGamesGuide}>FIND THE RIGHT GAME</button>
       </section>
 
       <SiteFooter onGuides={onGuides} />

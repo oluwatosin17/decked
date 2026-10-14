@@ -5,6 +5,7 @@ import { PASS_AND_PLAY_GAMES } from './passAndPlayRegistry'
 import catalogueMigration from '../../supabase/migrations/20261011120000_add_whot_multiplayer.sql?raw'
 import aggregateMigration from '../../supabase/migrations/20261011224500_refresh_multiplayer_analytics_aggregates.sql?raw'
 import exportMigration from '../../supabase/migrations/20261011231500_fix_command_centre_export_integrity.sql?raw'
+import knowMeMigration from '../../supabase/migrations/20261013150000_add_do_you_know_me_multiplayer.sql?raw'
 
 const sorted = (values: readonly string[]) => [...values].sort()
 
@@ -16,8 +17,8 @@ describe('analytics game wiring', () => {
 
   it('keeps every game in the effective database analytics allowlists', () => {
     for (const gameId of GAME_IDS) {
-      expect(catalogueMigration, `room/session analytics is missing ${gameId}`).toContain(`'${gameId}'`)
-      expect(aggregateMigration, `daily aggregates are missing ${gameId}`).toContain(`'${gameId}'`)
+      expect(catalogueMigration + knowMeMigration, `room/session analytics is missing ${gameId}`).toContain(`'${gameId}'`)
+      expect(aggregateMigration + knowMeMigration, `daily aggregates are missing ${gameId}`).toContain(`'${gameId}'`)
     }
   })
 

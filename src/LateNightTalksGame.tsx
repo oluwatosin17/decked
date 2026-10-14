@@ -20,10 +20,6 @@ const LNT_CHAT   = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/
 const LNT_SPARK1 = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-spark1.svg'
 const LNT_SPARK2 = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/lnt-spark2.svg'
 
-const SOCIAL_TIKTOK    = '/icons/social-tiktok.svg'
-const SOCIAL_INSTAGRAM = '/icons/social-instagram.svg'
-const SOCIAL_WHATSAPP  = '/icons/social-whatsapp.svg'
-
 /* ─── Questions by mode ─── */
 const QUESTIONS_BY_MODE: Record<string, string[]> = {
   couples: [
