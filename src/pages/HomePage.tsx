@@ -166,8 +166,8 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
         <section className="home-guide-pathway">
           <p className="home-guide-eyebrow">NOT SURE WHAT TO PLAY?</p>
           <h2 className="font-anton">FIND A GAME FOR YOUR GROUP</h2>
-          <p>Compare free browser party games for friends, couples, families, and groups—no download or sign-up required.</p>
-          <button className="font-staatliches" onClick={onFreeGamesGuide}>FIND THE RIGHT GAME</button>
+          <p>Find the right free browser party game for friends, couples, families, or groups. Play online instantly—no download or sign-up needed.</p>
+          <button className="font-staatliches" onClick={onFreeGamesGuide}>HELP ME CHOOSE</button>
         </section>
 
         <SiteFooter onGuides={onGuides} />
@@ -238,8 +238,8 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
       <section className="home-guide-pathway">
         <p className="home-guide-eyebrow">NOT SURE WHAT TO PLAY?</p>
         <h2 className="font-anton">FIND A GAME FOR YOUR GROUP</h2>
-        <p>Compare free browser party games for friends, couples, families, and groups—no download or sign-up required.</p>
-        <button className="font-staatliches" onClick={onFreeGamesGuide}>FIND THE RIGHT GAME</button>
+        <p>Find the right free browser party game for friends, couples, families, or groups. Play online instantly—no download or sign-up needed.</p>
+        <button className="font-staatliches" onClick={onFreeGamesGuide}>HELP ME CHOOSE</button>
       </section>
 
       <SiteFooter onGuides={onGuides} />
