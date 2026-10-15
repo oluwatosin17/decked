@@ -2365,9 +2365,9 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .how-to-instructions section { min-width: 0; padding: 26px; border-radius: 16px; background: #070708; }
 .how-to-step-number { margin: 0 0 28px; color: #777982; font: 16px 'Anton SC',sans-serif; }
 .how-to-instructions h2 { margin: 0 0 18px; font: 30px/1.08 'Anton SC',sans-serif; }
-.how-to-instructions ol { margin: 0; padding-left: 22px; }
+.how-to-instructions ol { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
 .how-to-instructions li, .how-to-instructions section > p:last-child { margin: 0 0 12px; color: #c5c6ca; font: 15px/1.55 'Satoshi',sans-serif; }
-.how-to-instructions li { padding-left: 4px; }
+.how-to-instructions li { margin: 0; padding: 0; }
 .how-to-deep-dive { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 16px; }
 .how-to-deep-dive section { padding: 28px; border: 1px solid rgba(255,255,255,.07); border-radius: 16px; background: rgba(7,7,8,.82); }
 .play-mode-how-to { padding: 2px 4px; border: 0; background: none; color: rgba(255,255,255,.58); font: 14px/1.4 'Satoshi',sans-serif; cursor: pointer; }
