@@ -24,6 +24,7 @@ export default function SiteFooter({ onGuides }: { onGuides: () => void }) {
         <p>© 2026 DECKED. All rights reserved.</p>
         <div className="site-footer-links">
           <button onClick={onGuides}>Guides</button>
+          <a href="/feedback?source=footer">Feedback</a>
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
           <a href="/cookies">Cookies</a>

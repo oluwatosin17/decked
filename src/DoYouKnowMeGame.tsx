@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { track } from './analytics'
-import { GameFooter, GameNav } from './components/GameShell'
+import { CompletionFeedbackLink, GameFooter, GameNav } from './components/GameShell'
 import PlayerSetup, { type Player } from './components/PlayerSetup'
 import DeckSize from './components/DeckSize'
 import { KNOW_ME_CATEGORIES, promptsFor, shuffledPrompts, type KnowMeCategory, type KnowMeMode, type KnowMePrompt, type KnowMeRelationship } from './content/doYouKnowMe'
@@ -106,7 +106,7 @@ export default function DoYouKnowMeGame({ onClose }: { onClose: () => void }) {
     const topScore=ranked[0]?.score??0
     const winners=ranked.filter(item=>item.score===topScore)
     const resultCopy=winners.length>1?`${winners.map(item=>item.player.name).join(' & ')} tied at the top.`:`${winners[0]?.player.name??'Nobody'} knows the group best.`
-    content=<><img className="dykm-trophy" src="/icons/trophy.svg" alt=""/><div><p className="dykm-kicker">GAME COMPLETE</p><h1 style={title}>{winners.length>1?'IT’S A TIE':'YOU KNOW THEM BEST'}</h1><p className="dykm-result-copy">{resultCopy}</p></div><div className="dykm-final-scores"><p>FINAL SCORES</p>{ranked.map((item,index)=><div className={index===0?'winner':''} key={`${item.playerIndex}-${item.player.name}`}><b>#{index+1}</b><i style={{background:item.player.color}}/><span>{item.player.name}</span>{index===0?<img src="/icons/trophy.svg" alt="Winner"/>:null}<strong>{item.score} {item.score===1?'PT':'PTS'}</strong></div>)}</div><div className="dykm-final-actions"><button style={secondary} onClick={onClose}>BROWSE GAMES</button><button style={primary} onClick={()=>begin()}>PLAY AGAIN</button></div></>
+    content=<><img className="dykm-trophy" src="/icons/trophy.svg" alt=""/><div><p className="dykm-kicker">GAME COMPLETE</p><h1 style={title}>{winners.length>1?'IT’S A TIE':'YOU KNOW THEM BEST'}</h1><p className="dykm-result-copy">{resultCopy}</p></div><div className="dykm-final-scores"><p>FINAL SCORES</p>{ranked.map((item,index)=><div className={index===0?'winner':''} key={`${item.playerIndex}-${item.player.name}`}><b>#{index+1}</b><i style={{background:item.player.color}}/><span>{item.player.name}</span>{index===0?<img src="/icons/trophy.svg" alt="Winner"/>:null}<strong>{item.score} {item.score===1?'PT':'PTS'}</strong></div>)}</div><div className="dykm-final-actions"><button style={secondary} onClick={onClose}>BROWSE GAMES</button><button style={primary} onClick={()=>begin()}>PLAY AGAIN</button></div><CompletionFeedbackLink gameId={GAME_ID}/></>
   }
 
   return <Frame onClose={onClose}><main className="dykm-main"><section style={shell}>{content}</section></main><Styles /><RelationshipOverrides /></Frame>

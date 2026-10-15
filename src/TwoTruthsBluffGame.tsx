@@ -23,6 +23,7 @@ function Button({ children, onClick, secondary = false, disabled = false }: { ch
 }
 
 function playerKey(player: Player, index: number) { return player.userId ?? `local-${index}` }
+const createVoteSessionId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 
 export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void }) {
   const multiplayer = useMultiplayerSession()
@@ -34,6 +35,7 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
   const [votes, setVotes] = usePersistentGameState<VoteMap>(GAME_ID, 'votes', {})
   const [scores, setScores] = usePersistentGameState<ScoreMap>(GAME_ID, 'scores', {})
   const [guesserIndex, setGuesserIndex] = usePersistentGameState(GAME_ID, 'guesserIndex', 0)
+  const [voteSessionId, setVoteSessionId] = usePersistentGameState(GAME_ID, 'voteSessionId', 'initial')
   const [drafts, setDrafts] = useState(['', '', ''])
   const [draftBluff, setDraftBluff] = useState(2)
   const [selectedGuess, setSelectedGuess] = useState('')
@@ -42,7 +44,7 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
   const isHost = !multiplayer || multiplayer.currentUserId === multiplayer.hostUserId
   const isActive = !multiplayer || active?.userId === multiplayer.currentUserId
   const eligible = useMemo(() => players.map(playerKey).filter(key => key !== activeKey), [players, activeKey])
-  const votePrefix = `ttbVote-${round}-`
+  const votePrefix = `ttbVote-${voteSessionId}-${round}-`
   const effectiveVotes = useMemo(() => {
     if (!multiplayer) return votes
     return Object.fromEntries(eligible.map(key => [key, multiplayer.values[`${votePrefix}${key}`]]).filter((entry): entry is [string, string] => typeof entry[1] === 'string'))
@@ -53,6 +55,7 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
   const nameForKey = (key: string) => players.find((player, index) => playerKey(player, index) === key)?.name ?? 'Player'
 
   const startRound = (nextRound = round) => {
+    if (nextRound === 0) setVoteSessionId(createVoteSessionId())
     setRound(nextRound)
     setStatements([])
     setBluffId('')
@@ -112,7 +115,7 @@ export default function TwoTruthsBluffGame({ onClose }: { onClose: () => void })
   }
 
   const nextRound = () => round + 1 >= players.length ? setStep('done') : startRound(round + 1)
-  const restart = () => { setRound(0); setStatements([]); setBluffId(''); setVotes({}); setScores({}); setGuesserIndex(0); setSelectedGuess(''); setStep(multiplayer ? 'write' : 'playerSetup') }
+  const restart = () => { setVoteSessionId(createVoteSessionId()); setRound(0); setStatements([]); setBluffId(''); setVotes({}); setScores({}); setGuesserIndex(0); setSelectedGuess(''); setStep(multiplayer ? 'write' : 'playerSetup') }
 
   let content: React.ReactNode
   if (step === 'playerSetup') content = <PlayerSetup minPlayers={2} initialPlayers={players} onSkip={onClose} onNext={nextPlayers => { setPlayers(nextPlayers); startRound(0) }} />

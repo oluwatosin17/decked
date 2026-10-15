@@ -559,18 +559,24 @@ export function CharadesCard({ flipped, prompt, onFlip, compact = false }: { fli
 
 /* ─── Compact countdown control with pause/resume and cancel actions ─── */
 export function TimerControl({
-  timeLeft, roundLength, paused, onTogglePause, onCancel,
+  timeLeft, roundLength, paused, onTogglePause, onCancel, urgentAt = 5,
+  showControls = true, pauseLabel = 'Pause', resumeLabel = 'Resume', cancelLabel = 'Cancel',
 }: {
   timeLeft: number
   roundLength: number
   paused: boolean
   onTogglePause: () => void
   onCancel: () => void
+  urgentAt?: number
+  showControls?: boolean
+  pauseLabel?: string
+  resumeLabel?: string
+  cancelLabel?: string
 }) {
   const ratio = roundLength > 0 ? Math.max(0, timeLeft / roundLength) : 0
   const minutes = Math.floor(timeLeft / 60)
   const seconds = String(timeLeft % 60).padStart(2, '0')
-  const urgent = timeLeft <= 5
+  const urgent = timeLeft <= urgentAt
 
   return (
     <div className={`charades-timer-control${urgent ? ' is-urgent' : ''}`}>
@@ -579,10 +585,10 @@ export function TimerControl({
         <rect className="charades-timer-progress" x="6" y="6" width="388" height="164" rx="44" pathLength="100"
           style={{ strokeDashoffset: 100 - ratio * 100 }} />
       </svg>
-      <div className="charades-timer-content">
-        <button className="charades-timer-pause" onClick={onTogglePause}>{paused ? 'Resume' : 'Pause'}</button>
+      <div className={`charades-timer-content${showControls ? '' : ' is-display-only'}`}>
+        {showControls ? <button className="charades-timer-pause" onClick={onTogglePause}>{paused ? resumeLabel : pauseLabel}</button> : null}
         <p className={urgent ? 'timer-pulse' : ''}>{minutes}:{seconds}</p>
-        <button className="charades-timer-cancel" onClick={onCancel}>Cancel</button>
+        {showControls ? <button className="charades-timer-cancel" onClick={onCancel}>{cancelLabel}</button> : null}
       </div>
     </div>
   )

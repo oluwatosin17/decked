@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { HomeCardRows, GAME_CARDS } from '../components/GameCardGrid'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 
-const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot', 'imposter', 'mini-mystery', 'do-you-know-me']
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot', 'imposter', 'mini-mystery', 'do-you-know-me', 'think-fast', 'not-me-your-honour']
 const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
@@ -20,6 +20,8 @@ const FEATURED_ACTIONS: Record<string, string> = {
   imposter: 'onPlayImposter',
   'mini-mystery': 'onPlayMiniMystery',
   'do-you-know-me': 'onPlayDoYouKnowMe',
+  'think-fast': 'onPlayThinkFast',
+  'not-me-your-honour': 'onPlayNotMeYourHonour',
 }
 
 function useIsMobile(bp = 768) {
@@ -52,6 +54,8 @@ interface Props {
   onPlayImposter: () => void
   onPlayMiniMystery: () => void
   onPlayDoYouKnowMe: () => void
+  onPlayThinkFast: () => void
+  onPlayNotMeYourHonour: () => void
   onBrowse: () => void
   onGuides: () => void
   onFreeGamesGuide: () => void
@@ -62,7 +66,7 @@ interface Props {
 function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) | undefined> }) {
   const gridRef = useRef<HTMLDivElement>(null)
   const [colW, setColW] = useState(166)
-  const allCards = GAME_CARDS(actions.onPlayTruthOrDare!, actions.onPlaySpicyStarters!, actions.onPlayLateNightTalks)
+  const allCards = useMemo(() => GAME_CARDS(), [])
   const featured = allCards.filter(c => FEATURED_IDS.includes(c.id))
 
   useEffect(() => {
@@ -117,9 +121,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onBrowse, onGuides, onFreeGamesGuide, onAbout, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onBrowse, onGuides, onFreeGamesGuide, onAbout, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
-  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onBrowse }
 
   if (isMobile) {
     return (
@@ -231,7 +235,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
       <section className="cards-section home-cards-section w-full" style={{ paddingTop: '90px', paddingBottom: '80px' }}>
         <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} onPlayImposter={onPlayImposter} onPlayMiniMystery={onPlayMiniMystery} onPlayDoYouKnowMe={onPlayDoYouKnowMe} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} onPlayImposter={onPlayImposter} onPlayMiniMystery={onPlayMiniMystery} onPlayDoYouKnowMe={onPlayDoYouKnowMe} onPlayThinkFast={onPlayThinkFast} onPlayNotMeYourHonour={onPlayNotMeYourHonour} />
         </div>
       </section>
 

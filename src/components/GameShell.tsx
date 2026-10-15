@@ -53,11 +53,12 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
 
         {/* Desktop nav links */}
         <div className="game-nav-desktop" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          {['Browse Games', 'Guides', 'About'].map(label => (
+          {['Browse Games', 'Guides', 'About', 'Feedback'].map(label => (
             <button key={label} onClick={label === 'Browse Games' ? leaveGame : undefined}
-              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: label === 'Browse Games' ? 'pointer' : 'default', padding: 0, transition: 'color 0.2s' }}
-              onMouseOver={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = '#fff' }}
-              onMouseOut={e => { if (label === 'Browse Games') (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: label === 'Browse Games'||label==='Feedback' ? 'pointer' : 'default', padding: 0, transition: 'color 0.2s' }}
+              onClickCapture={label==='Feedback'?()=>{window.location.href='/feedback?source=header'}:undefined}
+              onMouseOver={e => { if (label === 'Browse Games'||label==='Feedback') (e.currentTarget as HTMLButtonElement).style.color = '#fff' }}
+              onMouseOut={e => { if (label === 'Browse Games'||label==='Feedback') (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
             >{label}</button>
           ))}
         </div>
@@ -106,6 +107,7 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
                 style={{ flex: 1, minHeight: '44px', border: 0, borderRadius: '999px', background: '#dc2827', color: '#fff', fontFamily: "'Staatliches', sans-serif", fontSize: '15px', cursor: 'pointer' }}
               >RESET GAME</button>
             </div>
+            <a href={`/feedback?game=${encodeURIComponent(gameId??'')}&source=game_menu&from=${encodeURIComponent(window.location.pathname)}`} style={{ display:'inline-block', marginTop:18, color:'rgba(255,255,255,.58)', font:"13px 'Satoshi',sans-serif", textUnderlineOffset:3 }}>Have feedback? Tell us here.</a>
           </div>
         </div>
       )}
@@ -158,8 +160,8 @@ export function GameFooter() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
         <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: '#9ca3af' }}>© 2026 DECKED. All rights reserved.</span>
         <div style={{ display: 'flex', gap: '24px' }}>
-          {['Privacy', 'Terms', 'Cookie'].map(l => (
-            <button key={l} style={{ background: 'none', border: 'none', color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', cursor: 'pointer', padding: 0 }}>{l}</button>
+          {['Feedback','Privacy', 'Terms', 'Cookie'].map(l => (
+            <button key={l} onClick={l==='Feedback'?()=>{window.location.href='/feedback?source=footer'}:undefined} style={{ background: 'none', border: 'none', color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: '13px', cursor: 'pointer', padding: 0 }}>{l}</button>
           ))}
         </div>
       </div>
@@ -180,4 +182,15 @@ export function PlayAgainLabel() {
   }
   const count = multiplayer.rematchRequestCount ?? 0
   return <>{count > 0 ? `PLAY AGAIN · ${count} REQUEST${count === 1 ? '' : 'S'}` : 'PLAY AGAIN'}</>
+}
+
+/** Quiet, optional feedback entry point for completed games. */
+export function CompletionFeedbackLink({ gameId }: { gameId: string }) {
+  return <p style={{ margin: '2px 0 0', color: 'rgba(255,255,255,.46)', font: "13px/1.4 'Satoshi', sans-serif", textAlign: 'center' }}>
+    Have feedback?{' '}
+    <a
+      href={`/feedback?game=${encodeURIComponent(gameId)}&source=game_complete&from=${encodeURIComponent(window.location.pathname)}`}
+      style={{ color: 'rgba(255,255,255,.72)', textDecoration: 'underline', textUnderlineOffset: 3 }}
+    >Tell us here.</a>
+  </p>
 }

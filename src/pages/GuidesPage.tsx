@@ -13,6 +13,7 @@ const GAME_CONTEXT: Record<string, { format: string; mood: string }> = {
   'most-likely-to': { format: 'Group voting', mood: 'Playful' },
   'choose-your-side': { format: 'Pick and debate', mood: 'Conversational' },
   'who-said-that': { format: 'Guessing game', mood: 'Familiar groups' },
+  'think-fast': { format: 'Buzzer challenge', mood: 'Fast and competitive' },
   'spicy-starters': { format: 'Flirty prompts', mood: 'Playful' },
   'late-night-talks': { format: 'Deep questions', mood: 'Intimate' },
   'lets-reconnect': { format: 'Reflection prompts', mood: 'Thoughtful' },

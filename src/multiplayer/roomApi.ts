@@ -56,6 +56,21 @@ export interface DoYouKnowMeState {
   scores: Record<string, number>
 }
 
+export interface ThinkFastState {
+  phase: 'thinking' | 'answering' | 'judging' | 'results'
+  round: number
+  rounds: number
+  prompt: string
+  attempt: number
+  buzzerUserId: string | null
+  lockedUserIds: string[]
+  hasVoted: boolean
+  voteCount: number
+  scores: Record<string, number>
+  answerSeconds: number
+  answerDeadline: string | null
+}
+
 export async function createRoom(displayName: string, gameId: MultiplayerGameId): Promise<RoomBundle> {
   track('room_create_attempted', { game_id: gameId })
   const { data, error } = await supabase.rpc('decked_create_room', { p_display_name: displayName.trim(), p_game_id: gameId })
@@ -91,6 +106,33 @@ export async function advanceMultiGame(roomId: string) {
 export async function setSessionValue(roomId: string, key: string, value: unknown) {
   const { error } = await supabase.rpc('decked_set_session_value', { p_room_id: roomId, p_key: key, p_value: value })
   throwTrackedRpcError(error, 'decked_set_session_value')
+}
+
+export async function setSessionValues(roomId: string, values: Record<string, unknown>) {
+  if (Object.keys(values).length === 0) return
+  const { error } = await supabase.rpc('decked_set_session_values', { p_room_id: roomId, p_values: values })
+  if (isMissingBatchSessionRpc(error)) {
+    // Keep multiplayer usable while a frontend deployment and its database
+    // migration are briefly out of sync. The older single-value RPC exists on
+    // every supported database version, so ordered writes are a safe fallback.
+    for (const [key, value] of Object.entries(values)) {
+      await setSessionValue(roomId, key, value)
+    }
+    return
+  }
+  throwTrackedRpcError(error, 'decked_set_session_values')
+}
+
+function isMissingBatchSessionRpc(error: unknown) {
+  if (!error || typeof error !== 'object') return false
+  const candidate = error as { code?: unknown; message?: unknown; details?: unknown; hint?: unknown }
+  if (candidate.code === 'PGRST202' || candidate.code === '42883') return true
+  const description = [candidate.message, candidate.details, candidate.hint]
+    .filter((value): value is string => typeof value === 'string')
+    .join(' ')
+    .toLowerCase()
+  return description.includes('decked_set_session_values')
+    && (description.includes('not find') || description.includes('does not exist'))
 }
 
 export async function setCharadesDeck(roomId: string, deck: string[]) {
@@ -259,6 +301,23 @@ export async function advanceDoYouKnowMe(roomId: string) {
   const { error } = await supabase.rpc('decked_do_you_know_me_advance', { p_room_id: roomId })
   throwTrackedRpcError(error, 'decked_do_you_know_me_advance')
 }
+
+export async function startThinkFastGame(roomId: string, prompts: string[], answerSeconds: number) {
+  const { error } = await supabase.rpc('decked_start_think_fast', { p_room_id: roomId, p_prompts: prompts, p_answer_seconds: answerSeconds })
+  throwTrackedRpcError(error, 'decked_start_think_fast')
+}
+
+export async function getThinkFastState(roomId: string): Promise<ThinkFastState> {
+  const { data, error } = await supabase.rpc('decked_get_think_fast_state', { p_room_id: roomId })
+  throwTrackedRpcError(error, 'decked_get_think_fast_state')
+  const value = data as Record<string, unknown>
+  const rawScores = value.scores && typeof value.scores === 'object' ? value.scores as Record<string, unknown> : {}
+  return { phase:value.phase as ThinkFastState['phase'],round:Number(value.round_number??1),rounds:Number(value.rounds??1),prompt:String(value.prompt??''),attempt:Number(value.attempt_number??1),buzzerUserId:typeof value.buzzer_user_id==='string'?value.buzzer_user_id:null,lockedUserIds:Array.isArray(value.locked_user_ids)?value.locked_user_ids.map(String):[],hasVoted:value.has_voted===true,voteCount:Number(value.vote_count??0),scores:Object.fromEntries(Object.entries(rawScores).map(([key,item])=>[key,Number(item)])),answerSeconds:Number(value.answer_seconds??7),answerDeadline:typeof value.answer_deadline==='string'?value.answer_deadline:null }
+}
+
+export async function buzzThinkFast(roomId:string){const{error}=await supabase.rpc('decked_think_fast_buzz',{p_room_id:roomId});throwTrackedRpcError(error,'decked_think_fast_buzz')}
+export async function judgeThinkFast(roomId:string){const{error}=await supabase.rpc('decked_think_fast_judge',{p_room_id:roomId});throwTrackedRpcError(error,'decked_think_fast_judge')}
+export async function voteThinkFast(roomId:string,approved:boolean){const{error}=await supabase.rpc('decked_think_fast_vote',{p_room_id:roomId,p_approved:approved});throwTrackedRpcError(error,'decked_think_fast_vote')}
 
 async function trackRoomSuccess(kind: 'room_created' | 'room_joined', bundle: RoomBundle, gameId: MultiplayerGameId) {
   try {

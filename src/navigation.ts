@@ -1,5 +1,5 @@
 export type Screen =
-  | 'home' | 'about' | 'privacy' | 'terms' | 'cookies' | 'browse' | 'guides'
+  | 'home' | 'about' | 'feedback' | 'privacy' | 'terms' | 'cookies' | 'browse' | 'guides'
   | `guide-${string}`
   | 'quick-play' | 'play-mode'
   | 'lnt-select' | 'late-night-talks'
@@ -18,11 +18,14 @@ export type Screen =
   | 'imposter'
   | 'mini-mystery'
   | 'do-you-know-me'
+  | 'think-fast'
+  | 'not-me-your-honour'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<string, string> = {
   home: '/',
   about: '/about',
+  feedback: '/feedback',
   privacy: '/privacy',
   terms: '/terms',
   cookies: '/cookies',
@@ -57,6 +60,8 @@ export const SCREEN_PATHS: Record<string, string> = {
   imposter: '/games/imposter',
   'mini-mystery': '/games/mini-mystery',
   'do-you-know-me': '/games/do-you-know-me',
+  'think-fast': '/games/think-fast',
+  'not-me-your-honour': '/games/not-me-your-honour',
   'play-together': '/play-together',
 }
 

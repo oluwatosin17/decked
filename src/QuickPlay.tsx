@@ -40,6 +40,8 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'imposter', artworkId: 'imposter', label: 'Imposter', description: 'Give clues, spot the odd word, and expose the Imposter' },
   { id: 'mini-mystery', artworkId: 'mini-mystery', label: 'Mini Mystery', description: 'Take a role, question suspects, and solve the case' },
   { id: 'do-you-know-me', artworkId: 'do-you-know-me', label: 'Do You Know Me?', description: 'Predict each other’s answers and match minds' },
+  { id: 'think-fast', artworkId: 'think-fast', label: 'Think Fast', description: 'Race to name three answers before time runs out' },
+  { id: 'not-me-your-honour', artworkId: 'not-me-your-honour', label: 'Not Me, Your Honour!', description: 'Argue ridiculous cases, reveal evidence, and face the verdict' },
 ]
 
 function shuffleGames(): GameSuggestion[] {

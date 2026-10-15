@@ -7,6 +7,7 @@ export interface ReliabilityOperationsResponse {
   groups:Array<{error_type:string;fingerprint:string;error_class:string;occurrences:number;affected_sessions:number;first_seen:string;last_seen:string}>
   trend:Array<{metric_date:string;frontend_errors:number;rpc_failures:number;realtime_failures:number}>
   breakdowns:{game:Breakdown[];browser:Breakdown[];device:Breakdown[];app_version:Breakdown[]};refreshed_at:string|null;partial_warnings:string[]
+  performance:Array<{metric_name:string;sample_count:number;p50_ms:number;p75_ms:number;p95_ms:number;good_rate:number}>
 }
 export interface Breakdown{value:string;occurrences:number}
 export interface ReliabilityDimensionFilters{browser:string;appVersion:string}

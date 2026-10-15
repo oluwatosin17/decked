@@ -1,8 +1,10 @@
+import ResponsiveGameArtwork from './ResponsiveGameArtwork'
+
 const MOST_LIKELY_COLORS = ['#ef6655', '#ffd12d', '#66d7ad', '#f7f1df']
 
 export function TwoTruthsBluffArtwork({ className = '', portrait = false }: { className?: string; portrait?: boolean }) {
   return <div className={className} role="img" aria-label="Two Truths and a Bluff" style={{ position: 'relative', width: portrait ? '100%' : undefined, height: portrait ? '100%' : undefined, aspectRatio: portrait ? '4 / 5' : '1', overflow: 'hidden' }}>
-    <img loading="lazy" decoding="async" src="/assets/games/two-truths-bluff-approved.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: portrait ? 'fill' : 'contain', objectPosition: 'center' }} />
+    <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/two-truths-bluff-approved.png" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: portrait ? 'fill' : 'contain', objectPosition: 'center' }} />
   </div>
 }
 
@@ -16,6 +18,6 @@ export function MostLikelyArtwork({ compact = false, fluid = false }: { compact?
 
 export function ChooseYourSideArtwork({ compact = false }: { compact?: boolean }) {
   return <div style={{ width: compact ? 130 : '100%', aspectRatio: '4 / 5', height: compact ? undefined : '100%', minHeight: compact ? undefined : 0, position: 'relative', overflow: 'hidden', borderRadius: compact ? 9 : 14 }}>
-    <img loading="lazy" decoding="async" src="/assets/games/choose-your-side.png" alt="Choose Your Side" style={{ display: 'block', position: 'absolute', width: '123.4%', height: '118.2%', left: '-11.7%', top: '-9.1%', maxWidth: 'none' }} />
+    <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/choose-your-side.png" alt="Choose Your Side" style={{ display: 'block', position: 'absolute', width: '123.4%', height: '118.2%', left: '-11.7%', top: '-9.1%', maxWidth: 'none' }} />
   </div>
 }

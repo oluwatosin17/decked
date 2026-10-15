@@ -35,6 +35,8 @@ const games = [
   game('/games/imposter', 'Imposter', '/assets/games/imposter.png', 'friends and social deduction groups', '3 or more', '10–25 minutes', 'Social deduction game'),
   game('/games/mini-mystery', 'Mini Mystery', '/assets/games/mini-mystery-dossier.png', 'friends who enjoy mysteries and roleplay', '4–8', '20–50 minutes', 'Mystery game'),
   game('/games/do-you-know-me', 'Do You Know Me?', '/assets/games/do-you-know-me.png', 'couples, friends, families, and groups', '2–10', '10–45 minutes', 'Social prediction game'),
+  game('/games/think-fast', 'Think Fast', '/assets/games/think-fast-orange.png', 'friends, families, and party groups', '2–12', '10–30 minutes', 'Fast-paced buzzer game'),
+  game('/games/not-me-your-honour', 'Not Me, Your Honour!', '/assets/games/not-me-your-honour.png', 'friends and party groups who enjoy improvisation', '3–10', '15–45 minutes', 'Courtroom party game'),
 ]
 
 const pages = [
@@ -76,6 +78,14 @@ const pages = [
         <p>Pass one phone around or invite everyone to join from their own device. There is nothing to download, no account to create, and no complicated setup.</p>
         <p><a href="/games">Browse all Decked games</a></p>
       </main>`,
+  },
+  {
+    path: '/feedback',
+    title: 'Send Feedback — Decked',
+    description: 'Share an idea, report a problem, or tell us how Decked can make its games better.',
+    image: DEFAULT_IMAGE,
+    type: 'WebPage',
+    body: `<main><nav><a href="/">Decked</a> · <a href="/games">Browse games</a></nav><h1>Send feedback to Decked</h1><p>Share an idea, report a problem, or tell us how we can make Decked’s games better.</p></main>`,
   },
   legalPage('/privacy', 'Privacy Policy — Decked', 'Learn what information Decked processes, why it is used, how long it is kept, and the privacy choices available to you.', 'Privacy Policy', 'Decked processes limited on-device game data, temporary multiplayer information, technical records, and privacy-safe usage analytics when enabled. We do not sell personal data or use it for targeted advertising.'),
   legalPage('/terms', 'Terms of Use — Decked', 'Read the terms governing use of Decked browser games, multiplayer rooms, user content, safety, and availability.', 'Terms of Use', 'These terms govern use of Decked. Use the service lawfully, choose games appropriate for your group, skip any prompt, and never treat a game as an instruction to do something unsafe or illegal.'),
@@ -270,7 +280,7 @@ function breadcrumbItems(page, canonical) {
     items.push({ '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/guides` })
     items.push({ '@type': 'ListItem', position: 3, name: page.heading, item: canonical })
   } else {
-    const names = { '/games': 'Games', '/guides': 'Guides', '/about': 'About', '/privacy': 'Privacy Policy', '/terms': 'Terms of Use', '/cookies': 'Cookie Policy' }
+    const names = { '/games': 'Games', '/guides': 'Guides', '/about': 'About', '/feedback': 'Feedback', '/privacy': 'Privacy Policy', '/terms': 'Terms of Use', '/cookies': 'Cookie Policy' }
     const name = names[page.path] ?? page.title
     items.push({ '@type': 'ListItem', position: 2, name, item: canonical })
   }

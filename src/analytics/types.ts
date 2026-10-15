@@ -28,7 +28,7 @@ export interface AnalyticsEventProperties {
   }
   content_delivery_completed: GameContext & { content_source:'managed';release_id:string;item_count:number;fetch_duration_ms:number }
   content_delivery_failed: GameContext & { content_source:'bundled';fallback_reason:string;fetch_duration_ms:number }
-  performance_measured: { metric_name:'ttfb'|'dom_content_loaded'|'load_complete';duration_ms:number;rating:'good'|'needs_improvement'|'poor' }
+  performance_measured: { metric_name:'ttfb'|'dom_content_loaded'|'load_complete'|'first_contentful_paint'|'largest_contentful_paint'|'interaction_to_next_paint'|'multiplayer_sync';duration_ms:number;rating:'good'|'needs_improvement'|'poor';game_id?:MultiplayerGameId;retry_count?:number }
   screen_viewed: { screen_id: Screen; previous_screen_id?: Screen; game_id?: MultiplayerGameId }
   navigation_back_selected: {
     screen_id: Screen

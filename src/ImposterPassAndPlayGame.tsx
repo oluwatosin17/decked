@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { passAndPlayTracker } from './analytics/passAndPlay'
-import { GameFooter, GameNav } from './components/GameShell'
+import { CompletionFeedbackLink, GameFooter, GameNav } from './components/GameShell'
 import PlayerSetup, { type Player } from './components/PlayerSetup'
 import { ImposterWordCard } from './components/ImposterWordCard'
 import DeckSize from './components/DeckSize'
@@ -86,7 +86,7 @@ export default function ImposterPassAndPlayGame({ onClose }: { onClose: () => vo
       </div>)}
     </div>
     <p style={body}>{accused != null ? `The group selected ${players[accused].name} with ${highest} vote${highest === 1 ? '' : 's'}.` : 'Nobody received a clear majority.'}</p>
-    <div className="done-btns" style={{ display: 'flex', gap: 10 }}><button className="game-btn" style={secondary} onClick={() => setPhase('setup')}>CHANGE PLAYERS</button><button className="game-btn-primary" style={primary} onClick={() => deal(players)}>PLAY AGAIN</button></div>
+    <div className="done-btns" style={{ display: 'flex', gap: 10 }}><button className="game-btn" style={secondary} onClick={() => setPhase('setup')}>CHANGE PLAYERS</button><button className="game-btn-primary" style={primary} onClick={() => deal(players)}>PLAY AGAIN</button></div><CompletionFeedbackLink gameId={GAME_ID} />
   </>
 
   return <div className="game-fullscreen"><GameNav onBack={onClose} gameId={GAME_ID} /><main className="screen-enter" style={{ flex: 1, display: 'grid', placeItems: 'center', padding: '36px 16px 72px' }}><div style={shell}>{content}</div></main><GameFooter /></div>

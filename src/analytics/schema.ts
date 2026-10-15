@@ -14,7 +14,7 @@ const EVENT_FIELDS = {
   app_opened: ['initial_screen_id', 'entry_path', 'is_pwa', 'device_class', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'referrer_domain', 'timezone', 'timezone_offset_minutes'],
   content_delivery_completed: ['game_id','content_source','release_id','item_count','fetch_duration_ms'],
   content_delivery_failed: ['game_id','content_source','fallback_reason','fetch_duration_ms'],
-  performance_measured: ['metric_name','duration_ms','rating'],
+  performance_measured: ['metric_name','duration_ms','rating','game_id','retry_count'],
   screen_viewed: ['screen_id', 'previous_screen_id', 'game_id'],
   navigation_back_selected: ['screen_id', 'destination_screen_id', 'game_id', 'lifecycle_stage'],
   browse_category_selected: ['category_id', 'previous_category_id', 'visible_game_count'],

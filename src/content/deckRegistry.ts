@@ -23,6 +23,8 @@ import type { GameId } from '../gameRegistry'
 import { IMPOSTER_DECKS } from './imposter'
 import { ALL_MINI_MYSTERIES } from './miniMystery'
 import { KNOW_ME_CATEGORIES, KNOW_ME_PROMPTS } from './doYouKnowMe'
+import { THINK_FAST_PROMPTS } from './thinkFast'
+import { COURT_CASES } from './notMeYourHonour'
 
 export interface AuditedDeck {
   gameId?: GameId
@@ -113,4 +115,6 @@ export const CONTENT_AUDIT_GAMES: AuditedGame[] = [
   { gameId: 'imposter', game: 'Imposter', contentModel: 'bundled', decks: gameDecks('imposter', 'Imposter', Object.fromEntries(Object.entries(IMPOSTER_DECKS).map(([category, pairs]) => [category, pairs.map(pair => `${pair.regular} OR ${pair.imposter}`)]))) },
   { gameId: 'mini-mystery', game: 'Mini Mystery', contentModel: 'bundled', decks: gameDecks('mini-mystery', 'Mini Mystery', Object.fromEntries(ALL_MINI_MYSTERIES.map(mystery => [mystery.id, mysteryAuditPayload(mystery)]))) },
   { gameId: 'do-you-know-me', game: 'Do You Know Me?', contentModel: 'bundled', decks: gameDecks('do-you-know-me', 'Do You Know Me?', Object.fromEntries(KNOW_ME_CATEGORIES.map(category => [category.id, KNOW_ME_PROMPTS.filter(prompt => prompt.category === category.id).map(prompt => `${prompt.question} — ${prompt.options.join(' / ')}`)]))) },
+  { gameId: 'think-fast', game: 'Think Fast', contentModel: 'bundled', decks: [{ gameId: 'think-fast', game: 'Think Fast', category: 'main', prompts: THINK_FAST_PROMPTS }] },
+  { gameId: 'not-me-your-honour', game: 'Not Me, Your Honour!', contentModel: 'bundled', decks: gameDecks('not-me-your-honour', 'Not Me, Your Honour!', Object.fromEntries(COURT_CASES.map(item => [item.id, [...item.briefing, item.accusation, item.accusedSecret, item.prosecutorClue, ...item.evidence, item.twist, ...item.objections]]))) },
 ]

@@ -21,8 +21,11 @@ export function staffSignInErrorMessage(error: unknown) {
   if (message.includes('rate limit') || message.includes('too many')) {
     return 'Too many sign-in attempts. Wait a few minutes, then try again.'
   }
-  if (message.includes('failed to fetch') || message.includes('network') || message.includes('timeout')) {
+  if (message.includes('fetch') || message.includes('network') || message.includes('timeout') || message.includes('connection') || message.includes('upstream')) {
     return 'We could not reach the sign-in service. Check your connection and try again.'
+  }
+  if (/\b50[0-9]\b/.test(message) || message.includes('service unavailable') || message.includes('gateway')) {
+    return 'The sign-in service is temporarily unavailable. Wait a moment, then try again.'
   }
   if (message.includes('email not confirmed')) {
     return 'Confirm this staff email before signing in.'

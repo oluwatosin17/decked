@@ -1,31 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { ChooseYourSideArtwork, MostLikelyArtwork, TwoTruthsBluffArtwork } from './GameArtworks'
 import { GAME_NAMES, isGameId } from '../gameRegistry'
+import ResponsiveGameArtwork from './ResponsiveGameArtwork'
 
 /* ── Assets ── */
 const LATE_NIGHT_CARD_BG = '/icons/late-night-card-bg.svg'
-const SPICY_CARD_BG      = '/icons/spicy-card-bg.svg'
 const RECONNECT_CARD_BG  = '/assets/games/back-to-us.png'
-
-/* ── Mobile SVG card assets ── */
-const MOBILE_CARDS: Record<string, string> = {
-  'truth-or-dare': '/icons/truth-or-dare-mobile.svg',
-  'spicy-starters': '/icons/spicy-starters-mobile.svg',
-  'red-flag-green-flag': '/icons/red-flag-green-flag-mobile.svg',
-  'icebreaker': '/icons/icebreaker-mobile.svg',
-  'dinner-table': '/icons/dinner-conversation-mobile.svg',
-  'late-night-talks': '/icons/late-night-talks-mobile.svg',
-  'everyday-conversation': '/icons/everyday-conversations-mobile.svg',
-  'charades': '/icons/charades-mobile.svg',
-  'strangers': '/icons/we-are-not-really-strangers-mobile.svg',
-  'never-have-i-ever': '/icons/never-have-i-ever-mobile.svg',
-  'reconnect': '/icons/reconnect-mobile.svg',
-  'finger-down': '/icons/put-a-finger-down-mobile.svg',
-  'take-a-sip': '/assets/games/take-a-sip.png',
-  'sip-or-spill': '/icons/sip-and-spill-mobile.svg',
-  'you-laugh': '/icons/you-laugh-you-are-out-mobile.svg',
-  'do-or-drink': '/icons/do-or-drink-mobile.svg',
-}
 
 const gameLabel = (id: string) => isGameId(id) ? GAME_NAMES[id] : id.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
 
@@ -58,16 +38,12 @@ interface CardDef {
 const desktopCardHeight = (card: CardDef) =>
   card.id === 'most-likely-to' || card.id === 'choose-your-side' ? 348 : card.h
 
-export const GAME_CARDS = (
-  onPlayTruthOrDare: () => void,
-  onPlaySpicyStarters: () => void,
-  onPlayLateNightTalks?: () => void,
-): CardDef[] => [
+export const GAME_CARDS = (): CardDef[] => [
   {
     id: 'truth-or-dare', categories: ['couples'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15.23px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/truth-or-dare.png" alt="Truth or Dare" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/truth-or-dare.png" alt="Truth or Dare" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -75,7 +51,7 @@ export const GAME_CARDS = (
     id: 'spicy-starters', categories: ['couples', 'deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: 'pointer' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/spicy-opener.png" alt="Spicy Opener" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/spicy-opener.png" alt="Spicy Opener" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     ),
   },
@@ -83,7 +59,7 @@ export const GAME_CARDS = (
     id: 'red-flag-green-flag', categories: ['couples'], w: 267.692, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#1256e8' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/dateable-or-dealbreaker.png" alt="Dateable or Dealbreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/dateable-or-dealbreaker.png" alt="Dateable or Dealbreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -91,7 +67,7 @@ export const GAME_CARDS = (
     id: 'icebreaker', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/icebreaker.png" alt="Icebreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/icebreaker.png" alt="Icebreaker" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <p className="font-staatliches" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 56.04px)', fontSize: '39.088px', color: '#000', textAlign: 'center', whiteSpace: 'nowrap', margin: 0, pointerEvents: 'none' }}>ICEBREAKER</p>
       </div>
     ),
@@ -100,7 +76,7 @@ export const GAME_CARDS = (
     id: 'dinner-table', categories: ['deep-talk'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/dinner-table-v2.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/dinner-table-v2.png" alt="Dinner Table Conversation" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -108,7 +84,7 @@ export const GAME_CARDS = (
     id: 'late-night-talks', categories: ['deep-talk'], w: 359.601, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', position: 'relative', display: 'inline-grid', placeItems: 'start', cursor: onClick ? 'pointer' : 'default', borderRadius: '0', overflow: 'hidden' }}>
-        <img loading="lazy" decoding="async" src={LATE_NIGHT_CARD_BG} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src={LATE_NIGHT_CARD_BG} alt="" style={{ gridColumn: 1, gridRow: 1, width: '100%', height: '100%', objectFit: 'contain' }} />
         <div style={{ gridColumn: 1, gridRow: 1, marginLeft: '77.41px', marginTop: '156px', width: '168.435px', display: 'flex', flexDirection: 'column', gap: '3.75px', position: 'relative' }}>
           <p className="font-slackey" style={{ fontSize: '33.78px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Late</p>
           <p className="font-slackey" style={{ fontSize: '33.78px', color: '#ff440e', lineHeight: 1, margin: 0 }}>Night</p>
@@ -150,7 +126,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#5d0c42', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/charades-plum.png" alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/charades-plum.png" alt="Charades" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: 'scale(1.04)' }} />
       </div>
     ),
   },
@@ -189,7 +165,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/never-have-i-ever.jpg" alt="Never Have I Ever" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -198,7 +174,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#ef3526' }}>
-        <img loading="lazy" decoding="async" src={RECONNECT_CARD_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src={RECONNECT_CARD_BG} alt="Back to Us" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -207,7 +183,7 @@ export const GAME_CARDS = (
     playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '9.04px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/finger-down.png" alt="Drop a Finger" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/finger-down.png" alt="Drop a Finger" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         <p className="font-luckiest" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 'calc(50% - 108.48px)', width: '209.277px', fontSize: '36.16px', color: '#ed8251', textAlign: 'center', lineHeight: 'normal', margin: 0, pointerEvents: 'none' }}>DROP A<br />FINGER</p>
       </div>
     ),
@@ -216,7 +192,7 @@ export const GAME_CARDS = (
     id: 'take-a-sip', categories: ['drinking'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#ffecd1', borderRadius: '9.039px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/take-a-sip.png" alt="Take a Sip" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/take-a-sip.png" alt="Take a Sip" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -224,7 +200,7 @@ export const GAME_CARDS = (
     id: 'sip-or-spill', categories: ['drinking', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', background: '#35152d', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/answer-or-drink.png" alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/answer-or-drink.png" alt="Answer or Drink" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -232,7 +208,7 @@ export const GAME_CARDS = (
     id: 'you-laugh', categories: ['party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => (
       <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', position: 'relative', cursor: onClick ? 'pointer' : 'default', background: '#df561b' }}>
-        <img loading="lazy" decoding="async" src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/keep-a-straight-face.png" alt="Keep a Straight Face" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
     ),
   },
@@ -266,34 +242,46 @@ export const GAME_CARDS = (
   },
   {
     id: 'who-said-that', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
-    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><img loading="lazy" decoding="async" src="/assets/games/who-said-that.png" alt="Who Said That?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/who-said-that.png" alt="Who Said That?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
   },
   {
     id: 'we-just-met', categories: ['icebreakers', 'couples'], w: 277.948, h: 348, playable: true,
-    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}><img loading="lazy" decoding="async" src="/assets/games/we-just-met.png" alt="We Just Met" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: '15px', overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#0755c9' }}><ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/we-just-met.png" alt="We Just Met" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
   },
   {
     id: 'whot', categories: ['party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#35152d', position: 'relative' }}>
-      <img loading="lazy" decoding="async" src="/assets/games/whot-cover.png" alt="Whot" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/whot-cover.png" alt="Whot" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
   {
     id: 'imposter', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#082a48' }}>
-      <img loading="lazy" decoding="async" src="/assets/games/imposter.png" alt="Imposter" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/imposter.png" alt="Imposter" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
   {
     id: 'mini-mystery', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#0b452e' }}>
-      <img loading="lazy" decoding="async" src="/assets/games/mini-mystery-dossier.png" alt="Mini Mystery" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/mini-mystery-dossier.png" alt="Mini Mystery" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
   {
     id: 'do-you-know-me', categories: ['icebreakers', 'couples', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#46112f' }}>
-      <img loading="lazy" decoding="async" src="/assets/games/do-you-know-me.png" alt="Do You Know Me?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/do-you-know-me.png" alt="Do You Know Me?" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
+  },
+  {
+    id: 'think-fast', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#ff8a1f' }}>
+      <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/think-fast-orange.png" alt="Think Fast" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
+  },
+  {
+    id: 'not-me-your-honour', categories: ['party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#1264e8' }}>
+      <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/not-me-your-honour.png" alt="Not Me, Your Honour!" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
 ]
@@ -315,10 +303,12 @@ interface HomeGridProps {
   onPlayImposter: () => void
   onPlayMiniMystery: () => void
   onPlayDoYouKnowMe: () => void
+  onPlayThinkFast: () => void
+  onPlayNotMeYourHonour: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe }: HomeGridProps) {
-  const cards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour }: HomeGridProps) {
+  const cards = GAME_CARDS()
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
   const getEl = (id: string, onClick?: () => void, style?: React.CSSProperties) => {
@@ -375,6 +365,8 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('imposter', onPlayImposter)}
         {getEl('mini-mystery', onPlayMiniMystery)}
         {getEl('do-you-know-me', onPlayDoYouKnowMe)}
+        {getEl('think-fast', onPlayThinkFast)}
+        {getEl('not-me-your-honour', onPlayNotMeYourHonour)}
       </div>
     </div>
   )
@@ -410,6 +402,8 @@ interface BrowseGridProps {
   onPlayImposter?: () => void
   onPlayMiniMystery?: () => void
   onPlayDoYouKnowMe?: () => void
+  onPlayThinkFast?: () => void
+  onPlayNotMeYourHonour?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -439,6 +433,8 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     imposter: handlers.onPlayImposter,
     'mini-mystery': handlers.onPlayMiniMystery,
     'do-you-know-me': handlers.onPlayDoYouKnowMe,
+    'think-fast': handlers.onPlayThinkFast,
+    'not-me-your-honour': handlers.onPlayNotMeYourHonour,
   }
   return map[card.id]
 }
@@ -486,7 +482,7 @@ function ScaledCard({ card, onClick, containerWidth }: { card: CardDef; onClick?
 
 /** Reuses the exact Browse Games artwork as a compact, non-interactive preview. */
 export function GameCardPreview({ gameId }: { gameId: string }) {
-  const card = GAME_CARDS(() => {}, () => {}, () => {}).find(item => item.id === gameId)
+  const card = GAME_CARDS().find(item => item.id === gameId)
   if (!card) return null
 
   const maxWidth = 170
@@ -515,7 +511,7 @@ export function GameArtworkCover({ gameId, label }: { gameId: string; label: str
     : gameId === 'everyday-conversations'
       ? 'everyday-conversation'
       : gameId
-  const card = GAME_CARDS(() => {}, () => {}, () => {}).find(item => item.id === artworkId)
+  const card = GAME_CARDS().find(item => item.id === artworkId)
   const frameRef = useRef<HTMLDivElement>(null)
   const [frame, setFrame] = useState({ width: 0, height: 0 })
 
@@ -551,7 +547,7 @@ export function GameArtworkCover({ gameId, label }: { gameId: string; label: str
 
 /** Crops the current Browse Games artwork into the square used by Quick Play. */
 export function GameArtworkThumbnail({ gameId, size = 56 }: { gameId: string; size?: number }) {
-  const card = GAME_CARDS(() => {}, () => {}, () => {}).find(item => item.id === gameId)
+  const card = GAME_CARDS().find(item => item.id === gameId)
   if (!card) return null
 
   const scale = Math.max(size / card.w, size / card.h)
@@ -566,8 +562,8 @@ export function GameArtworkThumbnail({ gameId, size = 56 }: { gameId: string; si
 }
 
 export function BrowseCardGrid(props: BrowseGridProps) {
-  const { filter, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks } = props
-  const allCards = GAME_CARDS(onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks)
+  const { filter } = props
+  const allCards = useMemo(() => GAME_CARDS(), [])
   const dinnerTableIndex = allCards.findIndex(card => card.id === 'dinner-table')
   const beyondSmallTalkIndex = allCards.findIndex(card => card.id === 'strangers')
   const swappedCards = allCards.map((card, index) => {
@@ -639,7 +635,7 @@ export function BrowseCardGrid(props: BrowseGridProps) {
       setVisibleIds(nextVisible)
       setExitingIds(new Set())
     }, 300)
-  }, [filter])
+  }, [allCards, filter, visibleIds])
 
   const [staggerKey, setStaggerKey] = useState(0)
   useEffect(() => { setStaggerKey(k => k + 1) }, [filter])

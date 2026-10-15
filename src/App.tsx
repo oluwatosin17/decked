@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage'
 import BrowsePage from './pages/BrowsePage'
 import AboutPage from './pages/AboutPage'
 import LegalPage from './pages/LegalPage'
+import FeedbackPage from './pages/FeedbackPage'
 import { GuideArticlePage, GuideLibraryPage } from './pages/GuidesPage'
 import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
@@ -45,6 +46,8 @@ const WhotGame = lazy(() => import('./WhotGame'))
 const ImposterPassAndPlayGame = lazy(() => import('./ImposterPassAndPlayGame'))
 const MiniMysteryGame = lazy(() => import('./MiniMysteryGame'))
 const DoYouKnowMeGame = lazy(() => import('./DoYouKnowMeGame'))
+const ThinkFastGame = lazy(() => import('./ThinkFastGame'))
+const NotMeYourHonourGame = lazy(() => import('./NotMeYourHonourGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -72,6 +75,8 @@ const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: Mu
   imposter: { localScreen: 'imposter', multiplayerId: 'imposter' },
   'mini-mystery': { localScreen: 'mini-mystery', multiplayerId: 'mini-mystery' },
   'do-you-know-me': { localScreen: 'do-you-know-me', multiplayerId: 'do-you-know-me' },
+  'think-fast': { localScreen: 'think-fast', multiplayerId: 'think-fast' },
+  'not-me-your-honour': { localScreen: 'not-me-your-honour', multiplayerId: 'not-me-your-honour' },
 }
 
 const selectedGameFromLocation = () => {
@@ -163,7 +168,7 @@ function AppContent() {
   }
 
   if (screen === 'play-together') {
-    return <PlayTogether initialGameId={selectedGameId} onClose={() => setScreen('home')} />
+    return <PlayTogether initialGameId={selectedGameId} onClose={() => setScreen('browse')} />
   }
 
   /* ── Select Game Mode: LNT ── */
@@ -295,6 +300,13 @@ function AppContent() {
   if (screen === 'do-you-know-me') {
     return <DoYouKnowMeGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'think-fast') {
+    return <ThinkFastGame onClose={() => setScreen('browse')} />
+  }
+
+  if (screen === 'not-me-your-honour') {
+    return <NotMeYourHonourGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
@@ -328,12 +340,18 @@ function AppContent() {
         onPlayImposter={() => chooseGame('imposter')}
         onPlayMiniMystery={() => chooseGame('mini-mystery')}
         onPlayDoYouKnowMe={() => chooseGame('do-you-know-me')}
+        onPlayThinkFast={() => chooseGame('think-fast')}
+        onPlayNotMeYourHonour={() => chooseGame('not-me-your-honour')}
       />
     )
   }
 
   if (screen === 'about') {
     return <AboutPage onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onGuides={() => setScreen('guides')} />
+  }
+
+  if (screen === 'feedback') {
+    return <FeedbackPage onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onGuides={() => setScreen('guides')} onAbout={() => setScreen('about')} />
   }
 
   if (screen === 'privacy' || screen === 'terms' || screen === 'cookies') {
@@ -368,6 +386,8 @@ function AppContent() {
       onPlayImposter={() => chooseGame('imposter')}
       onPlayMiniMystery={() => chooseGame('mini-mystery')}
       onPlayDoYouKnowMe={() => chooseGame('do-you-know-me')}
+      onPlayThinkFast={() => chooseGame('think-fast')}
+      onPlayNotMeYourHonour={() => chooseGame('not-me-your-honour')}
       onBrowse={() => setScreen('browse')}
       onGuides={() => setScreen('guides')}
       onFreeGamesGuide={() => setScreen('guide-free-games-to-play-online')}

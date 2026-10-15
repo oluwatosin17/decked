@@ -1,4 +1,4 @@
-export const COMMAND_CENTRE_SECTIONS = ['overview', 'acquisition', 'games', 'funnels', 'multiplayer', 'geography', 'play-patterns', 'reliability', 'content', 'settings'] as const
+export const COMMAND_CENTRE_SECTIONS = ['overview', 'acquisition', 'games', 'funnels', 'multiplayer', 'geography', 'play-patterns', 'reliability', 'content', 'feedback', 'settings'] as const
 export type CommandCentreSection = typeof COMMAND_CENTRE_SECTIONS[number]
 
 export interface OverviewData {

@@ -5,7 +5,6 @@ import DeckSize from './components/DeckSize'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
 import { CHOOSE_SIDE_CATEGORIES, CHOOSE_SIDE_PROMPTS, type ChooseSideCategory, type ChooseSidePrompt } from './content/chooseYourSide'
-import { ChooseYourSideArtwork } from './components/GameArtworks'
 
 type Step = 'playerSetup' | 'categories' | 'deckSize' | 'handoff' | 'vote' | 'reveal' | 'done'
 type Side = 'a' | 'b'
@@ -30,22 +29,24 @@ function Button({ children, onClick, secondary, disabled }: { children: React.Re
 
 const shuffle = <T,>(items: readonly T[]) => [...items].sort(() => Math.random() - .5)
 const playerKey = (player: Player, index: number) => player.userId ?? `local-${index}`
+const createVoteSessionId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 
 export default function ChooseYourSideGame({ onClose }: { onClose: () => void }) {
   const multiplayer = useMultiplayerSession()
   const [step, setStep] = useGameStep<Step>(GAME_ID, 'playerSetup', STEPS)
   const [players, setPlayers] = usePersistentGameState<Player[]>(GAME_ID, 'players', [])
   const [categories, setCategories] = usePersistentGameState<ChooseSideCategory[]>(GAME_ID, 'categories', ['everyday', 'funny', 'morals'])
-  const [deckSize, setDeckSize] = usePersistentGameState(GAME_ID, 'deckSize', 20)
+  const [, setDeckSize] = usePersistentGameState(GAME_ID, 'deckSize', 20)
   const [deck, setDeck] = usePersistentGameState<ChooseSidePrompt[]>(GAME_ID, 'deck', [])
   const [cardIndex, setCardIndex] = usePersistentGameState(GAME_ID, 'cardIndex', 0)
   const [votes, setVotes] = usePersistentGameState<VoteMap>(GAME_ID, 'votes', {})
   const [voterIndex, setVoterIndex] = usePersistentGameState(GAME_ID, 'voterIndex', 0)
   const [stats, setStats] = usePersistentGameState<Stats>(GAME_ID, 'stats', { unanimous: 0, closestGap: 999, aVotes: 0, bVotes: 0 })
+  const [voteSessionId, setVoteSessionId] = usePersistentGameState(GAME_ID, 'voteSessionId', 'initial')
   const [selected, setSelected] = useState<Side | ''>('')
   const isHost = !multiplayer || multiplayer.currentUserId === multiplayer.hostUserId
   const keys = useMemo(() => players.map(playerKey), [players])
-  const prefix = `cysVote-${cardIndex}-`
+  const prefix = `cysVote-${voteSessionId}-${cardIndex}-`
   const effectiveVotes = useMemo(() => multiplayer
     ? Object.fromEntries(keys.map(key => [key, multiplayer.values[`${prefix}${key}`]]).filter((entry): entry is [string,Side] => entry[1] === 'a' || entry[1] === 'b'))
     : votes, [keys, multiplayer, prefix, votes])
@@ -55,14 +56,9 @@ export default function ChooseYourSideGame({ onClose }: { onClose: () => void })
   const allVoted = keys.length > 0 && keys.every(key => effectiveVotes[key])
   const prompt = deck[cardIndex]
 
-  const begin = () => {
-    const pool = categories.flatMap(category => CHOOSE_SIDE_PROMPTS[category])
-    setDeck(shuffle(pool).slice(0, Math.min(deckSize, pool.length)))
-    setCardIndex(0); setVotes({}); setVoterIndex(0); setStats({ unanimous: 0, closestGap: 999, aVotes: 0, bVotes: 0 }); setSelected('')
-    setStep(multiplayer ? 'vote' : 'handoff')
-  }
   const beginWithSize = (size: number) => {
     setDeckSize(size)
+    setVoteSessionId(createVoteSessionId())
     const pool = categories.flatMap(category => CHOOSE_SIDE_PROMPTS[category])
     setDeck(shuffle(pool).slice(0, Math.min(size, pool.length)))
     setCardIndex(0); setVotes({}); setVoterIndex(0); setStats({ unanimous: 0, closestGap: 999, aVotes: 0, bVotes: 0 }); setSelected('')

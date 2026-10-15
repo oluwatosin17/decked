@@ -38,10 +38,11 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
   const [votes, setVotes] = usePersistentGameState<VoteMap>(GAME_ID, 'votes', {})
   const [scores, setScores] = usePersistentGameState<ScoreMap>(GAME_ID, 'scores', {})
   const [voterIndex, setVoterIndex] = usePersistentGameState(GAME_ID, 'voterIndex', 0)
+  const [voteSessionId, setVoteSessionId] = usePersistentGameState(GAME_ID, 'voteSessionId', 'initial')
   const [selected, setSelected] = useState('')
   const isHost = !multiplayer || multiplayer.currentUserId === multiplayer.hostUserId
   const keys = useMemo(() => players.map(playerKey), [players])
-  const prefix = `mltVote-${cardIndex}-`
+  const prefix = `mltVote-${voteSessionId}-${cardIndex}-`
   const effectiveVotes = useMemo(() => multiplayer ? Object.fromEntries(keys.map(key => [key, multiplayer.values[`${prefix}${key}`]]).filter((entry): entry is [string,string] => typeof entry[1] === 'string')) : votes, [keys, multiplayer, prefix, votes])
   const currentVoter = players[voterIndex]
   const currentVoterKey = currentVoter ? playerKey(currentVoter, voterIndex) : ''
@@ -52,6 +53,7 @@ export default function MostLikelyToGame({ onClose }: { onClose: () => void }) {
 
   const begin = () => {
     const pool = categories.flatMap(category => MOST_LIKELY_PROMPTS[category])
+    setVoteSessionId(`${Date.now()}-${Math.random().toString(36).slice(2, 8)}`)
     setDeck(shuffle(pool).slice(0, Math.min(deckSize, pool.length)))
     setCardIndex(0); setVotes({}); setScores({}); setVoterIndex(0); setSelected(''); setStep(multiplayer ? 'game' : 'handoff')
   }

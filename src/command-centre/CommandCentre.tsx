@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
-import { getStaffAccess, observeStaffSession, requestStaffPasswordReset, restoreStaffSession, signInStaff, signOutStaff, updateStaffPassword, type StaffAccess } from './api'
+import { getStaffAccess, observeStaffSession, requestStaffEmailOtp, requestStaffPasswordReset, restoreStaffSession, signInStaff, signOutStaff, updateStaffPassword, verifyStaffEmailOtp, type StaffAccess } from './api'
 import { COMMAND_CENTRE_SECTIONS, commandCentrePath, sectionFromPath, type CommandCentreSection } from './model'
 import { LoadingState, StatePanel } from './Primitives'
 import OverviewPage from './OverviewPage'
@@ -13,11 +13,12 @@ import ContentPage from './ContentPage'
 import GeographyPage from './GeographyPage'
 import AcquisitionPage from './AcquisitionPage'
 import PlayPatternsPage from './PlayPatternsPage'
+import FeedbackPage from './FeedbackPage'
 import { isPasswordRecoveryUrl, passwordUpdateErrorMessage, staffSignInErrorMessage } from './authRecovery'
 import './command-centre.css'
 
 type AuthState = 'loading' | 'signed_out' | 'checking' | 'authorized' | 'unauthorized' | 'error'
-const LABELS: Record<CommandCentreSection, string> = { overview: 'Overview', acquisition: 'Acquisition', games: 'Games', funnels: 'Funnels', multiplayer: 'Multiplayer', geography: 'Geography', 'play-patterns': 'Play Patterns', reliability: 'Reliability', content: 'Content', settings: 'Settings' }
+const LABELS: Record<CommandCentreSection, string> = { overview: 'Overview', acquisition: 'Acquisition', games: 'Games', funnels: 'Funnels', multiplayer: 'Multiplayer', geography: 'Geography', 'play-patterns': 'Play Patterns', reliability: 'Reliability', content: 'Content', feedback:'Feedback', settings: 'Settings' }
 
 export default function CommandCentre() {
   const [authState, setAuthState] = useState<AuthState>('loading')
@@ -79,17 +80,20 @@ export default function CommandCentre() {
 
   return <div className="cc-app">
     <aside className="cc-sidebar"><a className="cc-brand" href="/" aria-label="Decked home">DECKED<span>.</span></a><p>COMMAND CENTRE</p><nav aria-label="Command Centre">{COMMAND_CENTRE_SECTIONS.map(item => <button key={item} className={item === section ? 'active' : ''} aria-current={item === section ? 'page' : undefined} onClick={() => navigate(item)}>{LABELS[item]}</button>)}</nav><div className="cc-account"><span>{access?.authorized ? access.role.toUpperCase() : 'STAFF'}</span><button onClick={signOut}>Sign out</button></div></aside>
-    <main className="cc-main">{section === 'overview' ? <OverviewPage /> : section === 'acquisition' ? <AcquisitionPage /> : section === 'games' ? <GamesPage /> : section === 'funnels' ? <FunnelsPage /> : section === 'multiplayer' ? <MultiplayerPage /> : section === 'geography' ? <GeographyPage /> : section === 'play-patterns' ? <PlayPatternsPage /> : section === 'reliability' ? <ReliabilityPage /> : section === 'content' ? <ContentPage role={access?.authorized ? access.role : 'viewer'} /> : <AuditPage isAdmin={access?.authorized === true && access.role === 'admin'} />}</main>
+    <main className="cc-main">{section === 'overview' ? <OverviewPage /> : section === 'acquisition' ? <AcquisitionPage /> : section === 'games' ? <GamesPage /> : section === 'funnels' ? <FunnelsPage /> : section === 'multiplayer' ? <MultiplayerPage /> : section === 'geography' ? <GeographyPage /> : section === 'play-patterns' ? <PlayPatternsPage /> : section === 'reliability' ? <ReliabilityPage /> : section === 'content' ? <ContentPage role={access?.authorized ? access.role : 'viewer'} /> : section==='feedback'?<FeedbackPage canEdit={access?.authorized===true&&access.role!=='viewer'}/>: <AuditPage isAdmin={access?.authorized === true && access.role === 'admin'} />}</main>
   </div>
 }
 
 function AuthFrame({ children }: { children: ReactNode }) { return <main className="cc-auth"><a className="cc-brand" href="/">DECKED<span>.</span></a>{children}</main> }
 
 function SignIn({ onSuccess }: { onSuccess: (session: Session | null) => Promise<void> }) {
-  const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [resetSent, setResetSent] = useState(false)
+  const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [otp, setOtp] = useState(''); const [otpSent, setOtpSent] = useState(false); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [emailNotice, setEmailNotice] = useState('')
   const submit = async (event: FormEvent) => { event.preventDefault(); setBusy(true); setError(''); try { await onSuccess(await signInStaff(email, password)) } catch (caught) { setError(staffSignInErrorMessage(caught)); setBusy(false) } }
-  const requestReset = async () => { if (!email) { setError('Enter your staff email first.'); return } setBusy(true); setError(''); try { await requestStaffPasswordReset(email); setResetSent(true) } catch { setError('We could not send the reset link. Please try again.'); } finally { setBusy(false) } }
-  return <form className="cc-signin" onSubmit={submit}><p>INTERNAL ANALYTICS</p><h1>Command Centre</h1><span>Sign in with a provisioned staff account.</span><label>Email<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={event => setPassword(event.target.value)} required /></label>{error ? <div className="cc-inline-error" role="alert">{error}</div> : null}{resetSent ? <div className="cc-inline-success" role="status">Check your email for a new Decked password-reset link.</div> : null}<button className="cc-button" disabled={busy}>{busy ? 'Please wait…' : 'Sign in'}</button><button className="cc-text-button" type="button" disabled={busy} onClick={() => void requestReset()}>Forgot password?</button></form>
+  const requireEmail = () => { if (email.trim()) return true; setError('Enter your staff email first.'); return false }
+  const requestOtp = async () => { if (!requireEmail()) return; setBusy(true); setError(''); setEmailNotice(''); try { await requestStaffEmailOtp(email); setOtpSent(true); setEmailNotice('Check your email for your eight-digit Decked sign-in code.') } catch (caught) { setError(staffSignInErrorMessage(caught)) } finally { setBusy(false) } }
+  const verifyOtp = async () => { if (!requireEmail()) return; if (!/^\d{8}$/.test(otp.trim())) { setError('Enter the eight-digit code from your email.'); return } setBusy(true); setError(''); try { await onSuccess(await verifyStaffEmailOtp(email, otp)) } catch (caught) { setError(staffSignInErrorMessage(caught)); setBusy(false) } }
+  const requestReset = async () => { if (!requireEmail()) return; setBusy(true); setError(''); setEmailNotice(''); try { await requestStaffPasswordReset(email); setEmailNotice('Check your email for a new Decked password-reset link.') } catch { setError('We could not send the reset link. Please try again.'); } finally { setBusy(false) } }
+  return <form className="cc-signin" onSubmit={submit}><p>INTERNAL ANALYTICS</p><h1>Command Centre</h1><span>Sign in with a provisioned staff account.</span><label>Email<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required /></label><label>Password<input type="password" autoComplete="current-password" value={password} onChange={event => setPassword(event.target.value)} required /></label>{otpSent ? <label>Eight-digit email code<input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={8} value={otp} onChange={event => setOtp(event.target.value.replace(/\D/g, '').slice(0, 8))} /></label> : null}{error ? <div className="cc-inline-error" role="alert">{error}</div> : null}{emailNotice ? <div className="cc-inline-success" role="status">{emailNotice}</div> : null}<button className="cc-button" disabled={busy}>{busy ? 'Please wait…' : 'Sign in with password'}</button>{otpSent ? <button className="cc-button cc-button-secondary" type="button" disabled={busy} onClick={() => void verifyOtp()}>Verify email code</button> : null}<button className="cc-text-button" type="button" disabled={busy} onClick={() => void requestOtp()}>{otpSent ? 'Send a new email code' : 'Email me a sign-in code'}</button><button className="cc-text-button" type="button" disabled={busy} onClick={() => void requestReset()}>Forgot password?</button></form>
 }
 
 function UpdatePassword({ onComplete }: { onComplete: () => void }) {

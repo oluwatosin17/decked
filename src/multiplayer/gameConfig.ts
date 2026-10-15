@@ -20,6 +20,8 @@ import { CHOOSE_SIDE_AUDIT_TEXT } from '../content/chooseYourSide'
 import { WHO_SAID_THAT_PROMPTS } from '../WhoSaidThatGame'
 import { WE_JUST_MET_DECK } from '../content/weJustMet'
 import { GAME_NAMES } from '../gameRegistry'
+import { THINK_FAST_PROMPTS } from '../content/thinkFast'
+import { COURT_CASES } from '../content/notMeYourHonour'
 
 export interface MultiplayerGameConfig {
   id: MultiplayerGameId
@@ -58,6 +60,8 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   imposter: { id: 'imposter', name: GAME_NAMES.imposter, deck: ['Private related-word pairs'], cardColor: '#082a48', textColor: '#f5ea18', kind: 'vote' },
   'mini-mystery': { id: 'mini-mystery', name: GAME_NAMES['mini-mystery'], deck: ['Three guided mystery cases'], cardColor: '#123953', textColor: '#f4ead2', kind: 'vote' },
   'do-you-know-me': { id: 'do-you-know-me', name: GAME_NAMES['do-you-know-me'], deck: ['Private prediction and matching prompts'], cardColor: '#35152d', textColor: '#ffcf37', kind: 'vote' },
+  'think-fast': { id: 'think-fast', name: GAME_NAMES['think-fast'], deck: THINK_FAST_PROMPTS, cardColor: '#ff8a1f', textColor: '#1c0c06', kind: 'score' },
+  'not-me-your-honour': { id: 'not-me-your-honour', name: GAME_NAMES['not-me-your-honour'], deck: COURT_CASES.map(item => item.accusation), cardColor: '#f6efde', textColor: '#17101d', kind: 'vote' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES

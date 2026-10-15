@@ -32,6 +32,29 @@ export async function signInStaff(email: string, password: string) {
   return data.session
 }
 
+export async function requestStaffEmailOtp(email: string) {
+  const emailRedirectTo = new URL('/command-centre', window.location.origin).toString()
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email.trim(),
+    options: {
+      emailRedirectTo,
+      // Command Centre must never become a public account-registration path.
+      shouldCreateUser: false,
+    },
+  })
+  if (error) throw error
+}
+
+export async function verifyStaffEmailOtp(email: string, token: string) {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email: email.trim(),
+    token: token.trim(),
+    type: 'email',
+  })
+  if (error) throw error
+  return data.session
+}
+
 export async function signOutStaff() {
   const { error } = await supabase.auth.signOut()
   if (error) throw error
@@ -93,7 +116,13 @@ export async function getGamesDashboard(filters: DashboardFilters, trendDays: 7 
 export async function getGameDetail(filters: DashboardFilters, gameId: string, trendDays: 7 | 30) { return rpc<GameDetailResponse>('decked_command_centre_game_detail', { p_environment: filters.environment, p_from: filters.from, p_to: filters.to, p_game_id: gameId, p_trend_days: trendDays }) }
 export async function getFunnelsDashboard(filters: DashboardFilters, acquisitionSource: string, appVersion: string) { return rpc<FunnelsResponse>('decked_command_centre_funnels_v2', { ...queryParameters(filters), p_play_mode: filters.playMode || null, p_device_class: filters.deviceClass === 'all' ? null : filters.deviceClass, p_country: null, p_acquisition_source: acquisitionSource || null, p_app_version: appVersion || null }) }
 export async function getMultiplayerDashboard(filters: DashboardFilters) { return rpc<MultiplayerOperationsResponse>('decked_command_centre_multiplayer_v2', queryParameters(filters)) }
-export async function getReliabilityDashboard(filters: DashboardFilters, browser: string, appVersion: string) { return rpc<ReliabilityOperationsResponse>('decked_command_centre_reliability_v2', { ...queryParameters(filters), p_device_class: filters.deviceClass === 'all' ? null : filters.deviceClass, p_browser: browser || null, p_app_version: appVersion || null }) }
+export async function getReliabilityDashboard(filters: DashboardFilters, browser: string, appVersion: string) {
+  const [reliability, performance] = await Promise.all([
+    rpc<Omit<ReliabilityOperationsResponse, 'performance'>>('decked_command_centre_reliability_v2', { ...queryParameters(filters), p_device_class: filters.deviceClass === 'all' ? null : filters.deviceClass, p_browser: browser || null, p_app_version: appVersion || null }),
+    rpc<{ metrics: ReliabilityOperationsResponse['performance'] }>('decked_command_centre_performance', { ...queryParameters(filters), p_device_class: filters.deviceClass === 'all' ? null : filters.deviceClass }),
+  ])
+  return { ...reliability, performance: performance.metrics }
+}
 export interface ExportResult { filename:string;csv:string;row_count:number;generated_at:string;refreshed_at:string|null }
 export async function exportCommandCentreCsv(report:'overview'|'games'|'funnels'|'multiplayer'|'reliability',filters:DashboardFilters,options:{source?:string;browser?:string;appVersion?:string;visibleGameIds?:string[];trendDays?:7|30}={}) {
   if(report==='games')return rpc<ExportResult>('decked_export_command_centre_games_csv',{p_environment:filters.environment,p_from:filters.from,p_to:filters.to,p_play_mode:filters.playMode||null,p_trend_days:options.trendDays??7,p_visible_game_ids:options.visibleGameIds??null,p_request_id:crypto.randomUUID()})
@@ -111,6 +140,13 @@ export async function getContentHistory(itemId:string){return rpc<{rows:Array<{v
 export async function saveContentItem(input:{itemId?:string;gameId:string;itemKind:ContentItem['item_kind'];body:string;metadata:Record<string,unknown>;categoryIds:string[];expectedVersion?:number;changeNote?:string}){return rpc<{id:string;version:number;status:'draft'}>('decked_command_centre_save_content_item',{p_item_id:input.itemId??null,p_game_id:input.gameId,p_item_kind:input.itemKind,p_body:input.body,p_metadata:input.metadata,p_category_ids:input.categoryIds,p_expected_version:input.expectedVersion??null,p_change_note:input.changeNote??null})}
 export async function setContentArchived(itemId:string,archived:boolean,expectedVersion:number){return rpc<void>('decked_command_centre_set_content_archived',{p_item_id:itemId,p_archived:archived,p_expected_version:expectedVersion})}
 export async function publishContent(gameId:string,notes?:string){return rpc<{release_id:string;game_id:string;item_count:number;membership_count:number;checksum:string}>('decked_command_centre_publish_content',{p_game_id:gameId,p_notes:notes??null})}
+
+export type FeedbackStatus='new'|'reviewed'|'planned'|'resolved'|'archived'
+export type FeedbackPriority='low'|'normal'|'high'|'urgent'
+export interface FeedbackItem{id:string;created_at:string;feedback_type:string;issue_categories:string[];game_id:string|null;rating:number|null;message:string;contact_email:string|null;source:string;page_path:string;play_mode:string|null;device_class:string;screenshot_path:string|null;status:FeedbackStatus;priority:FeedbackPriority;internal_notes:string|null;reviewed_at:string|null}
+export async function getFeedbackInbox(filters:{status?:string;type?:string;gameId?:string;query?:string}){return rpc<{rows:FeedbackItem[];total:number}>('decked_command_centre_feedback',{p_status:filters.status||null,p_type:filters.type||null,p_game_id:filters.gameId||null,p_query:filters.query||null,p_limit:200,p_offset:0})}
+export async function getFeedbackScreenshotUrl(path:string){const {data,error}=await supabase.storage.from('feedback-screenshots').createSignedUrl(path,300);if(error)throw error;return data.signedUrl}
+export async function updateFeedback(id:string,status:FeedbackStatus,priority:FeedbackPriority,notes:string){return rpc<void>('decked_update_feedback',{p_id:id,p_status:status,p_priority:priority,p_internal_notes:notes||null})}
 
 function queryParameters(filters: DashboardFilters) {
   return { p_environment: filters.environment, p_from: filters.from, p_to: filters.to, p_game_id: filters.gameId || null }

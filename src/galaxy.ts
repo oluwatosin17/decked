@@ -118,7 +118,7 @@ export function initGalaxy(): () => void {
   // ── Animation loop ────────────────────────────────────────────────
   let elapsed = 0
   let lastNow = performance.now()
-  let rafId = 0, intervalId = 0, running = true
+  let rafId = 0, running = true
 
   function tick(now: number) {
     if (!running) return
@@ -247,33 +247,27 @@ export function initGalaxy(): () => void {
   }
 
   function startRAF() {
-    clearInterval(intervalId)
+    cancelAnimationFrame(rafId)
     lastNow = performance.now()
     rafId   = requestAnimationFrame(tick)
   }
 
-  function startInterval() {
+  function pauseAnimation() {
     cancelAnimationFrame(rafId)
-    lastNow    = performance.now()
-    intervalId = window.setInterval(() => {
-      if (!running) return
-      tick(performance.now())
-    }, 33)
   }
 
   function onVisibilityChange() {
-    if (document.hidden) startInterval()
+    if (document.hidden) pauseAnimation()
     else startRAF()
   }
 
   document.addEventListener('visibilitychange', onVisibilityChange)
-  if (document.hidden) startInterval()
+  if (document.hidden) pauseAnimation()
   else startRAF()
 
   return () => {
     running = false
     cancelAnimationFrame(rafId)
-    clearInterval(intervalId)
     window.removeEventListener('resize', resize)
     window.removeEventListener('mousemove', onMouse)
     document.removeEventListener('visibilitychange', onVisibilityChange)

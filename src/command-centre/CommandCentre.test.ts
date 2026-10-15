@@ -37,6 +37,11 @@ describe('staff sign-in errors', () => {
       .toBe('That email or password was not accepted. You can reset the password below.')
   })
 
+  it('distinguishes temporary authentication-service failures', () => {
+    expect(staffSignInErrorMessage({ status: 503, message: 'upstream unavailable' }))
+      .toBe('We could not reach the sign-in service. Check your connection and try again.')
+  })
+
   it('does not expose unexpected authentication details', () => {
     expect(staffSignInErrorMessage(new Error('sensitive backend detail')))
       .toBe('Sign-in could not be completed. Please try again.')

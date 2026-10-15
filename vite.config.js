@@ -17,6 +17,15 @@ export default defineConfig({
   },
   build: {
     target: ['es2020', 'safari14'],
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+          if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/scheduler/')) return 'vendor-react'
+          if (id.includes('/@supabase/')) return 'vendor-supabase'
+        },
+      },
+    },
   },
   plugins: [
     react(),
@@ -62,7 +71,7 @@ export default defineConfig({
       workbox: {
         // Keep installation and updates lightweight. Game chunks and artwork
         // are cached only after the player actually opens them.
-        globPatterns: ['**/*.{js,css,html,ico,woff2}'],
+        globPatterns: ['**/*.{css,html,ico,woff2}'],
         // Force immediate activation on all browsers including Safari
         skipWaiting: true,
         clientsClaim: true,
@@ -72,6 +81,21 @@ export default defineConfig({
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
+          {
+            // Game code is downloaded and cached only when somebody opens it.
+            urlPattern: ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/assets/') && url.pathname.endsWith('.js'),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'game-code',
+              expiration: {
+                maxEntries: 90,
+                maxAgeSeconds: 60 * 60 * 24 * 14,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
           {
             urlPattern: /\/assets\/games\/.*\.(?:png|jpe?g|webp|avif|svg)$/i,
             handler: 'CacheFirst',

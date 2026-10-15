@@ -1,18 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { GameFooter, GameNav } from '../components/GameShell'
 import { BrowseCardGrid, GameCardPreview } from '../components/GameCardGrid'
-import { useScaledCard } from '../hooks/useCardScale'
-import { DARE_DECK, TRUTH_DECK } from '../TruthOrDareGame'
-import { IntroCard as SpicyIntroCard, SpicyCard } from '../SpicyStartersGame'
-import { IveDoneItScreen, NHIECard } from '../NeverHaveIEverGame'
 import type { Player as LocalPlayer } from '../components/PlayerSetup'
-import { LNTCard } from '../LateNightTalksGame'
-import { DTCCard } from '../DinnerTableGame'
-import { IcebreakerCard } from '../IcebreakerGame'
-import { ECCard } from '../EverydayConversationsGame'
-import { ReconnectCard } from '../LetsReconnectGame'
-import { RedFlagGreenFlagCard, VoteButtons } from '../RedFlagGreenFlagGame'
-import { CharadesCard } from '../CharadesGame'
 import TruthOrDareGame from '../TruthOrDareGame'
 import SpicyStartersGame from '../SpicyStartersGame'
 import NeverHaveIEverGame from '../NeverHaveIEverGame'
@@ -38,17 +27,21 @@ import WhotGame from '../WhotGame'
 import ImposterGame from '../ImposterGame'
 import MiniMysteryMultiplayerGame from '../MiniMysteryMultiplayerGame'
 import DoYouKnowMeMultiplayerGame from '../DoYouKnowMeMultiplayerGame'
+import ThinkFastMultiplayerGame from '../ThinkFastMultiplayerGame'
+import NotMeYourHonourMultiplayerGame from '../NotMeYourHonourMultiplayerGame'
 import { chooseMiniMysteryVariant, MINI_MYSTERIES } from '../content/miniMystery'
 import { KNOW_ME_CATEGORIES, promptsFor, shuffledPrompts, type KnowMeCategory, type KnowMeMode, type KnowMeRelationship } from '../content/doYouKnowMe'
-import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, getRoomAnalyticsRef, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValue, startDoYouKnowMeGame, startImposterGame, startMiniMysteryGame, startMultiGame, touchRoom } from './roomApi'
+import { shuffledThinkFastPrompts } from '../content/thinkFast'
+import { COURT_CASES, COURT_CASE_CATEGORIES, COURT_CATEGORY_DETAILS, shuffledCourtCases, type CourtCaseCategory } from '../content/notMeYourHonour'
+import { claimHost, clearRematchRequests, createRoom, endRoom, getCharadesPrompt, getRoom, getRoomAnalyticsRef, joinRoom, leaveRoom, requestRematch, setCharadesDeck, setSessionValues, startDoYouKnowMeGame, startImposterGame, startMiniMysteryGame, startMultiGame, startThinkFastGame, touchRoom } from './roomApi'
 import { track } from '../analytics'
+import { trackPerformance } from '../analytics/performance'
 import { ensureAnonymousUser, multiplayerConfigured, supabase } from './supabase'
 import { MULTIPLAYER_GAMES } from './gameConfig'
-import type { MultiplayerAnswer, MultiplayerGameId, MultiplayerPlayer, MultiplayerRoom, PromptType } from './types'
+import type { MultiplayerGameId, MultiplayerPlayer, MultiplayerRoom } from './types'
 import { SharedSessionProvider } from './SessionStateContext'
 
 const PLAYER_COLORS = ['#dc2827', '#9b59b6', '#27ae60', '#e67e22', '#3498db', '#e91e63']
-const HEART_GAME = 'https://res.cloudinary.com/oluwatosin17/image/upload/decked/game-assets/heart-filled.svg'
 
 function Panel({ children, narrow = false }: { children: React.ReactNode; narrow?: boolean }) {
   return (
@@ -107,6 +100,10 @@ function Entry({ onCreate, onJoin, busy, error, initialGameId }: {
       onPlayWeJustMet={() => selectGame('we-just-met')}
       onPlayWhot={() => selectGame('whot')}
       onPlayImposter={() => selectGame('imposter')}
+      onPlayMiniMystery={() => selectGame('mini-mystery')}
+      onPlayDoYouKnowMe={() => selectGame('do-you-know-me')}
+      onPlayThinkFast={() => selectGame('think-fast')}
+      onPlayNotMeYourHonour={() => selectGame('not-me-your-honour')}
     />
   </div>
 
@@ -152,7 +149,7 @@ function ExitRoomButton({ isHost, busy, onExit }: { isHost: boolean; busy: boole
 function Lobby({ room, players, currentUserId, onContinue, onExit, busy, onlineCount }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onContinue: () => void; onExit: () => void; busy: boolean; onlineCount: number }) {
   const shareUrl = `${window.location.origin}/play-together?code=${room.code}`
   const isHost = room.host_user_id === currentUserId
-  const minimumPlayers = room.game_id === 'mini-mystery' ? 4 : room.game_id === 'imposter' ? 3 : 2
+  const minimumPlayers = room.game_id === 'mini-mystery' ? 4 : room.game_id === 'imposter' || room.game_id === 'not-me-your-honour' ? 3 : 2
   const copyInvite = async () => { await navigator.clipboard.writeText(`Join my DECKED game: ${shareUrl}\nRoom code: ${room.code}`) }
   return <Panel>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
@@ -224,84 +221,29 @@ function DoYouKnowMeSetup({ busy, onBack, onStart }: { busy: boolean; onBack: ()
   return <MultiplayerSetupFrame gameId="do-you-know-me" onBack={goBack}><section style={{ ...setupShell, width: 'min(620px, calc(100vw - 32px))' }}>{content}<div style={{ display: 'flex', gap: 10 }}><button style={setupSecondary} onClick={goBack}>GO BACK</button><PrimaryButton disabled={busy} onClick={() => step === 'mode' ? setStep('relationship') : step === 'relationship' ? setStep('categories') : step === 'categories' ? setStep('rounds') : onStart(mode, relationship, categories, rounds)}>{step === 'rounds' ? busy ? 'STARTING…' : 'START THE QUESTIONS' : 'CONTINUE'}</PrimaryButton></div><style>{`.multiplayer-setup-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.multiplayer-setup-grid button{position:relative;min-height:78px;padding:14px;border-radius:13px;border:1px dashed rgba(255,255,255,.18);background:#070708;color:#fff;text-align:left;cursor:pointer}.multiplayer-setup-grid button.selected{border:2px solid #fff;background:#47123c}.multiplayer-setup-grid b{display:block;font:20px 'Staatliches',sans-serif}.multiplayer-setup-grid span{display:block;margin-top:5px;color:rgba(255,255,255,.58);font:13px/1.35 'Satoshi',sans-serif}.multiplayer-setup-grid em{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-style:normal}@media(max-width:520px){.multiplayer-setup-grid{grid-template-columns:1fr}}`}</style></section></MultiplayerSetupFrame>
 }
 
-function ExistingGameCard({ room, prompt, revealed, canReveal, onReveal }: { room: MultiplayerRoom; prompt: unknown; revealed: boolean; canReveal: boolean; onReveal: () => void }) {
-  const text = typeof prompt === 'string' ? prompt : ''
-  switch (room.game_id) {
-    case 'spicy-starters': return revealed ? <SpicyCard question={text} spiceLevel="medium" flipPhase="idle" /> : <SpicyIntroCard firstQuestion="" spiceLevel="medium" onTap={canReveal ? onReveal : () => {}} />
-    case 'never-have-i-ever': return <NHIECard prompt={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-    case 'late-night-talks': return <LNTCard question={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-    case 'dinner-table': return <DTCCard question={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-    case 'icebreaker': return <IcebreakerCard question={(prompt ?? { category: 'FUN', text: '' }) as { category: 'DEEP' | 'FUN' | 'REFLECTIVE' | 'SOCIAL' | 'CREATIVE'; text: string }} flipped={revealed} onTap={canReveal ? onReveal : () => {}} />
-    case 'everyday-conversation': return <ECCard question={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-    case 'reconnect': return <ReconnectCard question={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-    case 'red-flag-green-flag': return <RedFlagGreenFlagCard scenario={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-    case 'charades': return <CharadesCard prompt={text} flipped={revealed} onFlip={canReveal ? onReveal : () => {}} />
-  }
+function ThinkFastSetup({busy,onBack,onStart}:{busy:boolean;onBack:()=>void;onStart:(prompts:string[],answerSeconds:number)=>void}){
+  const [rounds,setRounds]=useState(10),[answerSeconds,setAnswerSeconds]=useState(7),[custom,setCustom]=useState<string[]>([]),[draft,setDraft]=useState('')
+  const add=()=>{const value=draft.trim();if(!value||custom.length>=rounds)return;setCustom(items=>[...items,value]);setDraft('')}
+  const start=()=>{const chosen=custom.slice(0,rounds);onStart([...chosen,...shuffledThinkFastPrompts().slice(0,Math.max(0,rounds-chosen.length))],answerSeconds)}
+  return <MultiplayerSetupFrame gameId="think-fast" onBack={onBack}><section style={{...setupShell,width:'min(620px,calc(100vw - 32px))'}}><p style={{...setupKicker,color:'#ff8a1f'}}>SET UP THE BUZZER</p><h1 style={{...headingStyle,fontSize:'clamp(36px,8vw,54px)'}}>THINK FAST</h1><p style={bodyStyle}>Custom prompts play first. Decked fills the rounds left.</p><div className="think-fast-multi-fields"><label><span>NUMBER OF PROMPTS</span><input aria-label="Number of prompts" type="number" min={3} max={30} value={rounds} onChange={event=>setRounds(Math.max(3,Math.min(30,Number(event.target.value))))}/></label><label><span>SECONDS TO ANSWER</span><input aria-label="Seconds to answer" type="number" min={3} max={60} value={answerSeconds} onChange={event=>setAnswerSeconds(Math.max(3,Math.min(60,Number(event.target.value)||3)))}/></label></div><div style={{width:'100%',display:'flex',gap:8}}><input value={draft} onChange={event=>setDraft(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'){event.preventDefault();add()}}} placeholder="Optional custom prompt" style={inputStyle}/><button style={setupSecondary} onClick={add}>ADD</button></div>{custom.length?<div style={{width:'100%',display:'grid',gap:7}}>{custom.map((item,index)=><div key={`${item}-${index}`} style={{padding:'10px 13px',display:'flex',alignItems:'center',gap:8,border:'1px solid rgba(255,255,255,.13)',borderRadius:10,color:'#fff',font:"14px 'Satoshi',sans-serif",textAlign:'left'}}><span style={{flex:1}}>{item}</span><button aria-label={`Remove prompt ${index+1}`} onClick={()=>setCustom(items=>items.filter((_,i)=>i!==index))} style={{border:0,background:'none',color:'#fff',fontSize:20}}>×</button></div>)}</div>:null}<div style={{display:'flex',gap:10}}><button style={setupSecondary} onClick={onBack}>GO BACK</button><PrimaryButton disabled={busy} onClick={start}>{busy?'STARTING…':'START BUZZING'}</PrimaryButton></div><style>{`.think-fast-multi-fields{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.think-fast-multi-fields label{display:flex;align-items:center;gap:10px;min-height:58px;padding:8px 12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#070708;color:#fff;text-align:left}.think-fast-multi-fields label span{flex:1;font:13px 'Staatliches',sans-serif;letter-spacing:.05em}.think-fast-multi-fields input{width:60px;padding:7px;border:1px solid rgba(255,255,255,.18);border-radius:8px;background:#1a1a1d;color:#fff;font:23px 'Anton SC',sans-serif;text-align:center}@media(max-width:520px){.think-fast-multi-fields{grid-template-columns:1fr}}`}</style></section></MultiplayerSetupFrame>
 }
 
-function MultiGame({ room, players, currentUserId, onReveal, onAnswer, onNext, onNewRoom, onExit, busy }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onReveal: () => void; onAnswer: (answer: MultiplayerAnswer) => void; onNext: () => void; onNewRoom: () => void; onExit: () => void; busy: boolean }) {
-  const config = MULTIPLAYER_GAMES[room.game_id]
-  const current = players[room.current_player_index % Math.max(players.length, 1)]
-  const isTurn = current?.user_id === currentUserId
-  const isHost = room.host_user_id === currentUserId
-  const revealed = room.game_state?.revealed === true
-  const prompt = room.prompt_index == null ? '' : config.deck[room.prompt_index] ?? ''
-  const answers = room.game_state?.answers ?? {}
-  const myAnswer = answers[currentUserId]
-  const allAnswered = Object.keys(answers).length >= players.length
-  const canControl = isTurn || isHost
-
-  if (room.status === 'finished') return <div className="screen-enter" style={{ display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '22px', padding: '40px 20px', textAlign: 'center' }}>
-    <h1 style={headingStyle}>YOU'RE DECKED</h1>
-    <p style={bodyStyle}>You played all {room.total_cards} {config.name} cards together.</p>
-    {config.kind === 'score' ? <PlayerList players={[...players].sort((a, b) => b.score - a.score)} currentUserId={currentUserId} /> : null}
-    <div style={{ display: 'flex', gap: '10px' }}><button className="game-btn" onClick={onExit} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 22px', color: '#fff', fontFamily: "'Staatliches', sans-serif" }}>{isHost ? 'END ROOM' : 'LEAVE ROOM'}</button><PrimaryButton onClick={onNewRoom}>PLAY AGAIN</PrimaryButton></div>
-  </div>
-
-  return <div className="screen-enter" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '22px', padding: '28px 20px 56px' }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><span style={{ width: 28, height: 28, borderRadius: '50%', background: current?.color, border: '2px solid #fff' }} /><span className="font-anton" style={{ color: '#fff', fontSize: '17px' }}>{current?.display_name.toUpperCase()}'S TURN</span></div>
-    <ExistingGameCard room={room} prompt={prompt} revealed={revealed} canReveal={!revealed && canControl && !busy} onReveal={onReveal} />
-    {revealed && config.kind === 'score' && !myAnswer ? <div style={{ width: '100%', maxWidth: 520 }}><IveDoneItScreen players={[{ name: players.find(player => player.user_id === currentUserId)?.display_name ?? 'You', color: players.find(player => player.user_id === currentUserId)?.color ?? '#dc2827' } satisfies LocalPlayer]} onNext={selected => onAnswer(selected.includes(0) ? 'have' : 'never')} /></div> : null}
-    {revealed && config.kind === 'vote' && !myAnswer ? <VoteButtons onVote={vote => onAnswer(vote)} /> : null}
-    {revealed && (config.kind === 'score' || config.kind === 'vote') ? <p style={bodyStyle}>{Object.keys(answers).length} of {players.length} answered{allAnswered ? ' · Ready to continue' : ''}</p> : null}
-    {revealed && canControl ? <PrimaryButton disabled={busy || ((config.kind === 'score' || config.kind === 'vote') && !allAnswered)} onClick={onNext}>NEXT</PrimaryButton> : null}
-    <div className="font-staatliches" style={{ color: 'rgba(255,255,255,.35)', letterSpacing: '.12em' }}>CARD {room.card_index + 1} OF {room.total_cards}</div>
-    <ExitRoomButton isHost={isHost} busy={busy} onExit={onExit} />
-  </div>
-}
-
-function RemoteGame({ room, players, currentUserId, onChoose, onNext, onNewRoom, onExit, busy }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onChoose: (type: PromptType) => void; onNext: () => void; onNewRoom: () => void; onExit: () => void; busy: boolean }) {
-  const current = players[room.current_player_index % Math.max(players.length, 1)]
-  const isTurn = current?.user_id === currentUserId
-  const isHost = room.host_user_id === currentUserId
-  const prompt = room.prompt_type === 'truth' ? TRUTH_DECK[room.prompt_index ?? 0] : room.prompt_type === 'dare' ? DARE_DECK[room.prompt_index ?? 0] : null
-  const { wrapperStyle: splitWrapperStyle, cardStyle: splitCardStyle } = useScaledCard(454, 457)
-  const { wrapperStyle: revealWrapperStyle, cardStyle: revealCardStyle } = useScaledCard(454, 400)
-
-  if (room.status === 'finished') return <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '40px', textAlign: 'center' }}><h1 style={headingStyle}>YOU'RE DECKED</h1><p style={bodyStyle}>You played all {room.total_cards} Truth or Dare cards together.</p><div style={{ display: 'flex', gap: '8px' }}><button className="game-btn" onClick={onExit} style={{ border: '1px solid #fff', background: 'none', borderRadius: '999px', padding: '12px 24px', color: '#fff', fontFamily: "'Staatliches', sans-serif" }}>END ROOM</button><PrimaryButton onClick={onNewRoom}>PLAY AGAIN</PrimaryButton></div></div>
-
-  if (!room.prompt_type) return <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '30px', padding: '40px 40px 60px', position: 'relative' }}>
-    <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '28px', height: '28px', borderRadius: '50%', background: current?.color, border: '2px solid rgba(255,255,255,0.2)' }} /><span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.65)' }}>{current?.display_name.toUpperCase()}'S TURN</span></div>
-    <div style={splitWrapperStyle}><div className="tod-split-card tod-card-enter game-card" style={{ ...splitCardStyle, position: 'relative', zIndex: 2, borderRadius: '20px', overflow: 'hidden', boxShadow: '0 32px 80px rgba(220,40,39,0.35)' }}>
-      <button disabled={!isTurn || busy} aria-label="Choose Truth" className="tod-truth-half" onClick={() => onChoose('truth')} style={{ position: 'absolute', inset: '0 0 auto', height: '228.5px', border: 0, background: '#e9b1ba', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: isTurn ? 'pointer' : 'default' }}><span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '36px', color: '#dd2a25' }}>TRUTH</span></button>
-      <button disabled={!isTurn || busy} aria-label="Choose Dare" className="tod-dare-half" onClick={() => onChoose('dare')} style={{ position: 'absolute', inset: 'auto 0 0', height: '228.5px', border: 0, background: '#dd2a25', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: isTurn ? 'pointer' : 'default' }}><span className="tod-half-label" style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '36px', color: '#e9b1ba' }}>DARE</span></button>
-      <div className="tod-hearts" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: '5px', zIndex: 3, pointerEvents: 'none' }}><img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px' }} /><img src={HEART_GAME} alt="" style={{ width: '32px', height: '32px', transform: 'scaleY(-1)' }} /></div>
-    </div></div>
-    {!isTurn ? <p style={bodyStyle}>Waiting for {current?.display_name} to choose Truth or Dare…</p> : null}
-    <div className="counter-in" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>CARD {room.card_index + 1} OF {room.total_cards}</div>
-    <ExitRoomButton isHost={isHost} busy={busy} onExit={onExit} />
-  </div>
-
-  const isTruth = room.prompt_type === 'truth'
-  const cardBg = isTruth ? '#f7b8bc' : '#dc2827'
-  const cardText = isTruth ? '#dc2827' : '#f7b8bc'
-  return <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 40px 60px', gap: '24px', position: 'relative' }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ width: '28px', height: '28px', borderRadius: '50%', background: current?.color, border: '2px solid rgba(255,255,255,0.2)' }} /><span style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.65)' }}>{current?.display_name.toUpperCase()}'S TURN</span></div>
-    <div style={revealWrapperStyle}><div className="tod-card-enter game-card" style={{ ...revealCardStyle, position: 'relative', background: cardBg, borderRadius: '20px', minHeight: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '52px 48px 44px', gap: '24px', boxShadow: `0 32px 80px ${isTruth ? 'rgba(247,100,100,0.25)' : 'rgba(220,40,39,0.45)'}` }}><div style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', letterSpacing: '0.18em', color: cardText, opacity: 0.65 }}>— {room.prompt_type.toUpperCase()} —</div><p style={{ fontFamily: "'Anton SC', sans-serif", fontSize: '28px', color: cardText, textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.2, margin: 0 }}>{prompt}</p><img src={HEART_GAME} alt="" style={{ width: '36px', height: '36px', opacity: 0.85 }} /></div></div>
-    {(isTurn || isHost) ? <button className="game-btn-primary" disabled={busy} onClick={onNext} style={{ width: '196px', background: '#dc2827', border: 0, borderRadius: '999px', padding: '12px 18px', fontFamily: "'Staatliches', sans-serif", fontSize: '16px', color: '#fff' }}>NEXT</button> : <p style={bodyStyle}>Waiting for {current?.display_name}…</p>}
-    <div className="counter-in" style={{ fontFamily: "'Staatliches', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.12em' }}>CARD {room.card_index + 1} OF {room.total_cards}</div>
-    <ExitRoomButton isHost={isHost} busy={busy} onExit={onExit} />
-  </div>
+function CourtroomSetup({ busy, onBack, onStart }: { busy: boolean; onBack: () => void; onStart: (caseIds: string[]) => void }) {
+  const [step, setStep] = useState<'categories' | 'rounds'>('categories')
+  const [categories, setCategories] = useState<CourtCaseCategory[]>(['Everyday Chaos', 'Friends & Parties', 'Dating Drama'])
+  const [rounds, setRounds] = useState(5)
+  const available = COURT_CASES.filter(item => categories.includes(item.category))
+  const choices = [3, 5, 7, 10].filter(value => value <= available.length)
+  if (!choices.includes(available.length)) choices.push(available.length)
+  choices.sort((a, b) => a - b)
+  const toggle = (category: CourtCaseCategory) => setCategories(current => current.includes(category) ? current.filter(item => item !== category) : [...current, category])
+  const goBack = () => step === 'categories' ? onBack() : setStep('categories')
+  return <MultiplayerSetupFrame gameId="not-me-your-honour" onBack={onBack}><section style={{ ...setupShell, width: 'min(620px, calc(100vw - 32px))' }}>
+    <p style={setupKicker}>{step === 'categories' ? 'BUILD YOUR COURT DOCKET' : 'SET THE COURT CALENDAR'}</p><h1 style={headingStyle}>{step === 'categories' ? 'CHOOSE YOUR CASES' : 'HOW MANY CASES?'}</h1><p style={bodyStyle}>{step === 'categories' ? 'Pick one theme or mix a few. Only selected case types will enter the trial.' : 'Every case includes private clues, evidence reveals, an objection and a plot twist.'}</p>
+    {step === 'categories' ? <div className="courtroom-category-options">{COURT_CASE_CATEGORIES.slice(1).map(category => { const typed = category as CourtCaseCategory; const selected = categories.includes(typed); const details = COURT_CATEGORY_DETAILS[typed]; return <button key={category} type="button" aria-pressed={selected} className={selected ? 'selected' : ''} onClick={() => toggle(typed)} style={{ '--court-accent': details.accent } as React.CSSProperties}><b>{category}</b><span>{details.description}</span><em>{COURT_CASES.filter(item => item.category === typed).length} CASES</em>{selected ? <i>✓</i> : null}</button> })}</div> : <div className="courtroom-round-options">{choices.map(value => <button key={value} type="button" className={rounds === value ? 'selected' : ''} onClick={() => setRounds(value)}><b>{value}</b><span>{value === 3 ? 'QUICK SESSION' : value === 5 ? 'CLASSIC TRIAL' : value === 7 ? 'FULL DOCKET' : 'ALL SELECTED CASES'}</span></button>)}</div>}
+    <div style={{ display: 'flex', gap: 10 }}><button style={setupSecondary} onClick={goBack}>GO BACK</button><PrimaryButton disabled={busy || !categories.length} onClick={() => step === 'categories' ? (setRounds(Math.min(5, available.length)), setStep('rounds')) : onStart(shuffledCourtCases(categories).slice(0, Math.min(rounds, available.length)).map(item => item.id))}>{step === 'categories' ? 'CHOOSE CASE COUNT' : busy ? 'OPENING COURT…' : 'DEAL PRIVATE ROLES'}</PrimaryButton></div>
+    <style>{`.courtroom-category-options,.courtroom-round-options{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.courtroom-category-options button{position:relative;min-height:126px;padding:15px;border:1px dashed rgba(255,255,255,.18);border-radius:13px;background:#070708;color:#fff;text-align:left;cursor:pointer}.courtroom-category-options button.selected{border:2px solid var(--court-accent);background:color-mix(in srgb,var(--court-accent) 10%,#070708)}.courtroom-category-options b{display:block;font:21px 'Anton SC',sans-serif;text-transform:uppercase}.courtroom-category-options span{display:block;margin-top:7px;color:rgba(255,255,255,.56);font:13px/1.35 'Satoshi',sans-serif}.courtroom-category-options em{display:block;margin-top:10px;color:var(--court-accent);font:12px 'Staatliches',sans-serif;letter-spacing:.08em;font-style:normal}.courtroom-category-options i{position:absolute;right:12px;top:10px;color:var(--court-accent);font-style:normal}.courtroom-round-options button{min-height:84px;padding:14px;border:1px dashed rgba(255,255,255,.18);border-radius:13px;background:#070708;color:#fff;cursor:pointer}.courtroom-round-options button.selected{border:2px solid #fff;background:#143d91}.courtroom-round-options b{display:block;font:32px 'Anton SC',sans-serif}.courtroom-round-options span{font:13px 'Staatliches',sans-serif;letter-spacing:.08em;color:rgba(255,255,255,.62)}@media(max-width:520px){.courtroom-category-options,.courtroom-round-options{grid-template-columns:1fr}}`}</style>
+  </section></MultiplayerSetupFrame>
 }
 
 const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
@@ -330,6 +272,8 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   imposter: 'imposter',
   'mini-mystery': 'mini-mystery',
   'do-you-know-me': 'do-you-know-me',
+  'think-fast': 'think-fast',
+  'not-me-your-honour': 'not-me-your-honour',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -358,6 +302,8 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   imposter: 'game',
   'mini-mystery': 'game',
   'do-you-know-me': 'game',
+  'think-fast': 'game',
+  'not-me-your-honour': 'game',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -386,6 +332,8 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   imposter: 'game',
   'mini-mystery': 'game',
   'do-you-know-me': 'game',
+  'think-fast': 'game',
+  'not-me-your-honour': 'game',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -414,6 +362,8 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   imposter: ['game'],
   'mini-mystery': ['game'],
   'do-you-know-me': ['game'],
+  'think-fast': ['game'],
+  'not-me-your-honour': ['game'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -484,17 +434,40 @@ function isTerminalSession(values: Record<string, unknown>) {
   return step === 'game' && total > 0 && index >= total
 }
 
+function sessionValuesEqual(left: unknown, right: unknown) {
+  if (Object.is(left, right)) return true
+  if ((left === null || typeof left !== 'object') || (right === null || typeof right !== 'object')) return false
+  try { return JSON.stringify(left) === JSON.stringify(right) } catch { return false }
+}
+
 function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onlineIds: string[]; onClose: () => void }) {
-  const remoteSession = room.game_state?.session ?? {}
+  const remoteSession = useMemo(() => room.game_state?.session ?? {}, [room.game_state?.session])
   const [values, setValues] = useState<Record<string, unknown>>(remoteSession)
   const valuesRef = useRef(values)
   const turnMutationActorRef = useRef<string | null>(null)
+  const pendingWritesRef = useRef<Record<string, unknown>>({})
+  const optimisticWritesRef = useRef<Record<string, unknown>>({})
+  const writeInFlightRef = useRef(false)
+  const flushTimerRef = useRef<number | null>(null)
+  const retryTimerRef = useRef<number | null>(null)
+  const pendingStartedAtRef = useRef<number | null>(null)
+  const writeRetryCountRef = useRef(0)
+  const mountedRef = useRef(true)
   const [privatePrompt, setPrivatePrompt] = useState<string | null>(null)
+  const [syncProblem, setSyncProblem] = useState(false)
 
   useEffect(() => {
-    valuesRef.current = remoteSession
-    setValues(remoteSession)
-  }, [room.version])
+    const optimistic = optimisticWritesRef.current
+    for (const [key, value] of Object.entries(optimistic)) {
+      if (sessionValuesEqual(remoteSession[key], value)) delete optimistic[key]
+    }
+    // A refresh can finish while a move is still travelling to the server.
+    // Preserve those acknowledged-later values instead of visually sending a
+    // player back to the previous screen.
+    const reconciled = { ...remoteSession, ...optimistic }
+    valuesRef.current = reconciled
+    setValues(reconciled)
+  }, [remoteSession, room.version])
 
   useEffect(() => {
     if (room.game_id !== 'charades') return
@@ -504,6 +477,64 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
       .catch(error => console.error('Could not load the private Charades prompt', error))
     return () => { active = false }
   }, [room.game_id, room.id, room.version])
+
+  const flushWrites = useCallback(async () => {
+    if (writeInFlightRef.current || Object.keys(pendingWritesRef.current).length === 0) return
+    writeInFlightRef.current = true
+    const batch = pendingWritesRef.current
+    pendingWritesRef.current = {}
+    const batchStartedAt = pendingStartedAtRef.current ?? performance.now()
+    const batchRetryCount = writeRetryCountRef.current
+    pendingStartedAtRef.current = null
+    writeRetryCountRef.current = 0
+    try {
+      await setSessionValues(room.id, batch)
+      trackPerformance('multiplayer_sync', performance.now() - batchStartedAt, { game_id: room.game_id, retry_count: batchRetryCount })
+      if (mountedRef.current) setSyncProblem(false)
+    } catch (error) {
+      // Preserve newer values for the same key while restoring failed writes for retry.
+      pendingWritesRef.current = { ...batch, ...pendingWritesRef.current }
+      pendingStartedAtRef.current = Math.min(pendingStartedAtRef.current ?? batchStartedAt, batchStartedAt)
+      writeRetryCountRef.current = Math.max(writeRetryCountRef.current, batchRetryCount + 1)
+      if (mountedRef.current) setSyncProblem(true)
+      console.error('Could not synchronize game state', error)
+      if (retryTimerRef.current === null) {
+        retryTimerRef.current = window.setTimeout(() => {
+          retryTimerRef.current = null
+          void flushWrites()
+        }, 1_500)
+      }
+    } finally {
+      writeInFlightRef.current = false
+      if (Object.keys(pendingWritesRef.current).length > 0 && retryTimerRef.current === null) void flushWrites()
+    }
+  }, [room.game_id, room.id])
+
+  const queueWrite = useCallback((key: string, value: unknown) => {
+    if (pendingStartedAtRef.current === null) pendingStartedAtRef.current = performance.now()
+    pendingWritesRef.current[key] = value
+    optimisticWritesRef.current[key] = value
+    if (flushTimerRef.current !== null) return
+    // A short batch window turns one gameplay transition into one atomic room update.
+    flushTimerRef.current = window.setTimeout(() => {
+      flushTimerRef.current = null
+      void flushWrites()
+    }, 24)
+  }, [flushWrites])
+
+  useEffect(() => {
+    mountedRef.current = true
+    const flushWhenOnline = () => {
+      if (Object.keys(pendingWritesRef.current).length > 0) void flushWrites()
+    }
+    window.addEventListener('online', flushWhenOnline)
+    return () => {
+      mountedRef.current = false
+      window.removeEventListener('online', flushWhenOnline)
+      if (flushTimerRef.current !== null) window.clearTimeout(flushTimerRef.current)
+      if (retryTimerRef.current !== null) window.clearTimeout(retryTimerRef.current)
+    }
+  }, [flushWrites])
 
   const setValue = useCallback(<T,>(key: string, next: React.SetStateAction<T>) => {
     const terminal = isTerminalSession(valuesRef.current)
@@ -553,15 +584,15 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
     setValues(updated)
     if (room.game_id === 'charades' && key === 'deck' && Array.isArray(resolved)) {
       void setCharadesDeck(room.id, resolved as string[])
-        .then(() => setSessionValue(room.id, key, valueToPersist))
+        .then(() => queueWrite(key, valueToPersist))
         .catch(error => console.error('Could not secure the Charades deck', error))
       return
     }
     if (terminal && isHost && key === 'step') {
       void clearRematchRequests(room.id).catch(error => console.error('Could not clear rematch requests', error))
     }
-    void setSessionValue(room.id, key, valueToPersist).catch(error => console.error('Could not synchronize game state', error))
-  }, [currentUserId, room.host_user_id, room.id, room.game_id])
+    queueWrite(key, valueToPersist)
+  }, [currentUserId, queueWrite, room.host_user_id, room.id, room.game_id])
 
   const isHost = room.host_user_id === currentUserId
   const currentStep = typeof values.step === 'string' ? values.step : INITIAL_STEPS[room.game_id]
@@ -611,12 +642,17 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
       {game}
     </div>
     <style>{`.multiplayer-terminal-guest .done-btns .game-btn { display: none !important; }`}</style>
-    {terminal ? <div role="status" style={{ position: 'fixed', left: '50%', bottom: '82px', transform: 'translateX(-50%)', zIndex: 20, width: 'min(420px, calc(100vw - 32px))', padding: '12px 16px', borderRadius: '12px', background: '#070708', border: '1px dashed rgba(255,255,255,.16)', color: '#fff', textAlign: 'center', fontFamily: "'Satoshi', sans-serif", fontSize: '13px', boxShadow: '0 16px 40px rgba(0,0,0,.45)' }}>
-      {isHost
+    {syncProblem ? <div role="alert" style={{ position: 'fixed', left: '50%', top: '76px', transform: 'translateX(-50%)', zIndex: 30, width: 'min(420px, calc(100vw - 32px))', padding: '10px 14px', borderRadius: 12, background: '#351416', border: '1px solid #e8292d', color: '#fff', textAlign: 'center', fontFamily: "'Satoshi', sans-serif", fontSize: 13 }}>Connection interrupted. Your move is being retried…</div> : null}
+    {terminal ? <div role="status" style={{ position: 'fixed', left: '50%', bottom: '82px', transform: 'translateX(-50%)', zIndex: 20, width: 'min(420px, calc(100vw - 32px))', padding: '12px 16px', borderRadius: '12px', background: '#070708', border: '1px dashed rgba(255,255,255,.16)', color: '#fff', textAlign: 'center', fontFamily: "'Satoshi', sans-serif", fontSize: '13px', boxShadow: '0 16px 40px rgba(0,0,0,.45)', display: 'grid', gap: 10 }}>
+      <span>{isHost
         ? `${room.rematch_requests?.length ?? 0} player${room.rematch_requests?.length === 1 ? '' : 's'} requested a rematch.`
         : requestedRematch
           ? 'Rematch requested. Waiting for the host.'
-          : hostOnline ? 'Only the host can start the next game.' : 'Host disconnected. The room will choose a new host shortly.'}
+          : hostOnline ? 'Only the host can start the next game.' : 'Host disconnected. The room will choose a new host shortly.'}</span>
+      {!isHost ? <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
+        <button className="font-staatliches" onClick={onClose} style={{ minHeight: 40, padding: '8px 18px', borderRadius: 999, border: '1px solid #fff', background: 'transparent', color: '#fff', cursor: 'pointer' }}>LEAVE ROOM</button>
+        <button className="font-staatliches" disabled={requestedRematch} onClick={() => void requestRematch(room.id).catch(error => console.error('Could not request a rematch', error))} style={{ minHeight: 40, padding: '8px 18px', borderRadius: 999, border: 0, background: requestedRematch ? '#555' : '#e8292d', color: '#fff', cursor: requestedRematch ? 'default' : 'pointer' }}>{requestedRematch ? 'REQUESTED' : 'PLAY AGAIN'}</button>
+      </div> : null}
     </div> : null}
   </SharedSessionProvider>
 }
@@ -631,17 +667,40 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
   const [presenceReady, setPresenceReady] = useState(false)
   const [setupGameId, setSetupGameId] = useState<MultiplayerGameId | null>(null)
   const analyticsRoomRef = useRef<string | null>(null)
+  const refreshInFlightRef = useRef<Promise<void> | null>(null)
+  const refreshQueuedRef = useRef(false)
+  const refreshTimerRef = useRef<number | null>(null)
+  const exitingRef = useRef(false)
   const roomId = room?.id
   const roomGameId = room?.game_id
 
   const refresh = useCallback(async (id: string) => {
-    const bundle = await getRoom(id)
-    setRoom(previous => {
-      if (previous?.id === bundle.room.id && previous.version > bundle.room.version) return previous
-      return bundle.room
-    })
-    setPlayers(bundle.players)
+    if (refreshInFlightRef.current) {
+      refreshQueuedRef.current = true
+      return refreshInFlightRef.current
+    }
+    const request = (async () => {
+      do {
+        refreshQueuedRef.current = false
+        const bundle = await getRoom(id)
+        setRoom(previous => {
+          if (previous?.id === bundle.room.id && previous.version > bundle.room.version) return previous
+          return bundle.room
+        })
+        setPlayers(bundle.players)
+      } while (refreshQueuedRef.current)
+    })()
+    refreshInFlightRef.current = request
+    try { await request } finally { refreshInFlightRef.current = null }
   }, [])
+
+  const scheduleRefresh = useCallback((id: string, immediate = false) => {
+    if (refreshTimerRef.current !== null) window.clearTimeout(refreshTimerRef.current)
+    refreshTimerRef.current = window.setTimeout(() => {
+      refreshTimerRef.current = null
+      void refresh(id).catch(error => console.error('Could not refresh multiplayer room', error))
+    }, immediate ? 0 : 60)
+  }, [refresh])
   const run = async (action: () => Promise<void>) => { setBusy(true); setError(''); try { await action() } catch (cause) { setError(cause instanceof Error ? cause.message : 'Something went wrong.') } finally { setBusy(false) } }
 
   useEffect(() => {
@@ -672,14 +731,17 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
           setPlayers([])
           return
         }
-        void refresh(roomId)
+        scheduleRefresh(roomId)
       })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'decked_room_players', filter: `room_id=eq.${roomId}` }, () => refresh(roomId))
-      .subscribe(status => track('realtime_status_changed', {
-        channel_type: 'database', status: status.toLowerCase(),
-        ...(roomGameId ? { game_id: roomGameId } : {}),
-        ...(analyticsRoomRef.current ? { multiplayer_room_ref: analyticsRoomRef.current } : {}),
-      }))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'decked_room_players', filter: `room_id=eq.${roomId}` }, () => scheduleRefresh(roomId))
+      .subscribe(status => {
+        track('realtime_status_changed', {
+          channel_type: 'database', status: status.toLowerCase(),
+          ...(roomGameId ? { game_id: roomGameId } : {}),
+          ...(analyticsRoomRef.current ? { multiplayer_room_ref: analyticsRoomRef.current } : {}),
+        })
+        if (status === 'SUBSCRIBED') scheduleRefresh(roomId, true)
+      })
     const presence = supabase.channel(`decked-presence:${roomId}`, { config: { presence: { key: currentUserId } } })
       .on('presence', { event: 'sync' }, () => { setOnlineIds(Object.keys(presence.presenceState())); setPresenceReady(true) })
       .subscribe(status => {
@@ -690,8 +752,21 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
         })
         if (status === 'SUBSCRIBED') presence.track({ online_at: new Date().toISOString() })
       })
-    return () => { supabase.removeChannel(changes); supabase.removeChannel(presence) }
-  }, [roomId, roomGameId, currentUserId, refresh])
+    const reconcile = () => { if (document.visibilityState === 'visible') scheduleRefresh(roomId, true) }
+    const interval = window.setInterval(reconcile, 8_000)
+    window.addEventListener('focus', reconcile)
+    window.addEventListener('online', reconcile)
+    document.addEventListener('visibilitychange', reconcile)
+    return () => {
+      if (refreshTimerRef.current !== null) window.clearTimeout(refreshTimerRef.current)
+      window.clearInterval(interval)
+      window.removeEventListener('focus', reconcile)
+      window.removeEventListener('online', reconcile)
+      document.removeEventListener('visibilitychange', reconcile)
+      void supabase.removeChannel(changes)
+      void supabase.removeChannel(presence)
+    }
+  }, [roomId, roomGameId, currentUserId, scheduleRefresh])
 
   useEffect(() => {
     if (!roomId || !currentUserId) return
@@ -724,17 +799,22 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
     setPlayers([])
     setSetupGameId(null)
   }
-  const exitRoom = () => run(async () => {
-    if (!room) return
-    if (room.host_user_id === currentUserId) await endRoom(room.id)
-    else await leaveRoom(room.id)
+  const exitRoom = () => {
+    if (!room || exitingRef.current) return
+    exitingRef.current = true
+    const closingRoom = room
     newRoom()
-  })
+    onClose()
+    const closeRequest = closingRoom.host_user_id === currentUserId ? endRoom(closingRoom.id) : leaveRoom(closingRoom.id)
+    void closeRequest.catch(error => console.error('Could not close multiplayer room cleanly', error))
+  }
 
   if (room && room.status !== 'lobby') {
     if (room.game_id === 'imposter') return <ImposterGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     if (room.game_id === 'mini-mystery') return <MiniMysteryMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     if (room.game_id === 'do-you-know-me') return <DoYouKnowMeMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
+    if (room.game_id === 'think-fast') return <ThinkFastMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
+    if (room.game_id === 'not-me-your-honour') return <NotMeYourHonourMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     return <SharedOriginalGame room={room} players={players} currentUserId={currentUserId} onlineIds={onlineIds} onClose={exitRoom} />
   }
 
@@ -756,11 +836,24 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
     })} />
   }
 
+  if (room?.status === 'lobby' && room.host_user_id === currentUserId && setupGameId === 'think-fast') {
+    return <ThinkFastSetup busy={busy} onBack={()=>setSetupGameId(null)} onStart={(prompts,answerSeconds)=>run(async()=>{await startThinkFastGame(room.id,prompts,answerSeconds);setSetupGameId(null);await refresh(room.id)})}/>
+  }
+
+  if (room?.status === 'lobby' && room.host_user_id === currentUserId && setupGameId === 'not-me-your-honour') {
+    return <CourtroomSetup busy={busy} onBack={() => setSetupGameId(null)} onStart={caseIds => run(async () => {
+      await startMultiGame(room.id, caseIds.length, 1)
+      await setSessionValues(room.id, { court_phase: 'roles', court_round: 0, court_case_ids: JSON.stringify(caseIds), court_scores: '{}' })
+      setSetupGameId(null)
+      await refresh(room.id)
+    })}/>
+  }
+
   return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
-    <GameNav onBack={onClose} />
+    <GameNav onBack={room ? exitRoom : onClose} />
     <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '36px 16px 72px' }}>
       {!multiplayerConfigured ? <Panel narrow><h1 style={headingStyle}>CONNECT SUPABASE</h1><p style={{ ...bodyStyle, marginTop: '14px' }}>Add VITE_SUPABASE_PUBLISHABLE_KEY to enable Play Together.</p></Panel> : !room ? <Entry initialGameId={initialGameId} busy={busy} error={error} onCreate={(name, gameId) => run(async () => joinBundle(await createRoom(name, gameId)))} onJoin={(code, name) => run(async () => joinBundle(await joinRoom(code, name)))} /> : activeView === 'lobby' ? <Lobby room={room} players={players} currentUserId={currentUserId} onlineCount={onlineIds.length} busy={busy} onExit={exitRoom} onContinue={() => {
-        if (room.game_id === 'mini-mystery' || room.game_id === 'do-you-know-me') {
+        if (room.game_id === 'mini-mystery' || room.game_id === 'do-you-know-me' || room.game_id === 'think-fast' || room.game_id === 'not-me-your-honour') {
           setSetupGameId(room.game_id)
           return
         }
@@ -772,10 +865,10 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
         }
         const localPlayers: LocalPlayer[] = players.map((player, index) => ({ name: player.display_name, color: player.color || PLAYER_COLORS[index % PLAYER_COLORS.length], userId: player.user_id }))
         await startMultiGame(room.id, 1, 1)
-        await Promise.all([
-          setSessionValue(room.id, 'players', localPlayers),
-          setSessionValue(room.id, 'step', INITIAL_STEPS[room.game_id]),
-        ])
+        await setSessionValues(room.id, {
+          players: localPlayers,
+          step: INITIAL_STEPS[room.game_id],
+        })
         await refresh(room.id)
         })
       }} /> : null}

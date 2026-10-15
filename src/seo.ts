@@ -31,6 +31,8 @@ const gameNames: Partial<Record<Screen, string>> = {
   imposter: 'Imposter',
   'mini-mystery': 'Mini Mystery',
   'do-you-know-me': 'Do You Know Me?',
+  'think-fast': 'Think Fast',
+  'not-me-your-honour': 'Not Me, Your Honour!',
 }
 
 const noIndexScreens = new Set<Screen>([
@@ -79,6 +81,9 @@ export function updateDocumentMetadata(screen: Screen) {
   } else if (screen === 'about') {
     title = 'About Decked — Games That Bring People Together'
     description = 'Learn how Decked makes parties, dates, family gatherings, and group hangouts more memorable with simple browser-based games.'
+  } else if (screen === 'feedback') {
+    title = 'Send Feedback — Decked'
+    description = 'Share an idea, report a problem, or tell us how Decked can make its games better.'
   } else if (screen === 'privacy') {
     title = 'Privacy Policy — Decked'
     description = 'Learn what information Decked processes, why it is used, how long it is kept, and the privacy choices available to you.'

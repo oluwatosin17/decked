@@ -10,42 +10,54 @@ import { installAnalyticsDeliveryRecovery } from './analytics/delivery'
 
 installAnalyticsDeliveryRecovery(() => { void flushAnalytics() }, window, document)
 
-// Keep already-open tabs on the current release. A newly activated worker can
-// control an old document, but that document still runs its previous JS until
-// it reloads. Reload once when the controller changes so stale builds cannot
-// keep showing outdated configuration screens.
-let reloadingForServiceWorker = false
+if (import.meta.env.DEV) {
+  // A production worker previously installed on localhost can keep serving an
+  // old index that references deleted Vite chunks. Development must always use
+  // the live module graph, so remove workers and their origin-scoped caches.
+  if ('serviceWorker' in navigator) {
+    void navigator.serviceWorker.getRegistrations().then(registrations =>
+      Promise.all(registrations.map(registration => registration.unregister())),
+    )
+  }
+  if ('caches' in window) {
+    void caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key))))
+  }
+} else {
+  // Keep already-open tabs on the current release. A newly activated worker
+  // can control an old document whose JavaScript still belongs to the previous
+  // release, so reload once after the controller changes.
+  let reloadingForServiceWorker = false
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (reloadingForServiceWorker) return
+      reloadingForServiceWorker = true
+      window.location.reload()
+    })
+  }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloadingForServiceWorker) return
-    reloadingForServiceWorker = true
-    window.location.reload()
+  const updateSW = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      void updateSW(true)
+    },
+    onRegisteredSW(_url, registration) {
+      if (!registration) return
+
+      const checkForUpdate = () => void registration.update()
+
+      checkForUpdate()
+      window.setInterval(checkForUpdate, 5 * 60 * 1000)
+
+      // Safari can restore a page from its back-forward cache without doing a
+      // normal load. Recheck the worker whenever that page becomes active.
+      window.addEventListener('pageshow', checkForUpdate)
+      window.addEventListener('focus', checkForUpdate)
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') checkForUpdate()
+      })
+    },
   })
 }
-
-const updateSW = registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    void updateSW(true)
-  },
-  onRegisteredSW(_url, registration) {
-    if (!registration) return
-
-    const checkForUpdate = () => void registration.update()
-
-    checkForUpdate()
-    window.setInterval(checkForUpdate, 5 * 60 * 1000)
-
-    // Safari can restore a page from its back-forward cache without doing a
-    // normal load. Recheck the worker whenever that page becomes active.
-    window.addEventListener('pageshow', checkForUpdate)
-    window.addEventListener('focus', checkForUpdate)
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') checkForUpdate()
-    })
-  },
-})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
