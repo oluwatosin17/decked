@@ -13,10 +13,13 @@ describe('how-to-play guides', () => {
       expect(guide.path).toBe(`/guides/how-to-play-${guide.gameId}`)
       expect(howToPlayScreen(guide.gameId)).toBe(`guide-how-to-play-${guide.gameId}`)
       expect(guide.summary.length).toBeGreaterThan(30)
+      expect(guide.objective.length).toBeGreaterThan(70)
       expect(guide.setup.length).toBeGreaterThanOrEqual(2)
       expect(guide.steps.length).toBeGreaterThanOrEqual(3)
       expect(guide.ending.length).toBeGreaterThan(20)
-      expect(guide.tips.length).toBeGreaterThanOrEqual(2)
+      expect(guide.example.length).toBeGreaterThan(70)
+      expect(guide.remember.length).toBeGreaterThan(70)
+      expect(guide.tips.length).toBeGreaterThanOrEqual(4)
     }
   })
 

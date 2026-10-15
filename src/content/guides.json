@@ -17,6 +17,10 @@
     "description": "Compare free online party games for friends and groups. Find games for laughs, competition, conversation, and large gatherings—no app required.",
     "intro": "The best party game is easy to explain, quick to start, and suited to the energy in the room. Decked runs in a browser, so one person can pass a phone around or the group can join from their own devices.",
     "summary": "For an energetic mixed group, start with Whot, Charades, or Keep a Straight Face. Choose Truth or Dare or Never Have I Ever when everyone is comfortable sharing more. Who’s Most Likely To?, Choose Your Side, and Who Said That? work well when the group already knows one another.",
+    "sections": [
+      { "heading": "Choose for the room you actually have", "paragraphs": ["Player count is only the first filter. A group that has just met usually needs a familiar, low-disclosure game such as Charades or Icebreaker. Close friends can handle voting and story games because they already understand one another’s humour and boundaries.", "Match the pace to the moment. Use Think Fast or Keep a Straight Face when people want immediate energy; choose Whot when the group wants competition; use question games when people are ready to sit, listen, and talk."] },
+      { "heading": "Plan the first ten minutes", "paragraphs": ["Explain only the rule needed for the first turn, then let the interface teach the rest. Start with a short round so late arrivals can join without disrupting a long game.", "Watch the least engaged player. If they are confused, uncomfortable, or waiting too long for a turn, change the format or switch games. A good host protects the group’s energy instead of forcing a chosen game to completion."] }
+    ],
     "tips": [
       "Start with a low-pressure game while guests are still arriving.",
       "Choose a game that works for the least confident person in the room.",
@@ -59,6 +63,10 @@
     "description": "Find free browser games for couples, date nights, deeper conversations, reconnection, and playful challenges—all playable on one phone.",
     "intro": "A good couples game should make conversation easier rather than turning the phone into a distraction. Put one phone between you, choose the mood you want, and take turns without creating accounts or installing anything.",
     "summary": "Use Spicy Opener for playful adult date nights, Late Night Talks for deeper questions, and Back to Us when you want thoughtful conversation. Dateable or Dealbreaker keeps things lighter, while Real Talk, Every Day suits a relaxed evening without a fixed theme.",
+    "sections": [
+      { "heading": "Choose the kind of connection you want", "paragraphs": ["A date-night game works best when both people want the same tone. Choose Dateable or Dealbreaker for playful debate, Real Talk, Every Day for easy conversation, Late Night Talks for reflection, and Back to Us when an established couple wants to reconnect intentionally.", "Do not choose the deepest deck simply because it appears more meaningful. A lighter game can create a better conversation when either person is tired, nervous, or still getting comfortable."] },
+      { "heading": "Make one shared phone feel natural", "paragraphs": ["Sit where both people can read comfortably, silence notifications, and alternate who holds the phone. Read prompts aloud so the device does not become a barrier between you.", "Let an interesting answer interrupt the game. The cards are conversation starters, not a checklist, and there is no benefit in finishing a deck if one prompt has already created the evening you wanted."] }
+    ],
     "tips": [
       "Agree on the mood before choosing: playful, reflective, flirty, or relaxed.",
       "Either person can skip a prompt without explaining why.",
@@ -87,6 +95,10 @@
     "description": "Choose inclusive browser-based icebreaker games for team meetings, workshops, onboarding, and remote or in-person groups.",
     "intro": "A useful work icebreaker gives everyone a clear way to participate without forcing personal disclosure. These options are browser-based, require no account, and can fit the beginning of a meeting or a longer team session.",
     "summary": "Use Icebreaker for new teams, Two Truths and a Bluff for onboarding, Charades for an energetic break, and Who Said That? for established teams. Real Talk, Every Day works best when the goal is thoughtful discussion rather than competition.",
+    "sections": [
+      { "heading": "Use the lowest appropriate level of disclosure", "paragraphs": ["Professional icebreakers should help people participate without asking them to reveal private information. Questions about preferences, working styles, everyday skills, and harmless experiences are usually safer than prompts about relationships, health, money, politics, religion, or alcohol.", "Tell participants that passing is allowed and demonstrate it yourself if necessary. Psychological safety matters more than completing every prompt."] },
+      { "heading": "Adapt the format to the meeting", "paragraphs": ["For a five-minute opener, use one prompt that everyone answers briefly. For onboarding or workshops, split large teams into groups of four to six so each person has meaningful speaking time.", "Remote teams can share the host’s screen or use a supported Play Together mode. Give clear instructions before opening breakout rooms, including the time limit and who will report back."] }
+    ],
     "tips": [
       "Tell participants how long the activity will take before starting.",
       "Keep personal questions optional and avoid topics involving health, relationships, religion, or alcohol.",
@@ -115,6 +127,10 @@
     "description": "Compare free browser-based drinking games for adult gatherings. Play with alcoholic or non-alcoholic drinks—no account or download required.",
     "intro": "These games are designed for adults of legal drinking age, but alcohol is never required. Water, soft drinks, or points work just as well. Decide the limits before starting, let anyone skip without pressure, and never connect a game penalty to unsafe consumption.",
     "summary": "Take a Sip is the simplest option, Answer or Drink adds a choice between answering and drinking, and Dare or Pour combines dares with optional sips. Never Have I Ever works well for larger adult groups when people want stories as much as gameplay.",
+    "sections": [
+      { "heading": "Make the game work without alcohol first", "paragraphs": ["The strongest drinking-game format still works when every sip is replaced with water, a snack, a point, or a raised hand. Present those alternatives before play so nobody has to request special treatment in front of the group.", "Choose one action per prompt and keep portions small. The aim is conversation and play, not drinking quickly or reaching a target."] },
+      { "heading": "Set safety rules before the first card", "paragraphs": ["Confirm that everyone is legally allowed to drink, has eaten, has water available, and has safe transport. A player may skip any prompt or stop drinking without explanation, teasing, or a penalty.", "Stop the game if anyone becomes unwell, unusually quiet, unsteady, or unable to make clear decisions. Never combine the game with driving, swimming, medication risks, dangerous dares, or pressure to keep pace with other players."] }
+    ],
     "tips": [
       "Only play if every participant is an adult of legal drinking age where you are.",
       "Make alcohol optional and keep water and non-alcoholic alternatives available.",

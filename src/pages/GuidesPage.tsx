@@ -96,10 +96,19 @@ export function HowToPlayDetailPage({ guide, onPlay, ...props }: SharedProps & {
             <button className="guide-play-button" onClick={() => onPlay(appGameIdForGuide(guide.gameId))}>PLAY {guide.name.toUpperCase()}</button>
           </div>
         </header>
+        <section className="how-to-objective" aria-labelledby="how-to-objective">
+          <p className="how-to-eyebrow">THE OBJECTIVE</p>
+          <h2 id="how-to-objective">What players are trying to do</h2>
+          <p>{guide.objective}</p>
+        </section>
         <div className="how-to-instructions">
           <section><p className="how-to-step-number">01</p><h2>Set up the game</h2><ol>{guide.setup.map(item => <li key={item}>{item}</li>)}</ol></section>
           <section><p className="how-to-step-number">02</p><h2>How a round works</h2><ol>{guide.steps.map(item => <li key={item}>{item}</li>)}</ol></section>
           <section><p className="how-to-step-number">03</p><h2>How it ends</h2><p>{guide.ending}</p></section>
+        </div>
+        <div className="how-to-deep-dive">
+          <section><p className="how-to-eyebrow">EXAMPLE ROUND</p><h2>See it in action</h2><p>{guide.example}</p></section>
+          <section><p className="how-to-eyebrow">GOOD TO KNOW</p><h2>Rules people often miss</h2><p>{guide.remember}</p></section>
         </div>
         <section className="guide-tips" aria-labelledby="how-to-tips">
           <div className="guide-section-heading"><h2 id="how-to-tips">Tips for a better game</h2></div>

@@ -2357,12 +2357,19 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .how-to-detail-hero dl div { min-width: 130px; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,.05); }
 .how-to-detail-hero dt { color: #858791; font: 11px 'Anton SC',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
 .how-to-detail-hero dd { margin: 4px 0 0; font: 15px 'Satoshi',sans-serif; }
+.how-to-detail, .how-to-detail * { text-align: left; }
+.how-to-objective { max-width: 820px; margin: 0 0 28px; padding: 28px; border-left: 3px solid #ff525c; border-radius: 0 16px 16px 0; background: rgba(255,255,255,.035); }
+.how-to-objective h2, .how-to-deep-dive h2 { margin: 0 0 12px; font: 30px/1.1 'Anton SC',sans-serif; }
+.how-to-objective > p:last-child, .how-to-deep-dive section > p:last-child { margin: 0; color: #c5c6ca; font: 16px/1.65 'Satoshi',sans-serif; }
 .how-to-instructions { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
-.how-to-instructions section { padding: 26px; border-radius: 16px; background: #070708; }
+.how-to-instructions section { min-width: 0; padding: 26px; border-radius: 16px; background: #070708; }
 .how-to-step-number { margin: 0 0 28px; color: #777982; font: 16px 'Anton SC',sans-serif; }
 .how-to-instructions h2 { margin: 0 0 18px; font: 30px/1.08 'Anton SC',sans-serif; }
-.how-to-instructions ol { margin: 0; padding-left: 20px; }
+.how-to-instructions ol { margin: 0; padding-left: 22px; }
 .how-to-instructions li, .how-to-instructions section > p:last-child { margin: 0 0 12px; color: #c5c6ca; font: 15px/1.55 'Satoshi',sans-serif; }
+.how-to-instructions li { padding-left: 4px; }
+.how-to-deep-dive { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 16px; }
+.how-to-deep-dive section { padding: 28px; border: 1px solid rgba(255,255,255,.07); border-radius: 16px; background: rgba(7,7,8,.82); }
 .play-mode-how-to { padding: 2px 4px; border: 0; background: none; color: rgba(255,255,255,.58); font: 14px/1.4 'Satoshi',sans-serif; cursor: pointer; }
 .play-mode-how-to strong { color: #fff; font-weight: 700; }
 .play-mode-how-to:hover strong { text-decoration: underline; text-underline-offset: 3px; }
@@ -2411,6 +2418,8 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .how-to-detail-art { width: min(320px,100%); margin: 0 auto; }
   .how-to-detail-hero h1 { font-size: 48px; }
   .how-to-instructions { grid-template-columns: 1fr; }
+  .how-to-objective { padding: 22px 20px; }
+  .how-to-deep-dive { grid-template-columns: 1fr; }
   .home-guide-pathway { width: calc(100% - 32px); margin-bottom: 56px; padding: 32px 22px; }
   .home-guide-pathway h2 { font-size: 36px; }
   .home-guide-pathway > p:not(.home-guide-eyebrow) { max-width: 34ch; font-size: 17px; line-height: 1.55; }
