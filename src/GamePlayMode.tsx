@@ -9,6 +9,7 @@ interface Props {
   onBack: () => void
   onPassAndPlay: () => void
   onPlayTogether: () => void
+  onHowToPlay: () => void
 }
 
 const optionStyle: React.CSSProperties = {
@@ -26,7 +27,7 @@ const optionStyle: React.CSSProperties = {
   gap: 5,
 }
 
-export default function GamePlayMode({ gameId, onBack, onPassAndPlay, onPlayTogether }: Props) {
+export default function GamePlayMode({ gameId, onBack, onPassAndPlay, onPlayTogether, onHowToPlay }: Props) {
   const playTogetherAvailable = true
   const selectPassAndPlay = () => {
     track('play_mode_selected', { game_id: gameId, play_mode: 'pass_and_play' })
@@ -55,6 +56,7 @@ export default function GamePlayMode({ gameId, onBack, onPassAndPlay, onPlayToge
             <span style={{ color: 'rgba(255,255,255,.72)', font: "13px/1.4 'Satoshi', sans-serif" }}>Create or join a room on separate devices.</span>
           </button>
         </div>
+        <button className="play-mode-how-to" type="button" onClick={onHowToPlay}>Not sure how this game works? <strong>Read how to play →</strong></button>
       </div>
     </main>
     <GameFooter />

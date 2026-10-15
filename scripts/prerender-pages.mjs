@@ -39,6 +39,19 @@ const games = [
   game('/games/not-me-your-honour', 'Not Me, Your Honour!', '/assets/games/not-me-your-honour.png', 'friends and party groups who enjoy improvisation', '3–10', '15–45 minutes', 'Courtroom party game'),
 ]
 
+const howToGameIds = ['truth-or-dare','spicy-starters','late-night-talks','dinner-table','you-laugh','never-have-i-ever','charades','reconnect','everyday-conversation','strangers','finger-down','take-a-sip','sip-or-spill','do-or-drink','icebreaker','red-flag-green-flag','two-truths-bluff','most-likely-to','choose-your-side','who-said-that','we-just-met','whot','imposter','mini-mystery','do-you-know-me','think-fast','not-me-your-honour']
+const howToPages = games.map((entry, index) => ({
+  ...entry,
+  playPath: entry.path,
+  gameId: howToGameIds[index],
+  path: `/guides/how-to-play-${howToGameIds[index]}`,
+  heading: `How to play ${entry.name}`,
+  title: `How to Play ${entry.name} — Rules & Setup | Decked`,
+  description: `Learn how to play ${entry.name}, including setup, step-by-step rules, how the game ends, and practical tips. Then play free online with Decked.`,
+  type: 'HowTo',
+  body: howToGameBody({ ...entry, playPath: entry.path }),
+}))
+
 const pages = [
   {
     path: '/',
@@ -93,9 +106,10 @@ const pages = [
   ...guides.map(guide => ({
     ...guide,
     image: DEFAULT_IMAGE,
-    type: guide.path === '/guides' ? 'CollectionPage' : 'Article',
-    body: guide.path === '/guides' ? guideLibraryBody(guide) : guideArticleBody(guide),
+    type: guide.path === '/guides' || guide.path === '/guides/how-to-play-decked-games' ? 'CollectionPage' : 'Article',
+    body: guide.path === '/guides' ? guideLibraryBody(guide) : guide.path === '/guides/how-to-play-decked-games' ? howToLibraryBody(guide) : guideArticleBody(guide),
   })),
+  ...howToPages,
   ...games.map(game => ({
     ...game,
     title: `${game.name} Online — Play Free on Decked`,
@@ -207,6 +221,27 @@ function buildStructuredData(page, canonical, image) {
         '@type': 'ListItem', position: index + 1, name: guide.heading, url: `${SITE_URL}${guide.path}`,
       })),
     }
+  } else if (page.path === '/guides/how-to-play-decked-games') {
+    graph[0].mainEntity = {
+      '@type': 'ItemList',
+      numberOfItems: howToPages.length,
+      itemListElement: howToPages.map((entry, index) => ({
+        '@type': 'ListItem', position: index + 1, name: entry.heading, url: `${SITE_URL}${entry.path}`,
+      })),
+    }
+  } else if (page.path.startsWith('/guides/how-to-play-')) {
+    graph[0].mainEntity = {
+      '@type': 'HowTo',
+      name: page.heading,
+      description: page.description,
+      totalTime: 'PT30M',
+      supply: [{ '@type': 'HowToSupply', name: 'A modern web browser' }],
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'Set up the game', text: `Open ${page.name} on Decked, add the players, and choose the available game options.` },
+        { '@type': 'HowToStep', position: 2, name: 'Follow each round', text: 'Read the on-screen instructions, take turns, and keep private information hidden when the game asks.' },
+        { '@type': 'HowToStep', position: 3, name: 'Complete the game', text: 'Continue until the selected rounds, deck, or winning condition is complete.' },
+      ],
+    }
   } else if (page.path.startsWith('/guides/')) {
     const faqId = `${canonical}#faq`
     graph[0].headline = page.heading
@@ -291,10 +326,18 @@ function guideLibraryBody(guide) {
   return `<main><nav><a href="/">Decked</a> · <a href="/games">Games</a></nav><article><h1>${escapeHtml(guide.heading)}</h1><p>${escapeHtml(guide.intro)}</p><ul>${guides.slice(1).map(item => `<li><a href="${item.path}">${escapeHtml(item.heading)}</a><p>${escapeHtml(item.description)}</p></li>`).join('')}</ul></article></main>`
 }
 
+function howToLibraryBody(guide) {
+  return `<main><nav><a href="/">Decked</a> · <a href="/guides">Guides</a></nav><article><h1>${escapeHtml(guide.heading)}</h1><p>${escapeHtml(guide.intro)}</p><ul>${howToPages.map(item => `<li><a href="${item.path}">${escapeHtml(item.heading)}</a></li>`).join('')}</ul></article></main>`
+}
+
+function howToGameBody(entry) {
+  return `<main><nav><a href="/">Decked</a> · <a href="/guides">Guides</a> · <a href="/guides/how-to-play-decked-games">How to play</a></nav><article><h1>How to play ${escapeHtml(entry.name)}</h1><p>Learn the setup, rules, winning conditions, and practical tips for ${escapeHtml(entry.name)}.</p><dl><dt>Players</dt><dd>${escapeHtml(entry.players)}</dd><dt>Typical time</dt><dd>${escapeHtml(entry.duration)}</dd></dl><section><h2>Set up the game</h2><p>Open ${escapeHtml(entry.name)} on Decked, add the players, and choose the available game options.</p></section><section><h2>How a round works</h2><p>Follow the instructions shown on screen, take turns, and keep private information hidden when the game asks.</p></section><section><h2>How it ends</h2><p>Continue until the selected rounds, deck, or winning condition is complete.</p></section><p><a href="${entry.playPath}">Play ${escapeHtml(entry.name)}</a></p></article></main>`
+}
+
 function guideArticleBody(guide) {
   const sections = (guide.sections ?? []).map(section => `<section><h2>${escapeHtml(section.heading)}</h2>${section.paragraphs.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}</section>`).join('')
   const ids = new Set(guide.recommendations.map(game => game.gameId))
-  const related = guides.slice(1).filter(candidate => candidate.slug !== guide.slug).map(candidate => ({ candidate, score: candidate.recommendations.filter(game => ids.has(game.gameId)).length })).sort((a, b) => b.score - a.score).slice(0, 3).map(item => item.candidate)
+  const related = guides.slice(1).filter(candidate => candidate.slug !== guide.slug && candidate.recommendations).map(candidate => ({ candidate, score: candidate.recommendations.filter(game => ids.has(game.gameId)).length })).sort((a, b) => b.score - a.score).slice(0, 3).map(item => item.candidate)
   return `<main><nav><a href="/">Decked</a> · <a href="/guides">Guides</a></nav><article><h1>${escapeHtml(guide.heading)}</h1><p>${escapeHtml(guide.intro)}</p><section><h2>Quick answer</h2><p>${escapeHtml(guide.summary)}</p></section><section><h2>Recommended games</h2>${guide.recommendations.map(game => `<article><h3><a href="${game.path}">${escapeHtml(game.name)}</a></h3>${searchDescriptors[game.path] ? `<p><strong>Game style:</strong> ${escapeHtml(searchDescriptors[game.path])}.</p>` : ''}<p>${escapeHtml(game.reason)}</p><dl><dt>Players</dt><dd>${escapeHtml(game.players)}</dd><dt>Time</dt><dd>${escapeHtml(game.duration)}</dd><dt>Best for</dt><dd>${escapeHtml(game.bestFor)}</dd><dt>Alcohol</dt><dd>${escapeHtml(game.alcohol)}</dd></dl></article>`).join('')}</section>${sections}<section><h2>Practical tips</h2><ol>${guide.tips.map(tip => `<li>${escapeHtml(tip)}</li>`).join('')}</ol></section><section><h2>Frequently asked questions</h2>${guide.faqs.map(item => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}</section><section><h2>Related game guides</h2><ul>${related.map(item => `<li><a href="${item.path}">${escapeHtml(item.heading)}</a></li>`).join('')}</ul></section></article></main>`
 }
 

@@ -4,7 +4,7 @@ import BrowsePage from './pages/BrowsePage'
 import AboutPage from './pages/AboutPage'
 import LegalPage from './pages/LegalPage'
 import FeedbackPage from './pages/FeedbackPage'
-import { GuideArticlePage, GuideLibraryPage } from './pages/GuidesPage'
+import { GuideArticlePage, GuideLibraryPage, HowToPlayCataloguePage, HowToPlayDetailPage } from './pages/GuidesPage'
 import SelectGameMode, { LNT_MODES, DTC_MODES } from './SelectGameMode'
 import { screenFromLocation, urlForScreen, type Screen } from './navigation'
 import { usePersistentGameState } from './hooks/usePersistentGameState'
@@ -14,6 +14,7 @@ import { DiscoveryJourneyTracker } from './analytics/journey'
 import { isCommandCentrePath } from './command-centre/model'
 import { updateDocumentMetadata } from './seo'
 import { GUIDE_BY_SCREEN } from './guideData'
+import { HOW_TO_PLAY_BY_SCREEN, howToPlayScreen } from './howToPlayData'
 
 const discoveryJourney = new DiscoveryJourneyTracker(track)
 
@@ -164,7 +165,7 @@ function AppContent() {
   if (screen === 'play-mode') {
     if (!selectedGameId) return <BrowsePageRedirect onRedirect={() => setScreen('browse', true)} />
     const destination = Object.values(GAME_DESTINATIONS).find(item => item.multiplayerId === selectedGameId)!
-    return <GamePlayMode gameId={selectedGameId} onBack={() => setScreen('browse')} onPassAndPlay={() => setScreen(destination.localScreen)} onPlayTogether={() => openPlayTogether(selectedGameId)} />
+    return <GamePlayMode gameId={selectedGameId} onBack={() => setScreen('browse')} onPassAndPlay={() => setScreen(destination.localScreen)} onPlayTogether={() => openPlayTogether(selectedGameId)} onHowToPlay={() => setScreen(howToPlayScreen(selectedGameId))} />
   }
 
   if (screen === 'play-together') {
@@ -360,6 +361,15 @@ function AppContent() {
 
   if (screen === 'guides') {
     return <GuideLibraryPage onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onAbout={() => setScreen('about')} onNavigateGuide={setScreen} />
+  }
+
+  if (screen === 'guide-how-to-play-decked-games') {
+    return <HowToPlayCataloguePage onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onAbout={() => setScreen('about')} onNavigateGuide={setScreen} />
+  }
+
+  const howToGuide = HOW_TO_PLAY_BY_SCREEN.get(screen)
+  if (howToGuide) {
+    return <HowToPlayDetailPage guide={howToGuide} onHome={() => setScreen('home')} onBrowse={() => setScreen('browse')} onAbout={() => setScreen('about')} onNavigateGuide={setScreen} onPlay={chooseGame} />
   }
 
   const guide = GUIDE_BY_SCREEN.get(screen)

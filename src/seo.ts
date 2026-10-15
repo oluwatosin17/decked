@@ -1,6 +1,7 @@
 import { urlForScreen, type Screen } from './navigation'
 import { GUIDE_BY_SCREEN } from './guideData'
 import searchDescriptors from './content/gameSearchDescriptors.json'
+import { HOW_TO_PLAY_BY_SCREEN } from './howToPlayData'
 
 const SITE_URL = 'https://www.usedecked.com'
 const DEFAULT_IMAGE = `${SITE_URL}/brand/decked-social-avatar.png`
@@ -66,13 +67,17 @@ function setCanonical(url: string) {
 export function updateDocumentMetadata(screen: Screen) {
   const gameName = gameNames[screen]
   const guide = GUIDE_BY_SCREEN.get(screen)
+  const howToGuide = HOW_TO_PLAY_BY_SCREEN.get(screen)
   const path = urlForScreen(screen)
   const canonical = `${SITE_URL}${path === '/' ? '/' : path}`
 
   let title = 'Decked — Free Online Party & Conversation Games'
   let description = 'Play free party and conversation games online with Decked. Pick a deck, pass the phone, or invite friends—no download or account needed.'
 
-  if (guide) {
+  if (howToGuide) {
+    title = `How to Play ${howToGuide.name} — Rules & Setup | Decked`
+    description = `Learn how to play ${howToGuide.name}: ${howToGuide.summary} See the setup, step-by-step rules, winning conditions, and tips, then play free online.`
+  } else if (guide) {
     title = guide.title
     description = guide.description
   } else if (screen === 'browse') {

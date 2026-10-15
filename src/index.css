@@ -2338,6 +2338,34 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .guide-final-cta { margin-top: 96px; padding: 48px; border-radius: 20px; background: #070708; }
 .guide-final-cta h2 { max-width: 650px; margin: 0 0 12px; font: 44px/1.05 'Anton SC', sans-serif; }
 .guide-final-cta > p { margin: 0 0 24px; color: #c9cacf; font: 17px 'Satoshi', sans-serif; }
+.how-to-catalogue { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 18px; }
+.how-to-catalogue-card { min-width: 0; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; background: #070708; color: #fff; text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s ease; }
+.how-to-catalogue-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,.24); }
+.how-to-card-art { display: block; aspect-ratio: 4/5; overflow: hidden; background: #111; }
+.how-to-card-art > * { width: 100%; height: 100%; }
+.how-to-card-copy { display: flex; min-height: 176px; padding: 18px; box-sizing: border-box; flex-direction: column; }
+.how-to-card-copy strong { font: 24px/1.08 'Anton SC',sans-serif; }
+.how-to-card-copy small { display: block; margin-top: 10px; color: #aeb0b6; font: 14px/1.45 'Satoshi',sans-serif; }
+.how-to-card-copy b { margin-top: auto; padding-top: 18px; color: #fff; font: 12px 'Anton SC',sans-serif; letter-spacing: .08em; }
+.how-to-detail-hero { display: grid; grid-template-columns: minmax(240px,360px) minmax(0,1fr); gap: 52px; align-items: center; margin-bottom: 80px; }
+.how-to-detail-art { aspect-ratio: 4/5; overflow: hidden; border-radius: 18px; background: #070708; }
+.how-to-detail-art > * { width: 100%; height: 100%; }
+.how-to-eyebrow { margin: 0 0 10px!important; color: #ff525c!important; font: 15px 'Anton SC',sans-serif!important; letter-spacing: .12em; }
+.how-to-detail-hero h1 { margin: 0; font-size: clamp(48px,7vw,82px); font-weight: 400; line-height: .98; text-transform: uppercase; }
+.how-to-detail-hero > div:last-child > p:not(.how-to-eyebrow) { max-width: 620px; margin: 20px 0; color: #c5c6ca; font: 18px/1.6 'Satoshi',sans-serif; }
+.how-to-detail-hero dl { display: flex; gap: 12px; margin: 0 0 24px; }
+.how-to-detail-hero dl div { min-width: 130px; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,.05); }
+.how-to-detail-hero dt { color: #858791; font: 11px 'Anton SC',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.how-to-detail-hero dd { margin: 4px 0 0; font: 15px 'Satoshi',sans-serif; }
+.how-to-instructions { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.how-to-instructions section { padding: 26px; border-radius: 16px; background: #070708; }
+.how-to-step-number { margin: 0 0 28px; color: #777982; font: 16px 'Anton SC',sans-serif; }
+.how-to-instructions h2 { margin: 0 0 18px; font: 30px/1.08 'Anton SC',sans-serif; }
+.how-to-instructions ol { margin: 0; padding-left: 20px; }
+.how-to-instructions li, .how-to-instructions section > p:last-child { margin: 0 0 12px; color: #c5c6ca; font: 15px/1.55 'Satoshi',sans-serif; }
+.play-mode-how-to { padding: 2px 4px; border: 0; background: none; color: rgba(255,255,255,.58); font: 14px/1.4 'Satoshi',sans-serif; cursor: pointer; }
+.play-mode-how-to strong { color: #fff; font-weight: 700; }
+.play-mode-how-to:hover strong { text-decoration: underline; text-underline-offset: 3px; }
 
 .home-guide-pathway {
   width: min(1120px, calc(100% - 48px));
@@ -2376,6 +2404,13 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .guide-related-grid { grid-template-columns: 1fr; }
   .guide-final-cta { margin-top: 72px; padding: 32px 24px; }
   .guide-final-cta h2 { font-size: 36px; }
+  .how-to-catalogue { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+  .how-to-card-copy { min-height: 164px; padding: 15px; }
+  .how-to-card-copy strong { font-size: 20px; }
+  .how-to-detail-hero { grid-template-columns: 1fr; gap: 30px; margin-bottom: 54px; }
+  .how-to-detail-art { width: min(320px,100%); margin: 0 auto; }
+  .how-to-detail-hero h1 { font-size: 48px; }
+  .how-to-instructions { grid-template-columns: 1fr; }
   .home-guide-pathway { width: calc(100% - 32px); margin-bottom: 56px; padding: 32px 22px; }
   .home-guide-pathway h2 { font-size: 36px; }
   .home-guide-pathway > p:not(.home-guide-eyebrow) { max-width: 34ch; font-size: 17px; line-height: 1.55; }

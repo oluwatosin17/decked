@@ -42,6 +42,15 @@
     ]
   },
   {
+    "screen": "guide-how-to-play-decked-games",
+    "path": "/guides/how-to-play-decked-games",
+    "slug": "how-to-play-decked-games",
+    "title": "How to Play Decked Games — Rules for Every Game",
+    "heading": "How to play Decked games",
+    "description": "Choose any Decked game and learn its setup, rules, winning conditions, and practical tips before you start playing.",
+    "intro": "Browse every Decked game in one place. Select a card to see exactly what you need, how each round works, and how the game ends, then start playing in your browser."
+  },
+  {
     "screen": "guide-couples-games-one-phone",
     "path": "/guides/couples-games-one-phone",
     "slug": "couples-games-one-phone",

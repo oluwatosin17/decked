@@ -4,6 +4,7 @@ import type { Screen } from '../navigation'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 import { GameArtworkCover } from '../components/GameCardGrid'
+import { HOW_TO_PLAY_GUIDES, appGameIdForGuide, howToPlayScreen, type HowToPlayGuide } from '../howToPlayData'
 
 const GAME_CONTEXT: Record<string, { format: string; mood: string }> = {
   'charades': { format: 'Team guessing', mood: 'High energy' },
@@ -50,6 +51,66 @@ export function GuideLibraryPage(props: SharedProps) {
           </button>
         ))}
       </section>
+    </GuideLayout>
+  )
+}
+
+export function HowToPlayCataloguePage(props: SharedProps) {
+  return (
+    <GuideLayout {...props} current="guide-how-to-play-decked-games">
+      <nav className="guide-breadcrumb" aria-label="Breadcrumb">
+        <button onClick={() => props.onNavigateGuide('guides')}>Guides</button><span>›</span><span>How to play</span>
+      </nav>
+      <header className="guide-hero">
+        <h1 className="font-anton">How to play Decked games</h1>
+        <p>Choose a game to learn the setup, rules, winning conditions, and practical tips. When you are ready, you can start that exact game from its guide.</p>
+      </header>
+      <section className="how-to-catalogue" aria-label="How to play every Decked game">
+        {HOW_TO_PLAY_GUIDES.map(guide => (
+          <button key={guide.gameId} className="how-to-catalogue-card" onClick={() => props.onNavigateGuide(howToPlayScreen(guide.gameId))}>
+            <span className="how-to-card-art"><GameArtworkCover gameId={guide.gameId} label={guide.name} /></span>
+            <span className="how-to-card-copy"><strong>{guide.name}</strong><small>{guide.summary}</small><b>HOW TO PLAY →</b></span>
+          </button>
+        ))}
+      </section>
+    </GuideLayout>
+  )
+}
+
+export function HowToPlayDetailPage({ guide, onPlay, ...props }: SharedProps & { guide: HowToPlayGuide; onPlay: (gameId: string) => void }) {
+  useEffect(() => { document.querySelector<HTMLElement>('.how-to-detail h1')?.focus({ preventScroll: true }) }, [guide.gameId])
+  return (
+    <GuideLayout {...props} current={howToPlayScreen(guide.gameId)}>
+      <article className="guide-article how-to-detail">
+        <nav className="guide-breadcrumb" aria-label="Breadcrumb">
+          <button onClick={() => props.onNavigateGuide('guides')}>Guides</button><span>›</span>
+          <button onClick={() => props.onNavigateGuide('guide-how-to-play-decked-games')}>How to play</button><span>›</span><span>{guide.name}</span>
+        </nav>
+        <header className="how-to-detail-hero">
+          <div className="how-to-detail-art"><GameArtworkCover gameId={guide.gameId} label={guide.name} /></div>
+          <div>
+            <p className="how-to-eyebrow">HOW TO PLAY</p>
+            <h1 className="font-anton" tabIndex={-1}>{guide.name}</h1>
+            <p>{guide.summary}</p>
+            <dl><div><dt>Players</dt><dd>{guide.players}</dd></div><div><dt>Typical time</dt><dd>{guide.duration}</dd></div></dl>
+            <button className="guide-play-button" onClick={() => onPlay(appGameIdForGuide(guide.gameId))}>PLAY {guide.name.toUpperCase()}</button>
+          </div>
+        </header>
+        <div className="how-to-instructions">
+          <section><p className="how-to-step-number">01</p><h2>Set up the game</h2><ol>{guide.setup.map(item => <li key={item}>{item}</li>)}</ol></section>
+          <section><p className="how-to-step-number">02</p><h2>How a round works</h2><ol>{guide.steps.map(item => <li key={item}>{item}</li>)}</ol></section>
+          <section><p className="how-to-step-number">03</p><h2>How it ends</h2><p>{guide.ending}</p></section>
+        </div>
+        <section className="guide-tips" aria-labelledby="how-to-tips">
+          <div className="guide-section-heading"><h2 id="how-to-tips">Tips for a better game</h2></div>
+          <ol>{guide.tips.map((tip, index) => <li key={tip}><span>{index + 1}</span><p>{tip}</p></li>)}</ol>
+        </section>
+        <aside className="guide-final-cta">
+          <h2>Ready to play {guide.name}?</h2>
+          <p>Choose Pass &amp; Play for one device or Play Together for separate phones.</p>
+          <button onClick={() => onPlay(appGameIdForGuide(guide.gameId))}>CHOOSE HOW TO PLAY</button>
+        </aside>
+      </article>
     </GuideLayout>
   )
 }
