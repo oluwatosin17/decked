@@ -527,7 +527,9 @@ export function GameArtworkCover({ gameId, label }: { gameId: string; label: str
 
   if (!card) return null
 
-  const scale = frame.width && frame.height ? Math.max(frame.width / card.w, frame.height / card.h) : 1
+  // Keep the complete Browse artwork visible when it is reused in Guides.
+  // Unusual proportions are intentionally letterboxed instead of cropped.
+  const scale = frame.width && frame.height ? Math.min(frame.width / card.w, frame.height / card.h) : 1
   const artworkWidth = card.w * scale
   const artworkHeight = card.h * scale
 

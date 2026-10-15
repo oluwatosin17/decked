@@ -2304,9 +2304,9 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .guide-section-heading { margin: 0 0 28px; }
 .guide-section-heading h2 { margin: 0; font: 42px/1.08 'Anton SC', sans-serif; }
 .guide-comparison { display: flex; flex-direction: column; gap: 18px; }
-.guide-game-card { display: grid; grid-template-columns: 240px minmax(0,1fr); overflow: hidden; border: 0; border-radius: 18px; background: #070708; }
-.guide-game-image { min-height: 320px; background: #070708; display: grid; place-items: center; overflow: hidden; }
-.guide-game-image img { width: 100%; height: 100%; object-fit: cover; }
+.guide-game-card { display: grid; grid-template-columns: 280px minmax(0,1fr); overflow: hidden; border: 1px solid rgba(255,255,255,.06); border-radius: 18px; background: #070708; }
+.guide-game-image { width: 240px; height: 300px; min-height: 0; align-self: center; justify-self: center; overflow: hidden; border-radius: 14px; background: #0d0d10; }
+.guide-game-image img { width: 100%; height: 100%; object-fit: contain; }
 .guide-game-copy { padding: 28px 30px; }
 .guide-game-copy > div:first-child { display: flex; align-items: baseline; gap: 14px; }
 .guide-game-number { margin: 0; color: #b9bbc3; font: 17px 'Anton SC', sans-serif; }
@@ -2339,13 +2339,13 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 .guide-final-cta h2 { max-width: 650px; margin: 0 0 12px; font: 44px/1.05 'Anton SC', sans-serif; }
 .guide-final-cta > p { margin: 0 0 24px; color: #c9cacf; font: 17px 'Satoshi', sans-serif; }
 .how-to-catalogue { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 18px; }
-.how-to-catalogue-card { min-width: 0; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; background: #070708; color: #fff; text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s ease; }
+.how-to-catalogue-card { display: flex; min-width: 0; height: 100%; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; background: #070708; color: #fff; text-align: left; cursor: pointer; flex-direction: column; transition: transform .2s ease, border-color .2s ease; }
 .how-to-catalogue-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,.24); }
-.how-to-card-art { display: block; aspect-ratio: 4/5; overflow: hidden; background: #111; }
+.how-to-card-art { display: block; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #0d0d10; }
 .how-to-card-art > * { width: 100%; height: 100%; }
-.how-to-card-copy { display: flex; min-height: 176px; padding: 18px; box-sizing: border-box; flex-direction: column; }
+.how-to-card-copy { display: flex; min-height: 190px; padding: 18px; box-sizing: border-box; flex: 1; flex-direction: column; }
 .how-to-card-copy strong { font: 24px/1.08 'Anton SC',sans-serif; }
-.how-to-card-copy small { display: block; margin-top: 10px; color: #aeb0b6; font: 14px/1.45 'Satoshi',sans-serif; }
+.how-to-card-copy small { display: -webkit-box; margin-top: 10px; overflow: hidden; color: #aeb0b6; font: 14px/1.45 'Satoshi',sans-serif; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
 .how-to-card-copy b { margin-top: auto; padding-top: 18px; color: #fff; font: 12px 'Anton SC',sans-serif; letter-spacing: .08em; }
 .how-to-detail-hero { display: grid; grid-template-columns: minmax(240px,360px) minmax(0,1fr); gap: 52px; align-items: center; margin-bottom: 80px; }
 .how-to-detail-art { aspect-ratio: 4/5; overflow: hidden; border-radius: 18px; background: #070708; }
@@ -2396,7 +2396,7 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
   .guide-library-grid, .guide-tips ol { grid-template-columns: 1fr; }
   .guide-library-card { min-height: 270px; padding: 24px; }
   .guide-game-card { grid-template-columns: 1fr; }
-  .guide-game-image { height: 250px; min-height: 0; }
+  .guide-game-image { width: min(280px,calc(100% - 40px)); height: auto; min-height: 0; margin: 20px 20px 0; justify-self: start; aspect-ratio: 4/5; }
   .guide-game-copy { padding: 24px 20px; }
   .guide-game-copy dl { grid-template-columns: 1fr 1fr; }
   .guide-section-heading h2 { font-size: 34px; }
