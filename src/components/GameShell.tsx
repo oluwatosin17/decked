@@ -7,8 +7,12 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
   const [showExitChoice, setShowExitChoice] = useState(false)
   const multiplayer = useMultiplayerSession()
 
-  const leaveGame = () => {
+  const recordAbandonment = () => {
     if (gameId && !multiplayer) passAndPlayTracker.abandon(gameId)
+  }
+
+  const leaveGame = () => {
+    recordAbandonment()
     onBack()
   }
 
@@ -53,13 +57,26 @@ export function GameNav({ onBack, gameId }: { onBack: () => void; gameId?: strin
 
         {/* Desktop nav links */}
         <div className="game-nav-desktop" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          {['Browse Games', 'Guides', 'About', 'Feedback'].map(label => (
-            <button key={label} onClick={label === 'Browse Games' ? leaveGame : undefined}
-              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: label === 'Browse Games'||label==='Feedback' ? 'pointer' : 'default', padding: 0, transition: 'color 0.2s' }}
-              onClickCapture={label==='Feedback'?()=>{window.location.href='/feedback?source=header'}:undefined}
-              onMouseOver={e => { if (label === 'Browse Games'||label==='Feedback') (e.currentTarget as HTMLButtonElement).style.color = '#fff' }}
-              onMouseOut={e => { if (label === 'Browse Games'||label==='Feedback') (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.4)' }}
-            >{label}</button>
+          <button
+            type="button"
+            onClick={leaveGame}
+            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: 'pointer', padding: 0, transition: 'color 0.2s' }}
+            onMouseOver={event => { event.currentTarget.style.color = '#fff' }}
+            onMouseOut={event => { event.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
+          >Browse Games</button>
+          {[
+            { label: 'Guides', href: '/guides' },
+            { label: 'About', href: '/about' },
+            { label: 'Feedback', href: '/feedback?source=header' },
+          ].map(item => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={recordAbandonment}
+              style={{ color: 'rgba(255,255,255,0.4)', fontFamily: "'Anton SC', sans-serif", fontSize: '16px', fontWeight: 400, cursor: 'pointer', padding: 0, textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseOver={event => { event.currentTarget.style.color = '#fff' }}
+              onMouseOut={event => { event.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
+            >{item.label}</a>
           ))}
         </div>
 
