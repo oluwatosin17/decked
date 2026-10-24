@@ -3,6 +3,7 @@
   "name": "decked",
   "main": "./cloudflare/worker.js",
   "compatibility_date": "2026-10-10",
+  "previews": {},
   "routes": [
     { "pattern": "www.usedecked.com", "custom_domain": true },
     { "pattern": "usedecked.com", "custom_domain": true }
