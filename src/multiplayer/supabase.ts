@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 export const supabaseProjectUrl = import.meta.env.VITE_SUPABASE_URL || 'https://aurirjornlsqepblndwa.supabase.co'
-export const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+export const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_41OH28xTGCwfGjS5wvSKVg_gcBjop6-'
 
 export const multiplayerConfigured = Boolean(supabaseProjectUrl && supabasePublishableKey)
 
