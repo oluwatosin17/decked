@@ -76,7 +76,7 @@ export default function CommandCentre() {
   if (authState === 'loading' || authState === 'checking') return <AuthFrame><LoadingState /></AuthFrame>
   if (authState === 'signed_out') return <AuthFrame><SignIn onSuccess={authorize} /></AuthFrame>
   if (authState === 'unauthorized') return <AuthFrame><StatePanel title="Staff access required" action={<button className="cc-button" onClick={signOut}>Use another account</button>}><p>This signed-in account is not provisioned for the Command Centre.</p></StatePanel></AuthFrame>
-  if (authState === 'error') return <AuthFrame><StatePanel title="Access check failed" action={<button className="cc-button" onClick={() => void authorize(session)}>Try again</button>}><p>{authError}</p></StatePanel></AuthFrame>
+  if (authState === 'error') return <AuthFrame><StatePanel title="Access check failed" action={<><button className="cc-button" onClick={() => void authorize(session)}>Try again</button><button className="cc-text-button" onClick={() => void signOut()}>Sign in again</button></>}><p>{authError}</p></StatePanel></AuthFrame>
 
   return <div className="cc-app">
     <aside className="cc-sidebar"><a className="cc-brand" href="/" aria-label="Decked home">DECKED<span>.</span></a><p>COMMAND CENTRE</p><nav aria-label="Command Centre">{COMMAND_CENTRE_SECTIONS.map(item => <button key={item} className={item === section ? 'active' : ''} aria-current={item === section ? 'page' : undefined} onClick={() => navigate(item)}>{LABELS[item]}</button>)}</nav><div className="cc-account"><span>{access?.authorized ? access.role.toUpperCase() : 'STAFF'}</span><button onClick={signOut}>Sign out</button></div></aside>
