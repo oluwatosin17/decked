@@ -3,7 +3,7 @@ import { HomeCardRows, GAME_CARDS } from '../components/GameCardGrid'
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 
-const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot', 'imposter', 'mini-mystery', 'do-you-know-me', 'think-fast', 'not-me-your-honour']
+const FEATURED_IDS = ['truth-or-dare', 'spicy-starters', 'late-night-talks', 'charades', 'never-have-i-ever', 'you-laugh', 'two-truths-bluff', 'most-likely-to', 'choose-your-side', 'who-said-that', 'we-just-met', 'whot', 'imposter', 'mini-mystery', 'do-you-know-me', 'think-fast', 'not-me-your-honour', 'bad-advice-only']
 const FEATURED_ACTIONS: Record<string, string> = {
   'truth-or-dare': 'onPlayTruthOrDare',
   'spicy-starters': 'onPlaySpicyStarters',
