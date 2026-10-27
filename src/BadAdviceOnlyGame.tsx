@@ -9,6 +9,14 @@ type Step = 'playerSetup' | 'categories' | 'rounds' | 'handoff' | 'answer' | 'wa
 type Answer = { author: string; text: string }
 const GAME_ID = 'bad-advice-only'
 const STEPS: readonly Step[] = ['playerSetup', 'categories', 'rounds', 'handoff', 'answer', 'waiting', 'reveal', 'done']
+const CATEGORY_PRESENTATION: Record<BadAdviceCategory, { icon: string; description: string }> = {
+  dating: { icon: '/icons/couples.svg', description: 'Dates, crushes, exes, and romantic disasters.' },
+  friends: { icon: '/icons/friends.svg', description: 'Group chats, loyalty tests, and messy friendships.' },
+  work: { icon: '/icons/colleague.svg', description: 'Jobs, money mistakes, and workplace chaos.' },
+  everyday: { icon: '/icons/everyday.svg', description: 'Awkward moments that only get worse.' },
+  naija: { icon: '/icons/family.svg', description: 'Family expectations, relatives, and home drama.' },
+  wild: { icon: '/icons/random.svg', description: 'Impossible choices and maximum chaos.' },
+}
 const playerKey = (player: Player, index: number) => player.userId ?? `local-${index}`
 const shell: React.CSSProperties = { width: 'min(620px,100%)', margin: 'auto', padding: '40px 16px 64px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }
 const title: React.CSSProperties = { margin: 0, color: '#f8f0df', fontFamily: "'Anton SC',sans-serif", fontSize: 'clamp(34px,8vw,58px)', lineHeight: 1, textAlign: 'center' }
@@ -68,7 +76,33 @@ export default function BadAdviceOnlyGame({ onClose }: { onClose: () => void }) 
 
   let content: React.ReactNode
   if (step === 'playerSetup') content = <PlayerSetup minPlayers={3} initialPlayers={players} onSkip={onClose} onNext={nextPlayers => { setPlayers(nextPlayers); setStep('categories') }} />
-  else if (step === 'categories') content = <section style={shell}><p className="font-staatliches" style={{ color: '#f04b45', margin: 0, letterSpacing: '.15em' }}>SET THE CHAOS LEVEL</p><h1 style={title}>Choose situations</h1><p style={copy}>Pick at least one category. Every deck contains original situations recovered from the live game.</p><div style={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: 10 }}>{BAD_ADVICE_CATEGORIES.map(category => { const active = categories.includes(category.id); return <button key={category.id} aria-pressed={active} onClick={() => setCategories(current => active ? current.filter(id => id !== category.id) : [...current, category.id])} style={{ minHeight: 70, padding: 12, borderRadius: 12, border: active ? '2px solid #f8f0df' : '1px dashed rgba(248,240,223,.2)', background: active ? '#174ba0' : '#101114', color: '#f8f0df', fontFamily: "'Staatliches',sans-serif", fontSize: 17, cursor: 'pointer' }}>{category.label}</button> })}</div><Button disabled={!isHost || categories.length === 0} onClick={() => setStep('rounds')}>CONTINUE</Button></section>
+  else if (step === 'categories') content = <section style={shell}>
+    <p className="font-staatliches" style={{ color: '#f04b45', margin: 0, letterSpacing: '.15em' }}>SET THE CHAOS LEVEL</p>
+    <h1 style={title}>Choose situations</h1>
+    <p style={copy}>Pick at least one category. Every deck contains original situations recovered from the live game.</p>
+    <div className="bad-advice-category-grid">
+      {BAD_ADVICE_CATEGORIES.map(category => {
+        const active = categories.includes(category.id)
+        const presentation = CATEGORY_PRESENTATION[category.id]
+        return <button
+          key={category.id}
+          className="bad-advice-category-card"
+          aria-pressed={active}
+          onClick={() => setCategories(current => active ? current.filter(id => id !== category.id) : [...current, category.id])}
+        >
+          <span className="bad-advice-category-icon" aria-hidden="true">
+            <img src={presentation.icon} alt="" />
+          </span>
+          <span className="bad-advice-category-copy">
+            <strong className="font-staatliches">{category.label}</strong>
+            <span>{presentation.description}</span>
+          </span>
+          <span className="bad-advice-category-check" aria-hidden="true">✓</span>
+        </button>
+      })}
+    </div>
+    <Button disabled={!isHost || categories.length === 0} onClick={() => setStep('rounds')}>CONTINUE</Button>
+  </section>
   else if (step === 'rounds') content = <section style={shell}><h1 style={title}>How many rounds?</h1><p style={copy}>The judge rotates automatically every round.</p><label style={{ ...copy, width: '100%', textAlign: 'left' }}>Rounds<input aria-label="Number of rounds" type="number" min={3} max={30} value={roundCount} onChange={event => setRoundCount(Math.max(3, Math.min(30, Number(event.target.value) || 3)))} style={{ width: '100%', height: 56, marginTop: 8, padding: '0 16px', boxSizing: 'border-box', borderRadius: 12, border: '1px solid rgba(248,240,223,.2)', background: '#101114', color: '#f8f0df', fontSize: 20 }} /></label><div style={{ display: 'flex', gap: 10 }}><Button secondary onClick={() => setStep('categories')}>BACK</Button><Button disabled={!isHost} onClick={begin}>START GAME</Button></div></section>
   else if (step === 'handoff') content = <section style={shell}><p className="font-staatliches" style={{ color: '#f04b45', margin: 0 }}>PRIVATE ANSWER</p><h1 style={title}>Pass to {players[keys.indexOf(eligibleKeys[writerIndex])]?.name}</h1><p style={copy}>{judge?.name} is judging. Everyone else should look away.</p><Button onClick={() => setStep('answer')}>I’M READY</Button></section>
   else if (step === 'answer') {
