@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { GameFooter, GameNav, PlayAgainLabel } from './components/GameShell'
+import DeckSize from './components/DeckSize'
 import PlayerSetup, { type Player } from './components/PlayerSetup'
 import { useGameStep, usePersistentGameState } from './hooks/usePersistentGameState'
 import { useMultiplayerSession } from './multiplayer/SessionStateContext'
@@ -51,8 +52,8 @@ export default function BadAdviceOnlyGame({ onClose }: { onClose: () => void }) 
   const allAnswered = eligibleKeys.length > 0 && eligibleKeys.every(key => effectiveAnswers[key])
   const revealed: Answer[] = useMemo(() => Object.entries(effectiveAnswers).map(([author, text]) => ({ author, text })).sort((a, b) => a.text.localeCompare(b.text)), [effectiveAnswers])
 
-  const begin = () => {
-    const selected = shuffledSituations(situationsFor(categories)).slice(0, roundCount)
+  const begin = (count = roundCount) => {
+    const selected = shuffledSituations(situationsFor(categories)).slice(0, count)
     setDeck(selected.map(item => item.situation)); setRound(0); setAnswers({}); setScores({}); setWriterIndex(0); setDraft('')
     setStep(multiplayer ? 'answer' : 'handoff')
   }
@@ -103,7 +104,19 @@ export default function BadAdviceOnlyGame({ onClose }: { onClose: () => void }) 
     </div>
     <Button disabled={!isHost || categories.length === 0} onClick={() => setStep('rounds')}>CONTINUE</Button>
   </section>
-  else if (step === 'rounds') content = <section style={shell}><h1 style={title}>How many rounds?</h1><p style={copy}>The judge rotates automatically every round.</p><label style={{ ...copy, width: '100%', textAlign: 'left' }}>Rounds<input aria-label="Number of rounds" type="number" min={3} max={30} value={roundCount} onChange={event => setRoundCount(Math.max(3, Math.min(30, Number(event.target.value) || 3)))} style={{ width: '100%', height: 56, marginTop: 8, padding: '0 16px', boxSizing: 'border-box', borderRadius: 12, border: '1px solid rgba(248,240,223,.2)', background: '#101114', color: '#f8f0df', fontSize: 20 }} /></label><div style={{ display: 'flex', gap: 10 }}><Button secondary onClick={() => setStep('categories')}>BACK</Button><Button disabled={!isHost} onClick={begin}>START GAME</Button></div></section>
+  else if (step === 'rounds') content = isHost
+    ? <DeckSize
+        title="HOW MANY ROUNDS?"
+        description="The judge rotates automatically every round."
+        inputLabel="Number of rounds"
+        min={3}
+        max={30}
+        initialValue={roundCount}
+        nextLabel="START GAME"
+        onBack={() => setStep('categories')}
+        onNext={count => { setRoundCount(count); begin(count) }}
+      />
+    : <section style={shell}><h1 style={title}>How many rounds?</h1><p style={copy}>The host is choosing the game length.</p></section>
   else if (step === 'handoff') content = <section style={shell}><p className="font-staatliches" style={{ color: '#f04b45', margin: 0 }}>PRIVATE ANSWER</p><h1 style={title}>Pass to {players[keys.indexOf(eligibleKeys[writerIndex])]?.name}</h1><p style={copy}>{judge?.name} is judging. Everyone else should look away.</p><Button onClick={() => setStep('answer')}>I’M READY</Button></section>
   else if (step === 'answer') {
     const isJudge = me === keys[judgeIndex]
