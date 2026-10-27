@@ -20,6 +20,7 @@ export type Screen =
   | 'do-you-know-me'
   | 'think-fast'
   | 'not-me-your-honour'
+  | 'bad-advice-only'
   | 'play-together'
 
 export const SCREEN_PATHS: Record<string, string> = {
@@ -62,6 +63,7 @@ export const SCREEN_PATHS: Record<string, string> = {
   'do-you-know-me': '/games/do-you-know-me',
   'think-fast': '/games/think-fast',
   'not-me-your-honour': '/games/not-me-your-honour',
+  'bad-advice-only': '/games/bad-advice-only',
   'play-together': '/play-together',
 }
 

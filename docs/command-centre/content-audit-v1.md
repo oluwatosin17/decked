@@ -1,15 +1,15 @@
 # Decked content audit v1
 
-Generated deterministically by `pnpm audit:content` at 2026-10-14T08:49:57.346Z.
+Generated deterministically by `pnpm audit:content` at 2026-10-27T07:05:34.440Z.
 
 ## Result
 
-- Canonical games: **25**
-- Audited games: **25**
-- Raw bundled records / category memberships: **42,417**
-- Normalized-unique payloads across all games: **40,408**
-- Games whose every selectable bundled category meets 300 cards: **19**
-- Games below the 300-card target: **4**
+- Canonical games: **28**
+- Audited games: **28**
+- Raw bundled records / category memberships: **43,007**
+- Normalized-unique payloads across all games: **40,998**
+- Games whose every selectable bundled category meets 300 cards: **20**
+- Games below the 300-card target: **6**
 - Not applicable: **2** (player-authored and rules-based games have no managed prompt inventory)
 
 The audit does not generate or pad content. Random mixers are excluded because they are selectors over authored categories, not independently authored categories. Player custom cards remain separate and are not migration input.
@@ -221,6 +221,23 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | do-you-know-me | future | 300 | 300 | 300 | 0 | 150/219/240/252 | meets-300 | `b87814657f2a` |
 | do-you-know-me | nigerian-life | 300 | 300 | 300 | 0 | 167/219/243/260 | meets-300 | `bb254a16c0e2` |
 | do-you-know-me | wild-cards | 300 | 300 | 300 | 0 | 112/199/227/245 | meets-300 | `7392fd3184d0` |
+| think-fast | main | 300 | 300 | 300 | 0 | 21/48/62/70 | meets-300 | `112d9022960b` |
+| not-me-your-honour | birthday-cake | 11 | 11 | 11 | 0 | 38/62/90/104 | below-300 | `502639352e26` |
+| not-me-your-honour | group-chat | 11 | 11 | 11 | 0 | 41/77/82/86 | below-300 | `fd2a2d1d30ed` |
+| not-me-your-honour | missing-jollof | 11 | 11 | 11 | 0 | 33/73/85/91 | below-300 | `2e60f51cf48b` |
+| not-me-your-honour | playlist-sabotage | 11 | 11 | 11 | 0 | 36/69/83/85 | below-300 | `cd9d3b3d0991` |
+| not-me-your-honour | double-booked-date | 11 | 11 | 11 | 0 | 52/77/82/97 | below-300 | `043c8164c9e0` |
+| not-me-your-honour | borrowed-hoodie | 11 | 11 | 11 | 0 | 37/74/82/85 | below-300 | `f352f49dbc9c` |
+| not-me-your-honour | office-lunch | 11 | 11 | 11 | 0 | 45/64/91/94 | below-300 | `569e81f0b860` |
+| not-me-your-honour | wifi-password | 11 | 11 | 11 | 0 | 38/62/83/90 | below-300 | `86c0ec35235a` |
+| not-me-your-honour | surprise-party | 11 | 11 | 11 | 0 | 41/56/80/90 | below-300 | `db0eec925e12` |
+| not-me-your-honour | dating-profile | 11 | 11 | 11 | 0 | 38/66/95/104 | below-300 | `b597fd746c4c` |
+| bad-advice-only | dating | 30 | 30 | 30 | 0 | 91/120/197/204 | below-300 | `7b484b5693c0` |
+| bad-advice-only | friends | 30 | 30 | 30 | 0 | 88/116/187/207 | below-300 | `ade3888fab5d` |
+| bad-advice-only | work | 30 | 30 | 30 | 0 | 91/113/189/190 | below-300 | `269c12b53034` |
+| bad-advice-only | everyday | 30 | 30 | 30 | 0 | 73/139/196/235 | below-300 | `e305926144c2` |
+| bad-advice-only | naija | 30 | 30 | 30 | 0 | 76/111/203/205 | below-300 | `176eedd91905` |
+| bad-advice-only | wild | 30 | 30 | 30 | 0 | 97/123/197/207 | below-300 | `925378c9d441` |
 
 ## Per-game reconciliation
 
@@ -251,6 +268,9 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | Imposter (`imposter`) | 1818 | 1818 | 1818 | 1818 | 0 | 1818 | meets-300 |
 | Mini Mystery (`mini-mystery`) | 2992 | 1753 | 2992 | 2992 | 0 | 2992 | below-300 |
 | Do You Know Me? (`do-you-know-me`) | 2400 | 2400 | 2400 | 2400 | 0 | 2400 | meets-300 |
+| Think Fast (`think-fast`) | 300 | 300 | 300 | 300 | 0 | 300 | meets-300 |
+| Not Me, Your Honour! (`not-me-your-honour`) | 110 | 110 | 110 | 110 | 0 | 110 | below-300 |
+| Bad Advice Only (`bad-advice-only`) | 180 | 180 | 180 | 180 | 0 | 180 | below-300 |
 
 ## Decisions and migration constraints
 

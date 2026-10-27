@@ -29,6 +29,7 @@ import MiniMysteryMultiplayerGame from '../MiniMysteryMultiplayerGame'
 import DoYouKnowMeMultiplayerGame from '../DoYouKnowMeMultiplayerGame'
 import ThinkFastMultiplayerGame from '../ThinkFastMultiplayerGame'
 import NotMeYourHonourMultiplayerGame from '../NotMeYourHonourMultiplayerGame'
+import BadAdviceOnlyGame from '../BadAdviceOnlyGame'
 import { chooseMiniMysteryVariant, MINI_MYSTERIES } from '../content/miniMystery'
 import { KNOW_ME_CATEGORIES, promptsFor, shuffledPrompts, type KnowMeCategory, type KnowMeMode, type KnowMeRelationship } from '../content/doYouKnowMe'
 import { shuffledThinkFastPrompts } from '../content/thinkFast'
@@ -104,6 +105,7 @@ function Entry({ onCreate, onJoin, busy, error, initialGameId }: {
       onPlayDoYouKnowMe={() => selectGame('do-you-know-me')}
       onPlayThinkFast={() => selectGame('think-fast')}
       onPlayNotMeYourHonour={() => selectGame('not-me-your-honour')}
+      onPlayBadAdviceOnly={() => selectGame('bad-advice-only')}
     />
   </div>
 
@@ -149,7 +151,7 @@ function ExitRoomButton({ isHost, busy, onExit }: { isHost: boolean; busy: boole
 function Lobby({ room, players, currentUserId, onContinue, onExit, busy, onlineCount }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onContinue: () => void; onExit: () => void; busy: boolean; onlineCount: number }) {
   const shareUrl = `${window.location.origin}/play-together?code=${room.code}`
   const isHost = room.host_user_id === currentUserId
-  const minimumPlayers = room.game_id === 'mini-mystery' ? 4 : room.game_id === 'imposter' || room.game_id === 'not-me-your-honour' ? 3 : 2
+  const minimumPlayers = room.game_id === 'mini-mystery' ? 4 : room.game_id === 'imposter' || room.game_id === 'not-me-your-honour' || room.game_id === 'bad-advice-only' ? 3 : 2
   const copyInvite = async () => { await navigator.clipboard.writeText(`Join my DECKED game: ${shareUrl}\nRoom code: ${room.code}`) }
   return <Panel>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
@@ -274,6 +276,7 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   'do-you-know-me': 'do-you-know-me',
   'think-fast': 'think-fast',
   'not-me-your-honour': 'not-me-your-honour',
+  'bad-advice-only': 'bad-advice-only',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -304,6 +307,7 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'do-you-know-me': 'game',
   'think-fast': 'game',
   'not-me-your-honour': 'game',
+  'bad-advice-only': 'categories',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -334,6 +338,7 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'do-you-know-me': 'game',
   'think-fast': 'game',
   'not-me-your-honour': 'game',
+  'bad-advice-only': 'categories',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -364,6 +369,7 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   'do-you-know-me': ['game'],
   'think-fast': ['game'],
   'not-me-your-honour': ['game'],
+  'bad-advice-only': ['answer', 'waiting', 'reveal', 'done'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -635,6 +641,7 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
     case 'we-just-met': game = <WeJustMetGame onClose={onClose} />; break
     case 'whot': game = <WhotGame onClose={onClose} />; break
     case 'imposter': game = null; break
+    case 'bad-advice-only': game = <BadAdviceOnlyGame onClose={onClose} />; break
   }
 
   return <SharedSessionProvider value={shared}>

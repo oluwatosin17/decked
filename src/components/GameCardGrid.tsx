@@ -284,6 +284,12 @@ export const GAME_CARDS = (): CardDef[] => [
       <ResponsiveGameArtwork loading="lazy" decoding="async" src="/assets/games/not-me-your-honour.png" alt="Not Me, Your Honour!" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
     </div>,
   },
+  {
+    id: 'bad-advice-only', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#174ba0' }}>
+      <img loading="lazy" decoding="async" src="/assets/games/bad-advice-only.avif" alt="Bad Advice Only" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+    </div>,
+  },
 ]
 
 /* ═══════════════════════════════════════════════
@@ -305,9 +311,10 @@ interface HomeGridProps {
   onPlayDoYouKnowMe: () => void
   onPlayThinkFast: () => void
   onPlayNotMeYourHonour: () => void
+  onPlayBadAdviceOnly: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onPlayBadAdviceOnly }: HomeGridProps) {
   const cards = GAME_CARDS()
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -367,6 +374,7 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('do-you-know-me', onPlayDoYouKnowMe)}
         {getEl('think-fast', onPlayThinkFast)}
         {getEl('not-me-your-honour', onPlayNotMeYourHonour)}
+        {getEl('bad-advice-only', onPlayBadAdviceOnly)}
       </div>
     </div>
   )
@@ -404,6 +412,7 @@ interface BrowseGridProps {
   onPlayDoYouKnowMe?: () => void
   onPlayThinkFast?: () => void
   onPlayNotMeYourHonour?: () => void
+  onPlayBadAdviceOnly?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -435,6 +444,7 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'do-you-know-me': handlers.onPlayDoYouKnowMe,
     'think-fast': handlers.onPlayThinkFast,
     'not-me-your-honour': handlers.onPlayNotMeYourHonour,
+    'bad-advice-only': handlers.onPlayBadAdviceOnly,
   }
   return map[card.id]
 }

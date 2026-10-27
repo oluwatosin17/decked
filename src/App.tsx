@@ -49,6 +49,7 @@ const MiniMysteryGame = lazy(() => import('./MiniMysteryGame'))
 const DoYouKnowMeGame = lazy(() => import('./DoYouKnowMeGame'))
 const ThinkFastGame = lazy(() => import('./ThinkFastGame'))
 const NotMeYourHonourGame = lazy(() => import('./NotMeYourHonourGame'))
+const BadAdviceOnlyGame = lazy(() => import('./BadAdviceOnlyGame'))
 
 const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: MultiplayerGameId }> = {
   'truth-or-dare': { localScreen: 'truth-or-dare', multiplayerId: 'truth-or-dare' },
@@ -78,6 +79,7 @@ const GAME_DESTINATIONS: Record<string, { localScreen: Screen; multiplayerId: Mu
   'do-you-know-me': { localScreen: 'do-you-know-me', multiplayerId: 'do-you-know-me' },
   'think-fast': { localScreen: 'think-fast', multiplayerId: 'think-fast' },
   'not-me-your-honour': { localScreen: 'not-me-your-honour', multiplayerId: 'not-me-your-honour' },
+  'bad-advice-only': { localScreen: 'bad-advice-only', multiplayerId: 'bad-advice-only' },
 }
 
 const selectedGameFromLocation = () => {
@@ -308,6 +310,9 @@ function AppContent() {
   if (screen === 'not-me-your-honour') {
     return <NotMeYourHonourGame onClose={() => setScreen('browse')} />
   }
+  if (screen === 'bad-advice-only') {
+    return <BadAdviceOnlyGame onClose={() => setScreen('browse')} />
+  }
 
   /* ── Browse ── */
   if (screen === 'browse') {
@@ -343,6 +348,7 @@ function AppContent() {
         onPlayDoYouKnowMe={() => chooseGame('do-you-know-me')}
         onPlayThinkFast={() => chooseGame('think-fast')}
         onPlayNotMeYourHonour={() => chooseGame('not-me-your-honour')}
+        onPlayBadAdviceOnly={() => chooseGame('bad-advice-only')}
       />
     )
   }
@@ -398,6 +404,7 @@ function AppContent() {
       onPlayDoYouKnowMe={() => chooseGame('do-you-know-me')}
       onPlayThinkFast={() => chooseGame('think-fast')}
       onPlayNotMeYourHonour={() => chooseGame('not-me-your-honour')}
+      onPlayBadAdviceOnly={() => chooseGame('bad-advice-only')}
       onBrowse={() => setScreen('browse')}
       onGuides={() => setScreen('guides')}
       onFreeGamesGuide={() => setScreen('guide-free-games-to-play-online')}
