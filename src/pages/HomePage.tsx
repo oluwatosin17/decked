@@ -22,6 +22,7 @@ const FEATURED_ACTIONS: Record<string, string> = {
   'do-you-know-me': 'onPlayDoYouKnowMe',
   'think-fast': 'onPlayThinkFast',
   'not-me-your-honour': 'onPlayNotMeYourHonour',
+  'bad-advice-only': 'onPlayBadAdviceOnly',
 }
 
 function useIsMobile(bp = 768) {
@@ -56,6 +57,7 @@ interface Props {
   onPlayDoYouKnowMe: () => void
   onPlayThinkFast: () => void
   onPlayNotMeYourHonour: () => void
+  onPlayBadAdviceOnly: () => void
   onBrowse: () => void
   onGuides: () => void
   onFreeGamesGuide: () => void
@@ -121,9 +123,9 @@ function MobileFeaturedGrid({ actions }: { actions: Record<string, (() => void) 
   )
 }
 
-export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onBrowse, onGuides, onFreeGamesGuide, onAbout, onPlayTogether }: Props) {
+export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades, onPlayNeverHaveIEver, onPlayYouLaugh, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onPlayBadAdviceOnly, onBrowse, onGuides, onFreeGamesGuide, onAbout, onPlayTogether }: Props) {
   const isMobile = useIsMobile()
-  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onBrowse }
+  const actions: Record<string, (() => void) | undefined> = { onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayCharades: onPlayCharades ?? onBrowse, onPlayNeverHaveIEver: onPlayNeverHaveIEver ?? onBrowse, onPlayYouLaugh: onPlayYouLaugh ?? onBrowse, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onPlayBadAdviceOnly, onBrowse }
 
   if (isMobile) {
     return (
@@ -235,7 +237,7 @@ export default function HomePage({ onQuickPlay, onPlayTruthOrDare, onPlaySpicySt
       <section className="cards-section home-cards-section w-full" style={{ paddingTop: '90px', paddingBottom: '80px' }}>
         <div style={{ width: '1320px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} onPlayImposter={onPlayImposter} onPlayMiniMystery={onPlayMiniMystery} onPlayDoYouKnowMe={onPlayDoYouKnowMe} onPlayThinkFast={onPlayThinkFast} onPlayNotMeYourHonour={onPlayNotMeYourHonour} />
+          <HomeCardRows onPlayTruthOrDare={onPlayTruthOrDare} onPlaySpicyStarters={onPlaySpicyStarters} onPlayLateNightTalks={onPlayLateNightTalks} onPlayTwoTruthsBluff={onPlayTwoTruthsBluff} onPlayMostLikelyTo={onPlayMostLikelyTo} onPlayChooseYourSide={onPlayChooseYourSide} onPlayWhoSaidThat={onPlayWhoSaidThat} onPlayWeJustMet={onPlayWeJustMet} onPlayWhot={onPlayWhot} onPlayImposter={onPlayImposter} onPlayMiniMystery={onPlayMiniMystery} onPlayDoYouKnowMe={onPlayDoYouKnowMe} onPlayThinkFast={onPlayThinkFast} onPlayNotMeYourHonour={onPlayNotMeYourHonour} onPlayBadAdviceOnly={onPlayBadAdviceOnly} />
         </div>
       </section>
 

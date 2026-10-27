@@ -25,6 +25,7 @@ import { ALL_MINI_MYSTERIES } from './miniMystery'
 import { KNOW_ME_CATEGORIES, KNOW_ME_PROMPTS } from './doYouKnowMe'
 import { THINK_FAST_PROMPTS } from './thinkFast'
 import { COURT_CASES } from './notMeYourHonour'
+import { BAD_ADVICE_CATEGORIES, BAD_ADVICE_SITUATIONS } from './badAdviceOnly'
 
 export interface AuditedDeck {
   gameId?: GameId
@@ -117,4 +118,5 @@ export const CONTENT_AUDIT_GAMES: AuditedGame[] = [
   { gameId: 'do-you-know-me', game: 'Do You Know Me?', contentModel: 'bundled', decks: gameDecks('do-you-know-me', 'Do You Know Me?', Object.fromEntries(KNOW_ME_CATEGORIES.map(category => [category.id, KNOW_ME_PROMPTS.filter(prompt => prompt.category === category.id).map(prompt => `${prompt.question} — ${prompt.options.join(' / ')}`)]))) },
   { gameId: 'think-fast', game: 'Think Fast', contentModel: 'bundled', decks: [{ gameId: 'think-fast', game: 'Think Fast', category: 'main', prompts: THINK_FAST_PROMPTS }] },
   { gameId: 'not-me-your-honour', game: 'Not Me, Your Honour!', contentModel: 'bundled', decks: gameDecks('not-me-your-honour', 'Not Me, Your Honour!', Object.fromEntries(COURT_CASES.map(item => [item.id, [...item.briefing, item.accusation, item.accusedSecret, item.prosecutorClue, ...item.evidence, item.twist, ...item.objections]]))) },
+  { gameId: 'bad-advice-only', game: 'Bad Advice Only', contentModel: 'bundled', decks: gameDecks('bad-advice-only', 'Bad Advice Only', Object.fromEntries(BAD_ADVICE_CATEGORIES.map(category => [category.id, BAD_ADVICE_SITUATIONS.filter(item => item.category === category.id).map(item => item.situation)]))) },
 ]

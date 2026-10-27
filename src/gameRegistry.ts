@@ -26,6 +26,7 @@ export const GAME_REGISTRY = [
   { id: 'do-you-know-me', name: 'Do You Know Me?' },
   { id: 'think-fast', name: 'Think Fast' },
   { id: 'not-me-your-honour', name: 'Not Me, Your Honour!' },
+  { id: 'bad-advice-only', name: 'Bad Advice Only' },
 ] as const
 
 export type GameId = typeof GAME_REGISTRY[number]['id']

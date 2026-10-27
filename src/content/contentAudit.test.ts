@@ -29,7 +29,7 @@ describe('complete content inventory',()=>{
   it('preserves the audited migration totals',()=>{
     const memberships=CONTENT_AUDIT_GAMES.flatMap(game=>game.decks).reduce((sum,deck)=>sum+deck.prompts.length,0)
     const unique=new Set(CONTENT_AUDIT_GAMES.flatMap(game=>game.decks.flatMap(deck=>deck.prompts.map(prompt=>`${game.gameId}\u0000${normalize(String(prompt))}`))))
-    expect(memberships).toBe(42_827)
-    expect(unique.size).toBe(41_207)
+    expect(memberships).toBe(43_007)
+    expect(unique.size).toBe(41_387)
   })
 })

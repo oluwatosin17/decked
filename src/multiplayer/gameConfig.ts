@@ -22,6 +22,7 @@ import { WE_JUST_MET_DECK } from '../content/weJustMet'
 import { GAME_NAMES } from '../gameRegistry'
 import { THINK_FAST_PROMPTS } from '../content/thinkFast'
 import { COURT_CASES } from '../content/notMeYourHonour'
+import { BAD_ADVICE_SITUATIONS } from '../content/badAdviceOnly'
 
 export interface MultiplayerGameConfig {
   id: MultiplayerGameId
@@ -62,6 +63,7 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'do-you-know-me': { id: 'do-you-know-me', name: GAME_NAMES['do-you-know-me'], deck: ['Private prediction and matching prompts'], cardColor: '#35152d', textColor: '#ffcf37', kind: 'vote' },
   'think-fast': { id: 'think-fast', name: GAME_NAMES['think-fast'], deck: THINK_FAST_PROMPTS, cardColor: '#ff8a1f', textColor: '#1c0c06', kind: 'score' },
   'not-me-your-honour': { id: 'not-me-your-honour', name: GAME_NAMES['not-me-your-honour'], deck: COURT_CASES.map(item => item.accusation), cardColor: '#f6efde', textColor: '#17101d', kind: 'vote' },
+  'bad-advice-only': { id: 'bad-advice-only', name: GAME_NAMES['bad-advice-only'], deck: BAD_ADVICE_SITUATIONS.map(item => item.situation), cardColor: '#f8f0df', textColor: '#174ba0', kind: 'vote' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES
