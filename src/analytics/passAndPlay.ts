@@ -33,7 +33,7 @@ export class PassAndPlayTracker {
       state = { started: false, completed: false, startedAt: this.now() }
       this.lifecycle.set(localGameId, state)
       if (step === initialStep) this.emit('game_setup_started', { game_id: definition.gameId, play_mode: 'pass_and_play', initial_step: step })
-      else this.emit('game_setup_resumed', { game_id: definition.gameId, play_mode: 'pass_and_play', restored_step: step })
+      else if (!definition.completionSteps.includes(step)) this.emit('game_setup_resumed', { game_id: definition.gameId, play_mode: 'pass_and_play', restored_step: step })
     }
     if (state.lastStep === step) return
 
@@ -58,7 +58,7 @@ export class PassAndPlayTracker {
 
     state.lastStep = step
     if (definition.playableSteps.includes(step)) this.startIfNeeded(localGameId, step, state)
-    if (definition.completionSteps.includes(step)) this.complete(localGameId, state)
+    if (state.started && definition.completionSteps.includes(step)) this.complete(localGameId, state)
   }
 
   observeValue(localGameId: string, key: string, value: unknown) {

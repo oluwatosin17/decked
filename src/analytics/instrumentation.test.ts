@@ -53,6 +53,18 @@ describe('discovery instrumentation', () => {
 })
 
 describe('pass-and-play instrumentation', () => {
+  it('does not record a second completion when a finished Bad Advice game is reopened', () => {
+    const { events, emit } = recordingTrack()
+    const storage = new ReadStorage()
+    storage.set('bad-advice-only', 'roundCount', 3)
+    storage.set('bad-advice-only', 'round', 2)
+    const journey = new PassAndPlayTracker(emit, storage)
+
+    journey.observeStep('bad-advice-only', 'done', 'playerSetup')
+
+    expect(events).toEqual([])
+  })
+
   it('records a complete Bad Advice session without sending advice or player names', () => {
     const { events, emit } = recordingTrack()
     const storage = new ReadStorage()
