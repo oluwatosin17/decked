@@ -503,7 +503,7 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
       pendingStartedAtRef.current = Math.min(pendingStartedAtRef.current ?? batchStartedAt, batchStartedAt)
       writeRetryCountRef.current = Math.max(writeRetryCountRef.current, batchRetryCount + 1)
       if (mountedRef.current) setSyncProblem(true)
-      console.error('Could not synchronize game state', error)
+      console.error('Could not synchronize game state', error instanceof Error ? error.message : JSON.stringify(error))
       if (retryTimerRef.current === null) {
         retryTimerRef.current = window.setTimeout(() => {
           retryTimerRef.current = null
@@ -606,11 +606,11 @@ function SharedOriginalGame({ room, players, currentUserId, onlineIds, onClose }
   const requestedRematch = room.rematch_requests?.includes(currentUserId) ?? false
   const rematchRequestCount = room.rematch_requests?.length ?? 0
   const shared = useMemo(() => ({
-    gameId: SESSION_GAME_IDS[room.game_id], values, setValue,
+    gameId: SESSION_GAME_IDS[room.game_id], roomId: room.id, roomVersion: room.version, values, setValue,
     currentUserId, hostUserId: room.host_user_id, privatePrompt,
     requestedRematch, rematchRequestCount,
     players: players.map(player => ({ userId: player.user_id, name: player.display_name, color: player.color })),
-  }), [room.game_id, room.host_user_id, values, setValue, currentUserId, privatePrompt, requestedRematch, rematchRequestCount, players])
+  }), [room.game_id, room.id, room.version, room.host_user_id, values, setValue, currentUserId, privatePrompt, requestedRematch, rematchRequestCount, players])
   const hostOnline = onlineIds.includes(room.host_user_id)
   if (!isHost && !GAMEPLAY_STEPS[room.game_id].includes(currentStep)) {
     return <GuestSetupWaiting room={room} onClose={onClose} />

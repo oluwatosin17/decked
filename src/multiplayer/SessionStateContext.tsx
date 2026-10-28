@@ -2,6 +2,8 @@ import { createContext, useContext, type Dispatch, type ReactNode, type SetState
 
 export interface SharedSessionState {
   gameId: string
+  roomId: string
+  roomVersion: number
   values: Record<string, unknown>
   setValue: <T>(key: string, next: SetStateAction<T>) => void
   currentUserId: string

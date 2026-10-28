@@ -53,6 +53,34 @@ describe('discovery instrumentation', () => {
 })
 
 describe('pass-and-play instrumentation', () => {
+  it('records a complete Bad Advice session without sending advice or player names', () => {
+    const { events, emit } = recordingTrack()
+    const storage = new ReadStorage()
+    storage.set('bad-advice-only', 'players', [{ name: 'private one' }, { name: 'private two' }, { name: 'private three' }])
+    storage.set('bad-advice-only', 'roundCount', 3)
+    storage.set('bad-advice-only', 'deck', ['private prompt one', 'private prompt two', 'private prompt three'])
+    storage.set('bad-advice-only', 'round', 0)
+    const journey = new PassAndPlayTracker(emit, storage)
+
+    journey.observeStep('bad-advice-only', 'playerSetup', 'playerSetup')
+    journey.observeStep('bad-advice-only', 'categories', 'playerSetup')
+    journey.observeStep('bad-advice-only', 'rounds', 'playerSetup')
+    journey.observeStep('bad-advice-only', 'handoff', 'playerSetup')
+    for (const round of [1, 2]) {
+      storage.set('bad-advice-only', 'round', round)
+      journey.observeValue('bad-advice-only', 'round', round)
+    }
+    journey.observeStep('bad-advice-only', 'done', 'playerSetup')
+
+    expect(events.filter(event => event.name === 'game_started')).toHaveLength(1)
+    expect(events.filter(event => event.name === 'card_presented')).toHaveLength(3)
+    expect(events.filter(event => event.name === 'card_advanced')).toHaveLength(2)
+    expect(events.find(event => event.name === 'game_completed')?.properties).toMatchObject({
+      game_id: 'bad-advice-only', play_mode: 'pass_and_play', cards_presented: 3, player_count: 3,
+    })
+    expect(JSON.stringify(events)).not.toMatch(/private (one|two|three|prompt)/)
+  })
+
   it('covers every canonical game exactly once', () => {
     const canonicalIds = Object.values(PASS_AND_PLAY_GAMES).map(game => game.gameId)
     expect(canonicalIds).toHaveLength(28)
