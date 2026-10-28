@@ -123,6 +123,45 @@ export async function setSessionValues(roomId: string, values: Record<string, un
   throwTrackedRpcError(error, 'decked_set_session_values')
 }
 
+export interface AnonymousBadAdviceRound {
+  round_number: number
+  phase: 'collecting' | 'board' | 'revealed'
+  answer_count: number
+  expected_count: number
+  has_answered: boolean
+  answers: Array<{ answer_id: string; text: string }>
+}
+
+export async function beginBadAdviceRound(roomId: string, round: number) {
+  const { error } = await supabase.rpc('decked_begin_anonymous_round', { p_room_id: roomId, p_round: round })
+  throwTrackedRpcError(error, 'decked_begin_anonymous_round')
+}
+
+export async function getBadAdviceRound(roomId: string, round: number): Promise<AnonymousBadAdviceRound | null> {
+  const { data, error } = await supabase.rpc('decked_get_anonymous_round', { p_room_id: roomId, p_round: round })
+  throwTrackedRpcError(error, 'decked_get_anonymous_round')
+  return data as AnonymousBadAdviceRound | null
+}
+
+export async function submitBadAdviceAnswer(roomId: string, round: number, answer: string, mutationId: string) {
+  const { error } = await supabase.rpc('decked_submit_anonymous_answer', {
+    p_room_id: roomId, p_round: round, p_answer: answer, p_mutation_id: mutationId,
+  })
+  throwTrackedRpcError(error, 'decked_submit_anonymous_answer')
+}
+
+export async function completeBadAdviceRound(roomId: string, round: number, answerId: string) {
+  const { error } = await supabase.rpc('decked_complete_bad_advice_round', {
+    p_room_id: roomId, p_round: round, p_answer_id: answerId,
+  })
+  throwTrackedRpcError(error, 'decked_complete_bad_advice_round')
+}
+
+export async function restartBadAdvice(roomId: string, values: Record<string, unknown>) {
+  const { error } = await supabase.rpc('decked_restart_bad_advice', { p_room_id: roomId, p_values: values })
+  throwTrackedRpcError(error, 'decked_restart_bad_advice')
+}
+
 function isMissingBatchSessionRpc(error: unknown) {
   if (!error || typeof error !== 'object') return false
   const candidate = error as { code?: unknown; message?: unknown; details?: unknown; hint?: unknown }
