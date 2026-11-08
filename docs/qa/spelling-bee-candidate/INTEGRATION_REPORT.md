@@ -2,7 +2,7 @@
 
 ## Source and decision
 
-The attached candidate was applied to the current checkout's Spelling Bee implementation. This checkout is on `feature/bad-advice-discovery` and already contained uncommitted Spelling Bee game and Command Centre work. The remote had no Spelling Bee branch when checked. The attached notes describe a proposal and were checked against the actual code, database migration, and content schema before implementation.
+The attached candidate was applied to the current checkout's Spelling Bee implementation. The checkout began on `feature/bad-advice-discovery` and already contained uncommitted Spelling Bee game and Command Centre work. The remote had no Spelling Bee branch when checked. A development base was created at the checkout's original commit `9069f68`, and [draft PR #15](https://github.com/oluwatosin17/decked/pull/15) contains the full checkout work plus this integration. The attached notes describe a proposal and were checked against the actual code, database migration, and content schema before implementation.
 
 The 1,000 supplied records remain **editorial drafts**. The pack reports 35 human review flags and explicitly does not claim dictionary attestation, audio review, or player playtesting. The prepared Command Centre import contains 934 new unflagged rows, all marked `needs_review`; it holds 35 flagged rows and excludes 31 unflagged words already in the 36-word bundled game. `node scripts/prepare-spelling-candidate.mjs` regenerates the import and summary with stable IDs.
 
@@ -32,4 +32,4 @@ The game currently has pronunciation assets for only 36 bundled words. The 934 d
 - Exercise Command Centre save, duplicate upload, revision conflict, release rollback, and all role permissions in a complete app environment. The local SQL tests cover publish rejection and four-identity privacy but do not exercise the browser workflow.
 - Individually review all 1,000 words, especially the 35 flagged rows; check dictionary evidence, regional variants, clues and pronunciation. Generate and verify audio for any word intended for play.
 - Verify the active speller alone receives pre-result clues in a four-client run. An opaque audio ID is not a cryptographic secret against inspecting public audio assets; this rule protects the application response and interface.
-- Resolve the repository branch structure before a clean PR: the Spelling Bee feature has no remote development branch, and the checkout has extensive pre-existing uncommitted changes.
+- Review the broad draft PR diff carefully: it includes the pre-existing uncommitted Read My Lips, Command Centre and Spelling Bee work from this checkout. The PR is not yet a full-product release recommendation.
