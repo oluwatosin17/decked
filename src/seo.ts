@@ -35,6 +35,8 @@ const gameNames: Partial<Record<Screen, string>> = {
   'think-fast': 'Think Fast',
   'not-me-your-honour': 'Not Me, Your Honour!',
   'bad-advice-only': 'Bad Advice Only',
+  'read-my-lips': 'Read My Lips',
+  'spelling-bee': 'Spelling Bee',
 }
 
 const noIndexScreens = new Set<Screen>([

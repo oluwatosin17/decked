@@ -1,3 +1,4 @@
+import { READ_MY_LIPS_DECKS } from './readMyLips'
 import { NEVER_HAVE_I_EVER_DECK } from '../NeverHaveIEverGame'
 import { LATE_NIGHT_DECKS } from '../LateNightTalksGame'
 import { DINNER_TABLE_DECKS } from '../DinnerTableGame'
@@ -26,6 +27,7 @@ import { KNOW_ME_CATEGORIES, KNOW_ME_PROMPTS } from './doYouKnowMe'
 import { THINK_FAST_PROMPTS } from './thinkFast'
 import { COURT_CASES } from './notMeYourHonour'
 import { BAD_ADVICE_CATEGORIES, BAD_ADVICE_SITUATIONS } from './badAdviceOnly'
+import { SPELLING_WORDS } from './spellingBee'
 
 export interface AuditedDeck {
   gameId?: GameId
@@ -119,4 +121,6 @@ export const CONTENT_AUDIT_GAMES: AuditedGame[] = [
   { gameId: 'think-fast', game: 'Think Fast', contentModel: 'bundled', decks: [{ gameId: 'think-fast', game: 'Think Fast', category: 'main', prompts: THINK_FAST_PROMPTS }] },
   { gameId: 'not-me-your-honour', game: 'Not Me, Your Honour!', contentModel: 'bundled', decks: gameDecks('not-me-your-honour', 'Not Me, Your Honour!', Object.fromEntries(COURT_CASES.map(item => [item.id, [...item.briefing, item.accusation, item.accusedSecret, item.prosecutorClue, ...item.evidence, item.twist, ...item.objections]]))) },
   { gameId: 'bad-advice-only', game: 'Bad Advice Only', contentModel: 'bundled', decks: gameDecks('bad-advice-only', 'Bad Advice Only', Object.fromEntries(BAD_ADVICE_CATEGORIES.map(category => [category.id, BAD_ADVICE_SITUATIONS.filter(item => item.category === category.id).map(item => item.situation)]))) },
+  { gameId: 'read-my-lips', game: 'Read My Lips', contentModel: 'bundled', decks: gameDecks('read-my-lips', 'Read My Lips', READ_MY_LIPS_DECKS) },
+  { gameId: 'spelling-bee', game: 'Spelling Bee', contentModel: 'bundled', decks: gameDecks('spelling-bee', 'Spelling Bee', Object.fromEntries([1, 2, 3].map(level => [`level-${level}`, SPELLING_WORDS.filter(item => item.level === level).map(item => item.word)]))) },
 ]

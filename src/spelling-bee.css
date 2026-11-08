@@ -1,0 +1,31 @@
+.spelling-game{background:transparent;color:#fff}
+.spelling-game .rml-shell{width:min(620px,100%)}
+.spelling-game .rml-kicker,.spelling-game .rml-scoreboard span{color:#fff1d1}
+.spelling-game .rml-primary{background:#ed3844;border-color:#ed3844;color:#fff}
+.spelling-game .rml-secondary{background:#09090d;color:#fff;border-color:rgba(255,255,255,.65)}
+.spelling-game .rml-primary,.spelling-game .rml-secondary{min-height:48px}
+.spelling-word,.spelling-answer{max-width:100%;overflow-wrap:anywhere;color:#fff1d1;font:400 clamp(48px,12vw,84px)/1 'Anton SC',sans-serif;text-transform:uppercase;letter-spacing:.015em}
+.spelling-word{padding:16px 0;border-block:1px solid rgba(255,241,209,.35)}
+.spelling-clues{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.spelling-clues .rml-secondary{min-height:40px;padding:8px 16px;font-size:14px}
+.spelling-game .rml-actions{width:100%}
+.spelling-game .rml-actions button{flex:1}
+.spelling-game .rml-scoreboard{max-width:620px}
+@media(max-width:560px){.spelling-word,.spelling-answer{font-size:clamp(42px,11vw,66px)}}
+.spelling-level-select{width:min(580px,100%)}
+.spelling-level-grid{width:100%;display:grid;gap:10px}
+.spelling-level-grid button{display:flex;align-items:center;gap:14px;min-height:74px;padding:12px 16px;border:1px dashed rgba(255,255,255,.3);border-radius:14px;background:#070708;color:#fff;text-align:left;cursor:pointer}
+.spelling-level-grid button[aria-pressed=true]{border:2px solid #fff1d1;background:#151515}
+.spelling-level-grid strong{display:block;font:23px 'Anton SC',sans-serif}.spelling-level-grid small{display:block;color:rgba(255,255,255,.58);font:13px 'Satoshi',sans-serif}.spelling-level-check{margin-left:auto;color:#fff1d1;font:26px 'Satoshi',sans-serif}
+.spelling-turn-card.rml-prompt-card{width:min(440px,100%);min-height:410px;aspect-ratio:auto;gap:14px;padding:28px 24px 22px;background:linear-gradient(#fff4d8,#fff4d8) padding-box,repeating-linear-gradient(135deg,#0d8e9d 0 12px,#ffd22f 12px 18px,#0d8e9d 18px 25px) border-box}
+.spelling-turn-card.rml-prompt-card>p{font-size:clamp(40px,10vw,62px);overflow-wrap:anywhere;color:#101014}
+.spelling-card-tools{display:flex;justify-content:center;flex-wrap:wrap;gap:7px}
+.spelling-card-tools button{min-height:38px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:7px 10px;border:1px solid #292929;border-radius:999px;background:transparent;color:#17171b;font:13px 'Staatliches',sans-serif;cursor:pointer}
+.spelling-card-tools button:disabled{opacity:.5;cursor:not-allowed}
+.spelling-turn-card small{max-width:33ch;color:#272727;font:14px/1.4 'Satoshi',sans-serif}
+.spelling-card-timer{width:100%;margin-top:auto}.spelling-card-timer .charades-timer-control{width:100%;aspect-ratio:400/104;border-radius:25px;background:#080808}.spelling-card-timer .charades-timer-content{inset:10px 13px;grid-template-columns:minmax(0,1fr) 78px minmax(0,1fr);gap:5px}.spelling-card-timer .charades-timer-content p{min-width:0;font-size:31px}.spelling-card-timer .charades-timer-content button{min-height:37px;padding:5px 6px;font-size:13px}.spelling-card-timer .charades-timer-pause{background:#222;color:#fff!important}
+@media(max-width:560px){.spelling-turn-card.rml-prompt-card{width:min(360px,100%);min-height:345px;padding:20px 15px 16px}.spelling-turn-card.rml-prompt-card>p{font-size:clamp(36px,9vw,54px)}.spelling-card-timer .charades-timer-content{inset:6px 10px}.spelling-card-timer .charades-timer-content p{font-size:26px}}
+.spelling-answer-form{width:min(440px,100%);display:grid;gap:10px;margin:18px auto 0;text-align:left}
+.spelling-answer-form label{font:15px 'Satoshi',sans-serif;color:#fff1d1}
+.spelling-answer-form input{width:100%;min-height:52px;padding:12px 15px;border:1px solid rgba(255,255,255,.65);border-radius:12px;background:#09090d;color:#fff;font:20px 'Satoshi',sans-serif}
+.spelling-answer-form input:focus{outline:2px solid #fff1d1;outline-offset:2px}

@@ -4,6 +4,7 @@ import { completeDeviceBreakdown, normalizeOverview, type AcquisitionResponse, t
 import type { GameDetailResponse, GamesAnalyticsResponse } from './gamesModel'
 import type { FunnelsResponse } from './funnelsModel'
 import type { MultiplayerOperationsResponse, ReliabilityOperationsResponse } from './operationsModel'
+import type { ContentJsonDocument } from './contentJson'
 
 export type StaffAccess = { authorized: true; role: 'admin' | 'editor' | 'viewer' } | { authorized: false; reason: string }
 
@@ -136,10 +137,22 @@ export interface ContentItem { id:string;game_id:string;item_kind:'prompt'|'chal
 export interface ContentCatalog { rows:ContentItem[];total:number;limit:number;offset:number }
 export async function getContentCounts(){return rpc<{games:ContentCategoryCount[]}>('decked_command_centre_content_counts',{})}
 export async function getContentCatalog(filters:{gameId?:string;categoryId?:string;status?:string;query?:string;limit?:number;offset?:number}){return rpc<ContentCatalog>('decked_command_centre_content_catalog',{p_game_id:filters.gameId||null,p_category_id:filters.categoryId||null,p_status:filters.status||null,p_query:filters.query||null,p_limit:filters.limit??100,p_offset:filters.offset??0})}
+export async function getAllContentCatalog(filters:{gameId:string;categoryId?:string;status?:string;query?:string}){
+  const rows:ContentItem[]=[]
+  const pageSize=200
+  for(let offset=0;offset<10000;offset+=pageSize){
+    const page=await getContentCatalog({...filters,limit:pageSize,offset})
+    rows.push(...page.rows)
+    if(rows.length>=page.total||page.rows.length<pageSize)return rows
+  }
+  throw new Error('Content export exceeded the supported size.')
+}
 export async function getContentHistory(itemId:string){return rpc<{rows:Array<{version:number;status:string;created_at:string;change_note:string|null;body:string}>}>('decked_command_centre_content_history',{p_item_id:itemId})}
 export async function saveContentItem(input:{itemId?:string;gameId:string;itemKind:ContentItem['item_kind'];body:string;metadata:Record<string,unknown>;categoryIds:string[];expectedVersion?:number;changeNote?:string}){return rpc<{id:string;version:number;status:'draft'}>('decked_command_centre_save_content_item',{p_item_id:input.itemId??null,p_game_id:input.gameId,p_item_kind:input.itemKind,p_body:input.body,p_metadata:input.metadata,p_category_ids:input.categoryIds,p_expected_version:input.expectedVersion??null,p_change_note:input.changeNote??null})}
 export async function setContentArchived(itemId:string,archived:boolean,expectedVersion:number){return rpc<void>('decked_command_centre_set_content_archived',{p_item_id:itemId,p_archived:archived,p_expected_version:expectedVersion})}
 export async function publishContent(gameId:string,notes?:string){return rpc<{release_id:string;game_id:string;item_count:number;membership_count:number;checksum:string}>('decked_command_centre_publish_content',{p_game_id:gameId,p_notes:notes??null})}
+export interface ContentJsonImportResult { game_id:string;created_count:number;updated_count:number;unchanged_count:number;archived_count:number;item_count:number }
+export async function importContentJson(document:ContentJsonDocument){return rpc<ContentJsonImportResult>('decked_command_centre_import_content_json',{p_document:document,p_request_id:crypto.randomUUID()})}
 
 export type FeedbackStatus='new'|'reviewed'|'planned'|'resolved'|'archived'
 export type FeedbackPriority='low'|'normal'|'high'|'urgent'

@@ -1,0 +1,36 @@
+row,word,level,code,severity,explanation
+27,bureaucracy,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+30,onomatopoeia,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+31,idiosyncrasy,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+32,chrysanthemum,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+34,quintessential,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+74,weather,2,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of whether; requires identifying context.
+82,dilemma,3,HARD_SHORT_WORD,human_review,Short Hard word: confirm intended spelling trap in playtest.
+83,equilibrium,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+120,principal,2,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of principle; requires identifying context.
+128,debris,3,HARD_SHORT_WORD,human_review,Short Hard word: confirm intended spelling trap in playtest.
+179,refrigerator,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+183,psychological,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+184,sovereignty,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+194,cereal,1,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of serial; requires identifying context.
+275,anachronism,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+279,connoisseur,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+280,euphemism,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+284,reconnaissance,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+288,bear,1,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of bare; requires identifying context.
+324,pear,1,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of pair; requires identifying context.
+393,wind,1,PRONUNCIATION_OR_HOMOPHONE,human_review,Has multiple pronunciations/meanings (air versus turn).
+410,flour,1,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of flower; requires identifying context.
+422,flower,1,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of flour; requires identifying context.
+573,relax,2,MEDIUM_SHORT_WORD,human_review,Short Medium word: confirm intended spelling trap in playtest.
+576,until,2,MEDIUM_SHORT_WORD,human_review,Short Medium word: confirm intended spelling trap in playtest.
+587,issue,2,MEDIUM_SHORT_WORD,human_review,Short Medium word: confirm intended spelling trap in playtest.
+619,vowel,2,MEDIUM_SHORT_WORD,human_review,Short Medium word: confirm intended spelling trap in playtest.
+620,whether,2,PRONUNCIATION_OR_HOMOPHONE,human_review,Homophone of weather; requires identifying context.
+798,moral,2,MEDIUM_SHORT_WORD,human_review,Short Medium word: confirm intended spelling trap in playtest.
+800,reply,2,MEDIUM_SHORT_WORD,human_review,Short Medium word: confirm intended spelling trap in playtest.
+847,zealous,3,HARD_SHORT_WORD,human_review,Short Hard word: confirm intended spelling trap in playtest.
+965,drought,3,HARD_SHORT_WORD,human_review,Short Hard word: confirm intended spelling trap in playtest.
+970,mathematical,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+975,telecommunication,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.
+981,entrepreneurial,3,VOCABULARY_FAMILIARITY,human_review,Review familiarity and pronunciation; do not equate obscurity with difficulty.

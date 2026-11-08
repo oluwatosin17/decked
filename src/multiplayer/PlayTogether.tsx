@@ -1,3 +1,7 @@
+import ReadMyLipsMultiplayerGame from '../ReadMyLipsMultiplayerGame'
+import SpellingBeeMultiplayerGame from '../SpellingBeeMultiplayerGame'
+import LipsLobbySetup from './LipsLobbySetup'
+import { shuffledMultiplayerLipsPhrases } from '../content/readMyLips'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { GameFooter, GameNav } from '../components/GameShell'
 import { BrowseCardGrid, GameCardPreview } from '../components/GameCardGrid'
@@ -106,6 +110,7 @@ function Entry({ onCreate, onJoin, busy, error, initialGameId }: {
       onPlayThinkFast={() => selectGame('think-fast')}
       onPlayNotMeYourHonour={() => selectGame('not-me-your-honour')}
       onPlayBadAdviceOnly={() => selectGame('bad-advice-only')}
+      onPlayReadMyLips={() => selectGame('read-my-lips')} onPlaySpellingBee={() => selectGame('spelling-bee')}
     />
   </div>
 
@@ -151,7 +156,7 @@ function ExitRoomButton({ isHost, busy, onExit }: { isHost: boolean; busy: boole
 function Lobby({ room, players, currentUserId, onContinue, onExit, busy, onlineCount }: { room: MultiplayerRoom; players: MultiplayerPlayer[]; currentUserId: string; onContinue: () => void; onExit: () => void; busy: boolean; onlineCount: number }) {
   const shareUrl = `${window.location.origin}/play-together?code=${room.code}`
   const isHost = room.host_user_id === currentUserId
-  const minimumPlayers = room.game_id === 'mini-mystery' ? 4 : room.game_id === 'imposter' || room.game_id === 'not-me-your-honour' || room.game_id === 'bad-advice-only' ? 3 : 2
+  const minimumPlayers = room.game_id === 'read-my-lips' || room.game_id === 'spelling-bee' ? 4 : room.game_id === 'imposter' || room.game_id === 'not-me-your-honour' || room.game_id === 'bad-advice-only' ? 3 : 2
   const copyInvite = async () => { await navigator.clipboard.writeText(`Join my DECKED game: ${shareUrl}\nRoom code: ${room.code}`) }
   return <Panel>
     <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
@@ -277,6 +282,8 @@ const SESSION_GAME_IDS: Record<MultiplayerGameId, string> = {
   'think-fast': 'think-fast',
   'not-me-your-honour': 'not-me-your-honour',
   'bad-advice-only': 'bad-advice-only',
+  'read-my-lips': 'read-my-lips',
+  'spelling-bee': 'spelling-bee',
 }
 
 const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
@@ -308,6 +315,8 @@ const INITIAL_STEPS: Record<MultiplayerGameId, string> = {
   'think-fast': 'game',
   'not-me-your-honour': 'game',
   'bad-advice-only': 'categories',
+  'read-my-lips': 'game',
+  'spelling-bee': 'game',
 }
 
 const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
@@ -339,6 +348,8 @@ const PLAYER_SETUP_NEXT_STEPS: Record<MultiplayerGameId, string> = {
   'think-fast': 'game',
   'not-me-your-honour': 'game',
   'bad-advice-only': 'categories',
+  'read-my-lips': 'game',
+  'spelling-bee': 'game',
 }
 
 const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
@@ -370,6 +381,8 @@ const GAMEPLAY_STEPS: Record<MultiplayerGameId, readonly string[]> = {
   'think-fast': ['game'],
   'not-me-your-honour': ['game'],
   'bad-advice-only': ['answer', 'waiting', 'reveal', 'done'],
+  'read-my-lips': ['game'],
+  'spelling-bee': ['game'],
 }
 
 const READY_NEXT_STEPS: Partial<Record<MultiplayerGameId, string>> = {
@@ -708,7 +721,7 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
       void refresh(id).catch(error => console.error('Could not refresh multiplayer room', error))
     }, immediate ? 0 : 60)
   }, [refresh])
-  const run = async (action: () => Promise<void>) => { setBusy(true); setError(''); try { await action() } catch (cause) { setError(cause instanceof Error ? cause.message : 'Something went wrong.') } finally { setBusy(false) } }
+  const run = async (action: () => Promise<void>) => { setBusy(true); setError(''); try { await action() } catch (cause) { setError(cause instanceof Error ? cause.message : cause && typeof cause === 'object' && 'message' in cause ? String(cause.message) : 'Something went wrong.') } finally { setBusy(false) } }
 
   useEffect(() => {
     if (!multiplayerConfigured) return
@@ -817,6 +830,8 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
   }
 
   if (room && room.status !== 'lobby') {
+    if (room.game_id === 'read-my-lips') return <ReadMyLipsMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
+    if (room.game_id === 'spelling-bee') return <SpellingBeeMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     if (room.game_id === 'imposter') return <ImposterGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     if (room.game_id === 'mini-mystery') return <MiniMysteryMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
     if (room.game_id === 'do-you-know-me') return <DoYouKnowMeMultiplayerGame room={room} players={players} currentUserId={currentUserId} onClose={exitRoom} />
@@ -856,11 +871,29 @@ export default function PlayTogether({ onClose, initialGameId = null }: { onClos
     })}/>
   }
 
+  if (room?.status === 'lobby' && room.host_user_id === currentUserId && setupGameId === 'spelling-bee') {
+    return <MultiplayerSetupFrame gameId="spelling-bee" onBack={() => setSetupGameId(null)}><LipsLobbySetup spelling players={players} busy={busy} error={error} onBack={() => setSetupGameId(null)} onStart={(teamNames, playerIds, roundSeconds, roundsPerTeam, _promptTypes, levels) => run(async () => {
+      const { error } = await supabase.rpc('decked_start_spelling_game', { p_room_id: room.id, p_team_names: teamNames, p_team_player_ids: playerIds, p_seconds: roundSeconds, p_rounds: roundsPerTeam, p_levels: levels })
+      if (error) throw error
+      setSetupGameId(null)
+      await refresh(room.id)
+    })} /></MultiplayerSetupFrame>
+  }
+
+  if (room?.status === 'lobby' && room.host_user_id === currentUserId && setupGameId === 'read-my-lips') {
+    return <MultiplayerSetupFrame gameId="read-my-lips" onBack={() => setSetupGameId(null)}><LipsLobbySetup players={players} busy={busy} error={error} onStart={(teamNames, playerIds, roundSeconds, roundsPerTeam, promptTypes) => run(async () => {
+      const { error } = await supabase.rpc('decked_start_lips_game', { p_room_id: room.id, p_deck: shuffledMultiplayerLipsPhrases(Math.random, promptTypes), p_team_names: teamNames, p_team_player_ids: playerIds, p_round_seconds: roundSeconds, p_rounds_per_team: roundsPerTeam })
+      if (error) throw error
+      setSetupGameId(null)
+      await refresh(room.id)
+    })} /></MultiplayerSetupFrame>
+  }
+
   return <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
     <GameNav onBack={room ? exitRoom : onClose} />
     <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '36px 16px 72px' }}>
       {!multiplayerConfigured ? <Panel narrow><h1 style={headingStyle}>CONNECT SUPABASE</h1><p style={{ ...bodyStyle, marginTop: '14px' }}>Add VITE_SUPABASE_PUBLISHABLE_KEY to enable Play Together.</p></Panel> : !room ? <Entry initialGameId={initialGameId} busy={busy} error={error} onCreate={(name, gameId) => run(async () => joinBundle(await createRoom(name, gameId)))} onJoin={(code, name) => run(async () => joinBundle(await joinRoom(code, name)))} /> : activeView === 'lobby' ? <Lobby room={room} players={players} currentUserId={currentUserId} onlineCount={onlineIds.length} busy={busy} onExit={exitRoom} onContinue={() => {
-        if (room.game_id === 'mini-mystery' || room.game_id === 'do-you-know-me' || room.game_id === 'think-fast' || room.game_id === 'not-me-your-honour') {
+        if (room.game_id === 'read-my-lips' || room.game_id === 'spelling-bee' || room.game_id === 'mini-mystery' || room.game_id === 'do-you-know-me' || room.game_id === 'think-fast' || room.game_id === 'not-me-your-honour') {
           setSetupGameId(room.game_id)
           return
         }

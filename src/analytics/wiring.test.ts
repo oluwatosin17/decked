@@ -9,6 +9,8 @@ import knowMeMigration from '../../supabase/migrations/20261013150000_add_do_you
 import thinkFastMigration from '../../supabase/migrations/20261014190000_add_think_fast_multiplayer.sql?raw'
 import courtroomMigration from '../../supabase/migrations/20261015130000_add_not_me_your_honour.sql?raw'
 import badAdviceMigration from '../../supabase/migrations/20261027100000_restore_bad_advice_only.sql?raw'
+import lipsMigration from '../../supabase/migrations/20261028100000_read_my_lips.sql?raw'
+import spellingMigration from '../../supabase/migrations/20261101120000_spelling_bee.sql?raw'
 
 const sorted = (values: readonly string[]) => [...values].sort()
 
@@ -20,8 +22,8 @@ describe('analytics game wiring', () => {
 
   it('keeps every game in the effective database analytics allowlists', () => {
     for (const gameId of GAME_IDS) {
-      expect(catalogueMigration + knowMeMigration + thinkFastMigration + courtroomMigration + badAdviceMigration, `room/session analytics is missing ${gameId}`).toContain(`'${gameId}'`)
-      expect(aggregateMigration + knowMeMigration + thinkFastMigration + courtroomMigration + badAdviceMigration, `daily aggregates are missing ${gameId}`).toContain(`'${gameId}'`)
+      expect(catalogueMigration + knowMeMigration + thinkFastMigration + courtroomMigration + badAdviceMigration + lipsMigration + spellingMigration, `room/session analytics is missing ${gameId}`).toContain(`'${gameId}'`)
+      expect(aggregateMigration + knowMeMigration + thinkFastMigration + courtroomMigration + badAdviceMigration + lipsMigration + spellingMigration, `daily aggregates are missing ${gameId}`).toContain(`'${gameId}'`)
     }
   })
 

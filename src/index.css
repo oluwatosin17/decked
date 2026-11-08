@@ -22,7 +22,6 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
 }
-
 /* Courtroom screens can exceed a short viewport; keep the case header reachable. */
 .court-main {
   place-items: start center !important;
@@ -2534,9 +2533,204 @@ nav[style*="backdropFilter"], footer[style*="backdropFilter"] {
 @media (max-width: 560px) {
   .bad-advice-category-grid { grid-template-columns: 1fr; }
   .bad-advice-category-card { min-height: 88px; }
+
+  .rml-category-card .bad-advice-category-check {
+    top: 50%;
+    transform: translateY(-50%) scale(.72);
+  }
+
+  .rml-category-card[aria-pressed="true"] .bad-advice-category-check {
+    transform: translateY(-50%) scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .bad-advice-category-card,
   .bad-advice-category-check { transition: none; }
+}
+/* ─── Mobile PWA install prompts ─── */
+.install-banner,
+.install-guide {
+  position: fixed;
+  z-index: 1000;
+  left: 16px;
+  right: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  max-width: 520px;
+  margin-inline: auto;
+  color: #fff;
+  background: #050506;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.58);
+}
+
+.install-banner {
+  min-height: 76px;
+  padding: 12px 12px 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto 36px;
+  align-items: center;
+  gap: 10px;
+}
+
+.install-banner-icon {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.install-banner-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.install-banner-copy strong,
+.install-guide h2 {
+  margin: 0;
+  font-family: 'Staatliches', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.install-banner-copy strong {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.install-banner-copy span {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.76);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.install-banner-action {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: #e83332;
+  font-family: 'Staatliches', sans-serif;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.install-prompt-close {
+  width: 36px;
+  height: 36px;
+  padding: 7px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+}
+
+.install-prompt-close svg,
+.install-guide-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.install-guide {
+  padding: 16px 18px 18px;
+  border: 0;
+  border-radius: 18px;
+}
+
+.install-guide-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.install-guide h2 {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.install-guide-steps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.45fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.install-guide-step {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.install-guide-icon {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  padding: 9px;
+  border-radius: 11px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.install-guide-arrow {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 25px;
+  line-height: 1;
+}
+
+@media (max-width: 370px) {
+  .install-banner {
+    grid-template-columns: 40px minmax(0, 1fr) auto 32px;
+    gap: 7px;
+    padding-inline: 10px;
+  }
+
+  .install-banner-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .install-banner-copy strong { font-size: 18px; }
+  .install-banner-action { padding-inline: 15px; }
+  .install-prompt-close { width: 32px; height: 32px; padding: 6px; }
+
+  .install-guide {
+    padding-inline: 14px;
+  }
+
+  .install-guide-steps {
+    gap: 7px;
+  }
+
+  .install-guide-step {
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .install-guide-icon {
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+  }
 }

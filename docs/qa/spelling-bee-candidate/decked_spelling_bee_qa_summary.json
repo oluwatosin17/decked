@@ -1,0 +1,27 @@
+{
+  "source": "spelling_words_reviewed_draft.json",
+  "total": 1000,
+  "levels": {
+    "1": 350,
+    "2": 400,
+    "3": 250
+  },
+  "issue_count": 35,
+  "issues_by_severity": {
+    "human_review": 35
+  },
+  "issues_by_code": {
+    "VOCABULARY_FAMILIARITY": 16,
+    "PRONUNCIATION_OR_HOMOPHONE": 9,
+    "HARD_SHORT_WORD": 4,
+    "MEDIUM_SHORT_WORD": 6
+  },
+  "affected_rows": 35,
+  "not_checked": [
+    "dictionary attestation",
+    "regional variants beyond a supplied allow-list",
+    "audio pronunciation",
+    "player difficulty calibration",
+    "live CMS integration"
+  ]
+}

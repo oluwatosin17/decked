@@ -43,6 +43,8 @@ const ALL_GAMES: GameSuggestion[] = [
   { id: 'think-fast', artworkId: 'think-fast', label: 'Think Fast', description: 'Race to name three answers before time runs out' },
   { id: 'not-me-your-honour', artworkId: 'not-me-your-honour', label: 'Not Me, Your Honour!', description: 'Argue ridiculous cases, reveal evidence, and face the verdict' },
   { id: 'bad-advice-only', artworkId: 'bad-advice-only', label: 'Bad Advice Only', description: 'Write terrible advice anonymously and make the judge laugh' },
+  { id: 'read-my-lips', artworkId: 'read-my-lips', label: 'Read My Lips', description: 'Mouth funny phrases and help your teammate guess' },
+  { id: 'spelling-bee', artworkId: 'spelling-bee', label: 'Spelling Bee', description: 'Spell words and score for your team' },
 ]
 
 function shuffleGames(): GameSuggestion[] {

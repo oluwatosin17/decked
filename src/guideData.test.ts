@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { GAME_SEARCH_DESCRIPTORS, GUIDES } from './guideData'
+import { HOW_TO_PLAY_BY_ID } from './howToPlayData'
 import { GAME_NAMES, type GameId } from './gameRegistry'
 
 const guideIdToRegistryId: Record<string, GameId> = {
@@ -46,5 +47,14 @@ describe('guide game names', () => {
     expect(GAME_SEARCH_DESCRIPTORS['/games/you-laugh-youre-out']).toContain('try-not-to-laugh')
     expect(GAME_SEARCH_DESCRIPTORS['/games/red-flag-green-flag']).toContain('red-flag-or-green-flag')
     expect(Object.values(GAME_SEARCH_DESCRIPTORS)).not.toContain("We're Not Really Strangers")
+  })
+
+  it('describes the configurable Read My Lips setup and both music modes', () => {
+    const guide = HOW_TO_PLAY_BY_ID.get('read-my-lips')
+    expect(guide?.players).toContain('4 or more')
+    expect(guide?.setup.join(' ')).toMatch(/even number of players.*teams of two/i)
+    expect(guide?.setup.join(' ')).toMatch(/timer.*rounds per team/i)
+    expect(guide?.steps.join(' ')).toMatch(/selected timer.*review the score.*next team/i)
+    expect(guide?.tips.join(' ')).toMatch(/Pass & Play.*separate device.*Play Together/i)
   })
 })

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 
 export const supabaseProjectUrl = import.meta.env.VITE_SUPABASE_URL || 'https://aurirjornlsqepblndwa.supabase.co'
 export const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_41OH28xTGCwfGjS5wvSKVg_gcBjop6-'
@@ -22,11 +23,18 @@ export const staffSupabase = createClient(supabaseProjectUrl, supabasePublishabl
   },
 })
 
-export async function ensureAnonymousUser() {
-  const { data } = await supabase.auth.getSession()
-  if (data.session?.user) return data.session.user
-  const result = await supabase.auth.signInAnonymously()
-  if (result.error) throw result.error
-  if (!result.data.user) throw new Error('Could not create a player session.')
-  return result.data.user
+let pendingAnonymousUser: Promise<User> | null = null
+
+export async function ensureAnonymousUser(): Promise<User> {
+  if (!pendingAnonymousUser) pendingAnonymousUser = (async () => {
+    const { data, error } = await supabase.auth.getSession()
+    if (error) throw error
+    if (data.session?.user) return data.session.user
+    const result = await supabase.auth.signInAnonymously()
+    if (result.error) throw result.error
+    if (!result.data.user) throw new Error('Could not create a player session.')
+    return result.data.user
+  })()
+  try { return await pendingAnonymousUser }
+  finally { pendingAnonymousUser = null }
 }
