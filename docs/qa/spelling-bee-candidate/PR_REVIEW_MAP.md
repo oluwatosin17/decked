@@ -19,10 +19,11 @@ Approval of one area does not imply approval of the whole PR or a release.
   bundle secret audit passed. The new client regression rejects any partial
   managed release and resets to the bundled library.
 - Database: all applicable migrations through 8 November 2026 applied to a
-  disposable local Supabase Postgres container. Four rollback SQL tests passed,
+  disposable local Supabase Postgres container. Five rollback SQL tests passed,
   including four authenticated identities and incomplete versus complete
-  managed release selection. The old Play Patterns text-rewrite migration was
-  skipped because it does not match the fresh container's function text.
+  managed release selection. The initial full local run skipped the old Play
+  Patterns text-rewrite migration. A follow-up fixed its replay behavior and
+  passed an isolated rollback regression, but did not repeat the full chain.
 - Local browser: four isolated Chrome contexts completed a Spelling Bee game,
   including privacy, reconnect, timeout and final database state. Synthetic
   viewer, editor and admin contexts navigated all 11 Command Centre sections;
