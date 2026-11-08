@@ -4,7 +4,9 @@ begin;
 
 -- Fresh checkout: the prior migration already uses the qualified column.
 create or replace function public.decked_command_centre_play_patterns(
-  text,date,date,text,text,text,text,text
+  p_environment text,p_from date,p_to date,p_game_id text default null,
+  p_play_mode text default null,p_device_class text default null,
+  p_country text default null,p_timezone text default null
 ) returns jsonb language plpgsql as $$
 declare result jsonb; out_weekday text; out_hour integer;
 begin
@@ -23,7 +25,9 @@ end $$;
 
 -- Older deployed body: apply the one-time qualification, then replay it.
 create or replace function public.decked_command_centre_play_patterns(
-  text,date,date,text,text,text,text,text
+  p_environment text,p_from date,p_to date,p_game_id text default null,
+  p_play_mode text default null,p_device_class text default null,
+  p_country text default null,p_timezone text default null
 ) returns jsonb language plpgsql as $$
 declare result jsonb; out_weekday text; out_hour integer;
 begin

@@ -10,6 +10,8 @@ insert into public.command_centre_staff(user_id,role,status) values
  ('d1111111-1111-4111-8111-111111111111','viewer','active'),
  ('d2222222-2222-4222-8222-222222222222','editor','active')
 on conflict(user_id) do update set role=excluded.role,status='active';
+create temp table content_test_item(id uuid) on commit drop;
+grant insert on content_test_item to authenticated;
 
 set local role authenticated;
 select set_config('request.jwt.claim.role','authenticated',true);
@@ -32,13 +34,18 @@ select set_config('request.jwt.claim.sub','d2222222-2222-4222-8222-222222222222'
 do $$ declare saved jsonb; item_id uuid; begin
   saved:=public.decked_command_centre_save_content_item(null,'never-have-i-ever','prompt','Never have I ever tested the content workflow.','{}',array['main'],null,'SQL acceptance test');
   item_id:=(saved->>'id')::uuid;
+  insert into content_test_item values(item_id);
   if saved->>'status'<>'draft' then raise exception 'New item was not a draft'; end if;
   perform public.decked_command_centre_set_content_archived(item_id,true,1);
   perform public.decked_command_centre_set_content_archived(item_id,false,1);
-  if not exists(select 1 from public.command_centre_audit_log where target_ref=item_id::text and action='content_item_restored') then raise exception 'Content audit history missing'; end if;
 end $$;
 
 reset role;
+do $$ begin
+  if not exists(select 1 from public.command_centre_audit_log a join content_test_item t on a.target_ref=t.id::text where a.action='content_item_restored') then
+    raise exception 'Content audit history missing';
+  end if;
+end $$;
 set local role anon;
 select set_config('request.jwt.claim.role','anon',true);
 do $$ declare payload jsonb; begin

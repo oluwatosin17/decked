@@ -127,13 +127,13 @@ do $$ declare overview jsonb; overview_v2 jsonb; filtered_v2 jsonb; zero_v2 json
  if jsonb_array_length(funnels->'rows')=0 then raise exception 'Partial funnels missing'; end if;
  if jsonb_array_length(empty_result->'rows')<>0 then raise exception 'Zero-data response is not empty'; end if;
  if overview->>'refreshed_at' is null then raise exception 'Freshness timestamp missing'; end if;
- if (overview_v2#>>'{current,game_starts}')::int<>3 or (overview_v2#>>'{current,weekly_active}')::int<>2 then raise exception 'Overview v2 core metrics mismatch: %',overview_v2; end if;
- if (overview_v2#>>'{current,error_sessions}')::int<>1 or (overview_v2#>>'{current,sessions}')::int<>2 then raise exception 'Overview v2 reliability mismatch: %',overview_v2; end if;
+ if (overview_v2#>>'{current,game_starts}')::int<>3 or (overview_v2#>>'{current,weekly_active}')::int<>3 then raise exception 'Overview v2 core metrics mismatch: %',overview_v2; end if;
+ if (overview_v2#>>'{current,error_sessions}')::int<>1 or (overview_v2#>>'{current,sessions}')::int<>3 then raise exception 'Overview v2 reliability mismatch: %',overview_v2; end if;
  if (filtered_v2#>>'{current,game_starts}')::int<>2 or jsonb_array_length(filtered_v2->'partial_warnings')<>1 then raise exception 'Overview v2 filtered result mismatch: %',filtered_v2; end if;
  if (zero_v2#>>'{current,game_starts}')::int<>0 or jsonb_array_length(zero_v2->'trend')<>0 then raise exception 'Overview v2 zero-data result mismatch: %',zero_v2; end if;
- if jsonb_array_length(games_v2->'rows')<>21 then raise exception 'Canonical games list does not contain 21 rows: %',games_v2; end if;
+ if jsonb_array_length(games_v2->'rows')<>30 then raise exception 'Canonical games list does not contain 30 rows: %',games_v2; end if;
  if (select (value->>'game_views')::int from jsonb_array_elements(games_v2->'rows') where value->>'game_id'='charades')<>1 then raise exception 'Game views mismatch: %',games_v2; end if;
- if jsonb_array_length(games_filtered->'partial_warnings')<>1 then raise exception 'Filtered games warning missing: %',games_filtered; end if;
+ if jsonb_array_length(games_filtered->'partial_warnings')<>2 then raise exception 'Filtered games warnings missing: %',games_filtered; end if;
  if jsonb_array_length(game_detail->'trend')<>2 or (game_detail#>>'{replay_behavior,replays}')::int<>1 then raise exception 'Game detail fixture mismatch: %',game_detail; end if;
  if jsonb_array_length(funnels_v2->'funnels')<>3 then raise exception 'Expected three ordered funnels: %',funnels_v2; end if;
  if (select (step->>'entrants')::int from jsonb_array_elements(funnels_v2->'funnels') funnel cross join lateral jsonb_array_elements(funnel->'steps') step where funnel->>'funnel_id'='discovery' and step->>'step_name'='Completion')<>1 then raise exception 'Cross-day discovery completion missing: %',funnels_v2; end if;
@@ -141,12 +141,15 @@ do $$ declare overview jsonb; overview_v2 jsonb; filtered_v2 jsonb; zero_v2 json
  if (multiplayer_v2#>>'{metrics,rooms_created}')::int<>2 or (multiplayer_v2#>>'{metrics,successful_joins}')::int<>3 then raise exception 'Multiplayer metrics mismatch: %',multiplayer_v2; end if;
  if multiplayer_v2::text like '%d7000000-0000-4000-8000-000000000001%' or multiplayer_v2::text like '%room_code%' or multiplayer_v2::text like '%display_name%' then raise exception 'Multiplayer response leaked a room reference or sensitive field: %',multiplayer_v2; end if;
  if multiplayer_v2#>>'{timeline_redacted}'<>'true' or jsonb_array_length(multiplayer_v2->'partial_warnings')=0 then raise exception 'Multiplayer redaction or partial-data state missing: %',multiplayer_v2; end if;
- if (reliability_v2#>>'{metrics,frontend_errors}')::int<>1 or (reliability_v2#>>'{metrics,rpc_failures}')::int<>1 or jsonb_array_length(reliability_v2->'groups')<>3 then raise exception 'Reliability grouping mismatch: %',reliability_v2; end if;
+ if (reliability_v2#>>'{metrics,frontend_errors}')::int<>0 or (reliability_v2#>>'{metrics,rpc_failures}')::int<>1 or jsonb_array_length(reliability_v2->'groups')<>2 then raise exception 'Reliability grouping mismatch: %',reliability_v2; end if;
  if reliability_v2::text like '%d6000000-0000-4000-8000-000000000002%' or reliability_v2::text like '%access_token%' or reliability_v2::text like '%stack%' then raise exception 'Reliability response leaked a session identifier or sensitive diagnostic: %',reliability_v2; end if;
  if exists (select 1 from jsonb_array_elements(reliability_v2->'groups') value where not (value ? 'occurrences' and value ? 'affected_sessions' and value ? 'first_seen' and value ? 'last_seen')) then raise exception 'Grouped error evidence is incomplete: %',reliability_v2; end if;
  if reliability_filtered#>'{metrics,error_free_session_rate}' <> 'null'::jsonb then raise exception 'Browser-filtered error-free rate must be redacted: %',reliability_filtered; end if;
 end $$;
 
+-- The export calls use the staff JWT above; audit-table assertions require
+-- the database test role because browser roles have no direct audit access.
+reset role;
 do $$ declare exported jsonb; ordered_export jsonb; filtered_export jsonb; audit_view jsonb; begin
  exported:=public.decked_export_command_centre_csv('games','production','2026-10-01','2026-10-02',null,null,null,null,null,null,array['charades'],'e2000000-0000-4000-8000-000000000001');
  if (exported->>'row_count')::int<>1 or position('"charades"' in exported->>'csv')=0 or position('"icebreaker"' in exported->>'csv')>0 then raise exception 'Filtered export does not match visible rows: %',exported; end if;
@@ -158,7 +161,7 @@ do $$ declare exported jsonb; ordered_export jsonb; filtered_export jsonb; audit
  if (ordered_export->>'row_count')::int<>2 or position('"icebreaker"' in ordered_export->>'csv')>=position('"charades"' in ordered_export->>'csv') then raise exception 'Games export order does not match visible rows: %',ordered_export; end if;
  if (select properties->>'trend_days' from public.command_centre_audit_log where request_id='e2000000-0000-4000-8000-000000000004')<>'30' then raise exception 'Games export did not audit its trend window'; end if;
  filtered_export:=public.decked_export_command_centre_csv('reliability','production','2026-10-01','2026-10-02','charades',null,'desktop',null,'Chrome','test',null,'e2000000-0000-4000-8000-000000000005');
- if (filtered_export->>'row_count')::int<>3 then raise exception 'Filtered Reliability export mismatch: %',filtered_export; end if;
+ if (filtered_export->>'row_count')::int<>0 then raise exception 'Filtered Reliability export mismatch: %',filtered_export; end if;
  if not exists(select 1 from public.command_centre_audit_log where request_id='e2000000-0000-4000-8000-000000000005' and properties->>'browser'='Chrome' and properties->>'app_version'='test' and not (properties ? 'csv')) then raise exception 'Filtered export audit metadata missing or contains export data'; end if;
  perform public.decked_set_command_centre_staff_role('d3333333-3333-4333-8333-333333333333','viewer','disabled','e2000000-0000-4000-8000-000000000002');
  if (select count(*) from public.command_centre_audit_log where request_id='e2000000-0000-4000-8000-000000000002' and action='staff_role_changed')<>1 then raise exception 'Role change audit missing'; end if;

@@ -12,6 +12,12 @@ insert into public.command_centre_staff(user_id,role) values
  ('f3333333-3333-4333-8333-333333333333','admin')
 on conflict(user_id) do update set role=excluded.role,status='active';
 
+do $$ begin
+  if not public.decked_analytics_properties_are_safe(jsonb_build_object('custom_card_count',2)) then
+    raise exception 'Approved aggregate custom-card count was rejected';
+  end if;
+end $$;
+
 do $$ declare protected_table text; begin
   foreach protected_table in array array[
     'analytics_events','analytics_game_sessions','analytics_room_facts','analytics_daily_aggregates','analytics_room_links',
@@ -39,8 +45,8 @@ end $$;
 
 select set_config('request.jwt.claim.sub','f2222222-2222-4222-8222-222222222222',true);
 do $$ declare result jsonb; payload jsonb; begin
-  if not public.decked_analytics_properties_are_safe(jsonb_build_object('custom_card_count',2)) then
-    raise exception 'Approved aggregate custom-card count was rejected';
+  if has_function_privilege('authenticated','public.decked_analytics_properties_are_safe(jsonb)','EXECUTE') then
+    raise exception 'Browser role can call private analytics validator';
   end if;
   begin insert into public.command_centre_staff(user_id,role) values(auth.uid(),'admin') on conflict(user_id) do update set role='admin';raise exception 'Viewer assigned itself admin';exception when insufficient_privilege then null;end;
   begin perform public.decked_set_command_centre_staff_role(auth.uid(),'admin','active','f4000000-0000-4000-8000-000000000001');raise exception 'Viewer changed its role through RPC';exception when insufficient_privilege then null;end;

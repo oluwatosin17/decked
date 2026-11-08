@@ -1,6 +1,22 @@
 -- Four authenticated identities, server-selected words and pre-result privacy.
 -- Run after all repository migrations against an isolated database.
 begin;
+do $$
+declare cards integer; rounds integer;
+begin
+  select m.cards_presented,m.rounds_completed into cards,rounds
+  from public.decked_authoritative_gameplay_metrics('spelling-bee',
+    '{"step":"game","cardIndex":1,"sp_turn":1,"sp_phase":"ready","sp_team_count":2,"sp_rounds":2}'::jsonb,4) m;
+  if cards<>2 or rounds<>0 then raise exception 'Ready turn counted a team round early: %, %',cards,rounds; end if;
+  select m.cards_presented,m.rounds_completed into cards,rounds
+  from public.decked_authoritative_gameplay_metrics('spelling-bee',
+    '{"step":"game","cardIndex":1,"sp_turn":1,"sp_phase":"result","sp_team_count":2,"sp_rounds":2}'::jsonb,4) m;
+  if cards<>2 or rounds<>1 then raise exception 'Completed team round was not counted: %, %',cards,rounds; end if;
+  select m.cards_presented,m.rounds_completed into cards,rounds
+  from public.decked_authoritative_gameplay_metrics('spelling-bee',
+    '{"step":"done","cardIndex":3,"sp_turn":3,"sp_phase":"done","sp_team_count":2,"sp_rounds":2}'::jsonb,4) m;
+  if cards<>4 or rounds<>2 then raise exception 'Final Spelling Bee metrics mismatch: %, %',cards,rounds; end if;
+end $$;
 insert into auth.users(id,is_anonymous) values
   ('e1111111-1111-4111-8111-111111111111',false),
   ('e2222222-2222-4222-8222-222222222222',false),
@@ -56,4 +72,17 @@ begin
   if response->>'audio_id' is not null then raise exception 'Fourth player received private audio'; end if;
 end $$;
 reset role;
+-- Reconcile the authoritative trigger output with a finished two-round room.
+update public.decked_rooms
+set status='finished', game_state=jsonb_set(game_state,'{session}',
+  (game_state->'session')||'{"step":"done","cardIndex":3,"sp_turn":3,"sp_phase":"done"}'::jsonb,true)
+where id='e9999999-9999-4999-8999-999999999999';
+do $$ begin
+  if not exists (
+    select 1 from public.analytics_game_sessions s
+    join public.analytics_room_links l on l.current_game_session_id=s.game_session_id
+    where l.room_id='e9999999-9999-4999-8999-999999999999'
+      and s.status='completed' and s.cards_presented=4 and s.rounds_completed=2
+  ) then raise exception 'Finished Spelling Bee room did not persist two completed rounds'; end if;
+end $$;
 rollback;
