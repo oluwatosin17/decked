@@ -5,7 +5,7 @@ import { groupContentCounts } from './contentGroups'
 import { contentMetadataForSave } from './contentMetadata'
 import { buildContentJsonDocument, contentJsonFilename, downloadContentJson, MAX_CONTENT_JSON_BYTES, parseContentJson, type ContentJsonDocument } from './contentJson'
 import { LoadingState, PageHeader, StatePanel } from './Primitives'
-import { spellingContentErrors, spellingContentPreview } from '../content/spellingManaged'
+import { spellingContentErrors, spellingContentPreview, spellingReleaseEligibility } from '../content/spellingManaged'
 import { spellingAudioId } from '../content/spellingAudio'
 
 type Role = 'viewer' | 'editor' | 'admin'
@@ -50,7 +50,26 @@ export default function ContentPage({ role }: { role: Role }) {
   const closeGame=()=>{setGameId('');setCategoryId('');setStatus('');setQuery('');setOffset(0)}
   const closeCollection=()=>{setCategoryId('');setStatus('');setQuery('');setOffset(0)}
   const archive=async(item:ContentItem)=>{setMessage('');try{await setContentArchived(item.id,item.lifecycle_status!=='archived',item.current_version);setMessage(item.lifecycle_status==='archived'?'Card restored.':'Card archived.');await load()}catch{setMessage('The card changed or the update was rejected. Refresh and try again.')}}
-  const publish=async()=>{if(!gameId)return;setMessage('');try{if(gameId==='spelling-bee'){const active=(await getAllContentCatalog({gameId})).filter(item=>item.lifecycle_status==='active');const preview=spellingContentPreview(active.map(item=>({item_kind:item.item_kind,body:item.body,metadata:item.metadata,category_ids:item.categories.filter(category=>category.enabled).map(category=>category.category_id)})),[]);const missingAudio=active.filter(item=>!spellingAudioId(item.body)).length;if(!active.length||preview.errors.length||preview.needsReview||missingAudio){setMessage(`Spelling Bee release held: ${preview.needsReview} words need review, ${missingAudio} need pronunciation audio, and ${preview.errors.length} have validation issues.`);return}}const result=await publishContent(gameId);setMessage(`Published ${result.item_count.toLocaleString()} cards in release ${result.release_id.slice(0,8)}.`);await load()}catch{setMessage('Publishing failed validation. The live release was not changed.')}}
+  const publish=async()=>{
+    if(!gameId)return
+    setMessage('')
+    try{
+      if(gameId==='spelling-bee'){
+        const active=(await getAllContentCatalog({gameId})).filter(item=>item.lifecycle_status==='active')
+        const release=spellingReleaseEligibility(active.map(item=>({
+          item_kind:item.item_kind,body:item.body,metadata:item.metadata,
+          category_ids:item.categories.filter(category=>category.enabled).map(category=>category.category_id),
+        })))
+        if(!release.eligible){
+          setMessage(`Spelling Bee release held: all published words need approval and audio, with at least four playable words in each level. ${release.errors.length} eligibility issues found. ${release.errors.slice(0,3).join(' ')}`)
+          return
+        }
+      }
+      const result=await publishContent(gameId)
+      setMessage(`Published ${result.item_count.toLocaleString()} cards in release ${result.release_id.slice(0,8)}.`)
+      await load()
+    }catch{setMessage('Publishing failed validation. The live release was not changed.')}
+  }
   const downloadJson=async()=>{if(!gameId)return;setMessage('Generating JSON download…');try{const exportItems=await getAllContentCatalog({gameId,categoryId,status,query});if(exportItems.length===0){setMessage('There are no matching cards to download.');return}const document=buildContentJsonDocument(gameId,categoryId,exportItems);downloadContentJson(contentJsonFilename(gameId,categoryId),document);setMessage(`Downloaded ${exportItems.length.toLocaleString()} cards as JSON.`)}catch{setMessage('JSON download failed. Refresh and try again.')}}
   const chooseJsonFile=async(file:File|undefined)=>{if(!file)return;setImportError('');if(file.size>MAX_CONTENT_JSON_BYTES){setMessage('JSON upload is larger than 5 MB.');return}try{const document=parseContentJson(await file.text(),gameId||undefined);const spelling=document.game_id==='spelling-bee'?spellingContentPreview(document.items,await getAllContentCatalog({gameId:'spelling-bee'})):undefined;setImportPreview({fileName:file.name,document,spelling});setMessage('')}catch(error){setMessage(error instanceof Error?error.message:'The JSON file could not be read.')}finally{if(fileInputRef.current)fileInputRef.current.value=''}}
   const runImport=async()=>{if(!importPreview||importPreview.spelling?.errors.length)return;setImportBusy(true);setImportError('');try{const result=await importContentJson(importPreview.document);setImportPreview(null);setMessage(`Imported ${result.item_count.toLocaleString()} cards as drafts: ${result.created_count.toLocaleString()} created, ${result.updated_count.toLocaleString()} updated, ${result.unchanged_count.toLocaleString()} unchanged. ${result.game_id==='spelling-bee'?'Review each word and add pronunciation audio before publishing.':`Publish ${GAME_NAMES[result.game_id as GameId]??result.game_id} when you want players to receive them.`}`);await load()}catch{setImportError('Import failed validation. Nothing was changed. Check card IDs, categories, duplicate text, and your permissions.')}finally{setImportBusy(false)}}

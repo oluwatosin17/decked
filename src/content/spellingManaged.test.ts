@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import candidate from '../../docs/qa/spelling-bee-candidate/command-centre-draft-import.json'
 import { parseContentJson } from '../command-centre/contentJson'
-import { applyManagedSpellingContent, spellingContentPreview, spellingWordFromManaged } from './spellingManaged'
+import { applyManagedSpellingContent, spellingContentPreview, spellingReleaseEligibility, spellingWordFromManaged } from './spellingManaged'
 import { getSpellingWords, resetManagedSpellingWords, SPELLING_WORDS } from './spellingBee'
 import migration from '../../supabase/migrations/20261108100000_spelling_bee_managed_content.sql?raw'
 
@@ -26,19 +26,29 @@ describe('Spelling Bee managed content integration', () => {
     expect(getSpellingWords()).toBe(SPELLING_WORDS)
   })
 
-  it('maps approved, audio-backed published rows and falls back for missing levels', () => {
-    const items = SPELLING_WORDS.slice(0, 2).map(word => ({
+  it('accepts a complete audio-backed release and rejects partial audio without omitting words', () => {
+    const items = SPELLING_WORDS.map(word => ({
       kind: 'prompt', body: word.word, categories: [`level-${word.level}`],
       metadata: { definition: word.definition, sentence: word.sentence, level: word.level, variants: [], review_status: 'approved' },
     }))
     expect(applyManagedSpellingContent(items)).toBe(true)
-    expect(getSpellingWords().filter(word => word.level === 1)).toHaveLength(2)
-    expect(getSpellingWords().filter(word => word.level === 2)).toHaveLength(12)
+    expect(getSpellingWords()).toHaveLength(items.length)
+    const draft = candidate.items[0]
+    const missingAudio = { ...draft, kind: 'prompt', categories: draft.category_ids, metadata: { ...draft.metadata, review_status: 'approved' } }
+    const incomplete = [...items, missingAudio]
+    expect(spellingReleaseEligibility(incomplete).errors).toContain('Entry 37 has no pronunciation audio.')
+    expect(applyManagedSpellingContent(incomplete)).toBe(false)
+    expect(getSpellingWords()).toBe(SPELLING_WORDS)
+    expect(applyManagedSpellingContent(items.filter(item => item.metadata.level !== 3))).toBe(false)
+    expect(getSpellingWords()).toBe(SPELLING_WORDS)
+    expect(applyManagedSpellingContent([...items, items[0]])).toBe(false)
+    expect(getSpellingWords()).toBe(SPELLING_WORDS)
   })
 
   it('requires reviewed audio-backed releases and server-owned equal-difficulty rounds', () => {
     expect(migration).toContain("v.metadata->>'review_status' is distinct from 'approved'")
     expect(migration).toContain('decked_spelling_catalog c where lower(c.word)=lower(v.body)')
+    expect(migration).toContain('jsonb_array_length(release_pool)=release_item_count')
     expect(migration).toContain('if available>=teams then selected_level:=level_order[level_index]')
     expect(migration).toContain('perform public.decked_start_spelling_game(p_room_id,chosen')
     expect(migration).toContain("if s->>'sp_phase'='word' and auth.uid()=speller then")

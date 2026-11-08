@@ -38,7 +38,7 @@ create or replace function public.decked_start_spelling_game(p_room_id uuid,p_te
 returns void language plpgsql security definer set search_path='' as $$
 declare
   teams integer; needed integer; allowed integer[]; level_order integer[]; level_index integer:=1;
-  active_release_id uuid; pool jsonb; release_pool jsonb; selected_level integer; available integer;
+  active_release_id uuid; release_item_count integer; pool jsonb; release_pool jsonb; selected_level integer; available integer;
   chosen jsonb:='[]'::jsonb; selected_round jsonb; used_words text[]:='{}'::text[]; round_index integer; candidate integer;
 begin
   if jsonb_typeof(p_team_names) is distinct from 'array' or jsonb_typeof(p_levels) is distinct from 'array' or jsonb_array_length(p_levels) not between 1 and 3
@@ -51,6 +51,7 @@ begin
   select array_agg(level order by random()) into level_order from unnest(allowed) level;
   select id into active_release_id from public.content_releases where game_id='spelling-bee' and status='published' order by published_at desc limit 1;
   if active_release_id is not null then
+    select count(*) into release_item_count from public.content_release_items where release_id=active_release_id;
     select coalesce(jsonb_agg(jsonb_build_object('word',c.word,'definition',v.metadata->>'definition','sentence',v.metadata->>'sentence',
       'hint_sentence',regexp_replace(v.metadata->>'sentence','\m'||c.word||'\M','_____','gi'),
       'level',(v.metadata->>'level')::integer,'variants',v.metadata->'variants','audio_id',c.audio_id)),'[]'::jsonb)
@@ -58,10 +59,21 @@ begin
     from public.content_release_items ri
     join public.content_item_versions v on v.item_id=ri.item_id and v.version=ri.version
     join public.decked_spelling_catalog c on lower(c.word)=lower(v.body)
-    where ri.release_id=active_release_id and v.metadata->>'review_status'='approved' and (v.metadata->>'level')::integer=any(allowed);
-    if (select coalesce(sum(level_count/teams),0) from (
-      select count(*) as level_count from jsonb_array_elements(release_pool) entry group by entry->>'level'
-    ) grouped)>=p_rounds then pool:=release_pool; end if;
+    where ri.release_id=active_release_id and v.metadata->>'review_status'='approved'
+      and v.metadata->>'level' in ('1','2','3')
+      and cardinality(ri.category_ids)=1 and ri.category_ids[1]='level-'||(v.metadata->>'level')
+      and c.audio_id ~ '^[0-9a-f]{16}$';
+    -- Reject the entire managed release if even one published entry was omitted.
+    -- Every level must support the maximum four-team setup.
+    if release_item_count>0 and jsonb_array_length(release_pool)=release_item_count
+      and (select count(distinct lower(entry->>'word')) from jsonb_array_elements(release_pool) entry)=release_item_count
+      and not exists(select 1 from generate_series(1,3) level where
+        (select count(*) from jsonb_array_elements(release_pool) entry where (entry->>'level')::integer=level)<4)
+      and (select coalesce(sum(level_count/teams),0) from (
+        select count(*) as level_count from jsonb_array_elements(release_pool) entry
+        where (entry->>'level')::integer=any(allowed) group by entry->>'level'
+      ) grouped)>=p_rounds
+    then pool:=release_pool; end if;
   end if;
   if pool is null then
     select coalesce(jsonb_agg(to_jsonb(c)),'[]'::jsonb) into pool from public.decked_spelling_catalog c where c.level=any(allowed);

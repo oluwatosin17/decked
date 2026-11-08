@@ -1,5 +1,5 @@
 import { spellingAudioId } from './spellingAudio'
-import { getSpellingWords, setManagedSpellingWords, SPELLING_WORDS, type SpellingLevel, type SpellingWord } from './spellingBee'
+import { getSpellingWords, resetManagedSpellingWords, setManagedSpellingWords, SPELLING_WORDS, type SpellingLevel, type SpellingWord } from './spellingBee'
 import { normalizeSpelling } from './spellingSelection'
 
 export interface ManagedSpellingItem {
@@ -48,28 +48,31 @@ export function spellingWordFromManaged(item: ManagedSpellingItem): SpellingWord
   }
 }
 
-/** Only released, approved words with a known pronunciation file can enter the audio-led game. */
-export function applyManagedSpellingContent(items: readonly ManagedSpellingItem[]): boolean {
+/** All published entries must be playable; otherwise the bundled library remains active. */
+export function spellingReleaseEligibility(items: readonly ManagedSpellingItem[]) {
+  const words = items.map(spellingWordFromManaged)
+  const errors: string[] = []
   const seen = new Set<string>()
-  const next: SpellingWord[] = []
-  let replaced = false
-  for (const level of [1, 2, 3] as const) {
-    const group = items.filter(item => (item.categories ?? item.category_ids ?? []).includes(`level-${level}`))
-    const valid = group.map(spellingWordFromManaged)
-    const audioBacked = valid.filter((word): word is SpellingWord => !!word && !!spellingAudioId(word.word))
-    const unique = audioBacked.every(word => {
-      const key = normalizeSpelling(word.word)
-      if (seen.has(key)) return false
-      seen.add(key)
-      return true
-    })
-    if (group.length > 0 && valid.every(Boolean) && unique && audioBacked.length >= 2) {
-      next.push(...audioBacked)
-      replaced = true
-    } else next.push(...SPELLING_WORDS.filter(word => word.level === level))
+  const levels = { 1: 0, 2: 0, 3: 0 }
+  for (const [index, word] of words.entries()) {
+    if (!word) { errors.push('Entry ' + (index + 1) + ' is not approved or valid.'); continue }
+    if (!spellingAudioId(word.word)) { errors.push('Entry ' + (index + 1) + ' has no pronunciation audio.'); continue }
+    const key = normalizeSpelling(word.word)
+    if (seen.has(key)) { errors.push('Entry ' + (index + 1) + ' duplicates another word.'); continue }
+    seen.add(key)
+    levels[word.level]++
   }
-  if (replaced) setManagedSpellingWords(next)
-  return replaced
+  for (const level of [1, 2, 3] as const) {
+    if (levels[level] < 4) errors.push('Level ' + level + ' needs at least four eligible words for four-team play.')
+  }
+  return { eligible: errors.length === 0 && words.length === items.length, words: words.filter((word): word is SpellingWord => !!word), levels, errors }
+}
+
+export function applyManagedSpellingContent(items: readonly ManagedSpellingItem[]): boolean {
+  const release = spellingReleaseEligibility(items)
+  if (!release.eligible) { resetManagedSpellingWords(); return false }
+  setManagedSpellingWords(release.words)
+  return true
 }
 
 export function spellingContentPreview(items: readonly ManagedSpellingItem[], existing: readonly { id: string; body: string }[]) {
