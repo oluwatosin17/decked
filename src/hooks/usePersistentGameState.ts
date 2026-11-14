@@ -68,14 +68,15 @@ export function useGameStep<T extends string>(gameId: string, initial: T, allowe
     return () => window.removeEventListener('popstate', syncFromHistory)
   }, [allowed, setStoredStep])
 
+  const effectiveStep = hasSharedSession && setSharedStep && sharedStep && allowed.includes(sharedStep) ? sharedStep : step
+
   useEffect(() => {
     const url = new URL(window.location.href)
-    if (url.searchParams.get('step') === step) return
-    url.searchParams.set('step', step)
-    window.history.replaceState({ ...window.history.state, step }, '', `${url.pathname}${url.search}${url.hash}`)
-  }, [step])
+    if (url.searchParams.get('step') === effectiveStep) return
+    url.searchParams.set('step', effectiveStep)
+    window.history.replaceState({ ...window.history.state, step: effectiveStep }, '', `${url.pathname}${url.search}${url.hash}`)
+  }, [effectiveStep])
 
-  const effectiveStep = hasSharedSession && setSharedStep && sharedStep && allowed.includes(sharedStep) ? sharedStep : step
   useEffect(() => {
     if (!hasSharedSession) passAndPlayTracker.observeStep(gameId, effectiveStep, initial)
   }, [effectiveStep, gameId, hasSharedSession, initial])
