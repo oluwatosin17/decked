@@ -26,6 +26,8 @@ const GAME_CONTEXT: Record<string, { format: string; mood: string }> = {
   'sip-or-spill': { format: 'Answer or sip', mood: 'Revealing' },
   'do-or-drink': { format: 'Dare or sip', mood: 'High energy' },
   'bad-advice-only': { format: 'Anonymous writing', mood: 'Chaotic and funny' },
+  'read-my-lips': { format: 'Team lip reading', mood: 'Loud and hilarious' },
+  'spelling-bee': { format: 'Team spelling', mood: 'Playful competition' },
 }
 
 interface SharedProps {

@@ -23,6 +23,8 @@ import { GAME_NAMES } from '../gameRegistry'
 import { THINK_FAST_PROMPTS } from '../content/thinkFast'
 import { COURT_CASES } from '../content/notMeYourHonour'
 import { BAD_ADVICE_SITUATIONS } from '../content/badAdviceOnly'
+import { READ_MY_LIPS_PHRASES } from '../content/readMyLips'
+import { SPELLING_WORDS } from '../content/spellingBee'
 
 export interface MultiplayerGameConfig {
   id: MultiplayerGameId
@@ -64,6 +66,8 @@ export const MULTIPLAYER_GAMES: Record<MultiplayerGameId, MultiplayerGameConfig>
   'think-fast': { id: 'think-fast', name: GAME_NAMES['think-fast'], deck: THINK_FAST_PROMPTS, cardColor: '#ff8a1f', textColor: '#1c0c06', kind: 'score' },
   'not-me-your-honour': { id: 'not-me-your-honour', name: GAME_NAMES['not-me-your-honour'], deck: COURT_CASES.map(item => item.accusation), cardColor: '#f6efde', textColor: '#17101d', kind: 'vote' },
   'bad-advice-only': { id: 'bad-advice-only', name: GAME_NAMES['bad-advice-only'], deck: BAD_ADVICE_SITUATIONS.map(item => item.situation), cardColor: '#f8f0df', textColor: '#174ba0', kind: 'vote' },
+  'read-my-lips': { id: 'read-my-lips', name: GAME_NAMES['read-my-lips'], deck: READ_MY_LIPS_PHRASES, cardColor: '#fff3d3', textColor: '#45192b', kind: 'score' },
+  'spelling-bee': { id: 'spelling-bee', name: GAME_NAMES['spelling-bee'], deck: SPELLING_WORDS.map(item => item.word), cardColor: '#0bb7c8', textColor: '#fff1d1', kind: 'score' },
 }
 
 export const isMultiplayerGame = (id: string): id is MultiplayerGameId => id in MULTIPLAYER_GAMES

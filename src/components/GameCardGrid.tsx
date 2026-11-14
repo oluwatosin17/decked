@@ -131,6 +131,10 @@ export const GAME_CARDS = (): CardDef[] => [
     ),
   },
   {
+    id: 'spelling-bee', categories: ['party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default' }}><img loading="lazy" decoding="async" src="/assets/games/spelling-bee.png" alt="Spelling Bee" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>,
+  },
+  {
     id: 'strangers', categories: ['deep-talk', 'icebreakers'], w: 277.948, h: 348,
     playable: true,
     render: (onClick) => (
@@ -285,6 +289,10 @@ export const GAME_CARDS = (): CardDef[] => [
     </div>,
   },
   {
+    id: 'read-my-lips', categories: ['party-games'], w: 277.948, h: 348, playable: true,
+    render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: 'pointer' }}><img loading="lazy" decoding="async" src="/assets/games/concepts/read-my-lips/terracotta-oluwatosin-detola.png" alt="Read My Lips" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>,
+  },
+  {
     id: 'bad-advice-only', categories: ['icebreakers', 'party-games'], w: 277.948, h: 348, playable: true,
     render: (onClick) => <div className="card-tile" onClick={onClick} style={{ width: '100%', height: '100%', borderRadius: 15, overflow: 'hidden', cursor: onClick ? 'pointer' : 'default', background: '#174ba0' }}>
       <img loading="lazy" decoding="async" src="/assets/games/bad-advice-only.avif" alt="Bad Advice Only" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -312,9 +320,11 @@ interface HomeGridProps {
   onPlayThinkFast: () => void
   onPlayNotMeYourHonour: () => void
   onPlayBadAdviceOnly: () => void
+  onPlayReadMyLips: () => void
+  onPlaySpellingBee: () => void
 }
 
-export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onPlayBadAdviceOnly }: HomeGridProps) {
+export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLateNightTalks, onPlayTwoTruthsBluff, onPlayMostLikelyTo, onPlayChooseYourSide, onPlayWhoSaidThat, onPlayWeJustMet, onPlayWhot, onPlayImposter, onPlayMiniMystery, onPlayDoYouKnowMe, onPlayThinkFast, onPlayNotMeYourHonour, onPlayBadAdviceOnly, onPlayReadMyLips, onPlaySpellingBee }: HomeGridProps) {
   const cards = GAME_CARDS()
   const byId = Object.fromEntries(cards.map(c => [c.id, c]))
 
@@ -375,6 +385,8 @@ export function HomeCardRows({ onPlayTruthOrDare, onPlaySpicyStarters, onPlayLat
         {getEl('think-fast', onPlayThinkFast)}
         {getEl('not-me-your-honour', onPlayNotMeYourHonour)}
         {getEl('bad-advice-only', onPlayBadAdviceOnly)}
+        {getEl('read-my-lips', onPlayReadMyLips)}
+        {getEl('spelling-bee', onPlaySpellingBee)}
       </div>
     </div>
   )
@@ -413,6 +425,8 @@ interface BrowseGridProps {
   onPlayThinkFast?: () => void
   onPlayNotMeYourHonour?: () => void
   onPlayBadAdviceOnly?: () => void
+  onPlayReadMyLips?: () => void
+  onPlaySpellingBee?: () => void
 }
 
 function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
@@ -445,6 +459,8 @@ function getCardOnClick(card: CardDef, handlers: BrowseGridProps) {
     'think-fast': handlers.onPlayThinkFast,
     'not-me-your-honour': handlers.onPlayNotMeYourHonour,
     'bad-advice-only': handlers.onPlayBadAdviceOnly,
+    'read-my-lips': handlers.onPlayReadMyLips,
+    'spelling-bee': handlers.onPlaySpellingBee,
   }
   return map[card.id]
 }

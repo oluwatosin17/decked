@@ -1,0 +1,12 @@
+{
+  "source_count": 1000,
+  "held_for_human_review": 35,
+  "bundled_overlap_excluded": 31,
+  "draft_import_count": 934,
+  "levels": {
+    "1": 332,
+    "2": 379,
+    "3": 223
+  },
+  "duplicate_words": []
+}

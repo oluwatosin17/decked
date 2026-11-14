@@ -1,0 +1,6065 @@
+[
+  {
+    "word": "lantern",
+    "definition": "A portable light with a protective case.",
+    "sentence": "We carried a lantern into the garden.",
+    "level": 1
+  },
+  {
+    "word": "puzzle",
+    "definition": "A problem or game solved by thinking.",
+    "sentence": "The final puzzle took us ten minutes.",
+    "level": 1
+  },
+  {
+    "word": "blanket",
+    "definition": "A warm covering used on a bed.",
+    "sentence": "She brought a blanket to the picnic.",
+    "level": 1
+  },
+  {
+    "word": "basket",
+    "definition": "A container woven from strips of material.",
+    "sentence": "The basket was full of fruit.",
+    "level": 1
+  },
+  {
+    "word": "festival",
+    "definition": "A celebration with events or performances.",
+    "sentence": "Our town hosts a music festival.",
+    "level": 1
+  },
+  {
+    "word": "journey",
+    "definition": "An act of travelling from one place to another.",
+    "sentence": "Their journey began at sunrise.",
+    "level": 1
+  },
+  {
+    "word": "thunder",
+    "definition": "The sound made by a lightning storm.",
+    "sentence": "We heard thunder after the flash.",
+    "level": 1
+  },
+  {
+    "word": "whisper",
+    "definition": "To speak very softly.",
+    "sentence": "Please whisper while the baby sleeps.",
+    "level": 1
+  },
+  {
+    "word": "diamond",
+    "definition": "A very hard clear gemstone.",
+    "sentence": "The ring held a small diamond.",
+    "level": 1
+  },
+  {
+    "word": "cinnamon",
+    "definition": "A sweet, warm spice from tree bark.",
+    "sentence": "She added cinnamon to the tea.",
+    "level": 1
+  },
+  {
+    "word": "treasure",
+    "definition": "Something valuable that is kept or found.",
+    "sentence": "The children searched for treasure.",
+    "level": 1
+  },
+  {
+    "word": "calendar",
+    "definition": "A chart showing days, weeks and months.",
+    "sentence": "Mark the date on the calendar.",
+    "level": 1
+  },
+  {
+    "word": "adventure",
+    "definition": "An exciting or unusual experience.",
+    "sentence": "The trip became an adventure.",
+    "level": 2
+  },
+  {
+    "word": "silhouette",
+    "definition": "A dark outline of a person or object.",
+    "sentence": "Her silhouette appeared in the doorway.",
+    "level": 2
+  },
+  {
+    "word": "occasion",
+    "definition": "A particular event or time.",
+    "sentence": "We dressed up for the occasion.",
+    "level": 2
+  },
+  {
+    "word": "rhythm",
+    "definition": "A repeated pattern of sounds or movements.",
+    "sentence": "The drummer kept a steady rhythm.",
+    "level": 2
+  },
+  {
+    "word": "mischief",
+    "definition": "Playful troublemaking.",
+    "sentence": "The puppy was full of mischief.",
+    "level": 2
+  },
+  {
+    "word": "restaurant",
+    "definition": "A place where meals are served to customers.",
+    "sentence": "They met at a new restaurant.",
+    "level": 2
+  },
+  {
+    "word": "boulevard",
+    "definition": "A broad street, often lined with trees.",
+    "sentence": "The parade moved down the boulevard.",
+    "level": 2
+  },
+  {
+    "word": "exaggerate",
+    "definition": "To describe something as bigger or greater than it is.",
+    "sentence": "Do not exaggerate the size of the fish.",
+    "level": 2
+  },
+  {
+    "word": "conscience",
+    "definition": "A sense of what is right and wrong.",
+    "sentence": "His conscience told him to apologise.",
+    "level": 2
+  },
+  {
+    "word": "courteous",
+    "definition": "Polite and considerate.",
+    "sentence": "The host was courteous to every guest.",
+    "level": 2
+  },
+  {
+    "word": "persuade",
+    "definition": "To convince someone to do or believe something.",
+    "sentence": "She tried to persuade us to stay.",
+    "level": 2
+  },
+  {
+    "word": "necessary",
+    "definition": "Needed for a purpose.",
+    "sentence": "A ticket is necessary for entry.",
+    "level": 2
+  },
+  {
+    "word": "accommodate",
+    "definition": "To make room for someone or something.",
+    "sentence": "The hall can accommodate fifty guests.",
+    "level": 3
+  },
+  {
+    "word": "entrepreneur",
+    "definition": "A person who starts and runs a business.",
+    "sentence": "The entrepreneur opened a bakery.",
+    "level": 3
+  },
+  {
+    "word": "bureaucracy",
+    "definition": "A system of administration with many rules and offices.",
+    "sentence": "The paperwork took longer because of bureaucracy.",
+    "level": 3
+  },
+  {
+    "word": "conscientious",
+    "definition": "Careful to do things thoroughly and well.",
+    "sentence": "She is a conscientious organiser.",
+    "level": 3
+  },
+  {
+    "word": "resilience",
+    "definition": "The ability to recover from difficulty.",
+    "sentence": "Their resilience impressed the whole team.",
+    "level": 3
+  },
+  {
+    "word": "onomatopoeia",
+    "definition": "A word that imitates a sound.",
+    "sentence": "Buzz is an example of onomatopoeia.",
+    "level": 3
+  },
+  {
+    "word": "idiosyncrasy",
+    "definition": "An unusual habit or feature of a person.",
+    "sentence": "That little dance is his idiosyncrasy.",
+    "level": 3
+  },
+  {
+    "word": "chrysanthemum",
+    "definition": "A flowering plant with many narrow petals.",
+    "sentence": "A yellow chrysanthemum grew by the gate.",
+    "level": 3
+  },
+  {
+    "word": "miscellaneous",
+    "definition": "Made up of different kinds of things.",
+    "sentence": "The box held miscellaneous supplies.",
+    "level": 3
+  },
+  {
+    "word": "quintessential",
+    "definition": "The most typical example of something.",
+    "sentence": "That song is quintessential party music.",
+    "level": 3
+  },
+  {
+    "word": "indispensable",
+    "definition": "So useful that it cannot be done without.",
+    "sentence": "Her help was indispensable.",
+    "level": 3
+  },
+  {
+    "word": "fluorescent",
+    "definition": "Giving off light after absorbing radiation.",
+    "sentence": "The fluorescent sign glowed above the door.",
+    "level": 3
+  },
+  {
+    "word": "river",
+    "definition": "A natural stream of water flowing across land.",
+    "sentence": "The river flooded after several days of heavy rain.",
+    "level": 1
+  },
+  {
+    "word": "button",
+    "definition": "A small object used to fasten clothing.",
+    "sentence": "One button fell off his school shirt.",
+    "level": 1
+  },
+  {
+    "word": "pencil",
+    "definition": "A tool used for writing or drawing.",
+    "sentence": "She sharpened her pencil before the lesson.",
+    "level": 1
+  },
+  {
+    "word": "carpet",
+    "definition": "A thick floor covering made of woven material.",
+    "sentence": "The carpet felt soft under my feet.",
+    "level": 1
+  },
+  {
+    "word": "doctor",
+    "definition": "A person trained to treat illness and injury.",
+    "sentence": "The doctor examined his injured knee.",
+    "level": 1
+  },
+  {
+    "word": "station",
+    "definition": "A place where buses or trains stop for passengers.",
+    "sentence": "We arrived at the station before sunrise.",
+    "level": 1
+  },
+  {
+    "word": "bottle",
+    "definition": "A container with a narrow neck for liquids.",
+    "sentence": "He filled his bottle with drinking water.",
+    "level": 1
+  },
+  {
+    "word": "helmet",
+    "definition": "A protective covering worn on the head.",
+    "sentence": "The cyclist wore a helmet on the busy road.",
+    "level": 1
+  },
+  {
+    "word": "magnet",
+    "definition": "An object that attracts certain metals.",
+    "sentence": "The magnet held the note against the fridge.",
+    "level": 1
+  },
+  {
+    "word": "camera",
+    "definition": "A device used to take photographs or videos.",
+    "sentence": "Her camera stopped working during the party.",
+    "level": 1
+  },
+  {
+    "word": "bridge",
+    "definition": "A structure built to cross a river or road.",
+    "sentence": "We walked across the bridge before sunset.",
+    "level": 1
+  },
+  {
+    "word": "hammer",
+    "definition": "A tool used for driving nails into materials.",
+    "sentence": "The carpenter picked up a hammer from the table.",
+    "level": 1
+  },
+  {
+    "word": "pepper",
+    "definition": "A spice or vegetable that adds flavour to food.",
+    "sentence": "She sprinkled pepper over the roasted potatoes.",
+    "level": 1
+  },
+  {
+    "word": "towel",
+    "definition": "A piece of cloth used for drying.",
+    "sentence": "He hung the wet towel outside.",
+    "level": 1
+  },
+  {
+    "word": "drawer",
+    "definition": "A sliding compartment used for storing things.",
+    "sentence": "I kept the spare keys inside the drawer.",
+    "level": 1
+  },
+  {
+    "word": "parrot",
+    "definition": "A bird known for its curved beak and colourful feathers.",
+    "sentence": "The parrot sat quietly on a wooden branch.",
+    "level": 1
+  },
+  {
+    "word": "airport",
+    "definition": "A place where aircraft take off and land.",
+    "sentence": "The taxi dropped us at the airport early.",
+    "level": 1
+  },
+  {
+    "word": "forest",
+    "definition": "A large area covered mainly with trees.",
+    "sentence": "The hikers followed a path through the forest.",
+    "level": 1
+  },
+  {
+    "word": "address",
+    "definition": "The details used to identify where someone lives.",
+    "sentence": "Please write your address clearly on the form.",
+    "level": 2
+  },
+  {
+    "word": "believe",
+    "definition": "To accept that something is true.",
+    "sentence": "I believe the package will arrive tomorrow.",
+    "level": 2
+  },
+  {
+    "word": "business",
+    "definition": "The activity of buying or selling goods and services.",
+    "sentence": "Her business grew quickly after the holiday.",
+    "level": 2
+  },
+  {
+    "word": "ceiling",
+    "definition": "The upper inside surface of a room.",
+    "sentence": "A small crack appeared in the ceiling.",
+    "level": 2
+  },
+  {
+    "word": "decision",
+    "definition": "A choice made after considering different options.",
+    "sentence": "The captain explained his decision to the team.",
+    "level": 2
+  },
+  {
+    "word": "environment",
+    "definition": "The natural world and conditions around living things.",
+    "sentence": "The children learned about protecting the environment.",
+    "level": 2
+  },
+  {
+    "word": "favourite",
+    "definition": "Preferred more than other people or things.",
+    "sentence": "This is my favourite place to watch football.",
+    "level": 2,
+    "variants": [
+      "favorite"
+    ]
+  },
+  {
+    "word": "foreign",
+    "definition": "Connected with a country other than your own.",
+    "sentence": "They watched a foreign film with subtitles.",
+    "level": 2
+  },
+  {
+    "word": "grammar",
+    "definition": "Rules governing the structure of a language.",
+    "sentence": "Our teacher explained the grammar in simple terms.",
+    "level": 2
+  },
+  {
+    "word": "honest",
+    "definition": "Truthful and not intending to deceive.",
+    "sentence": "She gave an honest answer to the question.",
+    "level": 2
+  },
+  {
+    "word": "island",
+    "definition": "An area of land surrounded by water.",
+    "sentence": "The small island was visible from the beach.",
+    "level": 2
+  },
+  {
+    "word": "knowledge",
+    "definition": "Information and understanding gained through learning or experience.",
+    "sentence": "The training improved his knowledge of first aid.",
+    "level": 2
+  },
+  {
+    "word": "library",
+    "definition": "A place where books and other resources are available.",
+    "sentence": "The library closes at six in the evening.",
+    "level": 2
+  },
+  {
+    "word": "muscle",
+    "definition": "Body tissue that contracts to produce movement.",
+    "sentence": "He pulled a muscle while carrying heavy bags.",
+    "level": 2
+  },
+  {
+    "word": "nuisance",
+    "definition": "Someone or something that causes annoyance or inconvenience.",
+    "sentence": "The leaking tap became a nuisance overnight.",
+    "level": 2
+  },
+  {
+    "word": "opposite",
+    "definition": "On the other side or entirely different.",
+    "sentence": "The pharmacy is opposite the bus stop.",
+    "level": 2
+  },
+  {
+    "word": "patient",
+    "definition": "Able to wait calmly without becoming annoyed.",
+    "sentence": "Please be patient while the results are checked.",
+    "level": 2
+  },
+  {
+    "word": "shoulder",
+    "definition": "The part of the body connecting the arm and torso.",
+    "sentence": "She carried the bag over one shoulder.",
+    "level": 2
+  },
+  {
+    "word": "tomorrow",
+    "definition": "The day immediately after today.",
+    "sentence": "Our final rehearsal takes place tomorrow morning.",
+    "level": 2
+  },
+  {
+    "word": "weather",
+    "definition": "The conditions outside, such as rain or sunshine.",
+    "sentence": "The weather changed during our trip.",
+    "level": 2
+  },
+  {
+    "word": "handkerchief",
+    "definition": "A small cloth used for wiping the nose or face.",
+    "sentence": "He placed a clean handkerchief in his jacket pocket.",
+    "level": 3
+  },
+  {
+    "word": "occurrence",
+    "definition": "An event or something that happens.",
+    "sentence": "Such an occurrence is unusual at this time of year.",
+    "level": 3
+  },
+  {
+    "word": "mischievous",
+    "definition": "Playfully causing minor trouble or annoyance.",
+    "sentence": "The mischievous puppy hid beneath the table.",
+    "level": 3
+  },
+  {
+    "word": "reconciliation",
+    "definition": "The restoration of friendly relations after a disagreement.",
+    "sentence": "Their reconciliation surprised everyone at the meeting.",
+    "level": 3
+  },
+  {
+    "word": "architecture",
+    "definition": "The art and practice of designing buildings.",
+    "sentence": "She studied architecture before joining the firm.",
+    "level": 3
+  },
+  {
+    "word": "beneficiary",
+    "definition": "A person who receives a benefit or payment.",
+    "sentence": "Each beneficiary received a letter explaining the grant.",
+    "level": 3
+  },
+  {
+    "word": "convenience",
+    "definition": "The quality of being useful or easy to access.",
+    "sentence": "The store opened late for the convenience of customers.",
+    "level": 3
+  },
+  {
+    "word": "dilemma",
+    "definition": "A situation requiring a difficult choice between options.",
+    "sentence": "He faced a dilemma about accepting the new role.",
+    "level": 3
+  },
+  {
+    "word": "equilibrium",
+    "definition": "A state of balance between opposing forces.",
+    "sentence": "The experiment reached equilibrium after several minutes.",
+    "level": 3
+  },
+  {
+    "word": "hypocrisy",
+    "definition": "Claiming values that your own actions do not follow.",
+    "sentence": "She criticised the hypocrisy of the unfair policy.",
+    "level": 3
+  },
+  {
+    "word": "millennium",
+    "definition": "A period lasting one thousand years.",
+    "sentence": "The museum opened at the start of the new millennium.",
+    "level": 3
+  },
+  {
+    "word": "parliament",
+    "definition": "A national assembly responsible for making laws.",
+    "sentence": "The proposal was debated in parliament yesterday.",
+    "level": 3
+  },
+  {
+    "word": "apron",
+    "definition": "A protective garment worn over clothes while cooking.",
+    "sentence": "Dad wore an apron while preparing dinner.",
+    "level": 1
+  },
+  {
+    "word": "beach",
+    "definition": "A sandy or pebbly area beside the sea.",
+    "sentence": "The children collected shells on the beach.",
+    "level": 1
+  },
+  {
+    "word": "coconut",
+    "definition": "A large tropical fruit with a hard shell.",
+    "sentence": "We drank fresh coconut water after the walk.",
+    "level": 1
+  },
+  {
+    "word": "drum",
+    "definition": "A musical instrument played by striking its surface.",
+    "sentence": "The drum kept a steady beat during the dance.",
+    "level": 1
+  },
+  {
+    "word": "engine",
+    "definition": "A machine that provides power to move something.",
+    "sentence": "The mechanic checked the engine before our trip.",
+    "level": 1
+  },
+  {
+    "word": "feather",
+    "definition": "One of the soft coverings on a bird's body.",
+    "sentence": "A small feather floated across the yard.",
+    "level": 1
+  },
+  {
+    "word": "glove",
+    "definition": "A covering worn on the hand for warmth or protection.",
+    "sentence": "She wore a glove while cleaning the garden.",
+    "level": 1
+  },
+  {
+    "word": "honey",
+    "definition": "A sweet substance made by bees.",
+    "sentence": "He added a spoonful of honey to his tea.",
+    "level": 1
+  },
+  {
+    "word": "insect",
+    "definition": "A small animal with six legs and three body sections.",
+    "sentence": "An insect landed on the kitchen table.",
+    "level": 1
+  },
+  {
+    "word": "jacket",
+    "definition": "A short coat worn over other clothes.",
+    "sentence": "She took off her jacket after entering the room.",
+    "level": 1
+  },
+  {
+    "word": "kettle",
+    "definition": "A container used for boiling water.",
+    "sentence": "The kettle boiled while we prepared breakfast.",
+    "level": 1
+  },
+  {
+    "word": "lemon",
+    "definition": "A sour yellow citrus fruit.",
+    "sentence": "She squeezed a lemon over the fish.",
+    "level": 1
+  },
+  {
+    "word": "medal",
+    "definition": "A small metal award for achievement or service.",
+    "sentence": "The runner received a medal after the race.",
+    "level": 1
+  },
+  {
+    "word": "napkin",
+    "definition": "A piece of cloth or paper used while eating.",
+    "sentence": "He placed a napkin beside each plate.",
+    "level": 1
+  },
+  {
+    "word": "ocean",
+    "definition": "A vast body of salt water.",
+    "sentence": "The ship crossed the ocean during the voyage.",
+    "level": 1
+  },
+  {
+    "word": "rabbit",
+    "definition": "A small animal with long ears and soft fur.",
+    "sentence": "A rabbit hopped across the field.",
+    "level": 1
+  },
+  {
+    "word": "shadow",
+    "definition": "A dark shape made when something blocks light.",
+    "sentence": "His shadow stretched across the road at sunset.",
+    "level": 1
+  },
+  {
+    "word": "wallet",
+    "definition": "A small case for carrying money and cards.",
+    "sentence": "She found her wallet under the sofa.",
+    "level": 1
+  },
+  {
+    "word": "accident",
+    "definition": "An unexpected event that causes damage or injury.",
+    "sentence": "Nobody was hurt in the accident near the junction.",
+    "level": 2
+  },
+  {
+    "word": "apology",
+    "definition": "Words expressing regret for a mistake or offence.",
+    "sentence": "He offered an apology for arriving late.",
+    "level": 2
+  },
+  {
+    "word": "biscuit",
+    "definition": "A small baked food that is usually crisp.",
+    "sentence": "She ate a biscuit with her afternoon tea.",
+    "level": 2
+  },
+  {
+    "word": "committee",
+    "definition": "A group appointed to discuss or decide something.",
+    "sentence": "The committee met to review the school plans.",
+    "level": 2
+  },
+  {
+    "word": "curious",
+    "definition": "Wanting to learn or know more about something.",
+    "sentence": "The curious child asked several questions.",
+    "level": 2
+  },
+  {
+    "word": "disappear",
+    "definition": "To go out of sight or stop being visible.",
+    "sentence": "The clouds seemed to disappear before sunset.",
+    "level": 2
+  },
+  {
+    "word": "excellent",
+    "definition": "Extremely good or of very high quality.",
+    "sentence": "She received excellent feedback on her presentation.",
+    "level": 2
+  },
+  {
+    "word": "familiar",
+    "definition": "Well known through previous experience.",
+    "sentence": "The street looked familiar despite the new buildings.",
+    "level": 2
+  },
+  {
+    "word": "frequently",
+    "definition": "Often or many times over a period.",
+    "sentence": "The buses arrive frequently during the morning rush.",
+    "level": 2
+  },
+  {
+    "word": "immediately",
+    "definition": "Without waiting or causing any delay.",
+    "sentence": "Please call me immediately if the plans change.",
+    "level": 2
+  },
+  {
+    "word": "interrupt",
+    "definition": "To stop someone while they are speaking or working.",
+    "sentence": "Try not to interrupt the speaker during the meeting.",
+    "level": 2
+  },
+  {
+    "word": "language",
+    "definition": "A system of communication using words and grammar.",
+    "sentence": "They studied a new language together.",
+    "level": 2
+  },
+  {
+    "word": "medicine",
+    "definition": "A substance used to treat or prevent illness.",
+    "sentence": "The pharmacist explained how to take the medicine.",
+    "level": 2
+  },
+  {
+    "word": "ordinary",
+    "definition": "Normal or not especially unusual.",
+    "sentence": "It seemed like an ordinary Monday morning.",
+    "level": 2
+  },
+  {
+    "word": "possible",
+    "definition": "Able to happen or be done.",
+    "sentence": "We will leave early if possible.",
+    "level": 2
+  },
+  {
+    "word": "principal",
+    "definition": "The head of a school or another organisation.",
+    "sentence": "The principal welcomed the new students at assembly.",
+    "level": 2
+  },
+  {
+    "word": "recommend",
+    "definition": "To suggest that something is suitable or worth choosing.",
+    "sentence": "I recommend this book to anyone who enjoys mysteries.",
+    "level": 2
+  },
+  {
+    "word": "sincerely",
+    "definition": "In an honest and genuine way.",
+    "sentence": "She sincerely thanked everyone for their support.",
+    "level": 2
+  },
+  {
+    "word": "theatre",
+    "definition": "A building where plays and performances are presented.",
+    "sentence": "We watched a comedy at the local theatre.",
+    "level": 2,
+    "variants": [
+      "theater"
+    ]
+  },
+  {
+    "word": "vacuum",
+    "definition": "A space that contains little or no matter.",
+    "sentence": "Scientists created a vacuum inside the sealed chamber.",
+    "level": 2
+  },
+  {
+    "word": "anonymous",
+    "definition": "Without a name or known identity.",
+    "sentence": "The donor asked to remain anonymous.",
+    "level": 3
+  },
+  {
+    "word": "catastrophe",
+    "definition": "A sudden event causing great damage or suffering.",
+    "sentence": "The flood was a catastrophe for nearby farms.",
+    "level": 3
+  },
+  {
+    "word": "colloquial",
+    "definition": "Used in informal everyday conversation.",
+    "sentence": "The writer included a colloquial expression in the dialogue.",
+    "level": 3
+  },
+  {
+    "word": "debris",
+    "definition": "Scattered pieces left after something has broken.",
+    "sentence": "Workers cleared the debris after the old wall collapsed.",
+    "level": 3
+  },
+  {
+    "word": "deteriorate",
+    "definition": "To become worse in quality or condition.",
+    "sentence": "The road began to deteriorate after months of heavy rain.",
+    "level": 3
+  },
+  {
+    "word": "exhilarating",
+    "definition": "Making someone feel very excited and energetic.",
+    "sentence": "The final sprint was an exhilarating moment for the runners.",
+    "level": 3
+  },
+  {
+    "word": "inconvenience",
+    "definition": "Trouble or difficulty caused to another person.",
+    "sentence": "We apologised for the inconvenience of the delayed service.",
+    "level": 3
+  },
+  {
+    "word": "inevitable",
+    "definition": "Certain to happen and impossible to avoid.",
+    "sentence": "A delay became inevitable when the bridge closed.",
+    "level": 3
+  },
+  {
+    "word": "meticulous",
+    "definition": "Extremely careful and attentive to small details.",
+    "sentence": "The tailor was meticulous when measuring the fabric.",
+    "level": 3
+  },
+  {
+    "word": "pneumonia",
+    "definition": "An infection that causes inflammation in the lungs.",
+    "sentence": "The doctor treated her pneumonia in hospital.",
+    "level": 3
+  },
+  {
+    "word": "simultaneous",
+    "definition": "Happening at exactly the same time.",
+    "sentence": "The two teams made simultaneous announcements.",
+    "level": 3
+  },
+  {
+    "word": "temperamental",
+    "definition": "Likely to change mood or behaviour suddenly.",
+    "sentence": "The temperamental actor struggled to stay calm during rehearsals.",
+    "level": 3
+  },
+  {
+    "word": "spoon",
+    "definition": "A small utensil used for eating or serving food.",
+    "sentence": "She used a spoon to stir the soup.",
+    "level": 1
+  },
+  {
+    "word": "cushion",
+    "definition": "A soft pad used to make a seat comfortable.",
+    "sentence": "He placed a cushion on the wooden chair.",
+    "level": 1
+  },
+  {
+    "word": "rope",
+    "definition": "A strong thick cord used for tying or pulling.",
+    "sentence": "They tied the boat with a rope.",
+    "level": 1
+  },
+  {
+    "word": "bucket",
+    "definition": "A container with a handle for carrying liquids.",
+    "sentence": "We filled a bucket with clean water.",
+    "level": 1
+  },
+  {
+    "word": "soap",
+    "definition": "A substance used with water to wash things.",
+    "sentence": "Please use soap to wash your hands.",
+    "level": 1
+  },
+  {
+    "word": "curtain",
+    "definition": "A piece of cloth hung to cover a window.",
+    "sentence": "She pulled the curtain across the bedroom window.",
+    "level": 1
+  },
+  {
+    "word": "tomato",
+    "definition": "A soft red fruit often used in cooking.",
+    "sentence": "He sliced a tomato for the salad.",
+    "level": 1
+  },
+  {
+    "word": "notebook",
+    "definition": "A book of blank pages used for writing.",
+    "sentence": "I wrote the address in my notebook.",
+    "level": 1
+  },
+  {
+    "word": "luggage",
+    "definition": "Bags and cases carried while travelling.",
+    "sentence": "Her luggage arrived at the airport late.",
+    "level": 1
+  },
+  {
+    "word": "painter",
+    "definition": "A person who paints pictures or surfaces.",
+    "sentence": "The painter finished the wall before lunch.",
+    "level": 1
+  },
+  {
+    "word": "pavement",
+    "definition": "A hard path beside a road for people walking.",
+    "sentence": "We stayed on the pavement near the shops.",
+    "level": 1
+  },
+  {
+    "word": "parcel",
+    "definition": "Something wrapped or packed for delivery.",
+    "sentence": "A parcel arrived for my sister this morning.",
+    "level": 1
+  },
+  {
+    "word": "ribbon",
+    "definition": "A narrow strip of fabric used for decoration.",
+    "sentence": "She tied a ribbon around the gift.",
+    "level": 1
+  },
+  {
+    "word": "saddle",
+    "definition": "A seat placed on the back of a horse.",
+    "sentence": "The rider checked the saddle before setting off.",
+    "level": 1
+  },
+  {
+    "word": "carrot",
+    "definition": "A long orange root vegetable eaten as food.",
+    "sentence": "He chopped a carrot into small pieces.",
+    "level": 1
+  },
+  {
+    "word": "comb",
+    "definition": "A tool with teeth used to tidy hair.",
+    "sentence": "She put the comb beside the sink.",
+    "level": 1
+  },
+  {
+    "word": "clock",
+    "definition": "A device that shows the time.",
+    "sentence": "The clock above the doorway stopped working.",
+    "level": 1
+  },
+  {
+    "word": "folder",
+    "definition": "A cover used to store papers together.",
+    "sentence": "Put the documents inside the blue folder.",
+    "level": 1
+  },
+  {
+    "word": "attendance",
+    "definition": "The act of being present at an event or place.",
+    "sentence": "The teacher checked attendance before starting the lesson.",
+    "level": 2
+  },
+  {
+    "word": "available",
+    "definition": "Able to be used or obtained when needed.",
+    "sentence": "There were no available seats near the front.",
+    "level": 2
+  },
+  {
+    "word": "category",
+    "definition": "A group of things sharing a particular feature.",
+    "sentence": "Please choose the correct category for your application.",
+    "level": 2
+  },
+  {
+    "word": "desperate",
+    "definition": "Feeling a strong need for something to happen.",
+    "sentence": "We were desperate to find the missing keys.",
+    "level": 2
+  },
+  {
+    "word": "discipline",
+    "definition": "The practice of following rules or controlling behaviour.",
+    "sentence": "Good discipline helped the team finish its training.",
+    "level": 2
+  },
+  {
+    "word": "efficient",
+    "definition": "Working well without wasting time or resources.",
+    "sentence": "The new process is more efficient than before.",
+    "level": 2
+  },
+  {
+    "word": "equipment",
+    "definition": "Tools or items needed for a particular activity.",
+    "sentence": "The team checked its equipment before the match.",
+    "level": 2
+  },
+  {
+    "word": "exercise",
+    "definition": "Physical activity done to improve health or fitness.",
+    "sentence": "A short walk is a useful form of exercise.",
+    "level": 2
+  },
+  {
+    "word": "generous",
+    "definition": "Willing to give more than is expected.",
+    "sentence": "A generous neighbour donated food to the shelter.",
+    "level": 2
+  },
+  {
+    "word": "harbour",
+    "definition": "A sheltered area where boats can stay safely.",
+    "sentence": "Several fishing boats waited in the harbour.",
+    "level": 2,
+    "variants": [
+      "harbor"
+    ]
+  },
+  {
+    "word": "identity",
+    "definition": "The characteristics that make a person recognisable.",
+    "sentence": "The officer asked her to confirm her identity.",
+    "level": 2
+  },
+  {
+    "word": "imagine",
+    "definition": "To form a picture or idea in the mind.",
+    "sentence": "Can you imagine living beside the sea?",
+    "level": 2
+  },
+  {
+    "word": "independent",
+    "definition": "Not controlled or supported by another person or group.",
+    "sentence": "She became independent after starting her own business.",
+    "level": 2
+  },
+  {
+    "word": "leisure",
+    "definition": "Time spent resting or enjoying activities outside work.",
+    "sentence": "He reads novels during his leisure time.",
+    "level": 2
+  },
+  {
+    "word": "marvellous",
+    "definition": "Extremely good or causing great pleasure.",
+    "sentence": "We had a marvellous afternoon at the park.",
+    "level": 2,
+    "variants": [
+      "marvelous"
+    ]
+  },
+  {
+    "word": "noticeable",
+    "definition": "Easy to see, hear, or recognise.",
+    "sentence": "There was a noticeable change in his confidence.",
+    "level": 2
+  },
+  {
+    "word": "permission",
+    "definition": "Approval or authority to do something.",
+    "sentence": "The children asked permission before entering the hall.",
+    "level": 2
+  },
+  {
+    "word": "reliable",
+    "definition": "Able to be trusted to work or behave well.",
+    "sentence": "We needed a reliable driver for the trip.",
+    "level": 2
+  },
+  {
+    "word": "schedule",
+    "definition": "A plan showing when activities will happen.",
+    "sentence": "The organiser shared the schedule before the event.",
+    "level": 2
+  },
+  {
+    "word": "temperature",
+    "definition": "A measure of how hot or cold something is.",
+    "sentence": "The temperature dropped sharply after the rain.",
+    "level": 2
+  },
+  {
+    "word": "acquaintance",
+    "definition": "A person someone knows but not very well.",
+    "sentence": "An old acquaintance greeted her at the station.",
+    "level": 3
+  },
+  {
+    "word": "labyrinth",
+    "definition": "A confusing network of paths or passages.",
+    "sentence": "The visitors explored a labyrinth of narrow corridors.",
+    "level": 3
+  },
+  {
+    "word": "pronunciation",
+    "definition": "The way a word or language is spoken.",
+    "sentence": "The teacher explained the pronunciation before the competition.",
+    "level": 3
+  },
+  {
+    "word": "susceptible",
+    "definition": "Easily affected or influenced by something.",
+    "sentence": "These flowers are susceptible to damage from strong winds.",
+    "level": 3
+  },
+  {
+    "word": "refrigerator",
+    "definition": "An appliance that keeps food and drinks cold.",
+    "sentence": "She placed the milk inside the refrigerator.",
+    "level": 3
+  },
+  {
+    "word": "correspondence",
+    "definition": "Letters or messages exchanged between people.",
+    "sentence": "The office kept copies of all correspondence.",
+    "level": 3
+  },
+  {
+    "word": "characteristic",
+    "definition": "A typical quality or feature of someone or something.",
+    "sentence": "Patience is a characteristic of a good listener.",
+    "level": 3
+  },
+  {
+    "word": "extraordinary",
+    "definition": "Very unusual, remarkable, or far beyond what is ordinary.",
+    "sentence": "The athletes gave an extraordinary performance in the final.",
+    "level": 3
+  },
+  {
+    "word": "psychological",
+    "definition": "Relating to the mind and how people think or feel.",
+    "sentence": "The film explored the psychological effects of fear.",
+    "level": 3
+  },
+  {
+    "word": "sovereignty",
+    "definition": "A country’s power to govern itself independently.",
+    "sentence": "The agreement recognised the island nation’s sovereignty.",
+    "level": 3
+  },
+  {
+    "word": "phenomenon",
+    "definition": "Something that happens or exists and can be observed.",
+    "sentence": "The northern lights are a beautiful natural phenomenon.",
+    "level": 3
+  },
+  {
+    "word": "accessibility",
+    "definition": "How easily something can be reached, used, or understood.",
+    "sentence": "The redesign improved accessibility for more visitors.",
+    "level": 3
+  },
+  {
+    "word": "bakery",
+    "definition": "A shop where bread and cakes are made or sold.",
+    "sentence": "The bakery opened early this morning.",
+    "level": 1
+  },
+  {
+    "word": "balloon",
+    "definition": "A thin rubber bag filled with air or gas.",
+    "sentence": "The balloon floated above the table.",
+    "level": 1
+  },
+  {
+    "word": "cabbage",
+    "definition": "A leafy vegetable with a round head.",
+    "sentence": "We chopped the cabbage for dinner.",
+    "level": 1
+  },
+  {
+    "word": "donkey",
+    "definition": "An animal related to a horse with long ears.",
+    "sentence": "The donkey carried a small load.",
+    "level": 1
+  },
+  {
+    "word": "branch",
+    "definition": "A part of a tree growing from its trunk.",
+    "sentence": "A bird rested on the branch.",
+    "level": 1
+  },
+  {
+    "word": "farmer",
+    "definition": "Someone who grows crops or raises animals.",
+    "sentence": "The farmer planted maize before the rain.",
+    "level": 1
+  },
+  {
+    "word": "gloves",
+    "definition": "Clothing worn to cover and protect the hands.",
+    "sentence": "She wore gloves while cleaning the kitchen.",
+    "level": 1
+  },
+  {
+    "word": "cereal",
+    "definition": "Food made from grains and often eaten for breakfast.",
+    "sentence": "The children ate cereal before school.",
+    "level": 1
+  },
+  {
+    "word": "fence",
+    "definition": "A barrier marking or protecting an area.",
+    "sentence": "They painted the fence behind the house.",
+    "level": 1
+  },
+  {
+    "word": "guitar",
+    "definition": "A musical instrument with strings played by hand.",
+    "sentence": "He practised the guitar after dinner.",
+    "level": 1
+  },
+  {
+    "word": "kitten",
+    "definition": "A very young domestic cat.",
+    "sentence": "The kitten slept beside the sofa.",
+    "level": 1
+  },
+  {
+    "word": "ladle",
+    "definition": "A large spoon used for serving soup.",
+    "sentence": "She used a ladle to serve the stew.",
+    "level": 1
+  },
+  {
+    "word": "lizard",
+    "definition": "A small reptile with a long body and tail.",
+    "sentence": "A lizard ran across the wall.",
+    "level": 1
+  },
+  {
+    "word": "mango",
+    "definition": "A sweet tropical fruit with a large seed.",
+    "sentence": "We shared a ripe mango at lunch.",
+    "level": 1
+  },
+  {
+    "word": "potato",
+    "definition": "An edible underground vegetable often cooked before eating.",
+    "sentence": "She boiled a potato for dinner.",
+    "level": 1
+  },
+  {
+    "word": "ruler",
+    "definition": "A straight tool used for measuring or drawing lines.",
+    "sentence": "The pupil used a ruler to draw a line.",
+    "level": 1
+  },
+  {
+    "word": "school",
+    "definition": "A place where children receive education.",
+    "sentence": "The school reopened on Monday morning.",
+    "level": 1
+  },
+  {
+    "word": "whistle",
+    "definition": "A small device that makes a high sound when blown.",
+    "sentence": "The referee blew his whistle loudly.",
+    "level": 1
+  },
+  {
+    "word": "assistant",
+    "definition": "A person who helps someone with their work.",
+    "sentence": "The assistant arranged the files on the desk.",
+    "level": 2
+  },
+  {
+    "word": "bargain",
+    "definition": "Something bought for less than its usual price.",
+    "sentence": "This pair of shoes was a real bargain.",
+    "level": 2
+  },
+  {
+    "word": "beautiful",
+    "definition": "Very pleasing to look at or experience.",
+    "sentence": "They visited a beautiful garden during the trip.",
+    "level": 2
+  },
+  {
+    "word": "courage",
+    "definition": "The ability to face fear or danger.",
+    "sentence": "It took courage to speak before the crowd.",
+    "level": 2
+  },
+  {
+    "word": "deceive",
+    "definition": "To make someone believe something that is not true.",
+    "sentence": "He did not want to deceive his friends.",
+    "level": 2
+  },
+  {
+    "word": "dessert",
+    "definition": "Sweet food usually eaten at the end of a meal.",
+    "sentence": "We shared a dessert after dinner.",
+    "level": 2
+  },
+  {
+    "word": "eligible",
+    "definition": "Having the necessary qualities to be allowed something.",
+    "sentence": "Only eligible players could enter the competition.",
+    "level": 2
+  },
+  {
+    "word": "frequent",
+    "definition": "Happening often or at short intervals.",
+    "sentence": "Frequent delays made the journey tiring.",
+    "level": 2
+  },
+  {
+    "word": "government",
+    "definition": "The group of people responsible for running a country.",
+    "sentence": "The government announced a new education policy.",
+    "level": 2
+  },
+  {
+    "word": "hesitate",
+    "definition": "To pause because you are unsure what to do.",
+    "sentence": "Do not hesitate to ask a question.",
+    "level": 2
+  },
+  {
+    "word": "jealous",
+    "definition": "Feeling unhappy because someone has something you want.",
+    "sentence": "He felt jealous of his brother’s new bicycle.",
+    "level": 2
+  },
+  {
+    "word": "lightning",
+    "definition": "A bright flash of electricity in the sky.",
+    "sentence": "The lightning flashed above the hills.",
+    "level": 2
+  },
+  {
+    "word": "mystery",
+    "definition": "Something strange that has not been explained.",
+    "sentence": "The missing keys remained a mystery all day.",
+    "level": 2
+  },
+  {
+    "word": "opportunity",
+    "definition": "A chance to do something useful or desirable.",
+    "sentence": "She welcomed the opportunity to learn a new skill.",
+    "level": 2
+  },
+  {
+    "word": "parallel",
+    "definition": "Extending in the same direction without meeting.",
+    "sentence": "The two roads run parallel for several kilometres.",
+    "level": 2
+  },
+  {
+    "word": "promise",
+    "definition": "A statement that you will do something.",
+    "sentence": "She made a promise to return the book.",
+    "level": 2
+  },
+  {
+    "word": "quarter",
+    "definition": "One of four equal parts of something.",
+    "sentence": "He ate a quarter of the cake.",
+    "level": 2
+  },
+  {
+    "word": "scissors",
+    "definition": "A cutting tool with two blades joined together.",
+    "sentence": "The tailor used scissors to cut the fabric.",
+    "level": 2
+  },
+  {
+    "word": "surprise",
+    "definition": "An unexpected event or piece of news.",
+    "sentence": "The party was a surprise for his sister.",
+    "level": 2
+  },
+  {
+    "word": "vehicle",
+    "definition": "A machine used to transport people or goods.",
+    "sentence": "The vehicle stopped beside the gate.",
+    "level": 2
+  },
+  {
+    "word": "abbreviation",
+    "definition": "A shortened form of a word or phrase.",
+    "sentence": "The report used an abbreviation for the department name.",
+    "level": 3
+  },
+  {
+    "word": "ambiguous",
+    "definition": "Having more than one possible meaning.",
+    "sentence": "The instructions were ambiguous and confused the players.",
+    "level": 3
+  },
+  {
+    "word": "astronomical",
+    "definition": "Extremely large in amount or relating to astronomy.",
+    "sentence": "The repairs came with an astronomical cost.",
+    "level": 3
+  },
+  {
+    "word": "belligerent",
+    "definition": "Hostile and eager to argue or fight.",
+    "sentence": "His belligerent reply made the discussion tense.",
+    "level": 3
+  },
+  {
+    "word": "cancellation",
+    "definition": "The act of deciding that an arranged event will not happen.",
+    "sentence": "The sudden cancellation disappointed everyone holding a ticket.",
+    "level": 3,
+    "variants": [
+      "cancelation"
+    ]
+  },
+  {
+    "word": "disproportionate",
+    "definition": "Too large or small in relation to something else.",
+    "sentence": "The fine seemed disproportionate to the minor offence.",
+    "level": 3
+  },
+  {
+    "word": "eccentricity",
+    "definition": "An unusual habit or way of behaving.",
+    "sentence": "His eccentricity made the performances memorable.",
+    "level": 3
+  },
+  {
+    "word": "infrastructure",
+    "definition": "The basic systems and structures a community needs.",
+    "sentence": "The city invested in infrastructure to improve transport.",
+    "level": 3
+  },
+  {
+    "word": "metamorphosis",
+    "definition": "A major change in form or appearance.",
+    "sentence": "The butterfly undergoes metamorphosis during its life.",
+    "level": 3
+  },
+  {
+    "word": "perpendicular",
+    "definition": "Meeting another line or surface at a right angle.",
+    "sentence": "The engineer drew a perpendicular line on the plan.",
+    "level": 3
+  },
+  {
+    "word": "sceptical",
+    "definition": "Doubting whether something is true or useful.",
+    "sentence": "She remained sceptical about the surprising claim.",
+    "level": 3,
+    "variants": [
+      "skeptical"
+    ]
+  },
+  {
+    "word": "unanimous",
+    "definition": "Fully agreed by every member of a group.",
+    "sentence": "The committee reached a unanimous decision after discussion.",
+    "level": 3
+  },
+  {
+    "word": "anchor",
+    "definition": "A heavy object used to keep a boat in place.",
+    "sentence": "The sailor dropped the anchor near the shore.",
+    "level": 1
+  },
+  {
+    "word": "chalk",
+    "definition": "A soft material used for writing on boards.",
+    "sentence": "The teacher picked up chalk to draw a circle.",
+    "level": 1
+  },
+  {
+    "word": "clinic",
+    "definition": "A place where people receive medical advice or treatment.",
+    "sentence": "She visited the clinic for a routine check.",
+    "level": 1
+  },
+  {
+    "word": "dinner",
+    "definition": "The main meal eaten in the evening or midday.",
+    "sentence": "Our family had dinner together on Sunday.",
+    "level": 1
+  },
+  {
+    "word": "elbow",
+    "definition": "The joint in the middle of the arm.",
+    "sentence": "He rested his elbow on the table.",
+    "level": 1
+  },
+  {
+    "word": "fabric",
+    "definition": "Material made by weaving or knitting threads.",
+    "sentence": "The tailor bought fabric for a new dress.",
+    "level": 1
+  },
+  {
+    "word": "handle",
+    "definition": "The part of an object used to hold it.",
+    "sentence": "The handle of the door came loose.",
+    "level": 1
+  },
+  {
+    "word": "marble",
+    "definition": "A small glass ball used in children's games.",
+    "sentence": "The boy found a blue marble under the chair.",
+    "level": 1
+  },
+  {
+    "word": "needle",
+    "definition": "A thin pointed tool used for sewing.",
+    "sentence": "She threaded the needle before repairing the shirt.",
+    "level": 1
+  },
+  {
+    "word": "onion",
+    "definition": "A round vegetable with layers and a strong taste.",
+    "sentence": "He chopped an onion for the stew.",
+    "level": 1
+  },
+  {
+    "word": "pumpkin",
+    "definition": "A large round vegetable with a thick outer skin.",
+    "sentence": "The farmer carried a pumpkin from the field.",
+    "level": 1
+  },
+  {
+    "word": "rainbow",
+    "definition": "A curved band of colours seen after rainfall.",
+    "sentence": "We spotted a rainbow above the houses.",
+    "level": 1
+  },
+  {
+    "word": "shelter",
+    "definition": "A place providing protection from weather or danger.",
+    "sentence": "They found shelter when the rain began.",
+    "level": 1
+  },
+  {
+    "word": "suitcase",
+    "definition": "A case used for carrying clothes while travelling.",
+    "sentence": "She packed her suitcase before the trip.",
+    "level": 1
+  },
+  {
+    "word": "turtle",
+    "definition": "An animal with a hard shell covering its body.",
+    "sentence": "A turtle moved slowly across the sand.",
+    "level": 1
+  },
+  {
+    "word": "village",
+    "definition": "A small community of houses in the countryside.",
+    "sentence": "His grandparents live in a quiet village.",
+    "level": 1
+  },
+  {
+    "word": "zebra",
+    "definition": "A wild animal with black and white stripes.",
+    "sentence": "The children watched a zebra at the wildlife park.",
+    "level": 1
+  },
+  {
+    "word": "staircase",
+    "definition": "A set of steps connecting different floors.",
+    "sentence": "They carried the boxes up the staircase.",
+    "level": 1
+  },
+  {
+    "word": "achievement",
+    "definition": "Something successful that someone has worked hard to do.",
+    "sentence": "Winning the competition was a great achievement for her.",
+    "level": 2
+  },
+  {
+    "word": "acquire",
+    "definition": "To get something through effort or purchase.",
+    "sentence": "He hopes to acquire new skills during training.",
+    "level": 2
+  },
+  {
+    "word": "amateur",
+    "definition": "Someone who does an activity without being a professional.",
+    "sentence": "The amateur photographer entered a local competition.",
+    "level": 2
+  },
+  {
+    "word": "apparent",
+    "definition": "Easy to notice or understand.",
+    "sentence": "Her disappointment was apparent after the results arrived.",
+    "level": 2
+  },
+  {
+    "word": "atmosphere",
+    "definition": "The general feeling or mood of a place.",
+    "sentence": "The music created a cheerful atmosphere at the party.",
+    "level": 2
+  },
+  {
+    "word": "cautious",
+    "definition": "Careful to avoid possible danger or mistakes.",
+    "sentence": "The driver was cautious on the wet road.",
+    "level": 2
+  },
+  {
+    "word": "cemetery",
+    "definition": "A place where people who have died are buried.",
+    "sentence": "The family visited the cemetery together.",
+    "level": 2
+  },
+  {
+    "word": "distinguish",
+    "definition": "To recognise a difference between similar things.",
+    "sentence": "Can you distinguish the two fabrics by touch?",
+    "level": 2
+  },
+  {
+    "word": "innocent",
+    "definition": "Not guilty of a crime or wrongdoing.",
+    "sentence": "The innocent student was cleared of the accusation.",
+    "level": 2
+  },
+  {
+    "word": "jewellery",
+    "definition": "Decorative items worn on the body, such as rings.",
+    "sentence": "She kept her jewellery in a wooden box.",
+    "level": 2,
+    "variants": [
+      "jewelry"
+    ]
+  },
+  {
+    "word": "secretary",
+    "definition": "A person who handles administrative work or records.",
+    "sentence": "The secretary prepared the agenda for the meeting.",
+    "level": 2
+  },
+  {
+    "word": "souvenir",
+    "definition": "An object kept to remember a place or event.",
+    "sentence": "He bought a souvenir during the school trip.",
+    "level": 2
+  },
+  {
+    "word": "stubborn",
+    "definition": "Unwilling to change an opinion or decision.",
+    "sentence": "The stubborn child refused to wear a coat.",
+    "level": 2
+  },
+  {
+    "word": "technique",
+    "definition": "A particular method of doing something skilfully.",
+    "sentence": "The coach demonstrated a new technique to the players.",
+    "level": 2
+  },
+  {
+    "word": "thorough",
+    "definition": "Careful and complete, paying attention to details.",
+    "sentence": "The inspector made a thorough examination of the building.",
+    "level": 2
+  },
+  {
+    "word": "unusual",
+    "definition": "Not common or normally expected.",
+    "sentence": "We heard an unusual noise behind the door.",
+    "level": 2
+  },
+  {
+    "word": "voluntary",
+    "definition": "Done by choice rather than because it is required.",
+    "sentence": "Her voluntary work helped the local library.",
+    "level": 2
+  },
+  {
+    "word": "accurate",
+    "definition": "Correct and free from mistakes.",
+    "sentence": "The report gave an accurate account of the meeting.",
+    "level": 2
+  },
+  {
+    "word": "competitive",
+    "definition": "Wanting to win or succeed more than others.",
+    "sentence": "The competitive players practised before the tournament.",
+    "level": 2
+  },
+  {
+    "word": "delicious",
+    "definition": "Having a very pleasant taste or smell.",
+    "sentence": "The soup smelled delicious when it was ready.",
+    "level": 2
+  },
+  {
+    "word": "anachronism",
+    "definition": "Something placed in a time period where it does not belong.",
+    "sentence": "A modern phone in the historical film was an anachronism.",
+    "level": 3
+  },
+  {
+    "word": "annihilate",
+    "definition": "To destroy something so thoroughly that nothing remains.",
+    "sentence": "The fire threatened to annihilate the abandoned wooden shed.",
+    "level": 3
+  },
+  {
+    "word": "bibliography",
+    "definition": "A list of books and sources used in writing.",
+    "sentence": "She included a bibliography at the end of her research.",
+    "level": 3
+  },
+  {
+    "word": "chandelier",
+    "definition": "A decorative light hanging from the ceiling.",
+    "sentence": "A glass chandelier hung above the dining table.",
+    "level": 3
+  },
+  {
+    "word": "connoisseur",
+    "definition": "A person with expert knowledge of art or food.",
+    "sentence": "The cheese connoisseur recognised the unusual flavour immediately.",
+    "level": 3
+  },
+  {
+    "word": "euphemism",
+    "definition": "A mild expression used instead of a more direct one.",
+    "sentence": "The speaker chose a euphemism to soften the announcement.",
+    "level": 3
+  },
+  {
+    "word": "formidable",
+    "definition": "Very difficult to deal with or overcome.",
+    "sentence": "The chess champion proved a formidable opponent.",
+    "level": 3
+  },
+  {
+    "word": "inconspicuous",
+    "definition": "Not easily noticed or attracting attention.",
+    "sentence": "She chose an inconspicuous seat near the back.",
+    "level": 3
+  },
+  {
+    "word": "melancholy",
+    "definition": "A quiet and lasting feeling of sadness.",
+    "sentence": "The old photograph filled him with melancholy.",
+    "level": 3
+  },
+  {
+    "word": "reconnaissance",
+    "definition": "An examination of an area to gather information.",
+    "sentence": "The team conducted reconnaissance before planning the route.",
+    "level": 3
+  },
+  {
+    "word": "rendezvous",
+    "definition": "An agreed meeting at a particular place and time.",
+    "sentence": "Their rendezvous was arranged for noon beside the station.",
+    "level": 3
+  },
+  {
+    "word": "vulnerability",
+    "definition": "The state of being open to harm or damage.",
+    "sentence": "The storm revealed the vulnerability of the old bridge.",
+    "level": 3
+  },
+  {
+    "word": "apple",
+    "definition": "A round fruit that grows on trees.",
+    "sentence": "She ate a fresh apple after lunch.",
+    "level": 1
+  },
+  {
+    "word": "bear",
+    "definition": "A large furry animal with strong paws.",
+    "sentence": "The bear searched for berries.",
+    "level": 1
+  },
+  {
+    "word": "card",
+    "definition": "A small piece of stiff paper used for messages.",
+    "sentence": "She wrote a greeting on the card.",
+    "level": 1
+  },
+  {
+    "word": "dolphin",
+    "definition": "An intelligent sea mammal with a pointed snout.",
+    "sentence": "The dolphin jumped above the waves.",
+    "level": 1
+  },
+  {
+    "word": "elephant",
+    "definition": "A very large animal with a long trunk.",
+    "sentence": "The elephant sprayed water over its back.",
+    "level": 1
+  },
+  {
+    "word": "frog",
+    "definition": "A small animal that jumps and lives near water.",
+    "sentence": "The frog leapt into the pond.",
+    "level": 1
+  },
+  {
+    "word": "giraffe",
+    "definition": "A tall African animal with a very long neck.",
+    "sentence": "The giraffe reached the leaves.",
+    "level": 1
+  },
+  {
+    "word": "horse",
+    "definition": "A large animal people can ride.",
+    "sentence": "The horse trotted across the field.",
+    "level": 1
+  },
+  {
+    "word": "ice",
+    "definition": "Water that has frozen solid.",
+    "sentence": "She put ice in the glass.",
+    "level": 1
+  },
+  {
+    "word": "jungle",
+    "definition": "A dense tropical area with thick plants.",
+    "sentence": "The path disappeared into the jungle.",
+    "level": 1
+  },
+  {
+    "word": "knife",
+    "definition": "A tool with a sharp blade for cutting.",
+    "sentence": "The cook placed the knife on the counter.",
+    "level": 1
+  },
+  {
+    "word": "light",
+    "definition": "Brightness that lets people see.",
+    "sentence": "The room filled with light.",
+    "level": 1
+  },
+  {
+    "word": "monkey",
+    "definition": "An animal that often climbs trees.",
+    "sentence": "The monkey swung between branches.",
+    "level": 1
+  },
+  {
+    "word": "niece",
+    "definition": "A daughter of one's brother or sister.",
+    "sentence": "His niece drew a picture for him.",
+    "level": 1
+  },
+  {
+    "word": "oven",
+    "definition": "An enclosed appliance used for baking.",
+    "sentence": "She placed the cake in the oven.",
+    "level": 1
+  },
+  {
+    "word": "post",
+    "definition": "A system for sending letters and parcels.",
+    "sentence": "She sent the documents by post.",
+    "level": 1
+  },
+  {
+    "word": "question",
+    "definition": "Something asked to obtain information.",
+    "sentence": "He raised his hand to ask a question.",
+    "level": 1
+  },
+  {
+    "word": "road",
+    "definition": "A route used by vehicles.",
+    "sentence": "The road was busy all morning.",
+    "level": 1
+  },
+  {
+    "word": "stove",
+    "definition": "An appliance used for heating and cooking.",
+    "sentence": "He turned off the stove after dinner.",
+    "level": 1
+  },
+  {
+    "word": "timer",
+    "definition": "A device that measures a set period.",
+    "sentence": "She started the timer before baking.",
+    "level": 1
+  },
+  {
+    "word": "uncle",
+    "definition": "The brother of a parent or an aunt's husband.",
+    "sentence": "My uncle visited us on Sunday.",
+    "level": 1
+  },
+  {
+    "word": "voice",
+    "definition": "The sounds produced when a person speaks.",
+    "sentence": "She recognised his voice immediately.",
+    "level": 1
+  },
+  {
+    "word": "weight",
+    "definition": "How heavy something is.",
+    "sentence": "The weight of the bag made it difficult to lift.",
+    "level": 1
+  },
+  {
+    "word": "yoghurt",
+    "definition": "A thick food made from fermented milk.",
+    "sentence": "He ate plain yoghurt with fruit.",
+    "level": 1
+  },
+  {
+    "word": "ash",
+    "definition": "The powder left after something burns.",
+    "sentence": "The fire left a pile of ash.",
+    "level": 1
+  },
+  {
+    "word": "bus",
+    "definition": "A large vehicle carrying many passengers.",
+    "sentence": "The bus arrived ten minutes late.",
+    "level": 1
+  },
+  {
+    "word": "claw",
+    "definition": "A sharp curved nail on an animal.",
+    "sentence": "The cat caught the cloth with its claw.",
+    "level": 1
+  },
+  {
+    "word": "dark",
+    "definition": "Having little or no light.",
+    "sentence": "The hallway was dark after sunset.",
+    "level": 1
+  },
+  {
+    "word": "egg",
+    "definition": "A round or oval food laid by a bird.",
+    "sentence": "He boiled an egg for breakfast.",
+    "level": 1
+  },
+  {
+    "word": "fish",
+    "definition": "An animal that lives in water and has gills.",
+    "sentence": "The fish swam under the boat.",
+    "level": 1
+  },
+  {
+    "word": "goose",
+    "definition": "A large water bird with a long neck.",
+    "sentence": "The goose hissed near the gate.",
+    "level": 1
+  },
+  {
+    "word": "hoof",
+    "definition": "The hard foot covering of some animals.",
+    "sentence": "The horse lifted its hoof.",
+    "level": 1
+  },
+  {
+    "word": "keyboard",
+    "definition": "A set of keys used for typing.",
+    "sentence": "She cleaned her keyboard before work.",
+    "level": 1
+  },
+  {
+    "word": "lake",
+    "definition": "A large area of water surrounded by land.",
+    "sentence": "They fished in the lake.",
+    "level": 1
+  },
+  {
+    "word": "mattress",
+    "definition": "A thick padded surface used on a bed.",
+    "sentence": "The mattress was too firm for him.",
+    "level": 1
+  },
+  {
+    "word": "nephew",
+    "definition": "A son of one's brother or sister.",
+    "sentence": "My nephew started school this year.",
+    "level": 1
+  },
+  {
+    "word": "owl",
+    "definition": "A bird of prey often active at night.",
+    "sentence": "An owl called from the tree.",
+    "level": 1
+  },
+  {
+    "word": "pear",
+    "definition": "A sweet fruit with a rounded base.",
+    "sentence": "The ripe pear fell from the tree.",
+    "level": 1
+  },
+  {
+    "word": "rock",
+    "definition": "Hard natural material found in the ground.",
+    "sentence": "She sat on a flat rock.",
+    "level": 1
+  },
+  {
+    "word": "stool",
+    "definition": "A seat usually without a back.",
+    "sentence": "He sat on a wooden stool.",
+    "level": 1
+  },
+  {
+    "word": "train",
+    "definition": "A series of connected vehicles running on rails.",
+    "sentence": "The train left the station early.",
+    "level": 1
+  },
+  {
+    "word": "van",
+    "definition": "A road vehicle used for goods or passengers.",
+    "sentence": "He loaded the boxes into the van.",
+    "level": 1
+  },
+  {
+    "word": "wall",
+    "definition": "A vertical structure dividing or enclosing space.",
+    "sentence": "He hung a picture on the wall.",
+    "level": 1
+  },
+  {
+    "word": "ant",
+    "definition": "A small insect that lives in colonies.",
+    "sentence": "The ant carried a crumb away.",
+    "level": 1
+  },
+  {
+    "word": "breeze",
+    "definition": "A light gentle wind.",
+    "sentence": "A cool breeze entered the room.",
+    "level": 1
+  },
+  {
+    "word": "cave",
+    "definition": "A natural hollow in the ground or rock.",
+    "sentence": "The explorers entered the cave carefully.",
+    "level": 1
+  },
+  {
+    "word": "deer",
+    "definition": "A graceful wild animal, often with antlers.",
+    "sentence": "A deer crossed the path.",
+    "level": 1
+  },
+  {
+    "word": "eagle",
+    "definition": "A large bird of prey with strong claws.",
+    "sentence": "The eagle circled high above the hill.",
+    "level": 1
+  },
+  {
+    "word": "flamingo",
+    "definition": "A tall pink bird with long legs.",
+    "sentence": "The flamingo stood on one leg.",
+    "level": 1
+  },
+  {
+    "word": "guava",
+    "definition": "A tropical fruit with fragrant flesh.",
+    "sentence": "He picked a guava from the garden.",
+    "level": 1
+  },
+  {
+    "word": "height",
+    "definition": "How tall something is.",
+    "sentence": "The height of the shelf surprised him.",
+    "level": 1
+  },
+  {
+    "word": "lesson",
+    "definition": "A period of learning or instruction.",
+    "sentence": "The lesson began at nine o'clock.",
+    "level": 1
+  },
+  {
+    "word": "message",
+    "definition": "Information sent from one person to another.",
+    "sentence": "She received a message from her friend.",
+    "level": 1
+  },
+  {
+    "word": "number",
+    "definition": "A word or symbol used for counting.",
+    "sentence": "She wrote the number on the board.",
+    "level": 1
+  },
+  {
+    "word": "oat",
+    "definition": "A grain often eaten at breakfast.",
+    "sentence": "She added oat flakes to the bowl.",
+    "level": 1
+  },
+  {
+    "word": "peach",
+    "definition": "A soft fruit with fuzzy skin and a stone.",
+    "sentence": "I bought a peach at the fruit stall.",
+    "level": 1
+  },
+  {
+    "word": "rain",
+    "definition": "Water falling in drops from clouds.",
+    "sentence": "The rain stopped before dinner.",
+    "level": 1
+  },
+  {
+    "word": "sauce",
+    "definition": "A liquid served with food to add flavour.",
+    "sentence": "He poured sauce over the pasta.",
+    "level": 1
+  },
+  {
+    "word": "toad",
+    "definition": "An animal similar to a frog with rough skin.",
+    "sentence": "A toad sat under the pot.",
+    "level": 1
+  },
+  {
+    "word": "valley",
+    "definition": "Low land between hills or mountains.",
+    "sentence": "The village lay in a valley.",
+    "level": 1
+  },
+  {
+    "word": "watch",
+    "definition": "A small device worn to tell the time.",
+    "sentence": "He checked his watch before leaving.",
+    "level": 1
+  },
+  {
+    "word": "answer",
+    "definition": "A reply to a question.",
+    "sentence": "She knew the correct answer.",
+    "level": 1
+  },
+  {
+    "word": "butter",
+    "definition": "A soft dairy food spread on bread.",
+    "sentence": "He melted butter in the pan.",
+    "level": 1
+  },
+  {
+    "word": "cheese",
+    "definition": "A food made from milk.",
+    "sentence": "She added cheese to her toast.",
+    "level": 1
+  },
+  {
+    "word": "drain",
+    "definition": "A channel or pipe that carries away water.",
+    "sentence": "Leaves blocked the drain after the rain.",
+    "level": 1
+  },
+  {
+    "word": "eraser",
+    "definition": "A small object used to remove pencil marks.",
+    "sentence": "The child borrowed an eraser from his friend.",
+    "level": 1
+  },
+  {
+    "word": "flag",
+    "definition": "A piece of fabric used as a symbol.",
+    "sentence": "The flag flew above the building.",
+    "level": 1
+  },
+  {
+    "word": "guest",
+    "definition": "A person invited to visit.",
+    "sentence": "The first guest arrived early.",
+    "level": 1
+  },
+  {
+    "word": "hill",
+    "definition": "An area of raised land smaller than a mountain.",
+    "sentence": "They climbed the hill before sunset.",
+    "level": 1
+  },
+  {
+    "word": "laptop",
+    "definition": "A portable computer with a folding screen.",
+    "sentence": "He closed his laptop after the call.",
+    "level": 1
+  },
+  {
+    "word": "mouse",
+    "definition": "A small animal with a long tail.",
+    "sentence": "A mouse ran behind the shelf.",
+    "level": 1
+  },
+  {
+    "word": "noodle",
+    "definition": "A thin strip of dough used in cooking.",
+    "sentence": "A noodle slipped from the fork.",
+    "level": 1
+  },
+  {
+    "word": "pharmacy",
+    "definition": "A shop where medicines are prepared or sold.",
+    "sentence": "The pharmacy closed at six.",
+    "level": 1
+  },
+  {
+    "word": "rice",
+    "definition": "Small grains cooked and eaten as food.",
+    "sentence": "The rice was ready before noon.",
+    "level": 1
+  },
+  {
+    "word": "shark",
+    "definition": "A large fish with sharp teeth.",
+    "sentence": "The shark swam past the reef.",
+    "level": 1
+  },
+  {
+    "word": "truck",
+    "definition": "A large vehicle used for carrying goods.",
+    "sentence": "A truck delivered the furniture.",
+    "level": 1
+  },
+  {
+    "word": "video",
+    "definition": "Moving images recorded or shown electronically.",
+    "sentence": "He watched the video after dinner.",
+    "level": 1
+  },
+  {
+    "word": "wasp",
+    "definition": "A flying insect that can sting.",
+    "sentence": "A wasp flew near the window.",
+    "level": 1
+  },
+  {
+    "word": "aunt",
+    "definition": "The sister of a parent or an uncle's wife.",
+    "sentence": "Her aunt baked a cake for everyone.",
+    "level": 1
+  },
+  {
+    "word": "berry",
+    "definition": "A small juicy fruit, often brightly coloured.",
+    "sentence": "A berry rolled off the plate.",
+    "level": 1
+  },
+  {
+    "word": "crocodile",
+    "definition": "A large reptile with a long snout.",
+    "sentence": "The crocodile rested beside the river.",
+    "level": 1
+  },
+  {
+    "word": "dog",
+    "definition": "A common animal kept as a pet.",
+    "sentence": "The dog waited by the door.",
+    "level": 1
+  },
+  {
+    "word": "exam",
+    "definition": "A test of knowledge or ability.",
+    "sentence": "The exam started in the morning.",
+    "level": 1
+  },
+  {
+    "word": "flight",
+    "definition": "A journey made through the air.",
+    "sentence": "Our flight was delayed by rain.",
+    "level": 1
+  },
+  {
+    "word": "glass",
+    "definition": "A hard transparent material used for windows and drinking containers.",
+    "sentence": "He placed the glass beside the sink.",
+    "level": 1
+  },
+  {
+    "word": "lime",
+    "definition": "A small green citrus fruit with sour juice.",
+    "sentence": "Add a slice of lime to the water.",
+    "level": 1
+  },
+  {
+    "word": "mud",
+    "definition": "Wet earth that is soft and sticky.",
+    "sentence": "His boots were covered in mud.",
+    "level": 1
+  },
+  {
+    "word": "noise",
+    "definition": "A sound, especially a loud or unwanted one.",
+    "sentence": "The sudden noise woke the baby.",
+    "level": 1
+  },
+  {
+    "word": "pen",
+    "definition": "An instrument used for writing with ink.",
+    "sentence": "She signed the form with a pen.",
+    "level": 1
+  },
+  {
+    "word": "remote",
+    "definition": "A small device used to control equipment from afar.",
+    "sentence": "He misplaced the television remote.",
+    "level": 1
+  },
+  {
+    "word": "sparrow",
+    "definition": "A small brown bird.",
+    "sentence": "The sparrow hopped along the wall.",
+    "level": 1
+  },
+  {
+    "word": "title",
+    "definition": "The name given to a book or other work.",
+    "sentence": "She read the title on the cover.",
+    "level": 1
+  },
+  {
+    "word": "worm",
+    "definition": "A small soft animal with a long body.",
+    "sentence": "A worm appeared after the rain.",
+    "level": 1
+  },
+  {
+    "word": "alarm",
+    "definition": "A sound or device warning of danger or time.",
+    "sentence": "The alarm rang at six o'clock.",
+    "level": 1
+  },
+  {
+    "word": "beetle",
+    "definition": "An insect with hard outer wings.",
+    "sentence": "A beetle crawled across the step.",
+    "level": 1
+  },
+  {
+    "word": "colour",
+    "definition": "The appearance of something as red, blue, or another shade.",
+    "sentence": "She chose a bright colour for the wall.",
+    "level": 1,
+    "variants": [
+      "color"
+    ]
+  },
+  {
+    "word": "desk",
+    "definition": "A table used for studying or office work.",
+    "sentence": "He placed his bag beside the desk.",
+    "level": 1
+  },
+  {
+    "word": "field",
+    "definition": "An open area of land, often used for farming.",
+    "sentence": "The boys played football in the field.",
+    "level": 1
+  },
+  {
+    "word": "gorilla",
+    "definition": "A large powerful ape.",
+    "sentence": "The gorilla sat quietly near the trees.",
+    "level": 1
+  },
+  {
+    "word": "leaf",
+    "definition": "A flat green part of a plant.",
+    "sentence": "A leaf fell onto the bench.",
+    "level": 1
+  },
+  {
+    "word": "mop",
+    "definition": "A tool used to clean floors with water.",
+    "sentence": "She rinsed the mop after cleaning.",
+    "level": 1
+  },
+  {
+    "word": "novel",
+    "definition": "A long fictional story written in prose.",
+    "sentence": "He finished the novel over the weekend.",
+    "level": 1
+  },
+  {
+    "word": "phone",
+    "definition": "A device used to make calls or send messages.",
+    "sentence": "His phone rang during the meeting.",
+    "level": 1
+  },
+  {
+    "word": "rat",
+    "definition": "A small rodent with a long tail.",
+    "sentence": "The rat hid under a box.",
+    "level": 1
+  },
+  {
+    "word": "snow",
+    "definition": "Frozen water falling in soft white flakes.",
+    "sentence": "The children watched snow fall outside.",
+    "level": 1
+  },
+  {
+    "word": "tray",
+    "definition": "A flat object used for carrying items.",
+    "sentence": "He carried the drinks on a tray.",
+    "level": 1
+  },
+  {
+    "word": "wind",
+    "definition": "Moving air outside.",
+    "sentence": "The wind blew the papers away.",
+    "level": 1
+  },
+  {
+    "word": "boat",
+    "definition": "A small vessel used for travelling on water.",
+    "sentence": "They took a boat across the lake.",
+    "level": 1
+  },
+  {
+    "word": "car",
+    "definition": "A vehicle with four wheels for passengers.",
+    "sentence": "She parked the car beside the shop.",
+    "level": 1
+  },
+  {
+    "word": "dance",
+    "definition": "A series of movements made to music.",
+    "sentence": "They performed a dance at the celebration.",
+    "level": 1
+  },
+  {
+    "word": "friend",
+    "definition": "A person one knows and likes.",
+    "sentence": "She invited a friend to lunch.",
+    "level": 1
+  },
+  {
+    "word": "garlic",
+    "definition": "A strongly flavoured bulb used in cooking.",
+    "sentence": "She crushed garlic for the stew.",
+    "level": 1
+  },
+  {
+    "word": "lion",
+    "definition": "A large wild cat with a loud roar.",
+    "sentence": "The lion rested beside a rock.",
+    "level": 1
+  },
+  {
+    "word": "melon",
+    "definition": "A large sweet fruit with thick skin.",
+    "sentence": "They shared a melon after dinner.",
+    "level": 1
+  },
+  {
+    "word": "nut",
+    "definition": "A hard-shelled seed often eaten as food.",
+    "sentence": "The squirrel carried a nut away.",
+    "level": 1
+  },
+  {
+    "word": "pond",
+    "definition": "A small area of still water.",
+    "sentence": "A frog jumped into the pond.",
+    "level": 1
+  },
+  {
+    "word": "root",
+    "definition": "The part of a plant growing under soil.",
+    "sentence": "The tree has a deep root.",
+    "level": 1
+  },
+  {
+    "word": "sign",
+    "definition": "A notice that gives information or directions.",
+    "sentence": "The sign pointed towards the exit.",
+    "level": 1
+  },
+  {
+    "word": "tiger",
+    "definition": "A large striped wild cat.",
+    "sentence": "The tiger walked through tall grass.",
+    "level": 1
+  },
+  {
+    "word": "wing",
+    "definition": "A part of a bird used for flying.",
+    "sentence": "The bird stretched one wing.",
+    "level": 1
+  },
+  {
+    "word": "battery",
+    "definition": "A device storing energy to power equipment.",
+    "sentence": "The remote needed a new battery.",
+    "level": 1
+  },
+  {
+    "word": "cliff",
+    "definition": "A steep high face of rock.",
+    "sentence": "They stood away from the cliff edge.",
+    "level": 1
+  },
+  {
+    "word": "desert",
+    "definition": "A very dry region with little rainfall.",
+    "sentence": "The travellers crossed the desert at dawn.",
+    "level": 1
+  },
+  {
+    "word": "flour",
+    "definition": "A powder made by grinding grains.",
+    "sentence": "She measured flour into the bowl.",
+    "level": 1
+  },
+  {
+    "word": "grape",
+    "definition": "A small juicy fruit growing in bunches.",
+    "sentence": "He packed a grape in his lunchbox.",
+    "level": 1
+  },
+  {
+    "word": "letter",
+    "definition": "A symbol used to write words.",
+    "sentence": "He wrote each letter carefully.",
+    "level": 1
+  },
+  {
+    "word": "moon",
+    "definition": "The natural object orbiting Earth.",
+    "sentence": "The moon shone above the trees.",
+    "level": 1
+  },
+  {
+    "word": "pig",
+    "definition": "A farm animal with a short snout.",
+    "sentence": "The pig slept in the shade.",
+    "level": 1
+  },
+  {
+    "word": "roof",
+    "definition": "The top covering of a building.",
+    "sentence": "The rain fell heavily on the roof.",
+    "level": 1
+  },
+  {
+    "word": "sheep",
+    "definition": "A farm animal raised for wool or meat.",
+    "sentence": "A sheep stood beside the fence.",
+    "level": 1
+  },
+  {
+    "word": "teacher",
+    "definition": "A person who helps others learn.",
+    "sentence": "The teacher explained the lesson again.",
+    "level": 1
+  },
+  {
+    "word": "whale",
+    "definition": "A very large mammal that lives in the sea.",
+    "sentence": "A whale surfaced near the boat.",
+    "level": 1
+  },
+  {
+    "word": "brother",
+    "definition": "A male sibling.",
+    "sentence": "Her brother carried the heavy bag.",
+    "level": 1
+  },
+  {
+    "word": "cloud",
+    "definition": "A visible mass of water droplets in the sky.",
+    "sentence": "A dark cloud covered the sun.",
+    "level": 1
+  },
+  {
+    "word": "dust",
+    "definition": "Very fine dry particles of dirt.",
+    "sentence": "A layer of dust covered the shelf.",
+    "level": 1
+  },
+  {
+    "word": "flower",
+    "definition": "The colourful part of many plants.",
+    "sentence": "He picked a flower for his mother.",
+    "level": 1
+  },
+  {
+    "word": "goat",
+    "definition": "A farm animal with horns and a beard.",
+    "sentence": "The goat climbed a small hill.",
+    "level": 1
+  },
+  {
+    "word": "length",
+    "definition": "The distance from one end to another.",
+    "sentence": "He measured the length of the table.",
+    "level": 1
+  },
+  {
+    "word": "meat",
+    "definition": "Animal flesh eaten as food.",
+    "sentence": "He put the meat in the pot.",
+    "level": 1
+  },
+  {
+    "word": "pillow",
+    "definition": "A soft support for the head during sleep.",
+    "sentence": "He put a clean cover on the pillow.",
+    "level": 1
+  },
+  {
+    "word": "radio",
+    "definition": "A device that receives broadcast sound.",
+    "sentence": "The radio played music all afternoon.",
+    "level": 1
+  },
+  {
+    "word": "smoke",
+    "definition": "A cloud of particles produced by burning.",
+    "sentence": "Smoke rose from the cooking fire.",
+    "level": 1
+  },
+  {
+    "word": "tap",
+    "definition": "A device controlling the flow of water.",
+    "sentence": "He turned the tap off tightly.",
+    "level": 1
+  },
+  {
+    "word": "width",
+    "definition": "The distance across something from side to side.",
+    "sentence": "She checked the width of the doorway.",
+    "level": 1
+  },
+  {
+    "word": "bread",
+    "definition": "Food baked from flour and water.",
+    "sentence": "He sliced the bread for breakfast.",
+    "level": 1
+  },
+  {
+    "word": "college",
+    "definition": "An institution providing education after school.",
+    "sentence": "Her sister attends a local college.",
+    "level": 1
+  },
+  {
+    "word": "door",
+    "definition": "A movable panel used to close an entrance.",
+    "sentence": "She opened the door for the visitors.",
+    "level": 1
+  },
+  {
+    "word": "floor",
+    "definition": "The lower surface of a room.",
+    "sentence": "She swept the floor before lunch.",
+    "level": 1
+  },
+  {
+    "word": "gift",
+    "definition": "Something given to someone without payment.",
+    "sentence": "He wrapped a gift for his sister.",
+    "level": 1
+  },
+  {
+    "word": "music",
+    "definition": "Sounds arranged to make a pleasing pattern.",
+    "sentence": "Soft music played during dinner.",
+    "level": 1
+  },
+  {
+    "word": "pigeon",
+    "definition": "A common grey bird found in towns.",
+    "sentence": "The pigeon flew onto the roof.",
+    "level": 1
+  },
+  {
+    "word": "soup",
+    "definition": "A liquid food usually served warm.",
+    "sentence": "The soup smelled delicious.",
+    "level": 1
+  },
+  {
+    "word": "tunnel",
+    "definition": "An underground passage for people or vehicles.",
+    "sentence": "The train passed through a dark tunnel.",
+    "level": 1
+  },
+  {
+    "word": "wire",
+    "definition": "A thin strand of metal carrying electricity.",
+    "sentence": "The electrician replaced the damaged wire.",
+    "level": 1
+  },
+  {
+    "word": "badge",
+    "definition": "A small symbol worn to show identity or membership.",
+    "sentence": "He pinned the badge to his shirt.",
+    "level": 1
+  },
+  {
+    "word": "crab",
+    "definition": "An animal with a hard shell and claws.",
+    "sentence": "A crab moved sideways on the sand.",
+    "level": 1
+  },
+  {
+    "word": "frost",
+    "definition": "A thin coating of ice formed in cold weather.",
+    "sentence": "The morning frost covered the grass.",
+    "level": 1
+  },
+  {
+    "word": "gate",
+    "definition": "A movable barrier across an entrance.",
+    "sentence": "The guard locked the gate at night.",
+    "level": 1
+  },
+  {
+    "word": "mist",
+    "definition": "Thin fog that reduces visibility.",
+    "sentence": "A light mist covered the hills.",
+    "level": 1
+  },
+  {
+    "word": "party",
+    "definition": "A gathering of people for enjoyment.",
+    "sentence": "We held a party after the exams.",
+    "level": 1
+  },
+  {
+    "word": "shrub",
+    "definition": "A small woody plant with several stems.",
+    "sentence": "They planted a shrub by the gate.",
+    "level": 1
+  },
+  {
+    "word": "table",
+    "definition": "Furniture with a flat top supported by legs.",
+    "sentence": "The plates were already on the table.",
+    "level": 1
+  },
+  {
+    "word": "brush",
+    "definition": "A tool with bristles used for cleaning or grooming.",
+    "sentence": "He washed the brush after painting.",
+    "level": 1
+  },
+  {
+    "word": "cup",
+    "definition": "A small container used for drinking.",
+    "sentence": "She poured water into a cup.",
+    "level": 1
+  },
+  {
+    "word": "fork",
+    "definition": "A utensil with prongs used for eating.",
+    "sentence": "She picked up the noodles with a fork.",
+    "level": 1
+  },
+  {
+    "word": "ginger",
+    "definition": "A spicy root used in cooking.",
+    "sentence": "He grated ginger into the sauce.",
+    "level": 1
+  },
+  {
+    "word": "map",
+    "definition": "A drawing showing where places are.",
+    "sentence": "She checked the map before travelling.",
+    "level": 1
+  },
+  {
+    "word": "package",
+    "definition": "Something wrapped or packed for delivery.",
+    "sentence": "He opened the package carefully.",
+    "level": 1
+  },
+  {
+    "word": "snake",
+    "definition": "A long reptile without legs.",
+    "sentence": "The snake slid through the grass.",
+    "level": 1
+  },
+  {
+    "word": "turkey",
+    "definition": "A large bird often kept for meat.",
+    "sentence": "The turkey walked across the farm.",
+    "level": 1
+  },
+  {
+    "word": "beat",
+    "definition": "A regular pulse in music.",
+    "sentence": "She tapped her foot to the beat.",
+    "level": 1
+  },
+  {
+    "word": "cake",
+    "definition": "A sweet baked food often eaten at celebrations.",
+    "sentence": "They shared the cake after dinner.",
+    "level": 1
+  },
+  {
+    "word": "family",
+    "definition": "A group of people related to one another.",
+    "sentence": "His family gathered for dinner.",
+    "level": 1
+  },
+  {
+    "word": "mountain",
+    "definition": "A very high natural area of land.",
+    "sentence": "The mountain was covered with mist.",
+    "level": 1
+  },
+  {
+    "word": "porridge",
+    "definition": "A thick dish made by boiling grains.",
+    "sentence": "The porridge warmed her hands.",
+    "level": 1
+  },
+  {
+    "word": "shop",
+    "definition": "A place where goods are sold.",
+    "sentence": "He bought a notebook from the shop.",
+    "level": 1
+  },
+  {
+    "word": "trophy",
+    "definition": "An object awarded for winning.",
+    "sentence": "The captain lifted the trophy.",
+    "level": 1
+  },
+  {
+    "word": "bank",
+    "definition": "An organisation that keeps and lends money.",
+    "sentence": "She visited the bank after work.",
+    "level": 1
+  },
+  {
+    "word": "cream",
+    "definition": "The rich fatty part of milk.",
+    "sentence": "She poured cream over the dessert.",
+    "level": 1
+  },
+  {
+    "word": "fur",
+    "definition": "The soft hair covering an animal.",
+    "sentence": "The kitten had thick fur.",
+    "level": 1
+  },
+  {
+    "word": "market",
+    "definition": "A place where goods are bought and sold.",
+    "sentence": "The market was crowded on Friday.",
+    "level": 1
+  },
+  {
+    "word": "photo",
+    "definition": "An image made with a camera.",
+    "sentence": "She framed the photo from the holiday.",
+    "level": 1
+  },
+  {
+    "word": "space",
+    "definition": "The vast region beyond Earth's atmosphere.",
+    "sentence": "The rocket travelled into space.",
+    "level": 1
+  },
+  {
+    "word": "thorn",
+    "definition": "A sharp point growing on a plant.",
+    "sentence": "A thorn caught his sleeve.",
+    "level": 1
+  },
+  {
+    "word": "beak",
+    "definition": "The hard pointed mouth of a bird.",
+    "sentence": "The bird tapped the seed with its beak.",
+    "level": 1
+  },
+  {
+    "word": "cousin",
+    "definition": "A child of an aunt or uncle.",
+    "sentence": "My cousin came to visit during the holiday.",
+    "level": 1
+  },
+  {
+    "word": "file",
+    "definition": "A collection of stored papers or digital information.",
+    "sentence": "He saved the file before shutting down.",
+    "level": 1
+  },
+  {
+    "word": "meadow",
+    "definition": "A field covered with grass and wildflowers.",
+    "sentence": "The horses grazed in the meadow.",
+    "level": 1
+  },
+  {
+    "word": "plane",
+    "definition": "An aircraft with wings.",
+    "sentence": "The plane landed before sunset.",
+    "level": 1
+  },
+  {
+    "word": "sugar",
+    "definition": "A sweet substance added to food and drinks.",
+    "sentence": "He stirred sugar into his tea.",
+    "level": 1
+  },
+  {
+    "word": "tail",
+    "definition": "The rear part of an animal's body.",
+    "sentence": "The dog wagged its tail.",
+    "level": 1
+  },
+  {
+    "word": "bed",
+    "definition": "Furniture used for sleeping.",
+    "sentence": "She made her bed before breakfast.",
+    "level": 1
+  },
+  {
+    "word": "cable",
+    "definition": "A thick wire or group of wires.",
+    "sentence": "He connected the cable to the monitor.",
+    "level": 1
+  },
+  {
+    "word": "fig",
+    "definition": "A soft sweet fruit with many tiny seeds.",
+    "sentence": "She cut the fig into halves.",
+    "level": 1
+  },
+  {
+    "word": "moth",
+    "definition": "A flying insect related to a butterfly.",
+    "sentence": "The moth circled the lamp.",
+    "level": 1
+  },
+  {
+    "word": "papaya",
+    "definition": "A tropical fruit with orange flesh and black seeds.",
+    "sentence": "The papaya tasted sweet and ripe.",
+    "level": 1
+  },
+  {
+    "word": "sea",
+    "definition": "A large area of salt water.",
+    "sentence": "They could smell the sea from the beach.",
+    "level": 1
+  },
+  {
+    "word": "board",
+    "definition": "A flat surface used for writing or notices.",
+    "sentence": "She wrote the date on the board.",
+    "level": 1
+  },
+  {
+    "word": "cat",
+    "definition": "A small animal often kept as a pet.",
+    "sentence": "The cat slept on the sofa.",
+    "level": 1
+  },
+  {
+    "word": "flame",
+    "definition": "The bright burning part of a fire.",
+    "sentence": "The candle flame flickered gently.",
+    "level": 1
+  },
+  {
+    "word": "penguin",
+    "definition": "A flightless bird that swims well.",
+    "sentence": "The penguin waddled across the ice.",
+    "level": 1
+  },
+  {
+    "word": "size",
+    "definition": "How big or small something is.",
+    "sentence": "Please check the size before buying it.",
+    "level": 1
+  },
+  {
+    "word": "basin",
+    "definition": "A wide container used for holding water.",
+    "sentence": "She washed the fruit in a basin.",
+    "level": 1
+  },
+  {
+    "word": "cover",
+    "definition": "Something placed over an object to protect it.",
+    "sentence": "He put a cover over the pot.",
+    "level": 1
+  },
+  {
+    "word": "parent",
+    "definition": "A mother or father.",
+    "sentence": "Each parent signed the school form.",
+    "level": 1
+  },
+  {
+    "word": "store",
+    "definition": "A place where goods are kept or sold.",
+    "sentence": "The store opened at nine.",
+    "level": 1
+  },
+  {
+    "word": "bench",
+    "definition": "A long seat for several people.",
+    "sentence": "They rested on a bench outside.",
+    "level": 1
+  },
+  {
+    "word": "camel",
+    "definition": "A desert animal with one or two humps.",
+    "sentence": "The camel carried supplies across the sand.",
+    "level": 1
+  },
+  {
+    "word": "plug",
+    "definition": "A device connecting electrical equipment to a socket.",
+    "sentence": "She removed the plug from the socket.",
+    "level": 1
+  },
+  {
+    "word": "sunrise",
+    "definition": "The time when the sun appears in the morning.",
+    "sentence": "We left home at sunrise.",
+    "level": 1
+  },
+  {
+    "word": "bowl",
+    "definition": "A round deep dish for holding food.",
+    "sentence": "The soup was served in a bowl.",
+    "level": 1
+  },
+  {
+    "word": "chicken",
+    "definition": "A farm bird raised for meat or eggs.",
+    "sentence": "The chicken crossed the yard.",
+    "level": 1
+  },
+  {
+    "word": "pot",
+    "definition": "A deep container used for cooking.",
+    "sentence": "She put the pot on the stove.",
+    "level": 1
+  },
+  {
+    "word": "sunset",
+    "definition": "The time when the sun disappears in the evening.",
+    "sentence": "They watched the sunset from the balcony.",
+    "level": 1
+  },
+  {
+    "word": "bean",
+    "definition": "An edible seed that grows in a pod.",
+    "sentence": "She planted a bean in the soil.",
+    "level": 1
+  },
+  {
+    "word": "charger",
+    "definition": "A device used to refill a battery.",
+    "sentence": "She packed her charger before travelling.",
+    "level": 1
+  },
+  {
+    "word": "plum",
+    "definition": "A small round fruit with smooth skin.",
+    "sentence": "She washed the plum before eating it.",
+    "level": 1
+  },
+  {
+    "word": "speed",
+    "definition": "How quickly something moves.",
+    "sentence": "The driver reduced his speed near the school.",
+    "level": 1
+  },
+  {
+    "word": "bee",
+    "definition": "An insect that makes honey.",
+    "sentence": "A bee landed on the flower.",
+    "level": 1
+  },
+  {
+    "word": "class",
+    "definition": "A group of students taught together.",
+    "sentence": "Our class visited the library.",
+    "level": 1
+  },
+  {
+    "word": "path",
+    "definition": "A route made for walking.",
+    "sentence": "They followed the path through the park.",
+    "level": 1
+  },
+  {
+    "word": "stairs",
+    "definition": "A set of steps leading between levels.",
+    "sentence": "He ran up the stairs quickly.",
+    "level": 1
+  },
+  {
+    "word": "book",
+    "definition": "Pages bound together for reading.",
+    "sentence": "She borrowed a book from the library.",
+    "level": 1
+  },
+  {
+    "word": "chair",
+    "definition": "A seat with a back for one person.",
+    "sentence": "She pulled out a chair for the guest.",
+    "level": 1
+  },
+  {
+    "word": "prize",
+    "definition": "Something given as a reward.",
+    "sentence": "She won a prize at the competition.",
+    "level": 1
+  },
+  {
+    "word": "sand",
+    "definition": "Tiny grains of rock found on beaches.",
+    "sentence": "The children played in the sand.",
+    "level": 1
+  },
+  {
+    "word": "baby",
+    "definition": "A very young child.",
+    "sentence": "The baby slept through the journey.",
+    "level": 1
+  },
+  {
+    "word": "corn",
+    "definition": "A tall crop with edible yellow kernels.",
+    "sentence": "They roasted corn beside the road.",
+    "level": 1
+  },
+  {
+    "word": "pea",
+    "definition": "A small round green seed eaten as a vegetable.",
+    "sentence": "A pea fell from his spoon.",
+    "level": 1
+  },
+  {
+    "word": "story",
+    "definition": "An account of events, real or imagined.",
+    "sentence": "The grandmother told a funny story.",
+    "level": 1
+  },
+  {
+    "word": "banana",
+    "definition": "A long curved fruit with yellow skin.",
+    "sentence": "He peeled a banana before the match.",
+    "level": 1
+  },
+  {
+    "word": "cow",
+    "definition": "A large farm animal that produces milk.",
+    "sentence": "The cow rested under a tree.",
+    "level": 1
+  },
+  {
+    "word": "poem",
+    "definition": "A piece of writing arranged in lines or verses.",
+    "sentence": "She read a short poem aloud.",
+    "level": 1
+  },
+  {
+    "word": "sound",
+    "definition": "Something that can be heard.",
+    "sentence": "A strange sound came from the garden.",
+    "level": 1
+  },
+  {
+    "word": "broom",
+    "definition": "A long-handled tool for sweeping.",
+    "sentence": "He swept the floor with a broom.",
+    "level": 1
+  },
+  {
+    "word": "chapter",
+    "definition": "A main division of a book.",
+    "sentence": "The next chapter begins on Monday.",
+    "level": 1
+  },
+  {
+    "word": "pasta",
+    "definition": "Food made from shaped dough, usually boiled.",
+    "sentence": "We cooked pasta for dinner.",
+    "level": 1
+  },
+  {
+    "word": "spider",
+    "definition": "A small animal with eight legs.",
+    "sentence": "The spider built a web in the corner.",
+    "level": 1
+  },
+  {
+    "word": "child",
+    "definition": "A young person below adulthood.",
+    "sentence": "The child waved from the gate.",
+    "level": 1
+  },
+  {
+    "word": "planet",
+    "definition": "A large object that travels around a star.",
+    "sentence": "Earth is a planet in our solar system.",
+    "level": 1
+  },
+  {
+    "word": "street",
+    "definition": "A public road in a town or city.",
+    "sentence": "The children crossed the street together.",
+    "level": 1
+  },
+  {
+    "word": "page",
+    "definition": "One side of a sheet in a book.",
+    "sentence": "He turned the page slowly.",
+    "level": 1
+  },
+  {
+    "word": "shape",
+    "definition": "The outline or form of something.",
+    "sentence": "The child drew a round shape.",
+    "level": 1
+  },
+  {
+    "word": "plate",
+    "definition": "A flat dish used for serving food.",
+    "sentence": "She put the meal on a plate.",
+    "level": 1
+  },
+  {
+    "word": "ship",
+    "definition": "A large vessel used to travel on water.",
+    "sentence": "The ship entered the harbour safely.",
+    "level": 1
+  },
+  {
+    "word": "pan",
+    "definition": "A shallow container used for cooking.",
+    "sentence": "The cook heated the pan before adding oil.",
+    "level": 1
+  },
+  {
+    "word": "step",
+    "definition": "A flat surface used when climbing.",
+    "sentence": "She missed the final step.",
+    "level": 1
+  },
+  {
+    "word": "petal",
+    "definition": "One of the soft coloured parts of a flower.",
+    "sentence": "A pink petal fell onto the table.",
+    "level": 1
+  },
+  {
+    "word": "although",
+    "definition": "Despite the fact that something is true.",
+    "sentence": "They went outside although the sky was cloudy.",
+    "level": 2
+  },
+  {
+    "word": "benefit",
+    "definition": "An advantage or something that helps.",
+    "sentence": "Regular exercise can bring a benefit to health.",
+    "level": 2
+  },
+  {
+    "word": "compassion",
+    "definition": "Concern for someone who is suffering.",
+    "sentence": "She showed compassion to the injured animal.",
+    "level": 2
+  },
+  {
+    "word": "department",
+    "definition": "A division within a company or organisation.",
+    "sentence": "She works in the accounts department.",
+    "level": 2
+  },
+  {
+    "word": "economy",
+    "definition": "The system by which goods and services are produced and traded.",
+    "sentence": "The report discussed the national economy.",
+    "level": 2
+  },
+  {
+    "word": "friction",
+    "definition": "Resistance when two surfaces rub against each other.",
+    "sentence": "The rough tyres create friction on the road.",
+    "level": 2
+  },
+  {
+    "word": "guidance",
+    "definition": "Advice or help given to someone.",
+    "sentence": "The students asked for guidance on their projects.",
+    "level": 2
+  },
+  {
+    "word": "heritage",
+    "definition": "Traditions and history passed down through generations.",
+    "sentence": "The museum celebrates local heritage.",
+    "level": 2
+  },
+  {
+    "word": "involve",
+    "definition": "To include someone in an activity.",
+    "sentence": "They want to involve the whole community.",
+    "level": 2
+  },
+  {
+    "word": "justice",
+    "definition": "Fair treatment according to rules or law.",
+    "sentence": "The family hoped for justice.",
+    "level": 2
+  },
+  {
+    "word": "likely",
+    "definition": "Expected to happen or be true.",
+    "sentence": "Rain is likely later this evening.",
+    "level": 2
+  },
+  {
+    "word": "manual",
+    "definition": "Done by hand rather than automatically.",
+    "sentence": "The technician performed a manual check.",
+    "level": 2
+  },
+  {
+    "word": "natural",
+    "definition": "Existing in nature rather than made by people.",
+    "sentence": "The park has a natural spring.",
+    "level": 2
+  },
+  {
+    "word": "outside",
+    "definition": "Beyond the outer part of something.",
+    "sentence": "The children waited outside the building.",
+    "level": 2
+  },
+  {
+    "word": "prevent",
+    "definition": "To stop something from happening.",
+    "sentence": "The barrier will prevent accidents.",
+    "level": 2
+  },
+  {
+    "word": "quietly",
+    "definition": "Without making much noise.",
+    "sentence": "The children entered quietly.",
+    "level": 2
+  },
+  {
+    "word": "reflect",
+    "definition": "To show an image or think carefully.",
+    "sentence": "The still water can reflect the sky.",
+    "level": 2
+  },
+  {
+    "word": "signal",
+    "definition": "A sound or movement giving information.",
+    "sentence": "The whistle was the signal to start.",
+    "level": 2
+  },
+  {
+    "word": "treatment",
+    "definition": "Medical care or the way someone is treated.",
+    "sentence": "The patient received treatment at the clinic.",
+    "level": 2
+  },
+  {
+    "word": "uniform",
+    "definition": "Special clothing worn by members of a group.",
+    "sentence": "The pupils wore a clean uniform.",
+    "level": 2
+  },
+  {
+    "word": "vertical",
+    "definition": "Going straight up and down.",
+    "sentence": "The artist drew a vertical line.",
+    "level": 2
+  },
+  {
+    "word": "welcome",
+    "definition": "To greet someone kindly on arrival.",
+    "sentence": "They gathered to welcome the guests.",
+    "level": 2
+  },
+  {
+    "word": "youthful",
+    "definition": "Having qualities associated with young people.",
+    "sentence": "He still has a youthful appearance.",
+    "level": 2
+  },
+  {
+    "word": "absolute",
+    "definition": "Complete and without any limits or conditions.",
+    "sentence": "The coach demanded absolute silence during the briefing.",
+    "level": 2
+  },
+  {
+    "word": "broadcast",
+    "definition": "To send a programme by radio or television.",
+    "sentence": "The station will broadcast the match live.",
+    "level": 2
+  },
+  {
+    "word": "collect",
+    "definition": "To gather things together.",
+    "sentence": "The students collect bottles for recycling.",
+    "level": 2
+  },
+  {
+    "word": "decade",
+    "definition": "A period of ten years.",
+    "sentence": "They lived abroad for a decade.",
+    "level": 2
+  },
+  {
+    "word": "evidence",
+    "definition": "Information showing whether something is true.",
+    "sentence": "The police examined the evidence carefully.",
+    "level": 2
+  },
+  {
+    "word": "fortune",
+    "definition": "A large amount of wealth or good luck.",
+    "sentence": "She inherited a small fortune.",
+    "level": 2
+  },
+  {
+    "word": "general",
+    "definition": "Relating to most people or things rather than specifics.",
+    "sentence": "She gave a general description of the plan.",
+    "level": 2
+  },
+  {
+    "word": "heavily",
+    "definition": "With great weight, force, or intensity.",
+    "sentence": "The rain fell heavily overnight.",
+    "level": 2
+  },
+  {
+    "word": "industry",
+    "definition": "Businesses involved in producing goods or services.",
+    "sentence": "She works in the tourism industry.",
+    "level": 2
+  },
+  {
+    "word": "location",
+    "definition": "The place where something is situated.",
+    "sentence": "He shared the location of the event.",
+    "level": 2
+  },
+  {
+    "word": "minority",
+    "definition": "A smaller part of a group.",
+    "sentence": "A minority preferred the earlier plan.",
+    "level": 2
+  },
+  {
+    "word": "notice",
+    "definition": "To become aware of something.",
+    "sentence": "Did you notice the new sign outside?",
+    "level": 2
+  },
+  {
+    "word": "organism",
+    "definition": "A living thing such as a plant or animal.",
+    "sentence": "A tiny organism appeared under the microscope.",
+    "level": 2
+  },
+  {
+    "word": "plenty",
+    "definition": "A large amount or more than enough.",
+    "sentence": "There was plenty of food at the party.",
+    "level": 2
+  },
+  {
+    "word": "quickly",
+    "definition": "At a fast speed or without delay.",
+    "sentence": "She quickly finished her homework.",
+    "level": 2
+  },
+  {
+    "word": "relax",
+    "definition": "To rest and become less tense.",
+    "sentence": "He likes to relax after work.",
+    "level": 2
+  },
+  {
+    "word": "shortage",
+    "definition": "A situation where there is not enough of something.",
+    "sentence": "The village faced a water shortage.",
+    "level": 2
+  },
+  {
+    "word": "terrible",
+    "definition": "Extremely bad or unpleasant.",
+    "sentence": "The storm caused terrible damage.",
+    "level": 2
+  },
+  {
+    "word": "until",
+    "definition": "Up to the time when something happens.",
+    "sentence": "Please wait until the doors open.",
+    "level": 2
+  },
+  {
+    "word": "variety",
+    "definition": "A number of different kinds.",
+    "sentence": "The shop sells a variety of fruit.",
+    "level": 2
+  },
+  {
+    "word": "workshop",
+    "definition": "A meeting for practical learning or discussion.",
+    "sentence": "They attended a writing workshop.",
+    "level": 2
+  },
+  {
+    "word": "ability",
+    "definition": "The skill or power to do something.",
+    "sentence": "She showed great ability in mathematics.",
+    "level": 2
+  },
+  {
+    "word": "barrier",
+    "definition": "Something that prevents movement or progress.",
+    "sentence": "A wooden barrier blocked the entrance.",
+    "level": 2
+  },
+  {
+    "word": "contribute",
+    "definition": "To give something towards a shared purpose.",
+    "sentence": "Everyone agreed to contribute to the fund.",
+    "level": 2
+  },
+  {
+    "word": "domestic",
+    "definition": "Relating to a home or one's own country.",
+    "sentence": "They sell domestic appliances in the shop.",
+    "level": 2
+  },
+  {
+    "word": "enormous",
+    "definition": "Extremely large in size or amount.",
+    "sentence": "An enormous crowd gathered outside.",
+    "level": 2
+  },
+  {
+    "word": "freedom",
+    "definition": "The ability to act or live without unfair restriction.",
+    "sentence": "They celebrated their freedom with a parade.",
+    "level": 2
+  },
+  {
+    "word": "guardian",
+    "definition": "Someone legally responsible for another person.",
+    "sentence": "A guardian signed the child's form.",
+    "level": 2
+  },
+  {
+    "word": "horizon",
+    "definition": "The line where land or sea seems to meet the sky.",
+    "sentence": "The sun sank below the horizon.",
+    "level": 2
+  },
+  {
+    "word": "issue",
+    "definition": "An important subject or problem.",
+    "sentence": "They discussed the issue at length.",
+    "level": 2
+  },
+  {
+    "word": "limited",
+    "definition": "Restricted in amount, size, or time.",
+    "sentence": "We have a limited number of tickets.",
+    "level": 2
+  },
+  {
+    "word": "medical",
+    "definition": "Related to medicine or treatment of illness.",
+    "sentence": "He attended a medical appointment.",
+    "level": 2
+  },
+  {
+    "word": "neutral",
+    "definition": "Not supporting either side in a disagreement.",
+    "sentence": "The referee remained neutral throughout the debate.",
+    "level": 2
+  },
+  {
+    "word": "overall",
+    "definition": "Considering everything together.",
+    "sentence": "The overall result pleased the team.",
+    "level": 2
+  },
+  {
+    "word": "period",
+    "definition": "A length of time with a beginning and end.",
+    "sentence": "The shop was closed for a short period.",
+    "level": 2
+  },
+  {
+    "word": "quality",
+    "definition": "The standard or degree of excellence.",
+    "sentence": "The shop is known for good quality.",
+    "level": 2
+  },
+  {
+    "word": "review",
+    "definition": "To examine something carefully or assess it.",
+    "sentence": "The editor will review the manuscript.",
+    "level": 2
+  },
+  {
+    "word": "safety",
+    "definition": "The condition of being protected from danger.",
+    "sentence": "The workers checked the safety equipment.",
+    "level": 2
+  },
+  {
+    "word": "tolerate",
+    "definition": "To accept something unpleasant without complaining.",
+    "sentence": "She could tolerate the noise for a while.",
+    "level": 2
+  },
+  {
+    "word": "universe",
+    "definition": "All of space and everything in it.",
+    "sentence": "Scientists study the universe.",
+    "level": 2
+  },
+  {
+    "word": "volunteer",
+    "definition": "Someone who offers to help without being paid.",
+    "sentence": "A volunteer guided us to the hall.",
+    "level": 2
+  },
+  {
+    "word": "website",
+    "definition": "A group of pages available on the internet.",
+    "sentence": "The school launched a new website.",
+    "level": 2
+  },
+  {
+    "word": "arrival",
+    "definition": "The act of reaching a place.",
+    "sentence": "Their arrival surprised the whole family.",
+    "level": 2
+  },
+  {
+    "word": "balance",
+    "definition": "A steady position or an equal distribution.",
+    "sentence": "He lost his balance on the wet floor.",
+    "level": 2
+  },
+  {
+    "word": "consider",
+    "definition": "To think carefully before deciding.",
+    "sentence": "Please consider all the options first.",
+    "level": 2
+  },
+  {
+    "word": "direction",
+    "definition": "The path or way something moves.",
+    "sentence": "The sign pointed in the correct direction.",
+    "level": 2
+  },
+  {
+    "word": "elegant",
+    "definition": "Attractive in a graceful and simple way.",
+    "sentence": "She wore an elegant outfit to dinner.",
+    "level": 2
+  },
+  {
+    "word": "figure",
+    "definition": "A number or a shape of a person.",
+    "sentence": "He checked every figure in the report.",
+    "level": 2
+  },
+  {
+    "word": "gallery",
+    "definition": "A building or room where art is displayed.",
+    "sentence": "We visited the art gallery on Friday.",
+    "level": 2
+  },
+  {
+    "word": "hesitation",
+    "definition": "A pause caused by uncertainty.",
+    "sentence": "There was a brief hesitation before she answered.",
+    "level": 2
+  },
+  {
+    "word": "internal",
+    "definition": "Located within something or an organisation.",
+    "sentence": "The company conducted an internal review.",
+    "level": 2
+  },
+  {
+    "word": "landscape",
+    "definition": "The visible features of an area of land.",
+    "sentence": "The landscape changed as they travelled north.",
+    "level": 2
+  },
+  {
+    "word": "measure",
+    "definition": "To find the size or amount of something.",
+    "sentence": "She used a ruler to measure the board.",
+    "level": 2
+  },
+  {
+    "word": "negative",
+    "definition": "Expressing disagreement or the opposite of positive.",
+    "sentence": "He gave a negative response to the request.",
+    "level": 2
+  },
+  {
+    "word": "obvious",
+    "definition": "Easy to see or understand.",
+    "sentence": "The mistake was obvious after a second look.",
+    "level": 2
+  },
+  {
+    "word": "progress",
+    "definition": "Movement towards improvement or completion.",
+    "sentence": "The team made steady progress.",
+    "level": 2
+  },
+  {
+    "word": "quantity",
+    "definition": "The amount or number of something.",
+    "sentence": "Please check the quantity before ordering.",
+    "level": 2
+  },
+  {
+    "word": "remove",
+    "definition": "To take something away from a place.",
+    "sentence": "Please remove your shoes at the door.",
+    "level": 2
+  },
+  {
+    "word": "section",
+    "definition": "One part of a larger whole.",
+    "sentence": "Please read the final section.",
+    "level": 2
+  },
+  {
+    "word": "transfer",
+    "definition": "To move something from one place to another.",
+    "sentence": "She will transfer the files tonight.",
+    "level": 2
+  },
+  {
+    "word": "usually",
+    "definition": "In most cases or most of the time.",
+    "sentence": "She usually arrives before nine.",
+    "level": 2
+  },
+  {
+    "word": "vowel",
+    "definition": "A speech sound made without blocking airflow.",
+    "sentence": "The teacher explained how a vowel is pronounced.",
+    "level": 2
+  },
+  {
+    "word": "whether",
+    "definition": "Used when talking about alternatives or uncertainty.",
+    "sentence": "She wondered whether the train was late.",
+    "level": 2
+  },
+  {
+    "word": "argument",
+    "definition": "A disagreement between people.",
+    "sentence": "The argument ended when everyone calmed down.",
+    "level": 2
+  },
+  {
+    "word": "breathing",
+    "definition": "The action of taking air into and out of the lungs.",
+    "sentence": "Slow breathing helped him relax.",
+    "level": 2
+  },
+  {
+    "word": "careful",
+    "definition": "Taking steps to avoid mistakes or danger.",
+    "sentence": "Be careful when crossing the road.",
+    "level": 2
+  },
+  {
+    "word": "document",
+    "definition": "A written or electronic record of information.",
+    "sentence": "She signed the document at the office.",
+    "level": 2
+  },
+  {
+    "word": "extend",
+    "definition": "To make something longer or larger.",
+    "sentence": "They decided to extend the deadline.",
+    "level": 2
+  },
+  {
+    "word": "function",
+    "definition": "The purpose or job of something.",
+    "sentence": "The button has a simple function.",
+    "level": 2
+  },
+  {
+    "word": "gradual",
+    "definition": "Happening slowly over a period.",
+    "sentence": "The patient made gradual progress.",
+    "level": 2
+  },
+  {
+    "word": "habitual",
+    "definition": "Done regularly or as a habit.",
+    "sentence": "His habitual lateness concerned the coach.",
+    "level": 2
+  },
+  {
+    "word": "initial",
+    "definition": "Happening at the beginning.",
+    "sentence": "The initial meeting was quite brief.",
+    "level": 2
+  },
+  {
+    "word": "liberty",
+    "definition": "Freedom from unreasonable control.",
+    "sentence": "The law protects individual liberty.",
+    "level": 2
+  },
+  {
+    "word": "manage",
+    "definition": "To organise or control something successfully.",
+    "sentence": "She can manage several tasks at once.",
+    "level": 2
+  },
+  {
+    "word": "narrow",
+    "definition": "Having little width from side to side.",
+    "sentence": "The car passed through a narrow lane.",
+    "level": 2
+  },
+  {
+    "word": "occupy",
+    "definition": "To fill or use a place or space.",
+    "sentence": "The tables occupy most of the room.",
+    "level": 2
+  },
+  {
+    "word": "protect",
+    "definition": "To keep someone or something safe from harm.",
+    "sentence": "A helmet can protect your head.",
+    "level": 2
+  },
+  {
+    "word": "respond",
+    "definition": "To answer or react to something.",
+    "sentence": "Please respond before the deadline.",
+    "level": 2
+  },
+  {
+    "word": "solution",
+    "definition": "An answer to a problem.",
+    "sentence": "They finally found a solution.",
+    "level": 2
+  },
+  {
+    "word": "translate",
+    "definition": "To express words in another language.",
+    "sentence": "He helped translate the instructions.",
+    "level": 2
+  },
+  {
+    "word": "unless",
+    "definition": "Except if something happens.",
+    "sentence": "We will leave unless the rain gets worse.",
+    "level": 2
+  },
+  {
+    "word": "visual",
+    "definition": "Related to seeing or images.",
+    "sentence": "She prepared a visual presentation.",
+    "level": 2
+  },
+  {
+    "word": "warning",
+    "definition": "A statement that danger may occur.",
+    "sentence": "The driver ignored the warning.",
+    "level": 2
+  },
+  {
+    "word": "author",
+    "definition": "A person who writes books or articles.",
+    "sentence": "The author signed copies of her novel.",
+    "level": 2
+  },
+  {
+    "word": "budget",
+    "definition": "A plan for how money will be spent.",
+    "sentence": "They prepared a budget for the trip.",
+    "level": 2
+  },
+  {
+    "word": "challenge",
+    "definition": "A difficult task that tests ability.",
+    "sentence": "The final round was a real challenge.",
+    "level": 2
+  },
+  {
+    "word": "determine",
+    "definition": "To discover or decide something exactly.",
+    "sentence": "The test will determine the winner.",
+    "level": 2
+  },
+  {
+    "word": "except",
+    "definition": "Not including someone or something.",
+    "sentence": "Everyone came except the youngest child.",
+    "level": 2
+  },
+  {
+    "word": "formal",
+    "definition": "Suitable for official or serious situations.",
+    "sentence": "He wore formal clothes to the event.",
+    "level": 2
+  },
+  {
+    "word": "genuine",
+    "definition": "Real and not false or artificial.",
+    "sentence": "He showed genuine concern for his friend.",
+    "level": 2
+  },
+  {
+    "word": "humour",
+    "definition": "The quality of being funny or amusing.",
+    "sentence": "Her humour made everyone laugh.",
+    "level": 2,
+    "variants": [
+      "humor"
+    ]
+  },
+  {
+    "word": "indicate",
+    "definition": "To point out or show something.",
+    "sentence": "The arrow will indicate the correct route.",
+    "level": 2
+  },
+  {
+    "word": "literature",
+    "definition": "Written works, especially novels, plays, and poetry.",
+    "sentence": "She studied English literature at university.",
+    "level": 2
+  },
+  {
+    "word": "member",
+    "definition": "A person belonging to a group.",
+    "sentence": "Every member received a badge.",
+    "level": 2
+  },
+  {
+    "word": "objective",
+    "definition": "A goal that someone is trying to achieve.",
+    "sentence": "The team's objective was clear.",
+    "level": 2
+  },
+  {
+    "word": "passion",
+    "definition": "A strong feeling of enthusiasm or love.",
+    "sentence": "He has a passion for teaching.",
+    "level": 2
+  },
+  {
+    "word": "realise",
+    "definition": "To become aware of something.",
+    "sentence": "I did not realise the time was so late.",
+    "level": 2,
+    "variants": [
+      "realize"
+    ]
+  },
+  {
+    "word": "suggest",
+    "definition": "To put forward an idea for consideration.",
+    "sentence": "She will suggest a different route.",
+    "level": 2
+  },
+  {
+    "word": "tendency",
+    "definition": "A habit or likelihood to behave in a certain way.",
+    "sentence": "He has a tendency to arrive early.",
+    "level": 2
+  },
+  {
+    "word": "update",
+    "definition": "To make information more current.",
+    "sentence": "She will update the report tomorrow.",
+    "level": 2
+  },
+  {
+    "word": "visitor",
+    "definition": "A person who comes to see someone or a place.",
+    "sentence": "Every visitor signed the book.",
+    "level": 2
+  },
+  {
+    "word": "wander",
+    "definition": "To move around without a fixed destination.",
+    "sentence": "They decided to wander through the park.",
+    "level": 2
+  },
+  {
+    "word": "apologise",
+    "definition": "To say that you are sorry for something.",
+    "sentence": "He called to apologise for being late.",
+    "level": 2,
+    "variants": [
+      "apologize"
+    ]
+  },
+  {
+    "word": "birthday",
+    "definition": "The anniversary of a person's birth.",
+    "sentence": "She celebrated her birthday with friends.",
+    "level": 2
+  },
+  {
+    "word": "confuse",
+    "definition": "To make someone uncertain or unable to understand.",
+    "sentence": "The complicated directions may confuse visitors.",
+    "level": 2
+  },
+  {
+    "word": "destroy",
+    "definition": "To damage something beyond repair.",
+    "sentence": "The fire could destroy the wooden shed.",
+    "level": 2
+  },
+  {
+    "word": "explore",
+    "definition": "To travel around a place to learn about it.",
+    "sentence": "They plan to explore the old town.",
+    "level": 2
+  },
+  {
+    "word": "faulty",
+    "definition": "Not working properly because of a defect.",
+    "sentence": "The mechanic replaced the faulty part.",
+    "level": 2
+  },
+  {
+    "word": "grocery",
+    "definition": "Food and household items sold in a shop.",
+    "sentence": "She bought a grocery item on her way home.",
+    "level": 2
+  },
+  {
+    "word": "healthy",
+    "definition": "In good physical or mental condition.",
+    "sentence": "A healthy meal can be simple.",
+    "level": 2
+  },
+  {
+    "word": "inspect",
+    "definition": "To examine something carefully.",
+    "sentence": "The engineer will inspect the bridge.",
+    "level": 2
+  },
+  {
+    "word": "logical",
+    "definition": "Following a clear and reasonable pattern.",
+    "sentence": "Her explanation was logical and easy to follow.",
+    "level": 2
+  },
+  {
+    "word": "marriage",
+    "definition": "The legally or socially recognised union of spouses.",
+    "sentence": "They celebrated their marriage with family.",
+    "level": 2
+  },
+  {
+    "word": "opinion",
+    "definition": "A personal belief or judgement.",
+    "sentence": "Everyone was free to share an opinion.",
+    "level": 2
+  },
+  {
+    "word": "previous",
+    "definition": "Happening or existing before now.",
+    "sentence": "She remembered the previous lesson.",
+    "level": 2
+  },
+  {
+    "word": "remember",
+    "definition": "To keep information in your mind.",
+    "sentence": "Try to remember the meeting time.",
+    "level": 2
+  },
+  {
+    "word": "specific",
+    "definition": "Clearly defined rather than general.",
+    "sentence": "She asked a specific question.",
+    "level": 2
+  },
+  {
+    "word": "therefore",
+    "definition": "For that reason or as a result.",
+    "sentence": "It was raining; therefore, we stayed inside.",
+    "level": 2
+  },
+  {
+    "word": "uncertain",
+    "definition": "Not sure about something.",
+    "sentence": "He was uncertain about the answer.",
+    "level": 2
+  },
+  {
+    "word": "version",
+    "definition": "A particular form of something.",
+    "sentence": "He installed the latest version.",
+    "level": 2
+  },
+  {
+    "word": "witness",
+    "definition": "Someone who sees an event happen.",
+    "sentence": "The witness described the accident.",
+    "level": 2
+  },
+  {
+    "word": "apartment",
+    "definition": "A set of rooms forming one home.",
+    "sentence": "They rented an apartment near the market.",
+    "level": 2
+  },
+  {
+    "word": "building",
+    "definition": "A structure with walls and a roof.",
+    "sentence": "The new building opened last month.",
+    "level": 2
+  },
+  {
+    "word": "convenient",
+    "definition": "Easy to use or suitable for a purpose.",
+    "sentence": "The new shop is in a convenient location.",
+    "level": 2
+  },
+  {
+    "word": "discover",
+    "definition": "To find something for the first time.",
+    "sentence": "They hope to discover a new route.",
+    "level": 2
+  },
+  {
+    "word": "encourage",
+    "definition": "To give someone support or confidence.",
+    "sentence": "Her friends tried to encourage her.",
+    "level": 2
+  },
+  {
+    "word": "forward",
+    "definition": "Towards the front or ahead.",
+    "sentence": "He took one step forward.",
+    "level": 2
+  },
+  {
+    "word": "gravity",
+    "definition": "The force that pulls objects towards the Earth.",
+    "sentence": "Gravity keeps our feet on the ground.",
+    "level": 2
+  },
+  {
+    "word": "healthcare",
+    "definition": "Medical services provided to people.",
+    "sentence": "The town needs better healthcare facilities.",
+    "level": 2
+  },
+  {
+    "word": "inform",
+    "definition": "To tell someone about something.",
+    "sentence": "Please inform us if your plans change.",
+    "level": 2
+  },
+  {
+    "word": "labour",
+    "definition": "Work, especially physical work.",
+    "sentence": "The job required hours of hard labour.",
+    "level": 2,
+    "variants": [
+      "labor"
+    ]
+  },
+  {
+    "word": "mention",
+    "definition": "To refer to something briefly.",
+    "sentence": "He forgot to mention the change of venue.",
+    "level": 2
+  },
+  {
+    "word": "outcome",
+    "definition": "The final result of an event.",
+    "sentence": "We will discuss the outcome tomorrow.",
+    "level": 2
+  },
+  {
+    "word": "positive",
+    "definition": "Showing agreement, hope, or a favourable quality.",
+    "sentence": "She gave a positive response.",
+    "level": 2
+  },
+  {
+    "word": "rarely",
+    "definition": "Not very often.",
+    "sentence": "He rarely misses a class.",
+    "level": 2
+  },
+  {
+    "word": "serious",
+    "definition": "Important or needing careful attention.",
+    "sentence": "They discussed a serious problem.",
+    "level": 2
+  },
+  {
+    "word": "target",
+    "definition": "A goal or something to aim at.",
+    "sentence": "The team reached its sales target.",
+    "level": 2
+  },
+  {
+    "word": "upload",
+    "definition": "To transfer a file to a computer system.",
+    "sentence": "He tried to upload the photograph.",
+    "level": 2
+  },
+  {
+    "word": "victory",
+    "definition": "Success in a competition or struggle.",
+    "sentence": "The team celebrated its victory.",
+    "level": 2
+  },
+  {
+    "word": "workplace",
+    "definition": "A place where people do their jobs.",
+    "sentence": "The workplace was quiet on Friday.",
+    "level": 2
+  },
+  {
+    "word": "abstract",
+    "definition": "Existing as an idea rather than a physical object.",
+    "sentence": "The painting showed an abstract pattern.",
+    "level": 2
+  },
+  {
+    "word": "between",
+    "definition": "In the space separating two things.",
+    "sentence": "The shop stands between two banks.",
+    "level": 2
+  },
+  {
+    "word": "chemical",
+    "definition": "A substance with a particular composition.",
+    "sentence": "The laboratory stored the chemical safely.",
+    "level": 2
+  },
+  {
+    "word": "decide",
+    "definition": "To make a choice between options.",
+    "sentence": "We must decide before the tickets sell out.",
+    "level": 2
+  },
+  {
+    "word": "earnest",
+    "definition": "Serious and sincere in intention.",
+    "sentence": "She made an earnest effort to help.",
+    "level": 2
+  },
+  {
+    "word": "financial",
+    "definition": "Related to money or its management.",
+    "sentence": "She asked for financial advice.",
+    "level": 2
+  },
+  {
+    "word": "geography",
+    "definition": "The study of places and the Earth's surface.",
+    "sentence": "She enjoys geography at school.",
+    "level": 2
+  },
+  {
+    "word": "harvest",
+    "definition": "The process of gathering crops.",
+    "sentence": "The farmers celebrated a good harvest.",
+    "level": 2
+  },
+  {
+    "word": "interest",
+    "definition": "A feeling of wanting to learn more.",
+    "sentence": "He showed interest in the new course.",
+    "level": 2
+  },
+  {
+    "word": "lecture",
+    "definition": "An educational talk given to a group.",
+    "sentence": "The professor gave a lecture on history.",
+    "level": 2
+  },
+  {
+    "word": "mutual",
+    "definition": "Shared or felt by two or more people.",
+    "sentence": "They reached a decision through mutual respect.",
+    "level": 2
+  },
+  {
+    "word": "official",
+    "definition": "Approved or connected with an authority.",
+    "sentence": "She received an official invitation.",
+    "level": 2
+  },
+  {
+    "word": "pressure",
+    "definition": "A force pressing against a surface.",
+    "sentence": "The engineer measured the water pressure.",
+    "level": 2
+  },
+  {
+    "word": "release",
+    "definition": "To allow something to become free or available.",
+    "sentence": "The team will release the update next week.",
+    "level": 2
+  },
+  {
+    "word": "skilful",
+    "definition": "Having the ability to do something well.",
+    "sentence": "The skilful carpenter repaired the chair.",
+    "level": 2
+  },
+  {
+    "word": "thoroughly",
+    "definition": "Completely and with great care.",
+    "sentence": "She checked the document thoroughly.",
+    "level": 2
+  },
+  {
+    "word": "urgent",
+    "definition": "Needing immediate attention.",
+    "sentence": "The message was urgent.",
+    "level": 2
+  },
+  {
+    "word": "valuable",
+    "definition": "Worth a lot of money or importance.",
+    "sentence": "The advice was valuable to her.",
+    "level": 2
+  },
+  {
+    "word": "wisdom",
+    "definition": "The ability to make good judgements.",
+    "sentence": "Her grandmother shared words of wisdom.",
+    "level": 2
+  },
+  {
+    "word": "absence",
+    "definition": "The state of not being present.",
+    "sentence": "His absence was noticed at the meeting.",
+    "level": 2
+  },
+  {
+    "word": "boundary",
+    "definition": "A line marking the limit of an area.",
+    "sentence": "The fence marks the property boundary.",
+    "level": 2
+  },
+  {
+    "word": "certain",
+    "definition": "Known for sure or without doubt.",
+    "sentence": "She was certain about her answer.",
+    "level": 2
+  },
+  {
+    "word": "delicate",
+    "definition": "Easily damaged or requiring careful handling.",
+    "sentence": "The delicate vase was wrapped in cloth.",
+    "level": 2
+  },
+  {
+    "word": "essential",
+    "definition": "Completely necessary for a purpose.",
+    "sentence": "Clean water is essential for life.",
+    "level": 2
+  },
+  {
+    "word": "future",
+    "definition": "A time that has not happened yet.",
+    "sentence": "They discussed their plans for the future.",
+    "level": 2
+  },
+  {
+    "word": "gesture",
+    "definition": "A movement used to express meaning.",
+    "sentence": "He made a friendly gesture to the crowd.",
+    "level": 2
+  },
+  {
+    "word": "isolate",
+    "definition": "To separate someone or something from others.",
+    "sentence": "The team had to isolate the faulty device.",
+    "level": 2
+  },
+  {
+    "word": "loyalty",
+    "definition": "Strong support or faithfulness towards someone.",
+    "sentence": "The team valued her loyalty.",
+    "level": 2
+  },
+  {
+    "word": "mixture",
+    "definition": "Two or more substances combined together.",
+    "sentence": "She stirred the mixture until it was smooth.",
+    "level": 2
+  },
+  {
+    "word": "original",
+    "definition": "Existing from the beginning or created first.",
+    "sentence": "They found the original drawing.",
+    "level": 2
+  },
+  {
+    "word": "performance",
+    "definition": "The act of presenting music, drama, or another skill.",
+    "sentence": "The dancers gave an excellent performance.",
+    "level": 2
+  },
+  {
+    "word": "recent",
+    "definition": "Happening a short time ago.",
+    "sentence": "They discussed a recent discovery.",
+    "level": 2
+  },
+  {
+    "word": "situation",
+    "definition": "The conditions affecting what is happening.",
+    "sentence": "The manager explained the situation.",
+    "level": 2
+  },
+  {
+    "word": "trouble",
+    "definition": "A problem or difficult situation.",
+    "sentence": "He had trouble opening the jar.",
+    "level": 2
+  },
+  {
+    "word": "understand",
+    "definition": "To know the meaning of something.",
+    "sentence": "I understand the instructions now.",
+    "level": 2
+  },
+  {
+    "word": "visible",
+    "definition": "Able to be seen.",
+    "sentence": "The road was barely visible in the fog.",
+    "level": 2
+  },
+  {
+    "word": "withdraw",
+    "definition": "To take money out or move something back.",
+    "sentence": "She went to withdraw cash from the bank.",
+    "level": 2
+  },
+  {
+    "word": "athlete",
+    "definition": "A person who competes in physical sports.",
+    "sentence": "The athlete trained every morning.",
+    "level": 2
+  },
+  {
+    "word": "behaviour",
+    "definition": "The way a person or animal acts.",
+    "sentence": "The teacher praised his polite behaviour.",
+    "level": 2,
+    "variants": [
+      "behavior"
+    ]
+  },
+  {
+    "word": "citizen",
+    "definition": "A person legally belonging to a country.",
+    "sentence": "Every citizen has certain legal rights.",
+    "level": 2
+  },
+  {
+    "word": "damage",
+    "definition": "Harm that reduces value or usefulness.",
+    "sentence": "The storm caused damage to the roof.",
+    "level": 2
+  },
+  {
+    "word": "enquire",
+    "definition": "To ask for information about something.",
+    "sentence": "She called to enquire about the booking.",
+    "level": 2,
+    "variants": [
+      "inquire"
+    ]
+  },
+  {
+    "word": "feature",
+    "definition": "An important or noticeable part of something.",
+    "sentence": "The camera has a useful new feature.",
+    "level": 2
+  },
+  {
+    "word": "governor",
+    "definition": "A person who leads a state or region.",
+    "sentence": "The governor visited the new hospital.",
+    "level": 2
+  },
+  {
+    "word": "intelligent",
+    "definition": "Able to learn and understand things quickly.",
+    "sentence": "The intelligent student asked thoughtful questions.",
+    "level": 2
+  },
+  {
+    "word": "launch",
+    "definition": "To start or introduce something new.",
+    "sentence": "The company will launch its website tomorrow.",
+    "level": 2
+  },
+  {
+    "word": "manufacture",
+    "definition": "To make goods in large quantities.",
+    "sentence": "The factory will manufacture bicycle parts.",
+    "level": 2
+  },
+  {
+    "word": "option",
+    "definition": "A possible choice among alternatives.",
+    "sentence": "She selected the cheaper option.",
+    "level": 2
+  },
+  {
+    "word": "purpose",
+    "definition": "The reason something is done or exists.",
+    "sentence": "She explained the purpose of the meeting.",
+    "level": 2
+  },
+  {
+    "word": "require",
+    "definition": "To need something for a particular purpose.",
+    "sentence": "The course may require extra reading.",
+    "level": 2
+  },
+  {
+    "word": "sensitive",
+    "definition": "Easily affected or requiring careful handling.",
+    "sentence": "The instrument is sensitive to heat.",
+    "level": 2
+  },
+  {
+    "word": "tension",
+    "definition": "A feeling of worry or strain.",
+    "sentence": "The long delay created tension.",
+    "level": 2
+  },
+  {
+    "word": "useful",
+    "definition": "Helping to achieve a purpose.",
+    "sentence": "The map was useful on the trip.",
+    "level": 2
+  },
+  {
+    "word": "whenever",
+    "definition": "At any time that something happens.",
+    "sentence": "Call me whenever you need help.",
+    "level": 2
+  },
+  {
+    "word": "appreciate",
+    "definition": "To recognise the value of something.",
+    "sentence": "I appreciate your help with the project.",
+    "level": 2
+  },
+  {
+    "word": "concentrate",
+    "definition": "To give full attention to something.",
+    "sentence": "Try to concentrate during the lesson.",
+    "level": 2
+  },
+  {
+    "word": "defend",
+    "definition": "To protect someone or something from harm.",
+    "sentence": "The goalkeeper moved to defend the goal.",
+    "level": 2
+  },
+  {
+    "word": "emergency",
+    "definition": "A serious situation needing immediate action.",
+    "sentence": "The nurse responded quickly to the emergency.",
+    "level": 2
+  },
+  {
+    "word": "fashion",
+    "definition": "A popular style of clothing or appearance.",
+    "sentence": "She enjoys learning about fashion.",
+    "level": 2
+  },
+  {
+    "word": "increase",
+    "definition": "To become larger in size or number.",
+    "sentence": "The school expects attendance to increase.",
+    "level": 2
+  },
+  {
+    "word": "motion",
+    "definition": "The act of moving or changing position.",
+    "sentence": "The camera recorded the motion of the ball.",
+    "level": 2
+  },
+  {
+    "word": "operate",
+    "definition": "To control or make equipment work.",
+    "sentence": "Only trained staff may operate the machine.",
+    "level": 2
+  },
+  {
+    "word": "public",
+    "definition": "Open or available to everyone.",
+    "sentence": "The library is a public building.",
+    "level": 2
+  },
+  {
+    "word": "report",
+    "definition": "A written or spoken account of information.",
+    "sentence": "He prepared a report on the event.",
+    "level": 2
+  },
+  {
+    "word": "several",
+    "definition": "More than two but not very many.",
+    "sentence": "Several guests arrived early.",
+    "level": 2
+  },
+  {
+    "word": "texture",
+    "definition": "The way a surface feels or looks.",
+    "sentence": "The fabric had a rough texture.",
+    "level": 2
+  },
+  {
+    "word": "unknown",
+    "definition": "Not recognised or identified.",
+    "sentence": "The cause of the noise remains unknown.",
+    "level": 2
+  },
+  {
+    "word": "whereas",
+    "definition": "Used to contrast two facts.",
+    "sentence": "He prefers tea, whereas she likes coffee.",
+    "level": 2
+  },
+  {
+    "word": "article",
+    "definition": "A piece of writing in a publication.",
+    "sentence": "She read an article about wildlife.",
+    "level": 2
+  },
+  {
+    "word": "climate",
+    "definition": "The usual weather conditions in a region.",
+    "sentence": "The climate is hot for much of the year.",
+    "level": 2
+  },
+  {
+    "word": "describe",
+    "definition": "To say what something is like.",
+    "sentence": "Please describe the missing bag.",
+    "level": 2
+  },
+  {
+    "word": "energy",
+    "definition": "The power needed to do work or move.",
+    "sentence": "The children had plenty of energy.",
+    "level": 2
+  },
+  {
+    "word": "flexible",
+    "definition": "Able to bend or change easily.",
+    "sentence": "Their working hours are quite flexible.",
+    "level": 2
+  },
+  {
+    "word": "important",
+    "definition": "Having great value or significance.",
+    "sentence": "This is an important decision for the team.",
+    "level": 2
+  },
+  {
+    "word": "monitor",
+    "definition": "To watch or check something over time.",
+    "sentence": "The nurse will monitor his progress.",
+    "level": 2
+  },
+  {
+    "word": "ownership",
+    "definition": "The legal right to possess something.",
+    "sentence": "The papers confirmed ownership of the land.",
+    "level": 2
+  },
+  {
+    "word": "precise",
+    "definition": "Exact and carefully expressed.",
+    "sentence": "The instructions gave a precise measurement.",
+    "level": 2
+  },
+  {
+    "word": "reduce",
+    "definition": "To make something smaller or less.",
+    "sentence": "We should reduce unnecessary spending.",
+    "level": 2
+  },
+  {
+    "word": "statement",
+    "definition": "A clear written or spoken declaration.",
+    "sentence": "She issued a statement after the meeting.",
+    "level": 2
+  },
+  {
+    "word": "thoughtful",
+    "definition": "Showing care for other people's feelings.",
+    "sentence": "He sent a thoughtful message.",
+    "level": 2
+  },
+  {
+    "word": "unique",
+    "definition": "Being the only one of its kind.",
+    "sentence": "Each painting has a unique style.",
+    "level": 2
+  },
+  {
+    "word": "welfare",
+    "definition": "The health and happiness of people or animals.",
+    "sentence": "The charity supports child welfare.",
+    "level": 2
+  },
+  {
+    "word": "alphabet",
+    "definition": "The set of letters used in a language.",
+    "sentence": "The children recited the alphabet together.",
+    "level": 2
+  },
+  {
+    "word": "character",
+    "definition": "A person in a story or someone's qualities.",
+    "sentence": "The main character returns in the final chapter.",
+    "level": 2
+  },
+  {
+    "word": "denial",
+    "definition": "A statement that something is not true.",
+    "sentence": "His denial surprised the reporters.",
+    "level": 2
+  },
+  {
+    "word": "effect",
+    "definition": "A change caused by something else.",
+    "sentence": "The medicine had a noticeable effect.",
+    "level": 2
+  },
+  {
+    "word": "fiction",
+    "definition": "Stories about events that are imagined.",
+    "sentence": "She prefers fiction to biographies.",
+    "level": 2
+  },
+  {
+    "word": "income",
+    "definition": "Money received from work or other sources.",
+    "sentence": "He saved part of his monthly income.",
+    "level": 2
+  },
+  {
+    "word": "modern",
+    "definition": "Related to the present or recent times.",
+    "sentence": "The office has a modern design.",
+    "level": 2
+  },
+  {
+    "word": "priority",
+    "definition": "Something considered more important than other things.",
+    "sentence": "Finishing the report is our priority.",
+    "level": 2
+  },
+  {
+    "word": "recover",
+    "definition": "To become healthy or strong again.",
+    "sentence": "She needed time to recover from illness.",
+    "level": 2
+  },
+  {
+    "word": "suspect",
+    "definition": "To believe something may be true without proof.",
+    "sentence": "They suspect the parcel was misplaced.",
+    "level": 2
+  },
+  {
+    "word": "theory",
+    "definition": "An explanation supported by reasoning or evidence.",
+    "sentence": "The teacher discussed a new theory.",
+    "level": 2
+  },
+  {
+    "word": "wonder",
+    "definition": "To think about something with curiosity.",
+    "sentence": "I wonder why the lights are off.",
+    "level": 2
+  },
+  {
+    "word": "announce",
+    "definition": "To make information known publicly.",
+    "sentence": "The principal will announce the winners tomorrow.",
+    "level": 2
+  },
+  {
+    "word": "contrast",
+    "definition": "A clear difference between two things.",
+    "sentence": "The contrast between the rooms was striking.",
+    "level": 2
+  },
+  {
+    "word": "design",
+    "definition": "A plan or drawing showing how something will look.",
+    "sentence": "He shared the design with the team.",
+    "level": 2
+  },
+  {
+    "word": "emphasis",
+    "definition": "Special importance given to something.",
+    "sentence": "The coach placed emphasis on teamwork.",
+    "level": 2
+  },
+  {
+    "word": "feedback",
+    "definition": "Comments about how something could improve.",
+    "sentence": "The team welcomed honest feedback.",
+    "level": 2
+  },
+  {
+    "word": "investigate",
+    "definition": "To examine facts to discover the truth.",
+    "sentence": "The team will investigate the complaint.",
+    "level": 2
+  },
+  {
+    "word": "moral",
+    "definition": "Related to what is right or wrong.",
+    "sentence": "The story contained a moral lesson.",
+    "level": 2
+  },
+  {
+    "word": "personality",
+    "definition": "The qualities that make someone unique.",
+    "sentence": "Her friendly personality made guests welcome.",
+    "level": 2
+  },
+  {
+    "word": "reply",
+    "definition": "An answer to a message or question.",
+    "sentence": "She sent a quick reply.",
+    "level": 2
+  },
+  {
+    "word": "satisfy",
+    "definition": "To meet a need or expectation.",
+    "sentence": "The meal should satisfy the guests.",
+    "level": 2
+  },
+  {
+    "word": "transport",
+    "definition": "A way of moving people or goods.",
+    "sentence": "Public transport was delayed by rain.",
+    "level": 2
+  },
+  {
+    "word": "western",
+    "definition": "Situated towards the west.",
+    "sentence": "They travelled through the western region.",
+    "level": 2
+  },
+  {
+    "word": "anxiety",
+    "definition": "A feeling of worry or nervousness.",
+    "sentence": "She felt anxiety before the examination.",
+    "level": 2
+  },
+  {
+    "word": "cottage",
+    "definition": "A small house, often in the countryside.",
+    "sentence": "They spent the weekend in a cottage.",
+    "level": 2
+  },
+  {
+    "word": "doubtful",
+    "definition": "Uncertain about whether something is true.",
+    "sentence": "He was doubtful about the prediction.",
+    "level": 2
+  },
+  {
+    "word": "express",
+    "definition": "To communicate a thought or feeling.",
+    "sentence": "He tried to express his gratitude.",
+    "level": 2
+  },
+  {
+    "word": "frustrate",
+    "definition": "To make someone feel annoyed by preventing progress.",
+    "sentence": "Repeated delays can frustrate travellers.",
+    "level": 2
+  },
+  {
+    "word": "include",
+    "definition": "To make something part of a group.",
+    "sentence": "Please include your phone number on the form.",
+    "level": 2
+  },
+  {
+    "word": "majority",
+    "definition": "More than half of a group.",
+    "sentence": "The majority voted for the plan.",
+    "level": 2
+  },
+  {
+    "word": "prepare",
+    "definition": "To make something ready for use.",
+    "sentence": "We need to prepare the room for guests.",
+    "level": 2
+  },
+  {
+    "word": "reward",
+    "definition": "Something given for good behaviour or achievement.",
+    "sentence": "She received a reward for her effort.",
+    "level": 2
+  },
+  {
+    "word": "senior",
+    "definition": "Older or higher in position.",
+    "sentence": "The senior manager joined the meeting.",
+    "level": 2
+  },
+  {
+    "word": "together",
+    "definition": "With or near other people or things.",
+    "sentence": "They worked together on the project.",
+    "level": 2
+  },
+  {
+    "word": "whichever",
+    "definition": "Any one chosen from a particular group.",
+    "sentence": "Choose whichever seat is free.",
+    "level": 2
+  },
+  {
+    "word": "academy",
+    "definition": "A place or organisation devoted to learning or training.",
+    "sentence": "She joined a music academy after school.",
+    "level": 2
+  },
+  {
+    "word": "children",
+    "definition": "More than one young person.",
+    "sentence": "The children played outside after school.",
+    "level": 2
+  },
+  {
+    "word": "demand",
+    "definition": "A strong request or need for something.",
+    "sentence": "There was a high demand for tickets.",
+    "level": 2
+  },
+  {
+    "word": "exchange",
+    "definition": "To give something and receive something else.",
+    "sentence": "They agreed to exchange their books.",
+    "level": 2
+  },
+  {
+    "word": "introduce",
+    "definition": "To tell people someone's name for the first time.",
+    "sentence": "She offered to introduce the new colleague.",
+    "level": 2
+  },
+  {
+    "word": "method",
+    "definition": "A particular way of doing something.",
+    "sentence": "The teacher demonstrated a simple method.",
+    "level": 2
+  },
+  {
+    "word": "predict",
+    "definition": "To say what is likely to happen.",
+    "sentence": "The forecast may predict rain tomorrow.",
+    "level": 2
+  },
+  {
+    "word": "administrator",
+    "definition": "Someone responsible for running an organisation.",
+    "sentence": "The administrator approved the new schedule.",
+    "level": 3
+  },
+  {
+    "word": "boisterous",
+    "definition": "Noisy, energetic, and cheerful.",
+    "sentence": "The boisterous crowd filled the hall.",
+    "level": 3
+  },
+  {
+    "word": "crystallise",
+    "definition": "To form into crystals or become clearly defined.",
+    "sentence": "The solution began to crystallise as it cooled.",
+    "level": 3,
+    "variants": [
+      "crystallize"
+    ]
+  },
+  {
+    "word": "displacement",
+    "definition": "The act of moving something from its position.",
+    "sentence": "The flood caused displacement of several families.",
+    "level": 3
+  },
+  {
+    "word": "experiment",
+    "definition": "A test carried out to discover something.",
+    "sentence": "The class conducted an experiment.",
+    "level": 3
+  },
+  {
+    "word": "fascination",
+    "definition": "A strong interest in something.",
+    "sentence": "The child's fascination with insects continued.",
+    "level": 3
+  },
+  {
+    "word": "generosity",
+    "definition": "Willingness to give more than expected.",
+    "sentence": "The neighbours appreciated her generosity.",
+    "level": 3
+  },
+  {
+    "word": "homogeneous",
+    "definition": "Made up of things that are alike.",
+    "sentence": "The mixture became homogeneous after stirring.",
+    "level": 3
+  },
+  {
+    "word": "installation",
+    "definition": "The process of putting equipment in place.",
+    "sentence": "The installation took two hours.",
+    "level": 3
+  },
+  {
+    "word": "justification",
+    "definition": "A reason explaining why something is acceptable.",
+    "sentence": "She provided a justification for the change.",
+    "level": 3
+  },
+  {
+    "word": "knowledgeable",
+    "definition": "Knowing a great deal about a subject.",
+    "sentence": "The guide was knowledgeable about local history.",
+    "level": 3
+  },
+  {
+    "word": "longevity",
+    "definition": "The ability to last for a long time.",
+    "sentence": "Regular maintenance supports equipment longevity.",
+    "level": 3
+  },
+  {
+    "word": "moderation",
+    "definition": "The practice of avoiding excess.",
+    "sentence": "She recommended moderation when exercising.",
+    "level": 3
+  },
+  {
+    "word": "nourishment",
+    "definition": "Food needed for growth and good health.",
+    "sentence": "The meals provided adequate nourishment.",
+    "level": 3
+  },
+  {
+    "word": "occupation",
+    "definition": "A person's job or usual activity.",
+    "sentence": "The form asked for his occupation.",
+    "level": 3
+  },
+  {
+    "word": "philosophy",
+    "definition": "The study of knowledge, reality, and values.",
+    "sentence": "The students discussed philosophy in class.",
+    "level": 3
+  },
+  {
+    "word": "quantitative",
+    "definition": "Related to amounts or numbers.",
+    "sentence": "The report included quantitative data.",
+    "level": 3
+  },
+  {
+    "word": "resolution",
+    "definition": "A firm decision or a solution to a problem.",
+    "sentence": "They reached a resolution after discussion.",
+    "level": 3
+  },
+  {
+    "word": "sympathetic",
+    "definition": "Showing understanding for someone's troubles.",
+    "sentence": "She was sympathetic to his concerns.",
+    "level": 3
+  },
+  {
+    "word": "thermometer",
+    "definition": "An instrument used to measure temperature.",
+    "sentence": "The nurse checked the thermometer.",
+    "level": 3
+  },
+  {
+    "word": "unanimity",
+    "definition": "Complete agreement among a group.",
+    "sentence": "The committee reached unanimity.",
+    "level": 3
+  },
+  {
+    "word": "vigilance",
+    "definition": "Careful attention to possible danger.",
+    "sentence": "The guards maintained constant vigilance.",
+    "level": 3
+  },
+  {
+    "word": "wrongdoing",
+    "definition": "Dishonest or illegal behaviour.",
+    "sentence": "The inquiry found no evidence of wrongdoing.",
+    "level": 3
+  },
+  {
+    "word": "xylophone",
+    "definition": "A musical instrument with bars struck by mallets.",
+    "sentence": "The child played a tune on the xylophone.",
+    "level": 3
+  },
+  {
+    "word": "zealous",
+    "definition": "Showing great enthusiasm for a cause.",
+    "sentence": "The zealous volunteer arrived early.",
+    "level": 3
+  },
+  {
+    "word": "accomplishment",
+    "definition": "Something successfully achieved through effort.",
+    "sentence": "Finishing the course was a major accomplishment.",
+    "level": 3
+  },
+  {
+    "word": "biography",
+    "definition": "An account of someone's life written by another person.",
+    "sentence": "She borrowed a biography of the scientist.",
+    "level": 3
+  },
+  {
+    "word": "categorise",
+    "definition": "To arrange things into groups based on type.",
+    "sentence": "Please categorise the files by date.",
+    "level": 3,
+    "variants": [
+      "categorize"
+    ]
+  },
+  {
+    "word": "dimension",
+    "definition": "A measurement of length, width, or height.",
+    "sentence": "The carpenter measured each dimension.",
+    "level": 3
+  },
+  {
+    "word": "explanation",
+    "definition": "A statement that makes something clear.",
+    "sentence": "The teacher gave a simple explanation.",
+    "level": 3
+  },
+  {
+    "word": "fragmentation",
+    "definition": "The process of breaking into smaller pieces.",
+    "sentence": "The impact caused fragmentation of the glass.",
+    "level": 3
+  },
+  {
+    "word": "gratitude",
+    "definition": "A feeling of thankfulness.",
+    "sentence": "He expressed gratitude to his teacher.",
+    "level": 3
+  },
+  {
+    "word": "hierarchical",
+    "definition": "Arranged in levels of rank or importance.",
+    "sentence": "The organisation uses a hierarchical structure.",
+    "level": 3
+  },
+  {
+    "word": "ingenuity",
+    "definition": "The ability to solve problems in clever new ways.",
+    "sentence": "Her ingenuity impressed the judges.",
+    "level": 3
+  },
+  {
+    "word": "liberation",
+    "definition": "The act of becoming free from control.",
+    "sentence": "The museum described the struggle for liberation.",
+    "level": 3
+  },
+  {
+    "word": "manipulate",
+    "definition": "To control or handle something skilfully or unfairly.",
+    "sentence": "She learned to manipulate the controls.",
+    "level": 3
+  },
+  {
+    "word": "noteworthy",
+    "definition": "Interesting or important enough to mention.",
+    "sentence": "The team achieved a noteworthy result.",
+    "level": 3
+  },
+  {
+    "word": "occasionally",
+    "definition": "Sometimes but not regularly.",
+    "sentence": "She occasionally visits the museum.",
+    "level": 3
+  },
+  {
+    "word": "provisional",
+    "definition": "Temporary until a final decision is made.",
+    "sentence": "The committee released provisional results.",
+    "level": 3
+  },
+  {
+    "word": "qualification",
+    "definition": "A skill or certificate showing ability.",
+    "sentence": "The role requires a relevant qualification.",
+    "level": 3
+  },
+  {
+    "word": "ridiculous",
+    "definition": "Very silly or unreasonable.",
+    "sentence": "The rumour sounded ridiculous.",
+    "level": 3
+  },
+  {
+    "word": "sanitation",
+    "definition": "Systems for keeping places clean and healthy.",
+    "sentence": "The council improved public sanitation.",
+    "level": 3
+  },
+  {
+    "word": "transaction",
+    "definition": "An exchange of money, goods, or services.",
+    "sentence": "The cashier recorded the transaction.",
+    "level": 3
+  },
+  {
+    "word": "underestimate",
+    "definition": "To judge something as smaller or less important.",
+    "sentence": "Do not underestimate the challenge.",
+    "level": 3
+  },
+  {
+    "word": "vibration",
+    "definition": "Rapid repeated movement back and forth.",
+    "sentence": "The phone's vibration woke him.",
+    "level": 3
+  },
+  {
+    "word": "wavelength",
+    "definition": "The distance between matching points in a wave.",
+    "sentence": "The scientist measured the wavelength.",
+    "level": 3
+  },
+  {
+    "word": "affiliation",
+    "definition": "A connection with a group or organisation.",
+    "sentence": "The form asked for his professional affiliation.",
+    "level": 3
+  },
+  {
+    "word": "benevolent",
+    "definition": "Kind and willing to help others.",
+    "sentence": "The benevolent neighbour offered support.",
+    "level": 3
+  },
+  {
+    "word": "collaboration",
+    "definition": "People working together on a shared task.",
+    "sentence": "The project required close collaboration.",
+    "level": 3
+  },
+  {
+    "word": "disclosure",
+    "definition": "The act of making information known.",
+    "sentence": "The company required full disclosure of costs.",
+    "level": 3
+  },
+  {
+    "word": "eliminate",
+    "definition": "To remove something completely.",
+    "sentence": "The update will eliminate the repeated error.",
+    "level": 3
+  },
+  {
+    "word": "fluctuation",
+    "definition": "An irregular change in amount or level.",
+    "sentence": "The chart showed a fluctuation in prices.",
+    "level": 3
+  },
+  {
+    "word": "governance",
+    "definition": "The process of directing and controlling an organisation.",
+    "sentence": "The board reviewed its governance rules.",
+    "level": 3
+  },
+  {
+    "word": "headquarters",
+    "definition": "The main office of an organisation.",
+    "sentence": "The company moved its headquarters last year.",
+    "level": 3
+  },
+  {
+    "word": "integration",
+    "definition": "The process of combining parts into a whole.",
+    "sentence": "The update improved integration between systems.",
+    "level": 3
+  },
+  {
+    "word": "legitimate",
+    "definition": "Allowed by law or accepted rules.",
+    "sentence": "The buyer made a legitimate request.",
+    "level": 3
+  },
+  {
+    "word": "multicultural",
+    "definition": "Including people from several cultural backgrounds.",
+    "sentence": "The festival was a multicultural celebration.",
+    "level": 3
+  },
+  {
+    "word": "neutrality",
+    "definition": "The state of not taking sides.",
+    "sentence": "The mediator maintained neutrality.",
+    "level": 3
+  },
+  {
+    "word": "observation",
+    "definition": "The act of watching something carefully.",
+    "sentence": "The scientist recorded an observation.",
+    "level": 3
+  },
+  {
+    "word": "proportion",
+    "definition": "A part compared with the whole.",
+    "sentence": "A large proportion of students attended.",
+    "level": 3
+  },
+  {
+    "word": "questionnaire",
+    "definition": "A set of written questions used to gather information.",
+    "sentence": "Everyone completed the questionnaire.",
+    "level": 3
+  },
+  {
+    "word": "replacement",
+    "definition": "Something or someone taking the place of another.",
+    "sentence": "The shop arranged a replacement.",
+    "level": 3
+  },
+  {
+    "word": "specialisation",
+    "definition": "A focus on one particular area of work.",
+    "sentence": "Her specialisation is language teaching.",
+    "level": 3,
+    "variants": [
+      "specialization"
+    ]
+  },
+  {
+    "word": "temporary",
+    "definition": "Lasting only for a short time.",
+    "sentence": "The office moved to a temporary location.",
+    "level": 3
+  },
+  {
+    "word": "underlying",
+    "definition": "Existing beneath something or forming its basis.",
+    "sentence": "The report explored the underlying problem.",
+    "level": 3
+  },
+  {
+    "word": "visibility",
+    "definition": "The distance or degree to which things can be seen.",
+    "sentence": "Heavy rain reduced visibility.",
+    "level": 3
+  },
+  {
+    "word": "workmanship",
+    "definition": "The skill shown in making something.",
+    "sentence": "The carpenter's workmanship impressed everyone.",
+    "level": 3
+  },
+  {
+    "word": "absorption",
+    "definition": "The process of taking something into a substance.",
+    "sentence": "The towel allowed rapid absorption of water.",
+    "level": 3
+  },
+  {
+    "word": "conceivable",
+    "definition": "Possible to imagine or believe.",
+    "sentence": "It is conceivable that the event will be delayed.",
+    "level": 3
+  },
+  {
+    "word": "deliberate",
+    "definition": "Done intentionally after careful thought.",
+    "sentence": "The decision was deliberate and well explained.",
+    "level": 3
+  },
+  {
+    "word": "ecological",
+    "definition": "Related to living things and their environment.",
+    "sentence": "The students studied an ecological problem.",
+    "level": 3
+  },
+  {
+    "word": "foundation",
+    "definition": "The solid base supporting a structure.",
+    "sentence": "The builders poured the foundation.",
+    "level": 3
+  },
+  {
+    "word": "guideline",
+    "definition": "A recommended rule or instruction.",
+    "sentence": "The coach shared a safety guideline.",
+    "level": 3
+  },
+  {
+    "word": "hindrance",
+    "definition": "Something that delays or prevents progress.",
+    "sentence": "The broken road became a hindrance.",
+    "level": 3
+  },
+  {
+    "word": "institution",
+    "definition": "An established organisation serving a particular purpose.",
+    "sentence": "The institution opened a new centre.",
+    "level": 3
+  },
+  {
+    "word": "legislation",
+    "definition": "Laws made by an official authority.",
+    "sentence": "The committee discussed new legislation.",
+    "level": 3
+  },
+  {
+    "word": "magnificent",
+    "definition": "Extremely beautiful or impressive.",
+    "sentence": "They admired the magnificent building.",
+    "level": 3
+  },
+  {
+    "word": "negotiation",
+    "definition": "Discussion aimed at reaching an agreement.",
+    "sentence": "The two teams entered negotiation.",
+    "level": 3
+  },
+  {
+    "word": "orientation",
+    "definition": "An introduction to a new place or activity.",
+    "sentence": "The students attended an orientation.",
+    "level": 3
+  },
+  {
+    "word": "proclamation",
+    "definition": "A formal public announcement.",
+    "sentence": "The mayor issued a proclamation.",
+    "level": 3
+  },
+  {
+    "word": "questionable",
+    "definition": "Possibly wrong or open to doubt.",
+    "sentence": "The evidence was questionable.",
+    "level": 3
+  },
+  {
+    "word": "rational",
+    "definition": "Based on reason or logic.",
+    "sentence": "She made a rational decision.",
+    "level": 3
+  },
+  {
+    "word": "scientifically",
+    "definition": "In a way based on scientific methods.",
+    "sentence": "The claim has not been scientifically tested.",
+    "level": 3
+  },
+  {
+    "word": "traditional",
+    "definition": "Following customs passed through generations.",
+    "sentence": "They served a traditional meal.",
+    "level": 3
+  },
+  {
+    "word": "unfortunately",
+    "definition": "Used to express regret about an event.",
+    "sentence": "Unfortunately, the meeting was cancelled.",
+    "level": 3
+  },
+  {
+    "word": "vocabulary",
+    "definition": "The words known or used by a person.",
+    "sentence": "Reading can improve your vocabulary.",
+    "level": 3
+  },
+  {
+    "word": "wholesome",
+    "definition": "Good for health or wellbeing.",
+    "sentence": "They enjoyed a wholesome family meal.",
+    "level": 3
+  },
+  {
+    "word": "ambassador",
+    "definition": "Someone who officially represents a country.",
+    "sentence": "The ambassador attended the cultural event.",
+    "level": 3
+  },
+  {
+    "word": "consultation",
+    "definition": "A meeting held to seek advice or opinions.",
+    "sentence": "The council arranged a public consultation.",
+    "level": 3
+  },
+  {
+    "word": "distribution",
+    "definition": "The process of sharing or delivering things.",
+    "sentence": "The team managed distribution of the supplies.",
+    "level": 3
+  },
+  {
+    "word": "equation",
+    "definition": "A mathematical statement showing two expressions are equal.",
+    "sentence": "The student solved the equation.",
+    "level": 3
+  },
+  {
+    "word": "feasibility",
+    "definition": "The possibility of something being done successfully.",
+    "sentence": "The report assessed the project's feasibility.",
+    "level": 3
+  },
+  {
+    "word": "guaranteed",
+    "definition": "Promised or certain to happen.",
+    "sentence": "The tickets came with guaranteed admission.",
+    "level": 3
+  },
+  {
+    "word": "hypothesis",
+    "definition": "An idea that can be tested through investigation.",
+    "sentence": "The students developed a hypothesis.",
+    "level": 3
+  },
+  {
+    "word": "incidental",
+    "definition": "Occurring as a minor part of something else.",
+    "sentence": "The cost was incidental to the main project.",
+    "level": 3
+  },
+  {
+    "word": "likelihood",
+    "definition": "The chance of something happening.",
+    "sentence": "The forecast estimated the likelihood of rain.",
+    "level": 3
+  },
+  {
+    "word": "mechanism",
+    "definition": "A set of parts working together to perform a task.",
+    "sentence": "The technician examined the mechanism.",
+    "level": 3
+  },
+  {
+    "word": "neighbourhood",
+    "definition": "An area where people live close together.",
+    "sentence": "The neighbourhood organised a community event.",
+    "level": 3,
+    "variants": [
+      "neighborhood"
+    ]
+  },
+  {
+    "word": "overwhelming",
+    "definition": "Very great in amount or intensity.",
+    "sentence": "The response to the event was overwhelming.",
+    "level": 3
+  },
+  {
+    "word": "pioneering",
+    "definition": "Introducing new ideas or methods.",
+    "sentence": "The team received praise for pioneering work.",
+    "level": 3
+  },
+  {
+    "word": "regulation",
+    "definition": "An official rule controlling an activity.",
+    "sentence": "The new regulation affects all drivers.",
+    "level": 3
+  },
+  {
+    "word": "supplementary",
+    "definition": "Added to provide extra support or information.",
+    "sentence": "The teacher provided supplementary notes.",
+    "level": 3
+  },
+  {
+    "word": "tremendous",
+    "definition": "Very great in amount or intensity.",
+    "sentence": "The team made a tremendous effort.",
+    "level": 3
+  },
+  {
+    "word": "unfamiliar",
+    "definition": "Not known or recognised.",
+    "sentence": "The route was unfamiliar to him.",
+    "level": 3
+  },
+  {
+    "word": "vegetarian",
+    "definition": "A person who does not eat meat or fish.",
+    "sentence": "The restaurant offered a vegetarian option.",
+    "level": 3
+  },
+  {
+    "word": "withdrawal",
+    "definition": "The act of taking something away or leaving.",
+    "sentence": "The bank confirmed the withdrawal.",
+    "level": 3
+  },
+  {
+    "word": "anticipation",
+    "definition": "A feeling of excitement about something expected.",
+    "sentence": "The crowd waited in anticipation of the result.",
+    "level": 3
+  },
+  {
+    "word": "competence",
+    "definition": "The ability to perform something properly.",
+    "sentence": "The role requires technical competence.",
+    "level": 3
+  },
+  {
+    "word": "differentiation",
+    "definition": "The act of distinguishing between things.",
+    "sentence": "The course focused on differentiation between materials.",
+    "level": 3
+  },
+  {
+    "word": "enforcement",
+    "definition": "The act of making people obey rules or laws.",
+    "sentence": "The agency improved enforcement of safety rules.",
+    "level": 3
+  },
+  {
+    "word": "frequency",
+    "definition": "How often something happens.",
+    "sentence": "The report measured the frequency of delays.",
+    "level": 3
+  },
+  {
+    "word": "geological",
+    "definition": "Related to the physical structure of the Earth.",
+    "sentence": "They visited a geological museum.",
+    "level": 3
+  },
+  {
+    "word": "hospitable",
+    "definition": "Friendly and welcoming towards guests.",
+    "sentence": "The family was hospitable to every visitor.",
+    "level": 3
+  },
+  {
+    "word": "implementation",
+    "definition": "The act of putting a plan into practice.",
+    "sentence": "The team planned the implementation carefully.",
+    "level": 3
+  },
+  {
+    "word": "liability",
+    "definition": "Legal responsibility for something.",
+    "sentence": "The contract explained the company's liability.",
+    "level": 3
+  },
+  {
+    "word": "migration",
+    "definition": "Movement from one place to another.",
+    "sentence": "The birds began their seasonal migration.",
+    "level": 3
+  },
+  {
+    "word": "necessity",
+    "definition": "Something that is needed or unavoidable.",
+    "sentence": "Clean water is a basic necessity.",
+    "level": 3
+  },
+  {
+    "word": "optimistic",
+    "definition": "Expecting good things to happen.",
+    "sentence": "She remained optimistic about the result.",
+    "level": 3
+  },
+  {
+    "word": "probability",
+    "definition": "The likelihood of something happening.",
+    "sentence": "The class studied probability using dice.",
+    "level": 3
+  },
+  {
+    "word": "rehabilitation",
+    "definition": "The process of restoring health or ability.",
+    "sentence": "The athlete began rehabilitation after the injury.",
+    "level": 3
+  },
+  {
+    "word": "spontaneous",
+    "definition": "Happening without advance planning.",
+    "sentence": "The friends made a spontaneous decision.",
+    "level": 3
+  },
+  {
+    "word": "temperament",
+    "definition": "A person's usual emotional nature.",
+    "sentence": "The child has a calm temperament.",
+    "level": 3
+  },
+  {
+    "word": "uncomfortable",
+    "definition": "Causing physical or emotional unease.",
+    "sentence": "The room became uncomfortable in the heat.",
+    "level": 3
+  },
+  {
+    "word": "verification",
+    "definition": "The act of confirming that something is true.",
+    "sentence": "The account required identity verification.",
+    "level": 3
+  },
+  {
+    "word": "aesthetic",
+    "definition": "Concerned with beauty or artistic appearance.",
+    "sentence": "She preferred a simple aesthetic for the room.",
+    "level": 3
+  },
+  {
+    "word": "credibility",
+    "definition": "The quality of being believable or trustworthy.",
+    "sentence": "The evidence improved the report's credibility.",
+    "level": 3
+  },
+  {
+    "word": "derivative",
+    "definition": "Something developed from another source.",
+    "sentence": "The new design is a derivative of the original.",
+    "level": 3
+  },
+  {
+    "word": "exhaustion",
+    "definition": "Extreme physical or mental tiredness.",
+    "sentence": "The hikers stopped because of exhaustion.",
+    "level": 3
+  },
+  {
+    "word": "fulfilment",
+    "definition": "The feeling of satisfaction from achieving something.",
+    "sentence": "She found fulfilment in teaching.",
+    "level": 3,
+    "variants": [
+      "fulfillment"
+    ]
+  },
+  {
+    "word": "haphazard",
+    "definition": "Lacking a clear plan or order.",
+    "sentence": "The books were stacked in a haphazard way.",
+    "level": 3
+  },
+  {
+    "word": "inhibitions",
+    "definition": "Feelings that stop someone acting freely.",
+    "sentence": "He lost his inhibitions during the dance.",
+    "level": 3
+  },
+  {
+    "word": "laboratory",
+    "definition": "A room equipped for scientific tests.",
+    "sentence": "The students worked in a laboratory.",
+    "level": 3
+  },
+  {
+    "word": "misrepresentation",
+    "definition": "A false or misleading description of something.",
+    "sentence": "The advert contained a misrepresentation.",
+    "level": 3
+  },
+  {
+    "word": "omission",
+    "definition": "The act of leaving something out.",
+    "sentence": "The missing signature was an omission.",
+    "level": 3
+  },
+  {
+    "word": "prosperity",
+    "definition": "The condition of being successful and wealthy.",
+    "sentence": "The community hoped for lasting prosperity.",
+    "level": 3
+  },
+  {
+    "word": "restriction",
+    "definition": "A rule limiting what someone can do.",
+    "sentence": "The venue introduced a noise restriction.",
+    "level": 3
+  },
+  {
+    "word": "secretariat",
+    "definition": "An office that handles administrative work.",
+    "sentence": "The secretariat circulated the documents.",
+    "level": 3
+  },
+  {
+    "word": "technological",
+    "definition": "Related to modern tools and practical science.",
+    "sentence": "The school welcomed technological improvements.",
+    "level": 3
+  },
+  {
+    "word": "unprecedented",
+    "definition": "Never known or experienced before.",
+    "sentence": "The team faced unprecedented demand.",
+    "level": 3
+  },
+  {
+    "word": "validation",
+    "definition": "The process of checking whether something is correct.",
+    "sentence": "The form required validation.",
+    "level": 3
+  },
+  {
+    "word": "allocation",
+    "definition": "The act of distributing resources for particular uses.",
+    "sentence": "The committee reviewed the budget allocation.",
+    "level": 3
+  },
+  {
+    "word": "commission",
+    "definition": "An official request to create or perform work.",
+    "sentence": "The artist received a commission for a mural.",
+    "level": 3
+  },
+  {
+    "word": "drought",
+    "definition": "A long period with very little rain.",
+    "sentence": "The farmers struggled during the drought.",
+    "level": 3
+  },
+  {
+    "word": "eligibility",
+    "definition": "The condition of meeting required rules.",
+    "sentence": "They checked her eligibility for the award.",
+    "level": 3
+  },
+  {
+    "word": "historical",
+    "definition": "Related to events from the past.",
+    "sentence": "They toured a historical building.",
+    "level": 3
+  },
+  {
+    "word": "intervention",
+    "definition": "Action taken to improve a difficult situation.",
+    "sentence": "Early intervention helped the learners.",
+    "level": 3
+  },
+  {
+    "word": "linguistic",
+    "definition": "Related to language or its study.",
+    "sentence": "The class explored linguistic differences.",
+    "level": 3
+  },
+  {
+    "word": "mathematical",
+    "definition": "Related to numbers, shapes, or calculations.",
+    "sentence": "She solved a mathematical puzzle.",
+    "level": 3
+  },
+  {
+    "word": "organisation",
+    "definition": "A group formed for a particular purpose.",
+    "sentence": "The organisation hosted a training session.",
+    "level": 3,
+    "variants": [
+      "organization"
+    ]
+  },
+  {
+    "word": "permanent",
+    "definition": "Lasting for a very long time or indefinitely.",
+    "sentence": "She accepted a permanent position.",
+    "level": 3
+  },
+  {
+    "word": "refinement",
+    "definition": "The process of making something better or more precise.",
+    "sentence": "The prototype needed further refinement.",
+    "level": 3
+  },
+  {
+    "word": "strategically",
+    "definition": "In a way planned to achieve a goal.",
+    "sentence": "They placed the signs strategically.",
+    "level": 3
+  },
+  {
+    "word": "telecommunication",
+    "definition": "Communication over long distances using technology.",
+    "sentence": "The network supports telecommunication services.",
+    "level": 3
+  },
+  {
+    "word": "undergraduate",
+    "definition": "A student working towards a first university degree.",
+    "sentence": "The undergraduate attended the lecture.",
+    "level": 3
+  },
+  {
+    "word": "versatility",
+    "definition": "The ability to work well in different ways.",
+    "sentence": "The tool was valued for its versatility.",
+    "level": 3
+  },
+  {
+    "word": "alliteration",
+    "definition": "The repetition of initial sounds in nearby words.",
+    "sentence": "The poem uses alliteration in its opening line.",
+    "level": 3
+  },
+  {
+    "word": "corresponding",
+    "definition": "Matching or related to something else.",
+    "sentence": "Each number has a corresponding letter.",
+    "level": 3
+  },
+  {
+    "word": "decompose",
+    "definition": "To break down into simpler substances.",
+    "sentence": "Leaves slowly decompose in damp soil.",
+    "level": 3
+  },
+  {
+    "word": "entrepreneurial",
+    "definition": "Related to starting and managing businesses.",
+    "sentence": "He showed an entrepreneurial spirit from an early age.",
+    "level": 3
+  },
+  {
+    "word": "influential",
+    "definition": "Having the power to affect opinions or decisions.",
+    "sentence": "She became an influential teacher.",
+    "level": 3
+  },
+  {
+    "word": "misinterpret",
+    "definition": "To understand something incorrectly.",
+    "sentence": "He did not mean to misinterpret the message.",
+    "level": 3
+  },
+  {
+    "word": "obligation",
+    "definition": "A duty or responsibility to do something.",
+    "sentence": "She understood her legal obligation.",
+    "level": 3
+  },
+  {
+    "word": "principally",
+    "definition": "Mainly or for the most part.",
+    "sentence": "The team worked principally on design.",
+    "level": 3
+  },
+  {
+    "word": "remuneration",
+    "definition": "Money paid for work or services.",
+    "sentence": "The contract explained the remuneration.",
+    "level": 3
+  },
+  {
+    "word": "synchronise",
+    "definition": "To make actions happen at the same time.",
+    "sentence": "The dancers tried to synchronise their movements.",
+    "level": 3,
+    "variants": [
+      "synchronize"
+    ]
+  },
+  {
+    "word": "triumphant",
+    "definition": "Feeling joy after winning or succeeding.",
+    "sentence": "The players returned home triumphant.",
+    "level": 3
+  },
+  {
+    "word": "unpredictable",
+    "definition": "Impossible to know in advance.",
+    "sentence": "The weather remained unpredictable.",
+    "level": 3
+  },
+  {
+    "word": "variation",
+    "definition": "A change or different version of something.",
+    "sentence": "She suggested a variation of the design.",
+    "level": 3
+  },
+  {
+    "word": "accumulation",
+    "definition": "The gradual gathering of more and more things.",
+    "sentence": "Dust accumulation became a problem in the store.",
+    "level": 3
+  },
+  {
+    "word": "circumstance",
+    "definition": "A fact or condition affecting an event.",
+    "sentence": "The unusual circumstance delayed the journey.",
+    "level": 3
+  },
+  {
+    "word": "declaration",
+    "definition": "A formal statement or announcement.",
+    "sentence": "The committee issued a declaration.",
+    "level": 3
+  },
+  {
+    "word": "enlightenment",
+    "definition": "Greater understanding gained through learning.",
+    "sentence": "The discussion brought a sense of enlightenment.",
+    "level": 3
+  },
+  {
+    "word": "incentive",
+    "definition": "Something that encourages a person to act.",
+    "sentence": "The prize provided an incentive to practise.",
+    "level": 3
+  },
+  {
+    "word": "manoeuvrable",
+    "definition": "Able to be moved or steered easily.",
+    "sentence": "The small vehicle was highly manoeuvrable.",
+    "level": 3
+  },
+  {
+    "word": "obstacle",
+    "definition": "Something that blocks movement or progress.",
+    "sentence": "They worked together to remove the obstacle.",
+    "level": 3
+  },
+  {
+    "word": "possibility",
+    "definition": "Something that might happen or exist.",
+    "sentence": "They considered every possibility.",
+    "level": 3
+  },
+  {
+    "word": "recommendation",
+    "definition": "Advice suggesting a particular choice.",
+    "sentence": "The report included a clear recommendation.",
+    "level": 3
+  },
+  {
+    "word": "significantly",
+    "definition": "To a noticeable or important degree.",
+    "sentence": "Attendance increased significantly.",
+    "level": 3
+  }
+]

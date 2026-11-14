@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { ensureAnonymousUser, supabase } from './supabase'
 import { track } from '../analytics'
 import type { MultiplayerAnswer, MultiplayerGameId, MultiplayerPlayer, MultiplayerRoom, PromptType } from './types'
 
@@ -73,6 +73,7 @@ export interface ThinkFastState {
 
 export async function createRoom(displayName: string, gameId: MultiplayerGameId): Promise<RoomBundle> {
   track('room_create_attempted', { game_id: gameId })
+  await ensureAnonymousUser()
   const { data, error } = await supabase.rpc('decked_create_room', { p_display_name: displayName.trim(), p_game_id: gameId })
   if (error) {
     track('room_create_failed', { game_id: gameId, error_code: safeAnalyticsErrorCode(error), failure_stage: 'rpc' })
@@ -207,6 +208,7 @@ export async function claimHost(roomId: string) {
 
 export async function joinRoom(code: string, displayName: string): Promise<RoomBundle> {
   track('room_join_attempted', {})
+  await ensureAnonymousUser()
   const { data, error } = await supabase.rpc('decked_join_room', {
     p_code: code.trim().toUpperCase(), p_display_name: displayName.trim(),
   })

@@ -23,7 +23,7 @@ const TEAM_COLORS = ['#dc2827','#9b59b6','#27ae60','#e67e22','#3498db','#e91e63'
 const MIN_TEAM_MODE_PLAYERS = 4
 const MIN_PLAYERS_PER_TEAM = 2
 
-interface GameTeam { id: string; name: string; color: string; players: Player[] }
+export interface GameTeam { id: string; name: string; color: string; players: Player[] }
 
 type Step =
   | 'playerSetup' | 'teamBuilder' | 'categorySelect' | 'deckSize' | 'customCards' | 'roundLength'
@@ -99,7 +99,7 @@ const CheckIcon = () => (
 )
 
 /* ─── 0a. Team Builder ─── */
-function TeamBuilderScreen({
+export function TeamBuilderScreen({
   players, initialTeams, onBack, onNext,
 }: {
   players: Player[]
@@ -414,7 +414,7 @@ function CustomCardsScreen({ deckSize, initialCards, onBack, onNext }: { deckSiz
 }
 
 /* ─── 4. Round Length ─── */
-function RoundLengthScreen({ initialValue, onBack, onNext }: { initialValue: number; onBack: () => void; onNext: (seconds: number) => void }) {
+export function RoundLengthScreen({ initialValue, onBack, onNext, nextLabel = 'START GAME' }: { initialValue: number; onBack: () => void; onNext: (seconds: number) => void; nextLabel?: string }) {
   const [value, setValue] = useState(initialValue ? String(initialValue) : '')
   const inputRef = useRef<HTMLInputElement>(null)
   const parsed = parseInt(value, 10)
@@ -445,7 +445,7 @@ function RoundLengthScreen({ initialValue, onBack, onNext }: { initialValue: num
 
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
           <button onClick={() => { haptic('light'); onBack() }} className="cta-btn" style={ctaOutline(142)}>GO BACK</button>
-          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} className="cta-btn" style={ctaPrimary(142, !valid)}>START GAME</button>
+          <button onClick={() => { if (valid) { haptic('medium'); onNext(parsed) } }} className="cta-btn" style={ctaPrimary(142, !valid)}>{nextLabel}</button>
         </div>
       </div>
     </div>

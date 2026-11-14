@@ -12,11 +12,12 @@ interface Props {
   minPlayers?: number
   /** Maximum number of players that can be added */
   maxPlayers?: number
+  playerCountMultiple?: number
   onSkip: () => void
   onNext: (players: Player[]) => void
 }
 
-export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR NOW', minPlayers = 1, maxPlayers, onSkip, onNext }: Props) {
+export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR NOW', minPlayers = 1, maxPlayers, playerCountMultiple, onSkip, onNext }: Props) {
   const [players, setPlayers]   = useState<Player[]>(initialPlayers)
   const [input, setInput]       = useState('')
   const [editingIdx, setEditingIdx] = useState<number | null>(null)
@@ -26,7 +27,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
 
   const nextColor = PLAYER_COLORS[players.length % PLAYER_COLORS.length]
   const hasInput  = input.trim().length > 0
-  const canNext   = players.length >= minPlayers
+  const canNext   = players.length >= minPlayers && (!playerCountMultiple || players.length % playerCountMultiple === 0)
   const atMaximum = maxPlayers !== undefined && players.length >= maxPlayers
 
   const addPlayer = () => {
@@ -75,6 +76,7 @@ export default function PlayerSetup({ initialPlayers = [], skipLabel = 'SKIP FOR
               Add at least {minPlayers} players to continue
             </p>
           )}
+          {playerCountMultiple && players.length >= minPlayers && players.length % playerCountMultiple !== 0 && <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.6)', margin: 0 }}>Add one more player to make pairs.</p>}
         </div>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>

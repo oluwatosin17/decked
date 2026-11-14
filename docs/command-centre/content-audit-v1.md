@@ -1,15 +1,15 @@
 # Decked content audit v1
 
-Generated deterministically by `pnpm audit:content` at 2026-10-27T07:05:34.440Z.
+Generated deterministically by `pnpm audit:content` at 2026-11-01T22:27:15.524Z.
 
 ## Result
 
-- Canonical games: **28**
-- Audited games: **28**
-- Raw bundled records / category memberships: **43,007**
-- Normalized-unique payloads across all games: **40,998**
+- Canonical games: **30**
+- Audited games: **30**
+- Raw bundled records / category memberships: **43,331**
+- Normalized-unique payloads across all games: **41,306**
 - Games whose every selectable bundled category meets 300 cards: **20**
-- Games below the 300-card target: **6**
+- Games below the 300-card target: **8**
 - Not applicable: **2** (player-authored and rules-based games have no managed prompt inventory)
 
 The audit does not generate or pad content. Random mixers are excluded because they are selectors over authored categories, not independently authored categories. Player custom cards remain separate and are not migration input.
@@ -238,6 +238,17 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | bad-advice-only | everyday | 30 | 30 | 30 | 0 | 73/139/196/235 | below-300 | `e305926144c2` |
 | bad-advice-only | naija | 30 | 30 | 30 | 0 | 76/111/203/205 | below-300 | `176eedd91905` |
 | bad-advice-only | wild | 30 | 30 | 30 | 0 | 97/123/197/207 | below-300 | `925378c9d441` |
+| read-my-lips | funny-ridiculous | 36 | 36 | 36 | 0 | 6/21/39/41 | below-300 | `3713722f7357` |
+| read-my-lips | naija-vibes | 36 | 36 | 36 | 0 | 3/13/40/47 | below-300 | `5029debafd40` |
+| read-my-lips | love-relationships | 36 | 36 | 36 | 0 | 5/19/46/48 | below-300 | `7d31426daa77` |
+| read-my-lips | everyday-life | 36 | 36 | 36 | 0 | 6/18/44/51 | below-300 | `80fad6976dc8` |
+| read-my-lips | friends-social-life | 36 | 36 | 36 | 0 | 6/19/48/54 | below-300 | `e4a60349fec2` |
+| read-my-lips | pop-culture-internet | 36 | 36 | 36 | 0 | 6/18/48/57 | below-300 | `6158232e673f` |
+| read-my-lips | food-kitchen | 36 | 36 | 36 | 0 | 4/20/46/52 | below-300 | `dd42438c3f6a` |
+| read-my-lips | tricky-tongue-twister | 36 | 36 | 36 | 0 | 5/18/41/49 | below-300 | `8eeef3748abd` |
+| spelling-bee | level-1 | 12 | 12 | 12 | 0 | 6/7/8/8 | below-300 | `6deaf0c2f9c7` |
+| spelling-bee | level-2 | 12 | 12 | 12 | 0 | 6/9/10/10 | below-300 | `14f65439ac7d` |
+| spelling-bee | level-3 | 12 | 12 | 12 | 0 | 10/12/13/14 | below-300 | `9da855aff71b` |
 
 ## Per-game reconciliation
 
@@ -271,6 +282,8 @@ The audit does not generate or pad content. Random mixers are excluded because t
 | Think Fast (`think-fast`) | 300 | 300 | 300 | 300 | 0 | 300 | meets-300 |
 | Not Me, Your Honour! (`not-me-your-honour`) | 110 | 110 | 110 | 110 | 0 | 110 | below-300 |
 | Bad Advice Only (`bad-advice-only`) | 180 | 180 | 180 | 180 | 0 | 180 | below-300 |
+| Read My Lips (`read-my-lips`) | 288 | 288 | 288 | 288 | 0 | 288 | below-300 |
+| Spelling Bee (`spelling-bee`) | 36 | 36 | 36 | 36 | 0 | 36 | below-300 |
 
 ## Decisions and migration constraints
 

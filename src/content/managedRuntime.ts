@@ -2,6 +2,8 @@ import { supabase } from '../multiplayer/supabase'
 import { CONTENT_AUDIT_GAMES } from './deckRegistry'
 import { CHOOSE_SIDE_PROMPTS, type ChooseSideCategory } from './chooseYourSide'
 import { track } from '../analytics'
+import { applyManagedReadMyLipsContent } from './readMyLips'
+import { applyManagedSpellingContent } from './spellingManaged'
 
 interface ManagedItem { id:string;kind:'prompt'|'challenge'|'scenario'|'choice';body:string;metadata:Record<string,unknown>;categories:string[] }
 interface ManagedResponse { available:boolean;game_id:string;release_id?:string;checksum?:string;items?:ManagedItem[] }
@@ -27,7 +29,17 @@ export async function loadManagedContent():Promise<ManagedContentLoadResult>{
     if(error){track('content_delivery_failed',{game_id:game.gameId,content_source:'bundled',fallback_reason:'rpc_failed',fetch_duration_ms:Math.round(performance.now()-started)});throw error}
     const response=data as ManagedResponse
     if(!response?.available||!Array.isArray(response.items)||!response.items.every(validItem)||!response.release_id){track('content_delivery_failed',{game_id:game.gameId,content_source:'bundled',fallback_reason:response?.available?'invalid_payload':'no_published_release',fetch_duration_ms:Math.round(performance.now()-started)});throw new Error('Managed content unavailable or malformed')}
+    if(game.gameId==='read-my-lips')applyManagedReadMyLipsContent(response.items)
+    if(game.gameId==='spelling-bee'){
+      if(!applyManagedSpellingContent(response.items)){
+        track('content_delivery_failed',{game_id:game.gameId,content_source:'bundled',fallback_reason:'ineligible_spelling_release',fetch_duration_ms:Math.round(performance.now()-started)})
+        throw new Error('Spelling Bee release is incomplete or contains ineligible words')
+      }
+      track('content_delivery_completed',{game_id:game.gameId,content_source:'managed',release_id:response.release_id,item_count:response.items.length,fetch_duration_ms:Math.round(performance.now()-started)})
+      return game.gameId
+    }
     for(const deck of game.decks){
+      if(game.gameId==='read-my-lips')continue
       const managed=response.items!.filter(item=>item.categories.includes(deck.category))
       if(managed.length===0)continue
       if(game.gameId==='choose-your-side'){

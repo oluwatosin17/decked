@@ -75,12 +75,12 @@ begin
     if sqlerrm = 'Expired room join unexpectedly succeeded' then raise; end if;
   end;
 
-  select public.decked_join_room(r.code, 'Guest private name') into payload
-  from public.decked_rooms r join analytics_test_state s on s.room_id = r.id;
+  select public.decked_join_room(s.code, 'Guest private name') into payload
+  from analytics_test_state s;
   joined_room := (payload->'room'->>'id')::uuid;
   -- A retry updates the operational player but must not duplicate the join fact.
-  perform public.decked_join_room(r.code, 'Guest private name')
-  from public.decked_rooms r where r.id = joined_room;
+  perform public.decked_join_room(s.code, 'Guest private name')
+  from analytics_test_state s where s.room_id = joined_room;
 
   begin
     perform public.decked_start_multi_game(joined_room, 2, 2, '{}'::jsonb);
